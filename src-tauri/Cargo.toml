@@ -1,11 +1,11 @@
 [package]
-name = "aicacia-id"
+name = "aicacia-books"
 version = "0.1.0"
 description = "A Tauri App"
 authors = [ "you" ]
 license = ""
 repository = ""
-default-run = "aicacia-id"
+default-run = "aicacia-books"
 edition = "2018"
 build = "src/build.rs"
 
@@ -22,5 +22,5 @@ embedded-server = [ "tauri/embedded-server" ]
 no-server = [ "tauri/no-server" ]
 
 [[bin]]
-name = "aicacia-id"
+name = "aicacia-books"
 path = "src/main.rs"

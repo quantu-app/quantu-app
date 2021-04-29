@@ -18,7 +18,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f26201604c87b1e01bd3d98f8d5d9a8fcbb815e8cedb41ffccbeb4bf593a35fe"
 
 [[package]]
-name = "aicacia-id"
+name = "aicacia-books"
 version = "0.1.0"
 dependencies = [
  "serde",
@@ -296,9 +296,9 @@ dependencies = [
 
 [[package]]
 name = "crossbeam-epoch"
-version = "0.9.3"
+version = "0.9.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "2584f639eb95fea8c798496315b297cf81b9b58b6d30ab066a75455333cf4b12"
+checksum = "52fb27eab85b17fbb9f6fd667089e07d6a2eb8743d02639ee7f6a7a7729c9c94"
 dependencies = [
  "cfg-if 1.0.0",
  "crossbeam-utils",
@@ -309,9 +309,9 @@ dependencies = [
 
 [[package]]
 name = "crossbeam-utils"
-version = "0.8.3"
+version = "0.8.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e7e9d99fa91428effe99c5c6d4634cdeba32b8cf784fc428a2a687f61a952c49"
+checksum = "4feb231f0d4d6af81aed15928e58ecf5816aa62a2393e2c82f46973e92a9a278"
 dependencies = [
  "autocfg",
  "cfg-if 1.0.0",
@@ -326,7 +326,7 @@ checksum = "fcc3dd5e9e9c0b295d6e1e4d811fb6f157d5ffd784b8d202fc62eac8035a770b"
 dependencies = [
  "proc-macro2",
  "quote 1.0.9",
- "syn 1.0.70",
+ "syn 1.0.71",
 ]
 
 [[package]]
@@ -397,7 +397,7 @@ checksum = "946ee94e3dbf58fdd324f9ce245c7b238d46a66f00e86a020b71996349e46cce"
 dependencies = [
  "proc-macro2",
  "quote 1.0.9",
- "syn 1.0.70",
+ "syn 1.0.71",
 ]
 
 [[package]]
@@ -436,7 +436,7 @@ checksum = "1d34cfa13a63ae058bfa601fe9e313bbdb3746427c1459185464ce0fcf62e1e8"
 dependencies = [
  "cfg-if 1.0.0",
  "libc",
- "redox_syscall 0.2.6",
+ "redox_syscall 0.2.7",
  "winapi",
 ]
 
@@ -561,7 +561,7 @@ dependencies = [
  "proc-macro-hack",
  "proc-macro2",
  "quote 1.0.9",
- "syn 1.0.70",
+ "syn 1.0.71",
 ]
 
 [[package]]
@@ -919,9 +919,9 @@ checksum = "af8b08b04175473088b46763e51ee54da5f9a164bc162f615b91bc179dbf15a3"
 
 [[package]]
 name = "openssl"
-version = "0.10.33"
+version = "0.10.34"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a61075b62a23fef5a29815de7536d940aa35ce96d18ce0cc5076272db678a577"
+checksum = "6d7830286ad6a3973c0f1d9b73738f69c76b739301d0229c4b96501695cbe4c8"
 dependencies = [
  "bitflags 1.2.1",
  "cfg-if 1.0.0",
@@ -939,9 +939,9 @@ checksum = "77af24da69f9d9341038eba93a073b1fdaaa1b788221b00a69bce9e762cb32de"
 
 [[package]]
 name = "openssl-sys"
-version = "0.9.61"
+version = "0.9.62"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "313752393519e876837e09e1fa183ddef0be7735868dced3196f4472d536277f"
+checksum = "fa52160d45fa2e7608d504b7c3a3355afed615e6d8b627a74458634ba21b69bd"
 dependencies = [
  "autocfg",
  "cc",
@@ -1073,7 +1073,7 @@ version = "1.0.26"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "a152013215dca273577e18d2bf00fa862b89b24169fb78c4c95aeb07992c9cec"
 dependencies = [
- "unicode-xid 0.2.1",
+ "unicode-xid 0.2.2",
 ]
 
 [[package]]
@@ -1215,9 +1215,9 @@ checksum = "41cc0f7e4d5d4544e8861606a285bb08d3e70712ccc7d2b84d7c0ccfaf4b05ce"
 
 [[package]]
 name = "redox_syscall"
-version = "0.2.6"
+version = "0.2.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8270314b5ccceb518e7e578952f0b72b88222d02e8f77f5ecf7abbb673539041"
+checksum = "85dd92e586f7355c633911e11f77f3d12f04b1b1bd76a198bd34ae3af8341ef2"
 dependencies = [
  "bitflags 1.2.1",
 ]
@@ -1240,7 +1240,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "528532f3d801c87aec9def2add9ca802fe569e44a544afe633765267840abe64"
 dependencies = [
  "getrandom 0.2.2",
- "redox_syscall 0.2.6",
+ "redox_syscall 0.2.7",
 ]
 
 [[package]]
@@ -1375,7 +1375,7 @@ checksum = "b093b7a2bb58203b5da3056c05b4ec1fed827dcfdb37347a8841695263b3d06d"
 dependencies = [
  "proc-macro2",
  "quote 1.0.9",
- "syn 1.0.70",
+ "syn 1.0.71",
 ]
 
 [[package]]
@@ -1397,7 +1397,7 @@ checksum = "2dc6b7951b17b051f3210b063f12cc17320e2fe30ae05b0fe2a3abb068551c76"
 dependencies = [
  "proc-macro2",
  "quote 1.0.9",
- "syn 1.0.70",
+ "syn 1.0.71",
 ]
 
 [[package]]
@@ -1463,13 +1463,13 @@ dependencies = [
 
 [[package]]
 name = "syn"
-version = "1.0.70"
+version = "1.0.71"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b9505f307c872bab8eb46f77ae357c8eba1fdacead58ee5a850116b1d7f82883"
+checksum = "ad184cc9470f9117b2ac6817bfe297307418819ba40552f9b3846f05c33d5373"
 dependencies = [
  "proc-macro2",
  "quote 1.0.9",
- "unicode-xid 0.2.1",
+ "unicode-xid 0.2.2",
 ]
 
 [[package]]
@@ -1623,7 +1623,7 @@ dependencies = [
  "cfg-if 1.0.0",
  "libc",
  "rand 0.8.3",
- "redox_syscall 0.2.6",
+ "redox_syscall 0.2.7",
  "remove_dir_all",
  "winapi",
 ]
@@ -1645,7 +1645,7 @@ checksum = "7765189610d8241a44529806d6fd1f2e0a08734313a35d5b3a556f92b381f3c0"
 dependencies = [
  "proc-macro2",
  "quote 1.0.9",
- "syn 1.0.70",
+ "syn 1.0.71",
 ]
 
 [[package]]
@@ -1736,9 +1736,9 @@ checksum = "8c1f860d7d29cf02cb2f3f359fd35991af3d30bac52c57d265a3c461074cb4dc"
 
 [[package]]
 name = "unicode-xid"
-version = "0.2.1"
+version = "0.2.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f7fe0bb3479651439c9112f72b6c505038574c9fbb575ed1bf3b797fa39dd564"
+checksum = "8ccb82d61f80a663efe1f787a51b16b5a51e3314d6ac365b08639f52387b33f3"
 
 [[package]]
 name = "url"
@@ -1829,7 +1829,7 @@ dependencies = [
  "log",
  "proc-macro2",
  "quote 1.0.9",
- "syn 1.0.70",
+ "syn 1.0.71",
  "wasm-bindgen-shared",
 ]
 
@@ -1851,7 +1851,7 @@ checksum = "d53739ff08c8a68b0fdbcd54c372b8ab800b1449ab3c9d706503bc7dd1621b2c"
 dependencies = [
  "proc-macro2",
  "quote 1.0.9",
- "syn 1.0.70",
+ "syn 1.0.71",
  "wasm-bindgen-backend",
  "wasm-bindgen-shared",
 ]
@@ -2045,7 +2045,7 @@ dependencies = [
  "proc-macro-crate",
  "proc-macro2",
  "quote 1.0.9",
- "syn 1.0.70",
+ "syn 1.0.71",
 ]
 
 [[package]]
@@ -2083,5 +2083,5 @@ dependencies = [
  "proc-macro-crate",
  "proc-macro2",
  "quote 1.0.9",
- "syn 1.0.70",
+ "syn 1.0.71",
 ]

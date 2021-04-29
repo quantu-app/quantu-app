@@ -7,7 +7,7 @@
 		<div class="nav col-auto me-auto" />
 
 		<div class="text-end">
-			<a role="button" class="btn btn-primary" href="/sign-in">Sign in</a>
+			<a role="button" class="btn btn-primary" href="/">Sign in</a>
 		</div>
 	</div>
 </header>

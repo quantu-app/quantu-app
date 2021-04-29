@@ -1,0 +1,3 @@
+# https://www.robotstxt.org/robotstxt.markdown
+User-agent: *
+Disallow:

@@ -14,7 +14,6 @@
 	},
 	"type": "module",
 	"devDependencies": {
-		"@aicacia/core": "^0.2.1",
 		"@aicacia/debounce": "^0.1.9",
 		"@sveltejs/adapter-static": "next",
 		"@sveltejs/kit": "next",

@@ -26,6 +26,7 @@
 					aria-label="New Book Name"
 					rows={markdown.split('\n').length}
 					required
+					ally-autofocus
 					bind:value={markdown}
 					on:change={onChange}
 				/>

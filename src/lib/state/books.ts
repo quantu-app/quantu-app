@@ -1,8 +1,8 @@
-import { Table } from 'automerge';
+import { Table, Text } from 'automerge';
 import { persistentStore } from './persistentStore';
 
 export interface IBook {
-	name: string;
+	name: Text;
 }
 
 export const booksStore = persistentStore('books', {
@@ -12,7 +12,7 @@ export const booksStore = persistentStore('books', {
 export function createBook(name: string) {
 	let id: string;
 	booksStore.change(({ table }) => {
-		id = table.add({ name });
+		id = table.add({ name: new Text(name) });
 	});
 	return id;
 }

@@ -1,26 +1,26 @@
 import type { ChangeFn } from 'automerge';
-import { Table } from 'automerge';
+import { Table, Text } from 'automerge';
 import { persistentStore } from './persistentStore';
 
 export enum BlockType {
-	Markdown = 'markdown'
+	Text = 'text'
 }
 
 export interface IBaseBlock {
-	type: string;
+	type: BlockType;
 	bookId: string;
 }
 
-export interface IMarkdownBlock extends IBaseBlock {
-	type: BlockType.Markdown;
-	markdown: string;
+export interface ITextBlock extends IBaseBlock {
+	type: BlockType.Text;
+	text: Text;
 }
 
-export function isMarkdownBlock(value: unknown): value is IMarkdownBlock {
-	return value !== null && typeof value === 'object' && value['type'] === BlockType.Markdown;
+export function isTextBlock(value: unknown): value is ITextBlock {
+	return value !== null && typeof value === 'object' && value['type'] === BlockType.Text;
 }
 
-export type IBlock = IMarkdownBlock;
+export type IBlock = ITextBlock;
 
 export const blocksStore = persistentStore('blocks', {
 	table: new Table<IBlock>()
@@ -31,8 +31,8 @@ export function createBlock(bookId: string, type: BlockType) {
 	blocksStore.change(({ table }) => {
 		const block = { bookId, type } as IBlock;
 
-		if (isMarkdownBlock(block)) {
-			block.markdown = '';
+		if (isTextBlock(block)) {
+			block.text = new Text();
 		}
 
 		id = table.add(block);

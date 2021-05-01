@@ -6,7 +6,7 @@
 
 	export let book: IBook & TableRow;
 
-	let blockType: BlockType = BlockType.Markdown;
+	let blockType: BlockType = BlockType.Text;
 
 	function onCreateBlock() {
 		createBlock(book.id, blockType);

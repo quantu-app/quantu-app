@@ -4,10 +4,18 @@
 	import { onDestroy, onMount } from 'svelte';
 
 	export let text: string;
+	let prevText: string;
 	export let onTextChange: (delta: Delta) => void;
 
 	let quill: Quill;
 	let container: HTMLDivElement;
+
+	$: {
+		if (text !== prevText && quill) {
+			prevText = text;
+			quill.setText(text);
+		}
+	}
 
 	onDestroy(() => {
 		if (quill) {
@@ -44,7 +52,7 @@
 		});
 
 		if (text) {
-			quill.setText(text.toString());
+			quill.setText(text);
 		}
 
 		function onChange(delta: Delta, _oldContents: Delta, source: string) {

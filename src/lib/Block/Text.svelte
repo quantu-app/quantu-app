@@ -7,8 +7,16 @@
 
 	export let block: ITextBlock & TableRow;
 	export let edit: boolean;
+	let prevEdit: boolean;
 
 	let text = block.text.toString();
+
+	$: {
+		if (edit !== prevEdit) {
+			prevEdit = edit;
+			text = block.text.toString();
+		}
+	}
 
 	function applyDeltaToText(text: Text, delta: Delta): void {
 		let i = 0;
@@ -30,7 +38,6 @@
 	function onTextChange(delta: Delta) {
 		updateBlock(block.id, (block) => {
 			applyDeltaToText(block.text, delta);
-			text = block.text.toString();
 		});
 	}
 </script>
@@ -38,8 +45,8 @@
 <div id={block.id}>
 	{#if edit}
 		<Quill {text} {onTextChange} />
-	{:else if text.toString().trim()}
-		{@html text.toString()}
+	{:else if text.trim()}
+		{@html text}
 	{:else}
 		<div class="d-flex align-items-center justify-content-center">
 			<h1>Click to Edit</h1>

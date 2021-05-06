@@ -1,14 +1,12 @@
 <header class="container">
 	<div class="d-flex flex-wrap align-items-center justify-content-center">
 		<div class="d-flex align-items-center">
-			<a href="/" class="btn btn-lg btn-primary" role="button"> Aicacia Id </a>
+			<a href="/" class="btn btn-lg btn-primary" role="button">Books</a>
 		</div>
 
 		<div class="nav col-auto me-auto" />
 
-		<div class="text-end">
-			<a role="button" class="btn btn-primary" href="/">Sign in</a>
-		</div>
+		<div class="text-end" />
 	</div>
 </header>
 
@@ -34,4 +32,9 @@
 	@import 'bootstrap/scss/images';
 	@import 'bootstrap/scss/containers';
 	@import 'bootstrap/scss/grid';
+
+	.ql-container,
+	.ql-editor {
+		height: inherit !important;
+	}
 </style>

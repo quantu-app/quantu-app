@@ -2,7 +2,8 @@
 	import type { IBook } from '$lib/state/books';
 	import type { TableRow } from 'automerge';
 	import Block from './Block/Block.svelte';
-	import { blocksStore, createBlock, BlockType } from './state/blocks';
+	import { blocksStore, createBlock, BlockType } from '$lib/state/blocks';
+	import { peer } from '$lib/state/peer';
 
 	export let book: IBook & TableRow;
 
@@ -14,6 +15,8 @@
 </script>
 
 <h1>{book.name}</h1>
+
+<p>PeerId: {$peer?.getId()}</p>
 
 <div class="mt-4">
 	{#each $blocksStore.table.rows as block}

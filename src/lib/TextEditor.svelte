@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type Quill from 'quill';
 	import type Delta from 'quill-delta';
-	import { onDestroy, onMount } from 'svelte';
+	import { onMount } from 'svelte';
 
 	export let text: string;
 	let prevText: string;
@@ -17,38 +17,14 @@
 		}
 	}
 
-	onDestroy(() => {
-		if (quill) {
-			quill.getModule('toolbar').container.remove();
-		}
-	});
-
 	onMount(async () => {
 		const { default: Quill } = await import('quill');
 
 		quill = new Quill(container, {
-			theme: 'snow',
 			modules: {
-				toolbar: [
-					['bold', 'italic', 'underline', 'strike'],
-					['blockquote', 'code-block'],
-
-					[{ header: 1 }, { header: 2 }],
-					[{ list: 'ordered' }, { list: 'bullet' }],
-					[{ script: 'sub' }, { script: 'super' }],
-					[{ indent: '-1' }, { indent: '+1' }],
-					[{ direction: 'rtl' }],
-
-					[{ size: ['small', false, 'large', 'huge'] }],
-					[{ header: [1, 2, 3, 4, 5, 6, false] }],
-
-					[{ color: [] }, { background: [] }],
-					[{ font: [] }],
-					[{ align: [] }],
-
-					['clean']
-				]
-			}
+				toolbar: false
+			},
+			theme: 'snow'
 		});
 
 		if (text) {

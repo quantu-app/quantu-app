@@ -31,8 +31,7 @@ export function persistentStore<T>(name: string, defaults: T, timeoutMS = 5000) 
 	}
 
 	(async function init() {
-		const actorId = await getActorId(),
-			raw = await forage.getItem({ key: name })();
+		const [actorId, raw] = await Promise.all([getActorId(), forage.getItem({ key: name })()]);
 
 		if (raw) {
 			store.set(Automerge.load(raw, actorId));

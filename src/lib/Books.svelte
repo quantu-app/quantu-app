@@ -20,12 +20,7 @@
 		/>
 	</div>
 	<div class="col-auto">
-		<button
-			type="submit"
-			class="form-control btn btn-primary"
-			aria-label="Update"
-			on:click={onCreateBook}
-		>
+		<button type="submit" class="btn btn-primary" aria-label="Update" on:click={onCreateBook}>
 			Create Book
 		</button>
 	</div>

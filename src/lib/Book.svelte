@@ -42,11 +42,11 @@
 		<div class="col-auto">
 			<button
 				type="submit"
-				class="form-control btn btn-primary"
+				class="btn btn-primary"
 				aria-label="Create Block"
 				on:click={onCreateBlock}
 			>
-				Create Block
+				Create
 			</button>
 		</div>
 	</form>

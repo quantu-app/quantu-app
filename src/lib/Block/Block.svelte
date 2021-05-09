@@ -4,8 +4,10 @@
 	import { BlockType } from '$lib/state/blocks';
 	import Text from './Text.svelte';
 	import { onMount } from 'svelte';
+	import type { Room } from '@aicacia/peer';
 
 	export let block: IBlock & TableRow;
+	export let room: Room | undefined;
 	let edit: boolean;
 
 	onMount(() => {
@@ -15,6 +17,6 @@
 
 <div class="mb-4" on:click|stopPropagation={() => (edit = true)}>
 	{#if block.type === BlockType.Text}
-		<Text {block} {edit} />
+		<Text {block} {edit} {room} />
 	{/if}
 </div>

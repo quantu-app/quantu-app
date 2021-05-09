@@ -43,8 +43,8 @@
 	}
 
 	function onMessage(message: IMessage) {
-		if (message.type === 'edit-text-block' && message.payload.id === block.id) {
-			updateBlock(block.id, (block) => {
+		if (message.type === 'edit-text-block' && message.payload.uuid === block.uuid) {
+			updateBlock(block.uuid, (block) => {
 				applyOpsToText(block.text, message.payload.ops);
 				if (edit) {
 					quill?.updateContents(new DeltaClass(message.payload.ops), 'api');
@@ -74,9 +74,9 @@
 	}
 
 	function onTextChange(delta: Delta) {
-		updateBlock(block.id, (block) => {
+		updateBlock(block.uuid, (block) => {
 			room?.broadcast('edit-text-block', {
-				id: block.id,
+				uuid: block.uuid,
 				ops: delta.ops
 			});
 			applyOpsToText(block.text, delta.ops);
@@ -90,7 +90,7 @@
 	});
 </script>
 
-<div id={block.id}>
+<div id={block.uuid}>
 	{#if edit}
 		<div class="row">
 			<div class="col-6">

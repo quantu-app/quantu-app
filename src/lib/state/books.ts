@@ -1,25 +1,26 @@
-import { Table, TableRow, Text } from 'automerge';
+import { Table, TableRow, Text, uuid } from 'automerge';
 import { persistentStore } from './persistentStore';
 
 export interface IBook {
+	uuid: string;
 	name: Text;
 }
 
 export interface IBookJSON {
-	id: string;
+	uuid: string;
 	name: string;
 }
 
 export function bookToJSON(book: IBook & TableRow): IBookJSON {
 	return {
-		id: book.id,
+		uuid: book.uuid,
 		name: book.name.toString()
 	};
 }
 
 export function bookFromJSON(json: IBookJSON) {
 	return {
-		id: json.id,
+		uuid: json.uuid,
 		name: new Text(json.name)
 	};
 }
@@ -29,9 +30,9 @@ export const booksStore = persistentStore('books', {
 });
 
 export function createBook(name: string) {
-	let id: string;
+	const id = uuid();
 	booksStore.change(({ table }) => {
-		id = table.add({ name: new Text(name) });
+		table.add({ uuid: id, name: new Text(name) });
 	});
 	return id;
 }

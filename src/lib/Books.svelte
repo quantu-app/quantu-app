@@ -4,7 +4,9 @@
 	let bookName: string;
 
 	function onCreateBook() {
-		createBook(bookName);
+		if (bookName) {
+			createBook(bookName);
+		}
 	}
 </script>
 
@@ -32,7 +34,7 @@
 			<div class="ms-2 me-auto">
 				<h3 class="fw-bold">{book.name}</h3>
 			</div>
-			<a role="button" class="btn btn-primary" aria-label="Update" href={`/books/${book.id}`}>
+			<a role="button" class="btn btn-primary" aria-label="Update" href={`/books/${book.uuid}`}>
 				Edit
 			</a>
 		</li>

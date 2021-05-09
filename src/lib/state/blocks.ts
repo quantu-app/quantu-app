@@ -1,4 +1,4 @@
-import { ChangeFn, TableRow } from 'automerge';
+import { ChangeFn, TableRow, uuid } from 'automerge';
 import { Table, Text } from 'automerge';
 import { persistentStore } from './persistentStore';
 
@@ -7,12 +7,13 @@ export enum BlockType {
 }
 
 export interface IBaseBlock {
+	uuid: string;
 	type: BlockType;
-	bookId: string;
+	bookUuid: string;
 }
 
 export interface IBaseBlockJSON extends IBaseBlock {
-	id: string;
+	uuid: string;
 }
 
 export interface ITextBlock extends IBaseBlock {
@@ -34,8 +35,8 @@ export type IBlockJSON = ITextBlockJSON;
 
 export function blockToJSON(block: IBlock & TableRow): IBlockJSON {
 	const json = {
-		id: block.id,
-		bookId: block.bookId,
+		uuid: block.uuid,
+		bookUuid: block.bookUuid,
 		type: block.type
 	};
 
@@ -49,8 +50,8 @@ export function blockToJSON(block: IBlock & TableRow): IBlockJSON {
 
 export function blockFromJSON(json: IBlockJSON): IBlock {
 	const block = {
-		id: json.id,
-		bookId: json.bookId,
+		uuid: json.uuid,
+		bookUuid: json.bookUuid,
 		type: json.type
 	};
 
@@ -66,23 +67,23 @@ export const blocksStore = persistentStore('blocks', {
 	table: new Table<IBlock>()
 });
 
-export function createBlock(bookId: string, type: BlockType) {
-	let id: string;
+export function createBlock(bookUuid: string, type: BlockType) {
+	const id = uuid();
 	blocksStore.change(({ table }) => {
-		const block = { bookId, type } as IBlock;
+		const block = { uuid: id, bookUuid, type } as IBlock;
 
 		if (isTextBlock(block)) {
 			block.text = new Text();
 		}
 
-		id = table.add(block);
+		table.add(block);
 	});
 	return id;
 }
 
-export function updateBlock(blockId: string, changeFn: ChangeFn<IBlock & TableRow>) {
+export function updateBlock(blockUuid: string, changeFn: ChangeFn<IBlock & TableRow>) {
 	blocksStore.change(({ table }) => {
-		const block = table.byId(blockId);
+		const block = table.rows.find((row) => row.uuid === blockUuid);
 
 		if (block) {
 			changeFn(block);

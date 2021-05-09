@@ -11,7 +11,7 @@
 	let blockType: BlockType = BlockType.Text;
 
 	function onCreateBlock() {
-		createBlock(book.id, blockType);
+		createBlock(book.uuid, blockType);
 	}
 </script>
 

@@ -3,7 +3,7 @@
 	export async function load({ page: { params } }) {
 		return {
 			props: {
-				bookId: params.bookId
+				bookUuid: params.bookUuid
 			}
 		};
 	}
@@ -17,15 +17,14 @@
 	import { getAppId, getPeer, peer } from '$lib/state/peer';
 	import { blockFromJSON, blocksStore, blockToJSON } from '$lib/state/blocks';
 
-	export let bookId: string;
+	export let bookUuid: string;
 
-	$: book = $booksStore.table.rows.find((row) => row.id === bookId);
+	$: book = $booksStore.table.rows.find((row) => row.uuid === bookUuid);
 
 	let room: Room | undefined;
 
 	function onMessage(message: IMessage) {
-		console.log(message);
-		if (message.type === 'book') {
+		if (message.type === 'sync') {
 			booksStore.change(({ table }) => {
 				table.add(bookFromJSON(message.payload.book));
 			});
@@ -34,25 +33,22 @@
 					table.add(blockFromJSON(block));
 				});
 			});
-		} else if (message.type === 'get-book' && book) {
-			room.send(message.from, 'book', {
+			room.off('connection' as any, onConnection);
+		} else if (message.type === 'sync-book' && book) {
+			room.send(message.from, 'sync', {
 				book: bookToJSON(book),
-				blocks: $blocksStore.table.filter((row) => row.bookId === bookId).map(blockToJSON)
+				blocks: $blocksStore.table.filter((row) => row.bookUuid === bookUuid).map(blockToJSON)
 			});
 		}
 	}
 
 	function onConnection() {
-		if (book) {
-			room.off('connection' as any, onConnection);
-		} else {
-			room.broadcast('get-book', undefined);
-		}
+		room.broadcast('sync-book', undefined);
 	}
 
 	onMount(async () => {
 		const peer = await getPeer();
-		room = await peer.connectToRoom(getAppId(bookId));
+		room = await peer.connectToRoom(getAppId(bookUuid));
 
 		room.on('message' as any, onMessage);
 		room.on('connection' as any, onConnection);

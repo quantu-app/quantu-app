@@ -41,5 +41,5 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tagName: aicacia-id-${{ steps.branch_name.outputs.SOURCE_TAG }}
-          releaseName: aicacia-id-${{ steps.branch_name.outputs.SOURCE_TAG }}
+          tagName: aicacia-books-${{ steps.branch_name.outputs.SOURCE_TAG }}
+          releaseName: aicacia-books-${{ steps.branch_name.outputs.SOURCE_TAG }}

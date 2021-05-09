@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "aicacia-books.fullname" . }}-environment
+  labels:
+    {{- include "aicacia-books.labels" . | nindent 4 }}
+data:
+{{ toYaml .Values.env | indent 2 }}

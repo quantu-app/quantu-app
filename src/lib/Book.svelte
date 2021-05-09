@@ -3,9 +3,10 @@
 	import type { TableRow } from 'automerge';
 	import Block from './Block/Block.svelte';
 	import { blocksStore, createBlock, BlockType } from '$lib/state/blocks';
-	import { peer } from '$lib/state/peer';
+	import type { Room } from '@aicacia/peer';
 
 	export let book: IBook & TableRow;
+	export let room: Room | undefined;
 
 	let blockType: BlockType = BlockType.Text;
 
@@ -16,11 +17,9 @@
 
 <h1>{book.name}</h1>
 
-<p>PeerId: {$peer?.getId()}</p>
-
 <div class="mt-4">
 	{#each $blocksStore.table.rows as block}
-		<Block {block} />
+		<Block {block} {room} />
 	{/each}
 </div>
 

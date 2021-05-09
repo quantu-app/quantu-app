@@ -1,5 +1,5 @@
 import preprocess from 'svelte-preprocess';
-import adapterStatic from '@sveltejs/adapter-static';
+import adapterNode from '@sveltejs/adapter-node';
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
@@ -11,7 +11,7 @@ const config = {
 		// By default, `npm run build` will create a standard Node app.
 		// You can create optimized builds for different platforms by
 		// specifying a different adapter
-		adapter: adapterStatic(),
+		adapter: adapterNode(),
 		// hydrate the <div id="svelte"> element in src/app.html
 		target: '#svelte'
 	}

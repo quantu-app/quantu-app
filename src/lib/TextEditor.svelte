@@ -6,6 +6,7 @@
 	export let text: string;
 	let prevText: string;
 	export let onTextChange: (delta: Delta) => void;
+	export let onQuillMount: (quill: Quill) => void;
 
 	let quill: Quill;
 	let container: HTMLDivElement;
@@ -49,6 +50,10 @@
 		quill.on('text-change', onChange);
 
 		container.addEventListener('keydown', onKeyDown, { capture: true });
+
+		if (onQuillMount) {
+			onQuillMount(quill);
+		}
 	});
 </script>
 

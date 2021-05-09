@@ -10,14 +10,19 @@
 		"desktop": "tauri dev",
 		"desktop.build": "tauri build",
 		"lint": "prettier --check . && eslint --ignore-path .gitignore .",
-		"format": "prettier --write ."
+		"format": "prettier --write .",
+		"docker.build": "docker build -t docker.pkg.github.com/aicacia/ts-books/ui:latest .",
+		"docker.push": "docker push docker.pkg.github.com/aicacia/ts-books/ui:latest",
+		"docker.run": "docker run --name aicacia-books --rm -it -p 3000:3000 docker.pkg.github.com/aicacia/ts-books/ui:latest",
+		"helm.delete": "helm delete -n ui aicacia-books",
+		"helm": "helm upgrade aicacia-books helm/aicacia-books -n ui --install --set image.hash=$(docker inspect --format='\"{{index .Id}}\"' docker.pkg.github.com/aicacia/ts-books/ui:latest)"
 	},
 	"type": "module",
 	"devDependencies": {
 		"@aicacia/debounce": "^0.1.9",
 		"@aicacia/markdown": "aicacia/ts-markdown",
 		"@aicacia/peer": "aicacia/ts-peer",
-		"@sveltejs/adapter-static": "next",
+		"@sveltejs/adapter-node": "next",
 		"@sveltejs/kit": "next",
 		"@tauri-apps/tauri-forage": "*",
 		"@types/js-cookie": "^2.2.6",

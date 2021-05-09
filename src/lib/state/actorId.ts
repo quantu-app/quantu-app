@@ -1,7 +1,7 @@
 import { uuid } from 'automerge';
 import { forage } from '@tauri-apps/tauri-forage';
 
-let ACTOR_ID: string | null = null;
+let ACTOR_ID: string | undefined;
 
 const ACTOR_ID_KEY = 'actor_id',
 	events: Array<(actorId: string) => void> = [];
@@ -15,7 +15,7 @@ export function getActorId() {
 
 	if (!actorId) {
 		actorId = uuid();
-		await forage.setItem({ key: ACTOR_ID_KEY, value: actorId });
+		await forage.setItem({ key: ACTOR_ID_KEY, value: actorId })();
 	}
 
 	ACTOR_ID = actorId;

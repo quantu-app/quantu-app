@@ -1,13 +1,10 @@
 <script lang="ts">
-	import type { TableRow } from 'automerge';
 	import type { IBlock } from '$lib/state/blocks';
 	import { BlockType } from '$lib/state/blocks';
 	import Text from './Text.svelte';
 	import { onMount } from 'svelte';
-	import type { Room } from '@aicacia/peer';
 
-	export let block: IBlock & TableRow;
-	export let room: Room | undefined;
+	export let block: IBlock;
 	let edit: boolean;
 
 	onMount(() => {
@@ -17,6 +14,6 @@
 
 <div class="mb-4" on:click|stopPropagation={() => (edit = true)}>
 	{#if block.type === BlockType.Text}
-		<Text {block} {edit} {room} />
+		<Text {block} {edit} />
 	{/if}
 </div>

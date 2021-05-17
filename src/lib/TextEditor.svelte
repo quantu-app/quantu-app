@@ -1,15 +1,15 @@
 <script lang="ts">
 	import type Quill from 'quill';
 	import type Delta from 'quill-delta';
-	import { onMount } from 'svelte';
+	import { onMount, createEventDispatcher } from 'svelte';
 
 	export let text: string;
 	let prevText: string;
-	export let onTextChange: (delta: Delta) => void;
-	export let onQuillMount: (quill: Quill) => void;
+
+	const dispatch = createEventDispatcher<{ textchange: Delta; change: string }>();
 
 	let quill: Quill;
-	let container: HTMLDivElement;
+	let element: HTMLDivElement;
 
 	$: {
 		if (text !== prevText && quill) {
@@ -21,7 +21,7 @@
 	onMount(async () => {
 		const { default: Quill } = await import('quill');
 
-		quill = new Quill(container, {
+		quill = new Quill(element, {
 			modules: {
 				toolbar: false
 			},
@@ -34,13 +34,15 @@
 
 		function onChange(delta: Delta, _oldContents: Delta, source: string) {
 			if (source === 'user') {
-				onTextChange(delta);
+				dispatch('textchange', delta);
+				dispatch('change', quill.getText());
 			}
 		}
 
 		function onKeyDown(e: KeyboardEvent) {
 			if (e.key === 'Backspace') {
 				const str = quill.getText();
+
 				if (str !== '' && str !== '\n') {
 					e.stopPropagation();
 				}
@@ -49,12 +51,8 @@
 
 		quill.on('text-change', onChange);
 
-		container.addEventListener('keydown', onKeyDown, { capture: true });
-
-		if (onQuillMount) {
-			onQuillMount(quill);
-		}
+		element.addEventListener('keydown', onKeyDown, { capture: true });
 	});
 </script>
 
-<div bind:this={container} />
+<div bind:this={element} />

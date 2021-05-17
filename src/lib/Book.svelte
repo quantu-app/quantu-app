@@ -1,25 +1,22 @@
 <script lang="ts">
 	import type { IBook } from '$lib/state/books';
-	import type { TableRow } from 'automerge';
 	import Block from './Block/Block.svelte';
 	import { blocksStore, createBlock, BlockType } from '$lib/state/blocks';
-	import type { Room } from '@aicacia/peer';
 
-	export let book: IBook & TableRow;
-	export let room: Room | undefined;
+	export let book: IBook;
 
 	let blockType: BlockType = BlockType.Text;
 
 	function onCreateBlock() {
-		createBlock(book.uuid, blockType);
+		createBlock(book.id, blockType);
 	}
 </script>
 
 <h1>{book.name}</h1>
 
 <div class="mt-4">
-	{#each $blocksStore.table.rows as block}
-		<Block {block} {room} />
+	{#each Object.values($blocksStore.byId) as block}
+		<Block {block} />
 	{/each}
 </div>
 

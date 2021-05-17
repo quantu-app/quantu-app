@@ -29,12 +29,12 @@
 </form>
 
 <ul class="list-group mt-4">
-	{#each $booksStore.table.rows as book}
+	{#each Object.values($booksStore.byId) as book}
 		<li class="list-group-item d-flex justify-content-between align-items-start">
 			<div class="ms-2 me-auto">
 				<h3 class="fw-bold">{book.name}</h3>
 			</div>
-			<a role="button" class="btn btn-primary" aria-label="Update" href={`/books/${book.uuid}`}>
+			<a role="button" class="btn btn-primary" aria-label="Update" href={`/books/${book.id}`}>
 				Edit
 			</a>
 		</li>

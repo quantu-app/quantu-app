@@ -1,7 +1,3 @@
-<script context="module" lang="ts">
-	import "$lib/plugins";
-</script>
-
 <header class="container">
 	<div class="d-flex flex-wrap align-items-center justify-content-center">
 		<div class="d-flex align-items-center">

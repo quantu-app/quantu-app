@@ -1,5 +1,5 @@
-import { ChangeFn, TableRow, uuid } from 'automerge';
-import { Table, Text } from 'automerge';
+import type { Updater } from 'svelte/store';
+import { v4 } from 'uuid';
 import { persistentStore } from './persistentStore';
 
 export enum BlockType {
@@ -7,21 +7,12 @@ export enum BlockType {
 }
 
 export interface IBaseBlock {
-	uuid: string;
+	id: string;
 	type: BlockType;
-	bookUuid: string;
-}
-
-export interface IBaseBlockJSON extends IBaseBlock {
-	uuid: string;
+	bookId: string;
 }
 
 export interface ITextBlock extends IBaseBlock {
-	type: BlockType.Text;
-	text: Text;
-}
-
-export interface ITextBlockJSON extends IBaseBlockJSON {
 	type: BlockType.Text;
 	text: string;
 }
@@ -31,62 +22,36 @@ export function isTextBlock(value: unknown): value is ITextBlock {
 }
 
 export type IBlock = ITextBlock;
-export type IBlockJSON = ITextBlockJSON;
 
-export function blockToJSON(block: IBlock & TableRow): IBlockJSON {
-	const json = {
-		uuid: block.uuid,
-		bookUuid: block.bookUuid,
-		type: block.type
-	};
-
-	if (isTextBlock(block)) {
-		const textJSON = json as ITextBlockJSON;
-		textJSON.text = block.text.toString();
-	}
-
-	return json as IBlockJSON;
+export interface IBlocks {
+	byId: Record<string, IBlock>;
 }
 
-export function blockFromJSON(json: IBlockJSON): IBlock {
-	const block = {
-		uuid: json.uuid,
-		bookUuid: json.bookUuid,
-		type: json.type
-	};
-
-	if (isTextBlock(block)) {
-		const textBlock = block as ITextBlock;
-		textBlock.text = new Text(json.text);
-	}
-
-	return block as any;
-}
-
-export const blocksStore = persistentStore('blocks', {
-	table: new Table<IBlock>()
+export const blocksStore = persistentStore<IBlocks>('blocks', {
+	byId: {}
 });
 
-export function createBlock(bookUuid: string, type: BlockType) {
-	const id = uuid();
-	blocksStore.change(({ table }) => {
-		const block = { uuid: id, bookUuid, type } as IBlock;
+export function createBlock(bookId: string, type: BlockType) {
+	const block = { id: v4(), bookId, type } as IBlock;
 
-		if (isTextBlock(block)) {
-			block.text = new Text();
-		}
+	if (isTextBlock(block)) {
+		block.text = '';
+	}
 
-		table.add(block);
+	blocksStore.update((blocks) => {
+		blocks.byId[block.id] = block;
+		return blocks;
 	});
-	return id;
 }
 
-export function updateBlock(blockUuid: string, changeFn: ChangeFn<IBlock & TableRow>) {
-	blocksStore.change(({ table }) => {
-		const block = table.rows.find((row) => row.uuid === blockUuid);
+export function updateBlock(blockId: string, updater: Updater<IBlock>) {
+	blocksStore.update((blocks) => {
+		const block = blocks.byId[blockId];
 
 		if (block) {
-			changeFn(block);
+			blocks.byId[block.id] = updater(block);
 		}
+
+		return blocks;
 	});
 }

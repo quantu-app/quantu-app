@@ -35,7 +35,6 @@
 		function onChange(delta: Delta, _oldContents: Delta, source: string) {
 			if (source === 'user') {
 				dispatch('textchange', delta);
-				dispatch('change', quill.getText());
 			}
 		}
 

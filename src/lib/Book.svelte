@@ -1,11 +1,13 @@
 <script lang="ts">
-	import type { IBook } from '$lib/state/books';
+	import { booksStore, BlockType, createBlock } from '$lib/state/books';
+	import type { IBookMeta } from '$lib/state/books';
 	import Block from './Block/Block.svelte';
-	import { blocksStore, createBlock, BlockType } from '$lib/state/blocks';
+	import type { TableRow } from 'automerge';
 
-	export let book: IBook;
+	export let book: IBookMeta & TableRow;
 
 	let blockType: BlockType = BlockType.Text;
+	let bookStore = booksStore.getBookById(book.id);
 
 	function onCreateBlock() {
 		createBlock(book.id, blockType);
@@ -15,8 +17,8 @@
 <h1>{book.name}</h1>
 
 <div class="mt-4">
-	{#each Object.values($blocksStore.byId) as block}
-		<Block {block} />
+	{#each $bookStore.blocks.rows as block}
+		<Block bookId={book.id} {block} />
 	{/each}
 </div>
 

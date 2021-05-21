@@ -1,10 +1,12 @@
 <script lang="ts">
-	import type { IBlock } from '$lib/state/blocks';
-	import { BlockType } from '$lib/state/blocks';
 	import Text from './Text.svelte';
 	import { onMount } from 'svelte';
+	import type { IBlock } from '$lib/state/books';
+	import { BlockType } from '$lib/state/books';
+	import type { TableRow, UUID } from 'automerge';
 
-	export let block: IBlock;
+	export let bookId: UUID;
+	export let block: IBlock & TableRow;
 	let edit: boolean;
 
 	onMount(() => {
@@ -14,6 +16,6 @@
 
 <div class="mb-4" on:click|stopPropagation={() => (edit = true)}>
 	{#if block.type === BlockType.Text}
-		<Text {block} {edit} />
+		<Text {bookId} {block} {edit} />
 	{/if}
 </div>

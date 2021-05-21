@@ -1,11 +1,16 @@
 <script lang="ts">
-	import type { ITextBlock } from '$lib/state/blocks';
-	import { updateBlock } from '$lib/state/blocks';
+	import type { ITextBlock } from '$lib/state/books';
+	import { updateBlock } from '$lib/state/books';
 	import TextEditor from '$lib/TextEditor.svelte';
 	import Markdown from '$lib/Markdown.svelte';
 	import { beforeUpdate } from 'svelte';
+	import type { UUID, TableRow } from 'automerge';
+	import { Text } from 'automerge';
+	import type Delta from 'quill-delta';
+	import { applyOpsToText } from '$lib/utils';
 
-	export let block: ITextBlock;
+	export let bookId: UUID;
+	export let block: ITextBlock & TableRow;
 	export let edit: boolean;
 
 	let prevEdit: boolean;
@@ -21,11 +26,10 @@
 		}
 	});
 
-	function onChange(event: CustomEvent<string>) {
-		updateBlock(block.id, (block) => {
-			block.text = event.detail;
-			rendered = block.text;
-			return block;
+	function onTextChange(event: CustomEvent<Delta>) {
+		updateBlock(bookId, block.id, (block) => {
+			applyOpsToText(block.text, event.detail.ops);
+			rendered = block.text.toString();
 		});
 	}
 </script>
@@ -34,14 +38,14 @@
 	{#if edit}
 		<div class="row">
 			<div class="col-6">
-				<TextEditor {text} on:change={onChange} />
+				<TextEditor {text} on:textchange={onTextChange} />
 			</div>
 			<div class="col-6">
 				<Markdown markdown={rendered} />
 			</div>
 		</div>
-	{:else if block.text.trim()}
-		<Markdown markdown={block.text} />
+	{:else if block.text.toString().trim()}
+		<Markdown markdown={block.text.toString()} />
 	{:else}
 		<div class="d-flex align-items-center justify-content-center">
 			<h1>Click to Edit</h1>

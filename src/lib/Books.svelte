@@ -1,11 +1,11 @@
 <script lang="ts">
-	import { booksStore, createBook } from '$lib/state/books';
+	import { booksStore } from '$lib/state/books';
 
 	let bookName: string;
 
 	function onCreateBook() {
 		if (bookName) {
-			createBook(bookName);
+			booksStore.createBook(bookName);
 		}
 	}
 </script>
@@ -29,7 +29,7 @@
 </form>
 
 <ul class="list-group mt-4">
-	{#each Object.values($booksStore.byId) as book}
+	{#each $booksStore.metas.rows as book}
 		<li class="list-group-item d-flex justify-content-between align-items-start">
 			<div class="ms-2 me-auto">
 				<h3 class="fw-bold">{book.name}</h3>

@@ -15,7 +15,7 @@
 
 	export let bookId: string;
 
-	$: book = $booksStore.byId[bookId];
+	$: book = $booksStore.metas.byId(bookId);
 </script>
 
 <svelte:head>

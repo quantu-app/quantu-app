@@ -47,8 +47,8 @@
 				<Markdown markdown={rendered} />
 			</div>
 		</div>
-	{:else if block.text.toString().trim()}
-		<Markdown markdown={block.text.toString()} />
+	{:else if text.trim()}
+		<Markdown markdown={text.toString()} />
 	{:else}
 		<div class="d-flex align-items-center justify-content-center">
 			<h1>Click to Edit</h1>

@@ -40,11 +40,6 @@
 		}
 
 		function onKeyDown(e: KeyboardEvent) {
-			if (!multiline) {
-				if (e.key === 'Enter') {
-					e.stopPropagation();
-				}
-			}
 			if (e.key === 'Backspace') {
 				const str = quill.getText();
 

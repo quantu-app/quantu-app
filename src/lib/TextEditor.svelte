@@ -31,7 +31,7 @@
 
 <div on:click|stopPropagation={() => (edit = true)}>
 	{#if edit}
-		<QuillEditor text={textString} on:textchange={onTextChange} />
+		<QuillEditor text={textString} multiline={false} on:textchange={onTextChange} />
 	{:else}
 		{text.toString()}
 	{/if}

@@ -1,4 +1,5 @@
-import { ChangeFn, from, Table, Text, UUID } from 'automerge';
+import Automerge from 'automerge';
+import type { Table, ChangeFn, UUID, Text } from 'automerge';
 import { AutomergePersistentStore } from './AutomergePersistentStore';
 
 export enum BlockType {
@@ -8,6 +9,7 @@ export enum BlockType {
 export interface IBaseBlock {
 	type: BlockType;
 	index: number;
+	createdAt: string;
 }
 
 export interface ITextBlock extends IBaseBlock {
@@ -22,10 +24,10 @@ export function isTextBlock(value: unknown): value is ITextBlock {
 export type IBlock = ITextBlock;
 
 export function createBlock(bookId: string, type: BlockType) {
-	const block: IBaseBlock = { type, index: 0 };
+	const block: IBaseBlock = { type, index: 0, createdAt: new Date().toJSON() };
 
 	if (isTextBlock(block)) {
-		block.text = new Text();
+		block.text = new Automerge.Text();
 	}
 
 	booksStore.getBookById(bookId).change((book) => {
@@ -52,9 +54,13 @@ export interface IBookStore {
 	blocks: Table<IBlock>;
 }
 
+export enum BookType {
+	Journel = 'journel'
+}
+
 export interface IBookMeta {
 	name: Text;
-	updatedAt: string;
+	type: BookType;
 	createdAt: string;
 }
 
@@ -69,21 +75,21 @@ export function bookStoreId(bookId: UUID) {
 class BooksStore extends AutomergePersistentStore<IBooksStore> {
 	private bookStores: Record<string, AutomergePersistentStore<IBookStore>> = {};
 
-	createBook(name: string) {
+	createBook(name: string, type: BookType) {
 		let bookMetaId: UUID;
 		this.change((doc) => {
 			const date = new Date().toJSON();
 			bookMetaId = doc.metas.add({
-				name: new Text(name),
-				updatedAt: date,
+				name: new Automerge.Text(name),
+				type,
 				createdAt: date
 			});
 		});
 		const bookStore = new AutomergePersistentStore<IBookStore>(
 			bookStoreId(bookMetaId),
-			from({
+			Automerge.from({
 				bookMetaId,
-				blocks: new Table()
+				blocks: new Automerge.Table()
 			})
 		);
 		this.bookStores[bookMetaId] = bookStore;
@@ -98,11 +104,11 @@ class BooksStore extends AutomergePersistentStore<IBooksStore> {
 		} else {
 			const bookStore = new AutomergePersistentStore<IBookStore>(
 				bookStoreId(bookMetaId),
-				from({
+				Automerge.from({
 					bookMetaId,
-					name: new Text(),
+					name: new Automerge.Text(),
 					createdAt: new Date().toJSON(),
-					blocks: new Table()
+					blocks: new Automerge.Table()
 				})
 			);
 			this.bookStores[bookMetaId] = bookStore;
@@ -118,7 +124,7 @@ class BooksStore extends AutomergePersistentStore<IBooksStore> {
 
 export const booksStore = new BooksStore(
 	'books',
-	from({
-		metas: new Table()
+	Automerge.from({
+		metas: new Automerge.Table()
 	})
 );

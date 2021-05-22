@@ -1,57 +1,38 @@
 <script lang="ts">
-	import type Quill from 'quill';
+	import QuillEditor from '$lib/QuillEditor.svelte';
+	import { beforeUpdate, createEventDispatcher, onMount } from 'svelte';
 	import type Delta from 'quill-delta';
-	import { onMount, createEventDispatcher } from 'svelte';
+	import type { Text } from 'automerge';
 
-	export let text: string;
-	let prevText: string;
+	export let text: Text;
 
-	const dispatch = createEventDispatcher<{ textchange: Delta; change: string }>();
+	const dispatch = createEventDispatcher<{ textchange: Delta }>();
 
-	let quill: Quill;
-	let element: HTMLDivElement;
+	let textString = text.toString();
 
-	$: {
-		if (text !== prevText && quill) {
-			prevText = text;
-			quill.setText(text);
+	let edit: boolean;
+	let prevEdit: boolean;
+
+	beforeUpdate(() => {
+		if (edit !== prevEdit) {
+			prevEdit = edit;
+			textString = text.toString();
 		}
-	}
-
-	onMount(async () => {
-		const { default: Quill } = await import('quill');
-
-		quill = new Quill(element, {
-			modules: {
-				toolbar: false
-			},
-			theme: 'snow'
-		});
-
-		if (text) {
-			quill.setText(text);
-		}
-
-		function onChange(delta: Delta, _oldContents: Delta, source: string) {
-			if (source === 'user') {
-				dispatch('textchange', delta);
-			}
-		}
-
-		function onKeyDown(e: KeyboardEvent) {
-			if (e.key === 'Backspace') {
-				const str = quill.getText();
-
-				if (str !== '' && str !== '\n') {
-					e.stopPropagation();
-				}
-			}
-		}
-
-		quill.on('text-change', onChange);
-
-		element.addEventListener('keydown', onKeyDown, { capture: true });
 	});
+
+	onMount(() => {
+		window.addEventListener('click', () => (edit = false));
+	});
+
+	function onTextChange(event: CustomEvent<Delta>) {
+		dispatch('textchange', event.detail);
+	}
 </script>
 
-<div bind:this={element} />
+<div on:click|stopPropagation={() => (edit = true)}>
+	{#if edit}
+		<QuillEditor text={textString} on:textchange={onTextChange} />
+	{:else}
+		{text.toString()}
+	{/if}
+</div>

@@ -1,16 +1,17 @@
 import { debounce } from '@aicacia/debounce';
 import { forage } from '@tauri-apps/tauri-forage';
-import { load, save, FreezeObject, BinaryDocument, change, ChangeFn } from 'automerge';
+import Automerge from 'automerge';
+import type { ChangeFn, Doc, BinaryDocument } from 'automerge';
 import { get, Readable, Subscriber, writable, Writable } from 'svelte/store';
 
-export class AutomergePersistentStore<T> implements Readable<FreezeObject<T>> {
+export class AutomergePersistentStore<T> implements Readable<Doc<T>> {
 	protected name: string;
-	protected store: Writable<FreezeObject<T>>;
+	protected store: Writable<Doc<T>>;
 	protected initialized = false;
 	protected changeFns: ChangeFn<T>[] = [];
 	protected debouncedPersist: () => void;
 
-	constructor(name: string, initialState: FreezeObject<T>, timeoutMS = 5000) {
+	constructor(name: string, initialState: Doc<T>, timeoutMS = 5000) {
 		this.name = name;
 		this.store = writable(initialState);
 		this.init();
@@ -21,12 +22,16 @@ export class AutomergePersistentStore<T> implements Readable<FreezeObject<T>> {
 		const raw: string = await forage.getItem({ key: this.name })();
 
 		if (raw) {
-			this.store.set(this.fromString(raw));
+			try {
+				this.store.set(this.fromString(raw));
+			} catch (error) {
+				console.error(error);
+			}
 		}
 
 		const changeFns = this.changeFns.slice();
 		this.changeFns.length = 0;
-		changeFns.forEach((changeFn) => this.store.update((doc) => change(doc, changeFn)));
+		changeFns.forEach((changeFn) => this.store.update((doc) => Automerge.change(doc, changeFn)));
 		this.debouncedPersist();
 
 		this.initialized = true;
@@ -41,28 +46,25 @@ export class AutomergePersistentStore<T> implements Readable<FreezeObject<T>> {
 	}
 	change(changeFn: ChangeFn<T>) {
 		if (this.initialized) {
-			this.store.update((doc) => change(doc, changeFn));
+			this.store.update((doc) => Automerge.change(doc, changeFn));
 			this.debouncedPersist();
 		} else {
 			this.changeFns.push(changeFn);
 		}
 		return this;
 	}
-	subscribe(
-		subscriber: Subscriber<FreezeObject<T>>,
-		invalidate?: (value?: FreezeObject<T>) => void
-	) {
+	subscribe(subscriber: Subscriber<Doc<T>>, invalidate?: (value?: Doc<T>) => void) {
 		return this.store.subscribe(subscriber, invalidate);
 	}
 
 	toString() {
-		const bytes = save(this.get());
+		const bytes = Automerge.save(this.get());
 		return bytesToString(bytes);
 	}
 
-	fromString(str: string): FreezeObject<T> {
+	fromString(str: string): Doc<T> {
 		const bytes = stringToBytes(str);
-		return load<T>(bytes);
+		return Automerge.load<T>(bytes);
 	}
 }
 
@@ -71,9 +73,11 @@ export function bytesToString(bytes: BinaryDocument): string {
 }
 
 export function stringToBytes(hexString: string): BinaryDocument {
-	const array = new Uint8Array(
-		hexString.match(/.{1,2}/g).map((byte) => parseInt(byte, 16))
-	) as unknown as BinaryDocument;
+	const result = [];
+	for (let i = 0; i < hexString.length; i += 2) {
+		result.push(parseInt(hexString.substr(i, 2), 16));
+	}
+	const array = new Uint8Array(result) as unknown as BinaryDocument;
 	array.__binaryDocument = true;
 	return array;
 }

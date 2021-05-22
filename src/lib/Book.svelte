@@ -3,6 +3,10 @@
 	import type { IBookMeta } from '$lib/state/books';
 	import Block from './Block/Block.svelte';
 	import type { TableRow } from 'automerge';
+	import { onDestroy } from 'svelte';
+	import TextEditor from './TextEditor.svelte';
+	import type Delta from 'quill-delta';
+	import { applyOpsToText } from './utils';
 
 	export let book: IBookMeta & TableRow;
 
@@ -12,9 +16,21 @@
 	function onCreateBlock() {
 		createBlock(book.id, blockType);
 	}
+
+	function onBookNameChange(event: CustomEvent<Delta>) {
+		booksStore.change((doc) => {
+			applyOpsToText(doc.metas.byId(book.id).name, event.detail.ops);
+		});
+	}
+
+	onDestroy(() => {
+		booksStore.unloadBookById(book.id);
+	});
 </script>
 
-<h1>{book.name}</h1>
+<h1>
+	<TextEditor text={book.name} on:textchange={onBookNameChange} />
+</h1>
 
 <div class="mt-4">
 	{#each $bookStore.blocks.rows as block}
@@ -27,8 +43,8 @@
 		<div class="col-auto">
 			<select
 				class="form-select"
-				placeholder="New Book Name"
-				aria-label="New Book Name"
+				placeholder="New Block Type"
+				aria-label="New Block Type"
 				required
 				bind:value={blockType}
 			>

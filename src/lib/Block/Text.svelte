@@ -1,11 +1,10 @@
 <script lang="ts">
 	import type { ITextBlock } from '$lib/state/books';
 	import { updateBlock } from '$lib/state/books';
-	import TextEditor from '$lib/TextEditor.svelte';
+	import QuillEditor from '$lib/QuillEditor.svelte';
 	import Markdown from '$lib/Markdown.svelte';
-	import { beforeUpdate } from 'svelte';
+	import { beforeUpdate, onMount } from 'svelte';
 	import type { UUID, TableRow } from 'automerge';
-	import { Text } from 'automerge';
 	import type Delta from 'quill-delta';
 	import { applyOpsToText } from '$lib/utils';
 
@@ -32,13 +31,17 @@
 			rendered = block.text.toString();
 		});
 	}
+
+	onMount(() => {
+		window.addEventListener('click', () => (edit = false));
+	});
 </script>
 
 <div>
 	{#if edit}
 		<div class="row">
 			<div class="col-6">
-				<TextEditor {text} on:textchange={onTextChange} />
+				<QuillEditor {text} on:textchange={onTextChange} />
 			</div>
 			<div class="col-6">
 				<Markdown markdown={rendered} />

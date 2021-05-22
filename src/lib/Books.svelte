@@ -1,11 +1,12 @@
 <script lang="ts">
-	import { booksStore } from '$lib/state/books';
+	import { booksStore, BookType } from '$lib/state/books';
 
 	let bookName: string;
+	let bookType: BookType = BookType.Journel;
 
 	function onCreateBook() {
 		if (bookName) {
-			booksStore.createBook(bookName);
+			booksStore.createBook(bookName, bookType);
 		}
 	}
 </script>
@@ -20,6 +21,19 @@
 			required
 			bind:value={bookName}
 		/>
+	</div>
+	<div class="col-auto">
+		<select
+			class="form-select"
+			placeholder="New Book Type"
+			aria-label="New Book Type"
+			required
+			bind:value={bookType}
+		>
+			{#each Object.entries(BookType) as [key, value]}
+				<option {value}>{key}</option>
+			{/each}
+		</select>
 	</div>
 	<div class="col-auto">
 		<button type="submit" class="btn btn-primary" aria-label="Update" on:click={onCreateBook}>

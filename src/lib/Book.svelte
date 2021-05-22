@@ -13,8 +13,8 @@
 	let blockType: BlockType = BlockType.Text;
 	let bookStore = booksStore.getBookById(book.id);
 
-	function onCreateBlock() {
-		createBlock(book.id, blockType);
+	async function onCreateBlock() {
+		await createBlock(book.id, blockType);
 	}
 
 	function onBookNameChange(event: CustomEvent<Delta>) {

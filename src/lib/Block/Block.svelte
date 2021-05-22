@@ -15,6 +15,9 @@
 </script>
 
 <div class="mb-4" on:click|stopPropagation={() => (edit = true)}>
+	<div>
+		{new Date(block.createdAt).toDateString()}
+	</div>
 	{#if block.type === BlockType.Text}
 		<Text {bookId} {block} {edit} />
 	{/if}

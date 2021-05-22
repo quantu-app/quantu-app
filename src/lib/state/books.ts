@@ -9,6 +9,7 @@ export enum BlockType {
 export interface IBaseBlock {
 	type: BlockType;
 	index: number;
+	geolocation: GeolocationCoordinates | null;
 	createdAt: string;
 }
 
@@ -17,14 +18,29 @@ export interface ITextBlock extends IBaseBlock {
 	text: Text;
 }
 
+export async function getGeolocationCoordinates() {
+	const geolocationPosition = await new Promise<GeolocationPosition | null>((resolve) =>
+		navigator.geolocation.getCurrentPosition(resolve, (error) => {
+			console.error(error);
+			resolve(null);
+		})
+	);
+	return geolocationPosition ? geolocationPosition.coords : null;
+}
+
 export function isTextBlock(value: unknown): value is ITextBlock {
 	return value !== null && typeof value === 'object' && value['type'] === BlockType.Text;
 }
 
 export type IBlock = ITextBlock;
 
-export function createBlock(bookId: string, type: BlockType) {
-	const block: IBaseBlock = { type, index: 0, createdAt: new Date().toJSON() };
+export async function createBlock(bookId: string, type: BlockType) {
+	const block: IBaseBlock = {
+		type,
+		index: 0,
+		geolocation: await getGeolocationCoordinates(),
+		createdAt: new Date().toJSON()
+	};
 
 	if (isTextBlock(block)) {
 		block.text = new Automerge.Text();
@@ -32,7 +48,7 @@ export function createBlock(bookId: string, type: BlockType) {
 
 	booksStore.getBookById(bookId).change((book) => {
 		block.index = book.blocks.rows.reduce(
-			(maxIndex, block) => (maxIndex > block.index ? maxIndex : block.index + 1),
+			(maxIndex, block) => (maxIndex >= block.index ? maxIndex : block.index + 1),
 			0
 		);
 		book.blocks.add(block as IBlock);

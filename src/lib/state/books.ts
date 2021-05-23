@@ -48,7 +48,7 @@ export async function createBlock(bookId: string, type: BlockType) {
 
 	booksStore.getBookById(bookId).change((book) => {
 		block.index = book.blocks.rows.reduce(
-			(maxIndex, block) => (maxIndex >= block.index ? maxIndex : block.index + 1),
+			(maxIndex, b) => (maxIndex <= b.index ? b.index + 1 : maxIndex),
 			0
 		);
 		book.blocks.add(block as IBlock);

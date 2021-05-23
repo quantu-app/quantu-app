@@ -51,7 +51,7 @@
 		<Markdown markdown={text.toString()} />
 	{:else}
 		<div class="d-flex align-items-center justify-content-center">
-			<h1>Click to Edit</h1>
+			<h3>Click to Edit</h3>
 		</div>
 	{/if}
 </div>

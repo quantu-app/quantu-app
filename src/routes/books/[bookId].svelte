@@ -11,11 +11,11 @@
 
 <script lang="ts">
 	import { booksStore } from '$lib/state/books';
-	import Book from '$lib/Book.svelte';
+	import Book from '$lib/Book/Book.svelte';
 
 	export let bookId: string;
 
-	$: book = $booksStore.metas.byId(bookId);
+	$: book = $booksStore.books.byId(bookId);
 </script>
 
 <svelte:head>

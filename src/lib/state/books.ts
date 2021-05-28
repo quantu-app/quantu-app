@@ -1,146 +1,74 @@
 import Automerge from 'automerge';
-import type { Table, ChangeFn, UUID, Text } from 'automerge';
-import { AutomergePersistentStore } from './AutomergePersistentStore';
+import type { Table, Text } from 'automerge';
+import { AutomergePersistentStore } from '$lib/state/AutomergePersistentStore';
+import { BlocksStore } from './blocks';
 
-export enum BlockType {
-	Text = 'text'
-}
-
-export interface IBaseBlock {
-	type: BlockType;
-	index: number;
-	geolocation: GeolocationCoordinates | null;
-	createdAt: string;
-}
-
-export interface ITextBlock extends IBaseBlock {
-	type: BlockType.Text;
-	text: Text;
-}
-
-export async function getGeolocationCoordinates() {
-	const geolocationPosition = await new Promise<GeolocationPosition | null>((resolve) =>
-		navigator.geolocation.getCurrentPosition(resolve, (error) => {
-			console.error(error);
-			resolve(null);
-		})
-	);
-	return geolocationPosition ? geolocationPosition.coords : null;
-}
-
-export function isTextBlock(value: unknown): value is ITextBlock {
-	return value !== null && typeof value === 'object' && value['type'] === BlockType.Text;
-}
-
-export type IBlock = ITextBlock;
-
-export async function createBlock(bookId: string, type: BlockType) {
-	const block: IBaseBlock = {
-		type,
-		index: 0,
-		geolocation: await getGeolocationCoordinates(),
-		createdAt: new Date().toJSON()
-	};
-
-	if (isTextBlock(block)) {
-		block.text = new Automerge.Text();
-	}
-
-	booksStore.getBookById(bookId).change((book) => {
-		block.index = book.blocks.rows.reduce(
-			(maxIndex, b) => (maxIndex <= b.index ? b.index + 1 : maxIndex),
-			0
-		);
-		book.blocks.add(block as IBlock);
-	});
-}
-
-export function updateBlock(bookId: string, blockId: string, changeFn: ChangeFn<IBlock>) {
-	booksStore.getBookById(bookId).change((book) => {
-		const block = book.blocks.byId(blockId);
-
-		if (block) {
-			changeFn(block);
-		}
-	});
-}
-
-export interface IBookStore {
-	bookMetaId: UUID;
-	blocks: Table<IBlock>;
-}
+export const BOOKS_TABLE = 'books';
 
 export enum BookType {
-	Journel = 'journel'
+	Journal = 'journal'
 }
 
-export interface IBookMeta {
+export interface IBookBase {
 	name: Text;
 	type: BookType;
 	createdAt: string;
 }
 
-export interface IBooksStore {
-	metas: Table<IBookMeta>;
+export interface IJournalBook extends IBookBase {
+	type: BookType.Journal;
 }
 
-export function bookStoreId(bookId: UUID) {
-	return `book-${bookId}`;
+export function isJournalBlock(value: unknown): value is IJournalBook {
+	return value !== null && typeof value === 'object' && value['type'] === BookType.Journal;
 }
 
-class BooksStore extends AutomergePersistentStore<IBooksStore> {
-	private bookStores: Record<string, AutomergePersistentStore<IBookStore>> = {};
+export type IBook = IJournalBook;
 
-	createBook(name: string, type: BookType) {
-		let bookMetaId: UUID;
+export interface IBooks {
+	books: Table<IBook>;
+}
+
+class BooksStore extends AutomergePersistentStore<IBooks> {
+	private blockStores: Record<string, BlocksStore> = {};
+
+	createBook(type: BookType, name?: string) {
 		this.change((doc) => {
-			const date = new Date().toJSON();
-			bookMetaId = doc.metas.add({
-				name: new Automerge.Text(name),
+			const bookId = doc.books.add({
+				name: new Automerge.Text(name || new Date().toDateString()),
 				type,
-				createdAt: date
+				createdAt: new Date().toJSON()
 			});
+			const blockStore = new BlocksStore(bookId);
+			this.blockStores[bookId] = blockStore;
 		});
-		const bookStore = new AutomergePersistentStore<IBookStore>(
-			bookStoreId(bookMetaId),
-			Automerge.from({
-				bookMetaId,
-				blocks: new Automerge.Table()
-			})
-		);
-		this.bookStores[bookMetaId] = bookStore;
-		return bookStore;
 	}
 
-	getBookById(bookMetaId: string) {
-		const bookStore = this.bookStores[bookMetaId];
+	getBookById(bookId: string) {
+		const blockStore = this.blockStores[bookId];
 
-		if (bookStore) {
-			return bookStore;
+		if (blockStore) {
+			return blockStore;
 		} else {
-			const bookStore = new AutomergePersistentStore<IBookStore>(
-				bookStoreId(bookMetaId),
-				Automerge.from({
-					bookMetaId,
-					name: new Automerge.Text(),
-					createdAt: new Date().toJSON(),
-					blocks: new Automerge.Table()
-				})
-			);
-			this.bookStores[bookMetaId] = bookStore;
-			return bookStore;
+			const blockStore = new BlocksStore(bookId);
+			this.blockStores[bookId] = blockStore;
+			return blockStore;
 		}
 	}
 
-	unloadBookById(bookMetaId: string) {
-		delete this.bookStores[bookMetaId];
+	async unloadBookById(bookId: string) {
+		const blockStore = this.blockStores[bookId];
+		if (blockStore) {
+			delete this.blockStores[bookId];
+			await blockStore.close();
+		}
 		return this;
 	}
 }
 
 export const booksStore = new BooksStore(
-	'books',
+	BOOKS_TABLE,
 	Automerge.from({
-		metas: new Automerge.Table()
+		books: new Automerge.Table()
 	})
 );

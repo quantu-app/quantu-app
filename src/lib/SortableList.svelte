@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
 
-	type T = $$Generic;
+	type T = any;
 
 	let isOver = false;
 	const getDraggedParent = (node) =>
@@ -27,7 +27,7 @@
 		reorder({ from, to });
 	};
 
-	const dispatch = createEventDispatcher();
+	const dispatch = createEventDispatcher<{ sort: T[] }>();
 	const reorder = ({ from, to }) => {
 		let newList = [...list];
 		newList[from] = [newList[to], (newList[to] = newList[from])][0];

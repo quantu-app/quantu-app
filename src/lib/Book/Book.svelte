@@ -1,30 +1,30 @@
 <script lang="ts">
-	import SortableList from './SortableList.svelte';
-	import { booksStore, BlockType, createBlock } from '$lib/state/books';
-	import type { IBlock } from '$lib/state/books';
-	import type { IBookMeta } from '$lib/state/books';
-	import Block from './Block/Block.svelte';
+	import SortableList from '$lib/SortableList.svelte';
+	import { BlockType } from '$lib/state/blocks';
+	import { booksStore } from '$lib/state/books';
+	import type { IBlock } from '$lib/state/blocks';
+	import type { IBook } from '$lib/state/books';
+	import Block from '$lib/Block/Block.svelte';
 	import type { FreezeObject, TableRow } from 'automerge';
-	import { onDestroy, onMount } from 'svelte';
-	import TextEditor from './TextEditor.svelte';
+	import { onDestroy } from 'svelte';
+	import TextEditor from '$lib/TextEditor.svelte';
 	import type Delta from 'quill-delta';
-	import { applyOpsToText } from './utils';
+	import { applyOpsToText } from '$lib/utils';
 
-	export let book: IBookMeta & TableRow;
+	export let book: IBook & TableRow;
 
 	let blockType: BlockType = BlockType.Text;
-	let bookStore = booksStore.getBookById(book.id);
-	let blocksElement: HTMLUListElement;
+	let blockStore = booksStore.getBookById(book.id);
 
-	$: blocks = $bookStore.blocks.rows.sort(sortBlocks);
+	$: blocks = $blockStore.blocks.rows.sort(sortBlocks);
 
-	async function onCreateBlock() {
-		await createBlock(book.id, blockType);
+	function onCreateBlock() {
+		blockStore.createBlock(blockType);
 	}
 
 	function onBookNameChange(event: CustomEvent<Delta>) {
 		booksStore.change((doc) => {
-			applyOpsToText(doc.metas.byId(book.id).name, event.detail.ops);
+			applyOpsToText(doc.books.byId(book.id).name, event.detail.ops);
 		});
 	}
 
@@ -41,7 +41,7 @@
 	}
 
 	function onSort(e: CustomEvent<Array<FreezeObject<IBlock & TableRow>>>) {
-		bookStore.change((doc) => {
+		blockStore.change((doc) => {
 			let index = 0;
 			e.detail
 				.map((block) => block.id)
@@ -70,13 +70,11 @@
 	on:sort={onSort}
 	klass="mt-4 list-group list-group-flush"
 >
-	<li class="list-group-item">
+	<li class="list-group-item {book.type.toLowerCase()}">
 		<div class="d-flex justify-content-between align-items-start">
 			<button type="button" class="btn btn-primary drag-sort-btn"
 				><i class="bi bi-arrows-move" /></button
 			>
-			<p>{item.index + 1} {item.id}</p>
-			<p>{new Date(item.createdAt).toDateString()}</p>
 			<button
 				type="button"
 				class="btn-close"
@@ -84,7 +82,7 @@
 				on:click={createOnDeleteBlock(item)}
 			/>
 		</div>
-		<Block bookId={book.id} block={item} />
+		<Block {blockStore} block={item} />
 	</li>
 </SortableList>
 

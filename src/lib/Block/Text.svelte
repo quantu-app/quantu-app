@@ -1,14 +1,13 @@
 <script lang="ts">
-	import type { ITextBlock } from '$lib/state/books';
-	import { updateBlock } from '$lib/state/books';
+	import type { ITextBlock, BlocksStore } from '$lib/state/blocks';
 	import QuillEditor from '$lib/QuillEditor.svelte';
 	import Markdown from '$lib/Markdown.svelte';
 	import { beforeUpdate, onMount } from 'svelte';
-	import type { UUID, TableRow } from 'automerge';
+	import type { TableRow } from 'automerge';
 	import type Delta from 'quill-delta';
 	import { applyOpsToText } from '$lib/utils';
 
-	export let bookId: UUID;
+	export let blockStore: BlocksStore;
 	export let block: ITextBlock & TableRow;
 	export let edit: boolean;
 
@@ -26,7 +25,7 @@
 	});
 
 	function onTextChange(event: CustomEvent<Delta>) {
-		updateBlock(bookId, block.id, (block) => {
+		blockStore.updateBlock(block.id, (block) => {
 			applyOpsToText(block.text, event.detail.ops);
 			rendered = block.text.toString();
 		});

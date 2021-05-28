@@ -1,11 +1,11 @@
 <script lang="ts">
 	import Text from './Text.svelte';
 	import { onDestroy } from 'svelte';
-	import type { IBlock } from '$lib/state/books';
-	import { BlockType } from '$lib/state/books';
-	import type { TableRow, UUID } from 'automerge';
+	import type { BlocksStore, IBlock } from '$lib/state/blocks';
+	import { BlockType } from '$lib/state/blocks';
+	import type { TableRow } from 'automerge';
 
-	export let bookId: UUID;
+	export let blockStore: BlocksStore;
 	export let block: IBlock & TableRow;
 	let edit: boolean;
 
@@ -20,6 +20,6 @@
 
 <div on:click|stopPropagation={() => (edit = true)}>
 	{#if block.type === BlockType.Text}
-		<Text {bookId} {block} {edit} />
+		<Text {blockStore} {block} {edit} />
 	{/if}
 </div>

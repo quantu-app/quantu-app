@@ -8,6 +8,7 @@ export class AutomergePersistentStore<T> implements Readable<Doc<T>> {
 	protected name: string;
 	protected store: Writable<Doc<T>>;
 	protected initialized = false;
+	protected saved = false;
 	protected changeFns: ChangeFn<T>[] = [];
 	protected debouncedPersist: () => void;
 
@@ -15,18 +16,21 @@ export class AutomergePersistentStore<T> implements Readable<Doc<T>> {
 		this.name = name;
 		this.store = writable(initialState);
 		this.init();
-		this.debouncedPersist = debounce(this.persist, timeoutMS);
+		this.debouncedPersist = debounce(this.persist, timeoutMS, {
+			after: () => (this.saved = true),
+			before: () => (this.saved = false)
+		});
 	}
 
 	private async init() {
-		const raw: string = await forage.getItem({ key: this.name })();
+		try {
+			const raw: string = await forage.getItem({ key: this.name })();
 
-		if (raw) {
-			try {
+			if (raw) {
 				this.store.set(this.fromString(raw));
-			} catch (error) {
-				console.error(error);
 			}
+		} catch (error) {
+			console.error(error);
 		}
 
 		const changeFns = this.changeFns.slice();
@@ -37,9 +41,17 @@ export class AutomergePersistentStore<T> implements Readable<Doc<T>> {
 		this.initialized = true;
 	}
 
-	protected async persist() {
-		await forage.setItem({ key: this.name, value: this.toString() })();
+	async close() {
+		await this.persist();
+		return this;
 	}
+
+	protected persist = () => {
+		if (!this.saved) {
+			forage.setItem({ key: this.name, value: this.toString() })();
+			this.saved = true;
+		}
+	};
 
 	get() {
 		return get(this.store);

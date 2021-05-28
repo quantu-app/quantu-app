@@ -1,9 +1,8 @@
 <script lang="ts">
 	import { Marked } from '@ts-stack/markdown';
-	import { afterUpdate } from 'svelte';
+	import { afterUpdate, onMount } from 'svelte';
 
 	export let markdown: string;
-	let prevMarkdown: string;
 	let element: HTMLDivElement;
 
 	const MARKDOWN_OPTIONS = {
@@ -14,11 +13,15 @@
 		throwOnError: false
 	};
 
-	afterUpdate(() => {
-		if (element && prevMarkdown !== markdown) {
-			prevMarkdown = markdown;
+	function renderKatex() {
+		if (element) {
 			(window as any).renderMathInElement(element, MARKDOWN_OPTIONS);
 		}
+	}
+
+	onMount(renderKatex);
+	afterUpdate(() => {
+		renderKatex();
 	});
 </script>
 

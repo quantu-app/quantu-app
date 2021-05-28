@@ -2,26 +2,26 @@
 	import { booksStore, BookType } from '$lib/state/books';
 
 	let bookName: string;
-	let bookType: BookType = BookType.Journel;
+	let bookType: BookType = BookType.Journal;
 
 	function onCreateBook() {
-		if (bookName) {
-			booksStore.createBook(bookName, bookType);
-		}
+		booksStore.createBook(bookType, bookName);
 	}
 </script>
 
 <form action="javascript:void(0);" class="row mt-4">
-	<div class="col-auto">
-		<input
-			type="text"
-			class="form-control"
-			placeholder="New Book Name"
-			aria-label="New Book Name"
-			required
-			bind:value={bookName}
-		/>
-	</div>
+	{#if bookType !== BookType.Journal}
+		<div class="col-auto">
+			<input
+				type="text"
+				class="form-control"
+				placeholder="New Book Name"
+				aria-label="New Book Name"
+				required
+				bind:value={bookName}
+			/>
+		</div>
+	{/if}
 	<div class="col-auto">
 		<select
 			class="form-select"
@@ -43,7 +43,7 @@
 </form>
 
 <ul class="list-group mt-4">
-	{#each $booksStore.metas.rows as book}
+	{#each $booksStore.books.rows.filter((book) => book.type === bookType) as book}
 		<li class="list-group-item d-flex justify-content-between align-items-start">
 			<div class="ms-2 me-auto">
 				<h3 class="fw-bold">{book.name}</h3>

@@ -10,6 +10,7 @@
 </script>
 
 <script lang="ts">
+	import { pascalCase } from 'pascal-case';
 	import { booksStore } from '$lib/state/books';
 	import Book from '$lib/Book/Book.svelte';
 
@@ -19,7 +20,7 @@
 </script>
 
 <svelte:head>
-	<title>Book: {book?.name}</title>
+	<title>{book ? pascalCase(book.type) : 'Book'} - {book?.name}</title>
 </svelte:head>
 
 {#if book}

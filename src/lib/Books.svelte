@@ -15,8 +15,8 @@
 			<input
 				type="text"
 				class="form-control"
-				placeholder="New Book Name"
-				aria-label="New Book Name"
+				placeholder="New Name"
+				aria-label="New Name"
 				required
 				bind:value={bookName}
 			/>
@@ -25,8 +25,8 @@
 	<div class="col-auto">
 		<select
 			class="form-select"
-			placeholder="New Book Type"
-			aria-label="New Book Type"
+			placeholder="New Type"
+			aria-label="New Type"
 			required
 			bind:value={bookType}
 		>
@@ -37,14 +37,14 @@
 	</div>
 	<div class="col-auto">
 		<button type="submit" class="btn btn-primary" aria-label="Update" on:click={onCreateBook}>
-			Create Book
+			Create
 		</button>
 	</div>
 </form>
 
-<ul class="list-group mt-4">
+<ul class="mt-4">
 	{#each $booksStore.books.rows.filter((book) => book.type === bookType) as book}
-		<li class="list-group-item d-flex justify-content-between align-items-start">
+		<li class="d-flex justify-content-between align-items-start">
 			<div class="ms-2 me-auto">
 				<h3 class="fw-bold">{book.name}</h3>
 			</div>

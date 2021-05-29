@@ -74,25 +74,15 @@
 	{geolocationName}
 </h3>
 
-<SortableList
-	list={blocks}
-	key="id"
-	handle=".drag-sort-btn"
-	let:item
-	on:sort={onSort}
-	klass="mt-4 list-group list-group-flush"
->
-	<li class="list-group-item {book.type.toLowerCase()}">
+<SortableList list={blocks} key="id" handle=".drag-sort-btn" let:item on:sort={onSort} klass="mt-4">
+	<li class={book.type.toLowerCase()}>
 		<div class="d-flex justify-content-between align-items-start">
 			<button type="button" class="btn btn-primary drag-sort-btn"
 				><i class="bi bi-arrows-move" /></button
 			>
-			<button
-				type="button"
-				class="btn-close"
-				aria-label="Close"
-				on:click={createOnDeleteBlock(item)}
-			/>
+			<button type="button" class="btn btn-danger" on:click={createOnDeleteBlock(item)}
+				><i class="bi bi-x" /></button
+			>
 		</div>
 		<Block {blockStore} block={item} />
 	</li>

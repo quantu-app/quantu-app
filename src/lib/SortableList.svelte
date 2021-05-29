@@ -43,15 +43,17 @@
 		overId = false;
 		e.preventDefault();
 		const dragged = getDraggedParent(e.target as HTMLElement),
-			from = e.dataTransfer.getData('source'),
-			to = dragged?.dataset.index;
-		reorder({ from, to });
+			from = parseInt(e.dataTransfer.getData('source')),
+			to = parseInt(dragged?.dataset.index);
+		reorder(from, to);
 	}
 
 	const dispatch = createEventDispatcher<{ sort: T[] }>();
-	function reorder({ from, to }) {
-		const newList = [...list];
-		newList[from] = [newList[to], (newList[to] = newList[from])][0];
+	function reorder(from: number, to: number) {
+		const newList = [...list],
+			tmp = newList[from];
+		newList[from] = newList[to];
+		newList[to] = tmp;
 		dispatch('sort', newList);
 	}
 

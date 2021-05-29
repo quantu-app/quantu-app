@@ -2,7 +2,7 @@
 	import type { ITextBlock, BlocksStore } from '$lib/state/blocks';
 	import QuillEditor from '$lib/QuillEditor.svelte';
 	import Markdown from '$lib/Markdown.svelte';
-	import { beforeUpdate, onMount } from 'svelte';
+	import { beforeUpdate } from 'svelte';
 	import type { TableRow } from 'automerge';
 	import type Delta from 'quill-delta';
 	import { applyOpsToText } from '$lib/utils';
@@ -30,10 +30,6 @@
 			rendered = block.text.toString();
 		});
 	}
-
-	onMount(() => {
-		window.addEventListener('click', () => (edit = false));
-	});
 </script>
 
 <div>

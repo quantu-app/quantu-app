@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "aicacia-books.fullname" . }}
+  name: {{ include "quantu.fullname" . }}
   labels:
-    {{- include "aicacia-books.labels" . | nindent 4 }}
+    {{- include "quantu.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      {{- include "aicacia-books.selectorLabels" . | nindent 6 }}
+      {{- include "quantu.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       annotations:
         checksum/config-environment: {{ include (print $.Template.BasePath "/config-environment.yaml") . | sha256sum }}
         image/hash: {{ .Values.image.hash }}
       labels:
-        {{- include "aicacia-books.selectorLabels" . | nindent 8 }}
+        {{- include "quantu.selectorLabels" . | nindent 8 }}
     spec:
       imagePullSecrets:
         - name: regcred
@@ -25,7 +25,7 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           envFrom:
             - configMapRef:
-                name: {{ include "aicacia-books.fullname" . }}-environment
+                name: {{ include "quantu.fullname" . }}-environment
           ports:
             - name: http
               containerPort: 3000

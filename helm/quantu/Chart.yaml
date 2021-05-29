@@ -1,6 +1,6 @@
 apiVersion: v2
-name: aicacia-books
-description: aicacia books ui
+name: quantu
+description: quantu ui
 type: application
 version: 0.1.0
 appVersion: latest

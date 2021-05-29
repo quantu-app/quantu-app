@@ -1,4 +1,4 @@
-# aicacia_books api
+# quantu api
 
 - A `Deployment` is used to create a Replica Set of nginx pods.
   ([templates/deployment.yaml](templates/deployment.yaml))
@@ -18,5 +18,5 @@ Helpers (usually called "partials" in template languages) are an
 advanced way for developers to structure their templates for optimal
 reuse.
 
-You can deploy this chart with `helm install aicacia_books_ui`. Or
-you can see how this chart would render with `helm install --dry-run --debug aicacia_books_ui`.
+You can deploy this chart with `helm install quantu_ui`. Or
+you can see how this chart would render with `helm install --dry-run --debug quantu_ui`.

@@ -17,10 +17,44 @@ export interface IBookBase {
 
 export interface IJournalBook extends IBookBase {
 	type: BookType.Journal;
+	geolocation: GeolocationCoordinates | null;
 }
 
-export function isJournalBlock(value: unknown): value is IJournalBook {
+export function isJournalBook(value: unknown): value is IJournalBook {
 	return value !== null && typeof value === 'object' && value['type'] === BookType.Journal;
+}
+
+export async function getGeolocationName(geolocation: GeolocationCoordinates) {
+	const response = await fetch(
+			`https://nominatim.openstreetmap.org/reverse?format=xml&lat=${geolocation.latitude}&lon=${geolocation.longitude}&zoom=18&addressdetails=1`
+		),
+		xml = new DOMParser().parseFromString(await response.text(), 'application/xml'),
+		addressparts = xml.getElementsByTagName('addressparts')[0],
+		country = addressparts?.getElementsByTagName('country')[0]?.textContent,
+		state = addressparts?.getElementsByTagName('state')[0]?.textContent,
+		town = addressparts?.getElementsByTagName('town')[0]?.textContent;
+	return `${town} ${state} ${country}`;
+}
+
+export function getGeolocationCoordinates() {
+	return new Promise<GeolocationCoordinates | null>((resolve) =>
+		navigator.geolocation.getCurrentPosition(
+			(position) =>
+				resolve({
+					accuracy: position.coords.accuracy,
+					altitude: position.coords.altitude,
+					altitudeAccuracy: position.coords.altitudeAccuracy,
+					heading: position.coords.heading,
+					latitude: position.coords.latitude,
+					longitude: position.coords.longitude,
+					speed: position.coords.speed
+				}),
+			(error) => {
+				console.error(error);
+				resolve(null);
+			}
+		)
+	);
 }
 
 export type IBook = IJournalBook;
@@ -32,13 +66,19 @@ export interface IBooks {
 class BooksStore extends AutomergePersistentStore<IBooks> {
 	private blockStores: Record<string, BlocksStore> = {};
 
-	createBook(type: BookType, name?: string) {
+	async createBook(type: BookType, name?: string) {
+		const book = {
+			name: new Automerge.Text(name || new Date().toDateString()),
+			type,
+			createdAt: new Date().toJSON()
+		} as IBook;
+
+		if (isJournalBook(book)) {
+			book.geolocation = await getGeolocationCoordinates();
+		}
+
 		this.change((doc) => {
-			const bookId = doc.books.add({
-				name: new Automerge.Text(name || new Date().toDateString()),
-				type,
-				createdAt: new Date().toJSON()
-			});
+			const bookId = doc.books.add(book);
 			const blockStore = new BlocksStore(bookId);
 			this.blockStores[bookId] = blockStore;
 		});

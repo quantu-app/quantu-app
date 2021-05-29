@@ -1,44 +1,95 @@
 <script lang="ts">
-	import { createEventDispatcher } from 'svelte';
-
-	type T = any;
-
-	let isOver = false;
-	const getDraggedParent = (node) =>
-		node.dataset && node.dataset.index ? node.dataset : getDraggedParent(node.parentNode);
-	const start = (ev) => {
-		ev.dataTransfer.setData('source', ev.target.dataset.index);
-	};
-	const over = (ev) => {
-		ev.preventDefault();
-		let dragged = getDraggedParent(ev.target);
-		if (isOver !== dragged.id) isOver = JSON.parse(dragged.id);
-	};
-	const leave = (ev) => {
-		let dragged = getDraggedParent(ev.target);
-		if (isOver === dragged.id) isOver = false;
-	};
-	const drop = (ev) => {
-		isOver = false;
-		ev.preventDefault();
-		let dragged = getDraggedParent(ev.target);
-		let from = ev.dataTransfer.getData('source');
-		let to = dragged.index;
-		reorder({ from, to });
-	};
-
-	const dispatch = createEventDispatcher<{ sort: T[] }>();
-	const reorder = ({ from, to }) => {
-		let newList = [...list];
-		newList[from] = [newList[to], (newList[to] = newList[from])][0];
-		dispatch('sort', newList);
-	};
-
-	const getKey = (item: T) => (key ? item[key] : item);
+	import { afterUpdate, createEventDispatcher, onMount } from 'svelte';
 
 	export let klass: string;
 	export let list: T[];
 	export let key: string;
+	export let handle: string;
+
+	let prevList: T[] = [...list];
+
+	type T = any;
+
+	let overId: any | false = false;
+	function getDraggedParent(node: HTMLElement): HTMLElement | undefined {
+		return node.dataset && node.dataset.index
+			? node
+			: getDraggedParent(node.parentNode as HTMLElement);
+	}
+	function onStart(e: DragEvent) {
+		e.dataTransfer.setData('source', (e.target as HTMLElement).dataset.index);
+	}
+	function onEnd(e: DragEvent) {
+		const dragged = getDraggedParent(e.target as HTMLElement);
+
+		if (dragged) {
+			dragged.draggable = false;
+		}
+	}
+	function onOver(e: DragEvent) {
+		e.preventDefault();
+		const dragged = getDraggedParent(e.target as HTMLElement);
+		if (dragged?.dataset.id && overId !== dragged?.dataset.id) {
+			overId = JSON.parse(dragged.dataset.id);
+		}
+	}
+	function onLeave(e: DragEvent) {
+		const dragged = getDraggedParent(e.target as HTMLElement);
+		if (overId === dragged?.dataset.id) {
+			overId = false;
+		}
+	}
+	function onDrop(e: DragEvent) {
+		overId = false;
+		e.preventDefault();
+		const dragged = getDraggedParent(e.target as HTMLElement),
+			from = e.dataTransfer.getData('source'),
+			to = dragged?.dataset.index;
+		reorder({ from, to });
+	}
+
+	const dispatch = createEventDispatcher<{ sort: T[] }>();
+	function reorder({ from, to }) {
+		const newList = [...list];
+		newList[from] = [newList[to], (newList[to] = newList[from])][0];
+		dispatch('sort', newList);
+	}
+
+	function getKey(item: T) {
+		return key ? item[key] : item;
+	}
+
+	function onMouseDown(e: MouseEvent) {
+		const dragged = getDraggedParent(e.target as HTMLElement);
+
+		if (dragged) {
+			dragged.draggable = true;
+		}
+	}
+	function onMouseUp(e: MouseEvent) {
+		const dragged = getDraggedParent(e.target as HTMLElement);
+
+		if (dragged) {
+			dragged.draggable = false;
+		}
+	}
+
+	function initHandle(element: HTMLElement) {
+		element.removeEventListener('mousedown', onMouseDown);
+		element.addEventListener('mousedown', onMouseDown);
+		element.removeEventListener('mouseup', onMouseUp);
+		element.addEventListener('mouseup', onMouseUp);
+	}
+
+	afterUpdate(() => {
+		if (prevList.length !== list.length) {
+			prevList = [...list];
+			document.querySelectorAll<HTMLElement>(handle).forEach(initHandle);
+		}
+	});
+	onMount(() => {
+		document.querySelectorAll<HTMLElement>(handle).forEach(initHandle);
+	});
 </script>
 
 {#if list && list.length}
@@ -47,12 +98,12 @@
 			<li
 				data-index={index}
 				data-id={JSON.stringify(getKey(item))}
-				draggable="true"
-				on:dragstart={start}
-				on:dragover={over}
-				on:dragleave={leave}
-				on:drop={drop}
-				class:over={getKey(item) === isOver}
+				on:dragstart={onStart}
+				on:dragend={onEnd}
+				on:dragover={onOver}
+				on:dragleave={onLeave}
+				on:drop={onDrop}
+				class:over={getKey(item) === overId}
 			>
 				<slot {item} {index}>
 					<p>{getKey(item)}</p>

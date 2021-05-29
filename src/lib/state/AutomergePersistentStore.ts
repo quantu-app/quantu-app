@@ -33,7 +33,7 @@ export class AutomergePersistentStore<T> implements Readable<Doc<T>> {
 			console.error(error);
 		}
 
-		const changeFns = this.changeFns.slice();
+		const changeFns = [...this.changeFns];
 		this.changeFns.length = 0;
 		changeFns.forEach((changeFn) => this.store.update((doc) => Automerge.change(doc, changeFn)));
 		this.debouncedPersist();

@@ -1,12 +1,12 @@
 <script lang="ts">
 	import SortableList from '$lib/SortableList.svelte';
 	import { BlockType } from '$lib/state/blocks';
-	import { booksStore } from '$lib/state/books';
+	import { booksStore, getGeolocationName } from '$lib/state/books';
 	import type { IBlock } from '$lib/state/blocks';
 	import type { IBook } from '$lib/state/books';
 	import Block from '$lib/Block/Block.svelte';
 	import type { FreezeObject, TableRow } from 'automerge';
-	import { onDestroy } from 'svelte';
+	import { onDestroy, onMount } from 'svelte';
 	import TextEditor from '$lib/TextEditor.svelte';
 	import type Delta from 'quill-delta';
 	import { applyOpsToText } from '$lib/utils';
@@ -15,11 +15,12 @@
 
 	let blockType: BlockType = BlockType.Text;
 	let blockStore = booksStore.getBookById(book.id);
+	let geolocationName: string;
 
 	$: blocks = $blockStore.blocks.rows.sort(sortBlocks);
 
-	function onCreateBlock() {
-		blockStore.createBlock(blockType);
+	async function onCreateBlock() {
+		await blockStore.createBlock(blockType);
 	}
 
 	function onBookNameChange(event: CustomEvent<Delta>) {
@@ -54,6 +55,13 @@
 				});
 		});
 	}
+
+	onMount(async () => {
+		if (book.geolocation) {
+			geolocationName = await getGeolocationName(book.geolocation);
+		}
+	});
+
 	onDestroy(() => {
 		booksStore.unloadBookById(book.id);
 	});
@@ -62,10 +70,14 @@
 <h1>
 	<TextEditor text={book.name} on:textchange={onBookNameChange} />
 </h1>
+<h3>
+	{geolocationName}
+</h3>
 
 <SortableList
 	list={blocks}
 	key="id"
+	handle=".drag-sort-btn"
 	let:item
 	on:sort={onSort}
 	klass="mt-4 list-group list-group-flush"

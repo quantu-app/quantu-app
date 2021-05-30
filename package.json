@@ -8,11 +8,12 @@
 		"web.build": "svelte-kit build",
 		"lint": "prettier --check . && eslint --ignore-path .gitignore .",
 		"format": "prettier --write .",
-		"docker.build": "docker build -t docker.pkg.github.com/aicacia/ts-books/ui:latest .",
-		"docker.push": "docker push docker.pkg.github.com/aicacia/ts-books/ui:latest",
-		"docker.run": "docker run --name quantu --rm -it -p 3000:3000 docker.pkg.github.com/aicacia/ts-books/ui:latest",
+		"docker.build": "docker build -t docker.pkg.github.com/quantu-app/quantu-app/quantu-app-ui:latest .",
+		"docker.push": "docker push docker.pkg.github.com/quantu-app/quantu-app/quantu-app-ui:latest",
+		"docker.run": "docker run --name quantu --rm -it -p 3000:3000 docker.pkg.github.com/quantu-app/quantu-app/quantu-app-ui:latest",
 		"helm.delete": "helm delete -n ui quantu",
-		"helm": "helm upgrade quantu helm/quantu -n ui --install --set image.hash=$(docker inspect --format='\"{{index .Id}}\"' docker.pkg.github.com/aicacia/ts-books/ui:latest)"
+		"helm": "helm upgrade quantu helm/quantu -n ui --install --set image.hash=$(docker inspect --format='\"{{index .Id}}\"' docker.pkg.github.com/quantu-app/quantu-app/quantu-app-ui:latest)",
+		"deploy": "npm run docker.build && npm run docker.push && npm run helm"
 	},
 	"type": "module",
 	"devDependencies": {
@@ -27,6 +28,7 @@
 		"@typescript-eslint/parser": "^4.24.0",
 		"automerge": "latest",
 		"bootstrap": "^5.0.1",
+		"dropbox": "^9.8.6",
 		"eslint": "^7.27.0",
 		"eslint-config-prettier": "^8.3.0",
 		"eslint-plugin-svelte3": "^3.2.0",

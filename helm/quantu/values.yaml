@@ -6,7 +6,7 @@ replicas:
       utilization: 90
 
 image:
-  repository: docker.pkg.github.com/quantu-app/quantu-app/ui
+  repository: docker.pkg.github.com/quantu-app/quantu-app/quantu-app-ui
   pullPolicy: Always
   hash: sha256:2af310fac13872efeed20df46547f19616fecab261e1dd0a23bc63c5b75ad30f
 
@@ -20,18 +20,18 @@ ingress:
     certmanager.k8s.io/cluster-issuer: letsencrypt
     nginx.ingress.kubernetes.io/secure-backends: 'true'
   hosts:
-    - host: quantu.app
+    - host: main.quantu.app
       paths:
         - /
   tls:
-    - secretName: quantu-app-tls
+    - secretName: main-quantu-app-tls
       hosts:
-        - quantu.app
+        - main.quantu.app
 
 resources:
   limits:
-    cpu: 500m
-    memory: 512Mi
+    cpu: 200m
+    memory: 256Mi
   requests:
-    cpu: 400m
-    memory: 128Mi
+    cpu: 50m
+    memory: 64Mi

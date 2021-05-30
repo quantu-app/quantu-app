@@ -2,5 +2,5 @@
 node_modules
 /.svelte-kit
 /build
-/functions
 /helm
+/functions

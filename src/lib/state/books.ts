@@ -17,44 +17,51 @@ export interface IBookBase {
 
 export interface IJournalBook extends IBookBase {
 	type: BookType.Journal;
-	geolocation: GeolocationCoordinates | null;
+	location: Text;
 }
 
 export function isJournalBook(value: unknown): value is IJournalBook {
 	return value !== null && typeof value === 'object' && value['type'] === BookType.Journal;
 }
 
-export async function getGeolocationName(geolocation: GeolocationCoordinates) {
+export async function getGeolocation(position: GeolocationPosition) {
 	const response = await fetch(
-			`https://nominatim.openstreetmap.org/reverse?format=xml&lat=${geolocation.latitude}&lon=${geolocation.longitude}&zoom=18&addressdetails=1`
+			`https://nominatim.openstreetmap.org/reverse?format=xml&lat=${position.coords.latitude}&lon=${position.coords.longitude}&zoom=18&addressdetails=1`
 		),
 		xml = new DOMParser().parseFromString(await response.text(), 'application/xml'),
 		addressparts = xml.getElementsByTagName('addressparts')[0],
-		country = addressparts?.getElementsByTagName('country')[0]?.textContent,
-		state = addressparts?.getElementsByTagName('state')[0]?.textContent,
-		town = addressparts?.getElementsByTagName('town')[0]?.textContent;
-	return `${town} ${state} ${country}`;
+		country = addressparts?.getElementsByTagName('country')[0]?.textContent || '',
+		state = addressparts?.getElementsByTagName('state')[0]?.textContent || '',
+		town = addressparts?.getElementsByTagName('town')[0]?.textContent || '',
+		neighbourhood = addressparts?.getElementsByTagName('neighbourhood')[0]?.textContent || '';
+	return { country, state, town, neighbourhood };
 }
 
-export function getGeolocationCoordinates() {
-	return new Promise<GeolocationCoordinates | null>((resolve) =>
-		navigator.geolocation.getCurrentPosition(
-			(position) =>
-				resolve({
-					accuracy: position.coords.accuracy,
-					altitude: position.coords.altitude,
-					altitudeAccuracy: position.coords.altitudeAccuracy,
-					heading: position.coords.heading,
-					latitude: position.coords.latitude,
-					longitude: position.coords.longitude,
-					speed: position.coords.speed
-				}),
-			(error) => {
-				console.error(error);
-				resolve(null);
-			}
-		)
+export function getGeolocationPosition() {
+	return new Promise<GeolocationPosition | null>((resolve) =>
+		navigator.geolocation.getCurrentPosition(resolve, (error) => {
+			console.error(error);
+			resolve(null);
+		})
 	);
+}
+
+export async function getLocation() {
+	const position = await getGeolocationPosition();
+
+	if (position) {
+		const location = await getGeolocation(position),
+			city =
+				location.town || location.neighbourhood
+					? (location.town || location.neighbourhood) + ' '
+					: '',
+			state = location.state ? location.state + ' ' : '',
+			country = location.country ? location.country : '';
+
+		return city + state + country;
+	} else {
+		return 'Unknown';
+	}
 }
 
 export type IBook = IJournalBook;
@@ -74,7 +81,7 @@ class BooksStore extends AutomergePersistentStore<IBooks> {
 		} as IBook;
 
 		if (isJournalBook(book)) {
-			book.geolocation = await getGeolocationCoordinates();
+			book.location = new Automerge.Text(await getLocation());
 		}
 
 		this.change((doc) => {

@@ -115,14 +115,13 @@
 	</ul>
 {/if}
 
-<style>
+<style lang="scss">
 	ul {
 		list-style: none;
 		padding: 0;
 	}
 	li {
 		border: 2px dotted transparent;
-		transition: border 0.1s linear;
 	}
 	.over {
 		border-color: rgba(48, 12, 200, 0.2);

@@ -1,12 +1,12 @@
 <script lang="ts">
 	import SortableList from '$lib/SortableList.svelte';
 	import { BlockType } from '$lib/state/blocks';
-	import { booksStore, getGeolocationName } from '$lib/state/books';
+	import { booksStore } from '$lib/state/books';
 	import type { IBlock } from '$lib/state/blocks';
 	import type { IBook } from '$lib/state/books';
 	import Block from '$lib/Block/Block.svelte';
 	import type { FreezeObject, TableRow } from 'automerge';
-	import { onDestroy, onMount } from 'svelte';
+	import { onDestroy } from 'svelte';
 	import TextEditor from '$lib/TextEditor.svelte';
 	import type Delta from 'quill-delta';
 	import { applyOpsToText } from '$lib/utils';
@@ -15,7 +15,6 @@
 
 	let blockType: BlockType = BlockType.Text;
 	let blockStore = booksStore.getBookById(book.id);
-	let geolocationName: string;
 
 	$: blocks = $blockStore.blocks.rows.sort(sortBlocks);
 
@@ -26,6 +25,12 @@
 	function onBookNameChange(event: CustomEvent<Delta>) {
 		booksStore.change((doc) => {
 			applyOpsToText(doc.books.byId(book.id).name, event.detail.ops);
+		});
+	}
+
+	function onBookLocationChange(event: CustomEvent<Delta>) {
+		booksStore.change((doc) => {
+			applyOpsToText(doc.books.byId(book.id).location, event.detail.ops);
 		});
 	}
 
@@ -56,12 +61,6 @@
 		});
 	}
 
-	onMount(async () => {
-		if (book.geolocation) {
-			geolocationName = await getGeolocationName(book.geolocation);
-		}
-	});
-
 	onDestroy(() => {
 		booksStore.unloadBookById(book.id);
 	});
@@ -71,16 +70,16 @@
 	<TextEditor text={book.name} on:textchange={onBookNameChange} />
 </h1>
 <h3>
-	{geolocationName}
+	<TextEditor text={book.location} on:textchange={onBookLocationChange} />
 </h3>
 
 <SortableList list={blocks} key="id" handle=".drag-sort-btn" let:item on:sort={onSort} klass="mt-4">
-	<li class={book.type.toLowerCase()}>
-		<div class="d-flex justify-content-between align-items-start">
-			<button type="button" class="btn btn-primary drag-sort-btn"
+	<li class={`item ${book.type.toLowerCase()}`}>
+		<div class="d-flex justify-content-between align-items-start control">
+			<button type="button" class="btn btn-primary btn-sm drag-sort-btn"
 				><i class="bi bi-arrows-move" /></button
 			>
-			<button type="button" class="btn btn-danger" on:click={createOnDeleteBlock(item)}
+			<button type="button" class="btn btn-danger btn-sm" on:click={createOnDeleteBlock(item)}
 				><i class="bi bi-x" /></button
 			>
 		</div>
@@ -115,3 +114,23 @@
 		</div>
 	</form>
 </div>
+
+<style lang="scss">
+	.control {
+		display: none !important;
+		width: 32px;
+		position: absolute;
+		right: 0;
+		top: 0;
+	}
+	.item {
+		position: relative;
+		&:hover {
+			border: 2px dotted transparent;
+			border-color: rgba(48, 12, 200, 0.2);
+			.control {
+				display: inherit !important;
+			}
+		}
+	}
+</style>

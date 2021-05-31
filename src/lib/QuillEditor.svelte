@@ -49,6 +49,7 @@
 			}
 		}
 
+		quill.focus();
 		quill.on('text-change', onChange);
 
 		element.addEventListener('keydown', onKeyDown, { capture: true });

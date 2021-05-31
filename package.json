@@ -2,10 +2,12 @@
 	"name": "quantu",
 	"version": "0.1.0",
 	"scripts": {
+		"electron": "electron",
 		"svelte-kit": "svelte-kit",
 		"clean": "rm -r node_modules/.vite && rm -r .svelte-kit && rm -r build",
 		"web": "svelte-kit dev --open",
 		"web.build": "svelte-kit build",
+		"desktop": "electron ./electron/main.js",
 		"lint": "prettier --check . && eslint --ignore-path .gitignore .",
 		"format": "prettier --write .",
 		"docker.build": "docker build -t docker.pkg.github.com/quantu-app/quantu-app/quantu-app-ui:latest .",
@@ -18,10 +20,11 @@
 	"type": "module",
 	"devDependencies": {
 		"@sveltejs/adapter-node": "next",
-		"@types/quill": "^2.0.6",
-		"@typescript-eslint/eslint-plugin": "^4.24.0",
-		"@typescript-eslint/parser": "^4.24.0",
+		"@types/quill": "^2.0.8",
+		"@typescript-eslint/eslint-plugin": "^4.25.0",
+		"@typescript-eslint/parser": "^4.25.0",
 		"bootstrap": "^5.0.1",
+		"electron": "^13.0.1",
 		"eslint": "^7.27.0",
 		"eslint-config-prettier": "^8.3.0",
 		"eslint-plugin-svelte3": "^3.2.0",
@@ -30,19 +33,19 @@
 		"sass": "^1.34.0",
 		"svelte-preprocess": "^4.7.3",
 		"tslib": "^2.2.0",
-		"typescript": "^4.2.4",
-		"vite": "^2.3.3"
+		"typescript": "^4.3.2",
+		"vite": "^2.3.4"
 	},
 	"dependencies": {
 		"@aicacia/debounce": "^0.1.9",
-		"@tauri-apps/tauri-forage": "^1.0.0-beta.2",
+		"@sveltejs/kit": "next",
+		"@tauri-apps/tauri-forage": "latest",
 		"@ts-stack/markdown": "^1.4.0",
 		"automerge": "latest",
 		"katex": "^0.13.11",
 		"pascal-case": "^3.1.2",
 		"quill": "^1.3.7",
 		"quill-delta": "^4.2.2",
-		"svelte": "^3.38.2",
-		"@sveltejs/kit": "next"
+		"svelte": "^3.38.2"
 	}
 }

@@ -1,3 +1,7 @@
+<script lang="ts" context="module">
+	import '../app.scss';
+</script>
+
 <header class="container">
 	<div class="d-flex flex-wrap align-items-center justify-content-center">
 		<div class="d-flex align-items-center">
@@ -11,7 +15,3 @@
 </header>
 
 <main class="container"><slot /></main>
-
-<style lang="scss" global>
-	@import '../app.scss';
-</style>

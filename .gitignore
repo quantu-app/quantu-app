@@ -3,4 +3,5 @@ node_modules
 /.svelte-kit
 /.vscode
 /build
+/electron/build
 /functions

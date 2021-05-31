@@ -125,8 +125,8 @@
 	}
 	.item {
 		position: relative;
+		border: 2px dotted transparent;
 		&:hover {
-			border: 2px dotted transparent;
 			border-color: rgba(48, 12, 200, 0.2);
 			.control {
 				display: inherit !important;

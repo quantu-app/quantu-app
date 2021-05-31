@@ -43,14 +43,12 @@
 </form>
 
 <ul class="mt-4">
-	{#each $booksStore.books.rows.filter((book) => book.type === bookType) as book}
+	{#each Object.entries($booksStore).filter(([_id, book]) => book.type === bookType) as [id, book]}
 		<li class="d-flex justify-content-between align-items-start">
 			<div class="ms-2 me-auto">
 				<h3 class="fw-bold">{book.name}</h3>
 			</div>
-			<a role="button" class="btn btn-primary" aria-label="Update" href={`/books/${book.id}`}>
-				Edit
-			</a>
+			<a role="button" class="btn btn-primary" aria-label="Update" href={`/books/${id}`}> Edit </a>
 		</li>
 	{/each}
 </ul>

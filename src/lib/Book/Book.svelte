@@ -1,7 +1,7 @@
 <script lang="ts">
 	import SortableList from '$lib/SortableList.svelte';
 	import { BlockType } from '$lib/state/blocks';
-	import { booksStore } from '$lib/state/books';
+	import { booksStore, BookStore, isJournalBook } from '$lib/state/books';
 	import type { IBlock } from '$lib/state/blocks';
 	import type { IBook } from '$lib/state/books';
 	import Block from '$lib/Block/Block.svelte';
@@ -11,26 +11,27 @@
 	import type Delta from 'quill-delta';
 	import { applyOpsToText } from '$lib/utils';
 
-	export let book: IBook & TableRow;
+	export let bookStore: BookStore;
 
 	let blockType: BlockType = BlockType.Text;
-	let blockStore = booksStore.getBookById(book.id);
 
-	$: blocks = $blockStore.blocks.rows.sort(sortBlocks);
+	$: blocks = $bookStore.blocks.rows.sort(sortBlocks);
 
 	async function onCreateBlock() {
-		await blockStore.createBlock(blockType);
+		await bookStore.createBlock(blockType);
 	}
 
 	function onBookNameChange(event: CustomEvent<Delta>) {
-		booksStore.change((doc) => {
-			applyOpsToText(doc.books.byId(book.id).name, event.detail.ops);
+		bookStore.change((doc) => {
+			applyOpsToText(doc.name, event.detail.ops);
 		});
 	}
 
 	function onBookLocationChange(event: CustomEvent<Delta>) {
-		booksStore.change((doc) => {
-			applyOpsToText(doc.books.byId(book.id).location, event.detail.ops);
+		bookStore.change((doc) => {
+			if (isJournalBook(doc)) {
+				applyOpsToText(doc.location, event.detail.ops);
+			}
 		});
 	}
 
@@ -40,14 +41,14 @@
 
 	function createOnDeleteBlock(block: FreezeObject<IBlock & TableRow>) {
 		return function onDeleteBlock() {
-			booksStore.getBookById(book.id).change((doc) => {
+			booksStore.getBookById(bookStore.get().id).change((doc) => {
 				doc.blocks.remove(block.id);
 			});
 		};
 	}
 
 	function onSort(e: CustomEvent<Array<FreezeObject<IBlock & TableRow>>>) {
-		blockStore.change((doc) => {
+		bookStore.change((doc) => {
 			let index = 0;
 			e.detail
 				.map((block) => block.id)
@@ -62,19 +63,21 @@
 	}
 
 	onDestroy(() => {
-		booksStore.unloadBookById(book.id);
+		booksStore.unloadBookById(bookStore.get().id);
 	});
 </script>
 
 <h1>
-	<TextEditor text={book.name} on:textchange={onBookNameChange} />
+	<TextEditor text={$bookStore.name} on:textchange={onBookNameChange} />
 </h1>
-<h3>
-	<TextEditor text={book.location} on:textchange={onBookLocationChange} />
-</h3>
+{#if isJournalBook($bookStore)}
+	<h3>
+		<TextEditor text={$bookStore.location} on:textchange={onBookLocationChange} />
+	</h3>
+{/if}
 
 <SortableList list={blocks} key="id" handle=".drag-sort-btn" let:item on:sort={onSort} klass="mt-4">
-	<li class={`item ${book.type.toLowerCase()}`}>
+	<li class={`item ${$bookStore.type.toLowerCase()}`}>
 		<div class="d-flex justify-content-between align-items-start control">
 			<button type="button" class="btn btn-primary btn-sm drag-sort-btn"
 				><i class="bi bi-arrows-move" /></button
@@ -83,7 +86,7 @@
 				><i class="bi bi-x" /></button
 			>
 		</div>
-		<Block {blockStore} block={item} />
+		<Block {bookStore} block={item} />
 	</li>
 </SortableList>
 
@@ -125,9 +128,9 @@
 	}
 	.item {
 		position: relative;
-		border: 2px dotted transparent;
+		border-top: 2px dotted transparent;
 		&:hover {
-			border-color: rgba(48, 12, 200, 0.2);
+			border-top-color: rgba(48, 12, 200, 0.2);
 			.control {
 				display: inherit !important;
 			}

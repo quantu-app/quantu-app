@@ -1,10 +1,17 @@
 import { debounce } from '@aicacia/debounce';
 import { forage } from '@tauri-apps/tauri-forage';
 import Automerge from 'automerge';
+import { EventEmitter } from 'eventemitter3';
 import type { ChangeFn, Doc, BinaryDocument } from 'automerge';
 import { get, Readable, Subscriber, writable, Writable } from 'svelte/store';
 
-export class AutomergePersistentStore<T> implements Readable<Doc<T>> {
+// tslint:disable-next-line: interface-name
+export interface AutomergePersistentStore<T> {
+	on(event: 'persist', listener: (doc: Doc<T>) => void): this;
+	off(event: 'persist', listener: (doc: Doc<T>) => void): this;
+}
+
+export class AutomergePersistentStore<T> extends EventEmitter implements Readable<Doc<T>> {
 	protected name: string;
 	protected store: Writable<Doc<T>>;
 	protected initialized = false;
@@ -13,6 +20,7 @@ export class AutomergePersistentStore<T> implements Readable<Doc<T>> {
 	protected debouncedPersist: () => void;
 
 	constructor(name: string, initialState: Doc<T>, timeoutMS = 5000) {
+		super();
 		this.name = name;
 		this.store = writable(initialState);
 		this.init();
@@ -35,14 +43,17 @@ export class AutomergePersistentStore<T> implements Readable<Doc<T>> {
 
 		const changeFns = [...this.changeFns];
 		this.changeFns.length = 0;
-		changeFns.forEach((changeFn) => this.store.update((doc) => Automerge.change(doc, changeFn)));
-		this.debouncedPersist();
+		if (changeFns.length) {
+			changeFns.forEach((changeFn) => this.store.update((doc) => Automerge.change(doc, changeFn)));
+			this.debouncedPersist();
+		}
 
 		this.initialized = true;
 	}
 
 	async close() {
 		await this.persist();
+		this.removeAllListeners();
 		return this;
 	}
 
@@ -50,6 +61,7 @@ export class AutomergePersistentStore<T> implements Readable<Doc<T>> {
 		if (!this.saved) {
 			forage.setItem({ key: this.name, value: this.toString() })();
 			this.saved = true;
+			this.emit('persist', this.get());
 		}
 	};
 

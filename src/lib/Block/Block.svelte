@@ -1,11 +1,13 @@
 <script lang="ts">
 	import Text from './Text.svelte';
 	import { onDestroy, onMount } from 'svelte';
-	import type { BlocksStore, IBlock } from '$lib/state/blocks';
+	import type { IBlock } from '$lib/state/blocks';
 	import { BlockType } from '$lib/state/blocks';
+	import type { BookStore } from '$lib/state/books';
 	import type { TableRow } from 'automerge';
+	import { addEventListener, removeEventListener } from '$lib/utils';
 
-	export let blockStore: BlocksStore;
+	export let bookStore: BookStore;
 	export let block: IBlock & TableRow;
 	let edit: boolean;
 
@@ -17,15 +19,15 @@
 	}
 
 	onMount(() => {
-		window.addEventListener('click', onWindowClick);
+		addEventListener('click', onWindowClick);
 	});
 	onDestroy(() => {
-		window.removeEventListener('click', onWindowClick);
+		removeEventListener('click', onWindowClick);
 	});
 </script>
 
 <div on:click|stopPropagation={onClick}>
 	{#if block.type === BlockType.Text}
-		<Text {blockStore} {block} {edit} />
+		<Text {bookStore} {block} {edit} />
 	{/if}
 </div>

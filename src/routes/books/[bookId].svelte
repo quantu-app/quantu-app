@@ -16,15 +16,15 @@
 
 	export let bookId: string;
 
-	$: book = $booksStore.books.byId(bookId);
+	const bookStore = booksStore.getBookById(bookId);
 </script>
 
 <svelte:head>
-	<title>{book ? pascalCase(book.type) : 'Book'} - {book?.name}</title>
+	<title>{pascalCase($bookStore.type)} - {$bookStore.name}</title>
 </svelte:head>
 
-{#if book}
-	<Book {book} />
+{#if bookStore}
+	<Book {bookStore} />
 {:else}
 	<div class="d-flex align-items-center justify-content-center">
 		<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" />

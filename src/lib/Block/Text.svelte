@@ -1,5 +1,6 @@
 <script lang="ts">
-	import type { ITextBlock, BlocksStore } from '$lib/state/blocks';
+	import type { ITextBlock } from '$lib/state/blocks';
+	import type { BookStore } from '$lib/state/books';
 	import QuillEditor from '$lib/QuillEditor.svelte';
 	import Markdown from '$lib/Markdown.svelte';
 	import { beforeUpdate } from 'svelte';
@@ -7,7 +8,7 @@
 	import type Delta from 'quill-delta';
 	import { applyOpsToText } from '$lib/utils';
 
-	export let blockStore: BlocksStore;
+	export let bookStore: BookStore;
 	export let block: ITextBlock & TableRow;
 	export let edit: boolean;
 
@@ -25,7 +26,7 @@
 	});
 
 	function onTextChange(event: CustomEvent<Delta>) {
-		blockStore.updateBlock(block.id, (block) => {
+		bookStore.updateBlock(block.id, (block) => {
 			applyOpsToText(block.text, event.detail.ops);
 			rendered = block.text.toString();
 		});

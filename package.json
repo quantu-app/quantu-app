@@ -7,7 +7,7 @@
 		"clean": "rm -r node_modules/.vite && rm -r .svelte-kit && rm -r build",
 		"web": "svelte-kit dev --open",
 		"web.build": "svelte-kit build",
-		"desktop": "electron ./electron/main.js",
+		"desktop": "electron ./src/electron.cjs",
 		"lint": "prettier --check . && eslint --ignore-path .gitignore .",
 		"format": "prettier --write .",
 		"docker.build": "docker build -t docker.pkg.github.com/quantu-app/quantu-app/quantu-app-ui:latest .",

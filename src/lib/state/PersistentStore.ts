@@ -41,11 +41,8 @@ export class PersistentStore<T> extends eventemitter3.EventEmitter implements Wr
 
 		const updaters = [...this.updaters];
 		this.updaters.length = 0;
-
-		if (updaters.length) {
-			updaters.forEach((updater) => this.store.update(updater));
-			this.debouncedPersist();
-		}
+		updaters.forEach((updater) => this.store.update(updater));
+		await this.persist();
 
 		this.initialized = true;
 	}
@@ -55,11 +52,8 @@ export class PersistentStore<T> extends eventemitter3.EventEmitter implements Wr
 		return this;
 	}
 
-	protected persist = () => {
-		if (!this.saved) {
-			forage.setItem({ key: this.name, value: this.toString() })();
-			this.saved = true;
-		}
+	persist = async () => {
+		await forage.setItem({ key: this.name, value: this.toString() })();
 	};
 
 	get() {

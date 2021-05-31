@@ -46,10 +46,8 @@ export class AutomergePersistentStore<T>
 
 		const changeFns = [...this.changeFns];
 		this.changeFns.length = 0;
-		if (changeFns.length) {
-			changeFns.forEach((changeFn) => this.store.update((doc) => Automerge.change(doc, changeFn)));
-			this.debouncedPersist();
-		}
+		changeFns.forEach((changeFn) => this.store.update((doc) => Automerge.change(doc, changeFn)));
+		await this.persist();
 
 		this.initialized = true;
 	}
@@ -60,12 +58,9 @@ export class AutomergePersistentStore<T>
 		return this;
 	}
 
-	protected persist = () => {
-		if (!this.saved) {
-			forage.setItem({ key: this.name, value: this.toString() })();
-			this.saved = true;
-			this.emit('persist', this.get());
-		}
+	persist = async () => {
+		await forage.setItem({ key: this.name, value: this.toString() })();
+		this.emit('persist', this.get());
 	};
 
 	get() {

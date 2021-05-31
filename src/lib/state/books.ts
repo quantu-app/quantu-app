@@ -108,8 +108,9 @@ class BooksStore extends PersistentStore<IBooks> {
 
 	private createBookStore(bookId: string, book: IBook) {
 		const bookStore = new BookStore(`${BOOKS_TABLE}/${bookId}`, Automerge.from(book));
+		bookStore.persist();
 		bookStore.on('persist', (doc) => {
-			const book = this.get().books[doc.id],
+			const book = this.get()[doc.id],
 				name = doc.name.toString();
 
 			if (book && book.name !== name) {
@@ -144,6 +145,7 @@ class BooksStore extends PersistentStore<IBooks> {
 		});
 
 		const bookStore = this.createBookStore(bookId, book);
+		bookStore;
 		this.bookStores[bookId] = bookStore;
 		return bookStore;
 	}
@@ -154,10 +156,7 @@ class BooksStore extends PersistentStore<IBooks> {
 		if (bookStore) {
 			return bookStore;
 		} else {
-			const bookStore = new BookStore(
-				bookId,
-				Automerge.from(createEmptyBook(DEFAULT_BOOK_TYPE, undefined))
-			);
+			const bookStore = this.createBookStore(bookId, createEmptyBook(DEFAULT_BOOK_TYPE, undefined));
 			this.bookStores[bookId] = bookStore;
 			return bookStore;
 		}

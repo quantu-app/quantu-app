@@ -1,6 +1,6 @@
 import { debounce } from '@aicacia/debounce';
 import { forage } from '@tauri-apps/tauri-forage';
-import { EventEmitter } from 'eventemitter3';
+import eventemitter3 from 'eventemitter3';
 import { get, Subscriber, Updater, writable, Writable } from 'svelte/store';
 
 // tslint:disable-next-line: interface-name
@@ -9,7 +9,7 @@ export interface PersistentStore<T> {
 	off(event: 'persist', listener: (doc: T) => void): this;
 }
 
-export class PersistentStore<T> extends EventEmitter implements Writable<T> {
+export class PersistentStore<T> extends eventemitter3.EventEmitter implements Writable<T> {
 	protected name: string;
 	protected store: Writable<T>;
 	protected initialized = false;

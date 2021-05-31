@@ -1,7 +1,7 @@
 import { debounce } from '@aicacia/debounce';
 import { forage } from '@tauri-apps/tauri-forage';
 import Automerge from 'automerge';
-import { EventEmitter } from 'eventemitter3';
+import eventemitter3 from 'eventemitter3';
 import type { ChangeFn, Doc, BinaryDocument } from 'automerge';
 import { get, Readable, Subscriber, writable, Writable } from 'svelte/store';
 
@@ -11,7 +11,10 @@ export interface AutomergePersistentStore<T> {
 	off(event: 'persist', listener: (doc: Doc<T>) => void): this;
 }
 
-export class AutomergePersistentStore<T> extends EventEmitter implements Readable<Doc<T>> {
+export class AutomergePersistentStore<T>
+	extends eventemitter3.EventEmitter
+	implements Readable<Doc<T>>
+{
 	protected name: string;
 	protected store: Writable<Doc<T>>;
 	protected initialized = false;

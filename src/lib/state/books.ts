@@ -1,4 +1,4 @@
-import Automerge from 'automerge';
+import Automerge, { FreezeObject } from 'automerge';
 import type { Table, Text, ChangeFn, UUID } from 'automerge';
 import { AutomergePersistentStore } from '$lib/state/AutomergePersistentStore';
 import { getLocationName } from '$lib/utils';
@@ -49,6 +49,17 @@ export function isNotesBook(value: unknown): value is INotesBook {
 export type IBook = IJournalBook | INotesBook;
 
 export class BookStore extends AutomergePersistentStore<IBook> {
+	private bookId: string;
+
+	constructor(bookId: string, initialState: FreezeObject<IBook>) {
+		super(`${BOOKS_TABLE}/${bookId}`, initialState);
+		this.bookId = bookId;
+	}
+
+	getBookId() {
+		return this.bookId;
+	}
+
 	createBlock(type: BlockType) {
 		const block: IBlockBase = {
 			type,
@@ -84,8 +95,9 @@ export class BookStore extends AutomergePersistentStore<IBook> {
 
 export type IBooks = Record<UUID, IBookMeta>;
 
-function createEmptyBook(type: BookType, name?: string) {
+function createEmptyBook(id: UUID, type: BookType, name?: string) {
 	return {
+		id,
 		name: new Automerge.Text(name),
 		type,
 		createdAt: new Date().toJSON(),
@@ -93,8 +105,8 @@ function createEmptyBook(type: BookType, name?: string) {
 	} as IBookBase as IBook;
 }
 
-async function createBook(type: BookType, name?: string) {
-	const book = createEmptyBook(type, name || new Date().toDateString());
+async function createBook(id: UUID, type: BookType, name?: string) {
+	const book = createEmptyBook(id, type, name || new Date().toDateString());
 
 	if (isJournalBook(book)) {
 		book.location = new Automerge.Text(await getLocationName());
@@ -107,11 +119,13 @@ class BooksStore extends PersistentStore<IBooks> {
 	private bookStores: Record<UUID, BookStore> = {};
 
 	private createBookStore(bookId: string, book: IBook) {
-		const bookStore = new BookStore(`${BOOKS_TABLE}/${bookId}`, Automerge.from(book));
+		const bookStore = new BookStore(bookId, Automerge.from(book));
 		bookStore.persist();
 		bookStore.on('persist', (doc) => {
 			const book = this.get()[doc.id],
 				name = doc.name.toString();
+
+			console.log(this.get(), doc);
 
 			if (book && book.name !== name) {
 				this.update((state) => ({ ...state, [doc.id]: { ...state[doc.id], name } }));
@@ -132,7 +146,7 @@ class BooksStore extends PersistentStore<IBooks> {
 
 	async createBook(type: BookType, name?: string) {
 		const bookId = this.createBookUUID(),
-			book = await createBook(type, name);
+			book = await createBook(bookId, type, name);
 
 		this.update((state) => {
 			const bookMeta = {
@@ -156,7 +170,10 @@ class BooksStore extends PersistentStore<IBooks> {
 		if (bookStore) {
 			return bookStore;
 		} else {
-			const bookStore = this.createBookStore(bookId, createEmptyBook(DEFAULT_BOOK_TYPE, undefined));
+			const bookStore = this.createBookStore(
+				bookId,
+				createEmptyBook(bookId, DEFAULT_BOOK_TYPE, undefined)
+			);
 			this.bookStores[bookId] = bookStore;
 			return bookStore;
 		}

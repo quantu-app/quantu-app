@@ -1,7 +1,5 @@
 import type { Text } from 'automerge';
 
-export const BLOCKS_TABLE = 'blocks';
-
 export enum BlockType {
 	Text = 'text'
 }

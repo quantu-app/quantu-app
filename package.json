@@ -1,7 +1,9 @@
 {
 	"name": "quantu",
 	"version": "0.1.0",
+	"description": "This is the main application repository for QuantU.",
 	"scripts": {
+		"electron-builder": "electron-builder",
 		"electron": "electron",
 		"svelte-kit": "svelte-kit",
 		"clean": "rm -r node_modules/.vite && rm -r .svelte-kit && rm -r build",
@@ -18,6 +20,7 @@
 		"deploy": "npm run docker.build && npm run docker.push && npm run helm"
 	},
 	"type": "module",
+	"main": "src/electron.cjs",
 	"devDependencies": {
 		"@sveltejs/adapter-node": "next",
 		"@types/quill": "^2.0.8",

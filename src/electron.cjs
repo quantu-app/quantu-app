@@ -1,11 +1,50 @@
-const { app, BrowserWindow } = require('electron'); // eslint-disable-line @typescript-eslint/no-var-requires
+const { app, BrowserWindow } = require('electron');
 
-const { HOST = '0.0.0.0', PORT = 3000 } = process.env;
+const { HOST = 'localhost', PORT = 3000 } = process.env;
 
-function onReady() {
-	const win = new BrowserWindow();
+async function whenServerReady() {
+	const { instance } = await import('../build/index.js');
+
+	function isReady(resolve) {
+		if (instance.server.listening) {
+			setTimeout(() => isReady(resolve));
+		} else {
+			resolve();
+		}
+	}
+
+	return new Promise(isReady);
+}
+
+let win = null;
+
+async function main() {
+	if (app.isPackaged) {
+		await whenServerReady();
+	}
+	win = new BrowserWindow({
+		webPreferences: {
+			nodeIntegration: true,
+			enableRemoteModule: true
+		}
+	});
 	win.setMenu(null);
+	if (!app.isPackaged) {
+		win.webContents.openDevTools();
+	}
 	win.loadURL(`http://${HOST}:${PORT}`);
 }
 
-app.whenReady().then(onReady);
+app.on('window-all-closed', () => {
+	if (process.platform !== 'darwin') {
+		app.quit();
+	}
+});
+
+app.on('activate', () => {
+	if (BrowserWindow.getAllWindows().length === 0) {
+		onReady();
+	}
+});
+
+app.whenReady().then(main);

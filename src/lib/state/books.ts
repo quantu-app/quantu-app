@@ -9,8 +9,8 @@ import { PersistentStore } from './PersistentStore';
 export const BOOKS_TABLE = 'books';
 
 export enum BookType {
-	Notes = 'notes',
-	Journal = 'journal'
+	Journal = 'journal',
+	Notes = 'notes'
 }
 
 export const DEFAULT_BOOK_TYPE = BookType.Notes;
@@ -124,8 +124,6 @@ class BooksStore extends PersistentStore<IBooks> {
 		bookStore.on('persist', (doc) => {
 			const book = this.get()[doc.id],
 				name = doc.name.toString();
-
-			console.log(this.get(), doc);
 
 			if (book && book.name !== name) {
 				this.update((state) => ({ ...state, [doc.id]: { ...state[doc.id], name } }));

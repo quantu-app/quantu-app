@@ -3,8 +3,6 @@
 	"version": "0.1.0",
 	"description": "This is the main application repository for QuantU.",
 	"scripts": {
-		"electron-builder": "electron-builder",
-		"electron": "electron",
 		"svelte-kit": "svelte-kit",
 		"clean": "rm -r node_modules/.vite && rm -r .svelte-kit && rm -r build",
 		"web": "svelte-kit dev --open",
@@ -41,6 +39,7 @@
 	},
 	"dependencies": {
 		"@aicacia/debounce": "^0.1.9",
+		"@aicacia/string-fuzzy_equals": "^0.1.0",
 		"@sveltejs/kit": "next",
 		"@tauri-apps/tauri-forage": "latest",
 		"@ts-stack/markdown": "^1.4.0",

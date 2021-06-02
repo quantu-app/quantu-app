@@ -20,9 +20,7 @@
 	}
 
 	onMount(renderKatex);
-	afterUpdate(() => {
-		renderKatex();
-	});
+	afterUpdate(renderKatex);
 </script>
 
 <div class="markdown" bind:this={element}>

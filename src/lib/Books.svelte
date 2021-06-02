@@ -1,49 +1,58 @@
 <script lang="ts">
 	import { booksStore, BookType } from '$lib/state/books';
+	import { fuzzyEquals } from '@aicacia/string-fuzzy_equals';
 
 	let bookName: string;
 	let bookType: BookType = BookType.Journal;
+	let bookNameFilter: string;
+
+	$: books = Object.entries($booksStore).filter(([_id, book]) =>
+		book.type === bookType && bookNameFilter ? fuzzyEquals(bookNameFilter, book.name) : true
+	);
 
 	function onCreateBook() {
 		booksStore.createBook(bookType, bookName);
 	}
 </script>
 
-<form action="javascript:void(0);" class="row mt-4">
+<div class="input-group mt-4">
 	{#if bookType !== BookType.Journal}
-		<div class="col-auto">
-			<input
-				type="text"
-				class="form-control"
-				placeholder="New Name"
-				aria-label="New Name"
-				required
-				bind:value={bookName}
-			/>
-		</div>
-	{/if}
-	<div class="col-auto">
-		<select
-			class="form-select"
-			placeholder="New Type"
-			aria-label="New Type"
+		<input
+			type="text"
+			class="form-control"
+			placeholder="New Name"
+			aria-label="New Name"
 			required
-			bind:value={bookType}
-		>
-			{#each Object.entries(BookType) as [key, value]}
-				<option {value}>{key}</option>
-			{/each}
-		</select>
-	</div>
-	<div class="col-auto">
-		<button type="submit" class="btn btn-primary" aria-label="Update" on:click={onCreateBook}>
-			Create
-		</button>
-	</div>
-</form>
+			bind:value={bookName}
+		/>
+	{/if}
+	<select
+		class="form-select"
+		placeholder="New Type"
+		aria-label="New Type"
+		required
+		bind:value={bookType}
+	>
+		{#each Object.entries(BookType) as [key, value]}
+			<option {value}>{key}</option>
+		{/each}
+	</select>
+	<button type="submit" class="btn btn-primary" aria-label="Update" on:click={onCreateBook}>
+		Create
+	</button>
+</div>
+
+<div class="input-group mt-4">
+	<input
+		type="search"
+		class="form-control"
+		placeholder="Filter by name"
+		bind:value={bookNameFilter}
+	/>
+</div>
 
 <ul class="mt-4">
-	{#each Object.entries($booksStore).filter(([_id, book]) => book.type === bookType) as [id, book]}
+	{#each books as [id, book]}
 		<li class="d-flex justify-content-between align-items-start">
 			<div class="ms-2 me-auto">
 				<h3 class="fw-bold">{book.name}</h3>

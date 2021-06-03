@@ -5,6 +5,7 @@ import { getLocationName } from '$lib/utils';
 import { BlockType, isTextBlock } from './blocks';
 import type { IBlock, IBlockBase } from './blocks';
 import { PersistentStore } from './PersistentStore';
+import { forage } from '@tauri-apps/tauri-forage';
 
 export const BOOKS_TABLE = 'books';
 
@@ -54,6 +55,10 @@ export class BookStore extends AutomergePersistentStore<IBook> {
 	constructor(bookId: string, initialState: FreezeObject<IBook>) {
 		super(`${BOOKS_TABLE}/${bookId}`, initialState);
 		this.bookId = bookId;
+	}
+
+	static async deleteBook(bookId: string) {
+		await forage.removeItem({ key: `${BOOKS_TABLE}/${bookId}` })();
 	}
 
 	getBookId() {
@@ -152,8 +157,7 @@ class BooksStore extends PersistentStore<IBooks> {
 				type,
 				createdAt: book.createdAt
 			};
-			state[bookId] = bookMeta;
-			return state;
+			return { ...state, [bookId]: bookMeta };
 		});
 
 		const bookStore = this.createBookStore(bookId, book);
@@ -162,7 +166,16 @@ class BooksStore extends PersistentStore<IBooks> {
 		return bookStore;
 	}
 
-	getBookById(bookId: string) {
+	deleteBookById(bookId: UUID) {
+		BookStore.deleteBook(bookId);
+		this.update((state) => {
+			const newState = { ...state };
+			delete newState[bookId];
+			return newState;
+		});
+	}
+
+	getBookById(bookId: UUID) {
 		const bookStore = this.bookStores[bookId];
 
 		if (bookStore) {

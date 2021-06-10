@@ -10,11 +10,14 @@
 	};
 
 	function highlight(code: string, language?: string): string {
-		console.log(arguments);
+		let html = '';
 
-		const html = language
-			? (window as any).hljs.highlight(code, { language }).value
-			: (window as any).hljs.highlightAuto(code).value;
+		try {
+			html = (window as any).hljs.highlight(code, { language }).value;
+		} catch (_error) {
+			html = (window as any).hljs.highlightAuto(code).value;
+		}
+
 		return `<div style="background: #eaeaea">${html}</div>`;
 	}
 

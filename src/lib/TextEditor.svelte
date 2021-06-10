@@ -1,6 +1,6 @@
 <script lang="ts">
 	import QuillEditor from '$lib/QuillEditor.svelte';
-	import { beforeUpdate, createEventDispatcher, onDestroy, onMount } from 'svelte';
+	import { beforeUpdate, createEventDispatcher, onMount } from 'svelte';
 	import type Delta from 'quill-delta';
 	import type { Text } from 'automerge';
 	import { addEventListener, removeEventListener } from '$lib/utils';
@@ -31,10 +31,10 @@
 
 	onMount(() => {
 		addEventListener('click', onWindowClick);
-	});
 
-	onDestroy(() => {
-		removeEventListener('click', onWindowClick);
+		return () => {
+			removeEventListener('click', onWindowClick);
+		};
 	});
 </script>
 

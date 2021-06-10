@@ -6,7 +6,7 @@
 	import type { IBook } from '$lib/state/books';
 	import Block from '$lib/Block/Block.svelte';
 	import type { FreezeObject, TableRow } from 'automerge';
-	import { onDestroy } from 'svelte';
+	import { onMount } from 'svelte';
 	import TextEditor from '$lib/TextEditor.svelte';
 	import type Delta from 'quill-delta';
 	import { applyOpsToText } from '$lib/utils';
@@ -62,8 +62,10 @@
 		});
 	}
 
-	onDestroy(() => {
-		booksStore.unloadBookById(bookStore.get().id);
+	onMount(() => {
+		return () => {
+			booksStore.unloadBookById(bookStore.get().id);
+		};
 	});
 </script>
 

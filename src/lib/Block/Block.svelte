@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Text from './Text.svelte';
-	import { onDestroy, onMount } from 'svelte';
+	import { onMount } from 'svelte';
 	import type { IBlock } from '$lib/state/blocks';
 	import { BlockType } from '$lib/state/blocks';
 	import type { BookStore } from '$lib/state/books';
@@ -20,9 +20,10 @@
 
 	onMount(() => {
 		addEventListener('click', onWindowClick);
-	});
-	onDestroy(() => {
-		removeEventListener('click', onWindowClick);
+
+		return () => {
+			removeEventListener('click', onWindowClick);
+		};
 	});
 </script>
 

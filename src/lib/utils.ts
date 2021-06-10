@@ -24,7 +24,12 @@ export function applyOpsToText(text: Text, ops: Op[]): void {
 			text.insertAt!(i, ...chars);
 			i += chars.length;
 		} else if (op.delete) {
-			text.deleteAt!(i, op.delete);
+			let deleteCount = op.delete || 0;
+			const diff = text.length - (i + deleteCount);
+			if (diff < 0) {
+				deleteCount += diff;
+			}
+			text.deleteAt!(i, deleteCount);
 		}
 	}
 }

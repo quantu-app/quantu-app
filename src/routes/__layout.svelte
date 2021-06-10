@@ -1,17 +1,24 @@
-<header class="container">
-	<div class="d-flex flex-wrap align-items-center justify-content-center">
-		<div class="d-flex align-items-center">
-			<a href="/" class="btn btn-lg btn-primary" role="button">Quantu</a>
-		</div>
+<script context="module" lang="ts">
+	import '../app.scss';
+</script>
 
-		<div class="nav col-auto me-auto" />
-
-		<div class="text-end" />
+<main class="d-flex flex-row">
+	<div class="d-flex flex-column flex-shrink-0 px-3" style="width: 320px;">
+		<a href="/" class="navbar-brand" role="button">Quant[U]</a>
+		<hr />
+		<ul class="nav nav-pills flex-column mb-auto">
+			<li class="nav-item">
+				<a href="/" class="nav-link">
+					Home
+					<i class="bi bi-house" />
+				</a>
+			</li>
+		</ul>
 	</div>
-</header>
+	<div class="d-flex flex-column flex-grow-1 pe-3">
+		<slot />
+	</div>
+</main>
 
-<main class="container"><slot /></main>
-
-<style lang="scss" global>
-	@import '../app.scss';
+<style lang="scss">
 </style>

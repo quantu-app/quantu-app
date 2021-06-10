@@ -67,16 +67,6 @@
 </script>
 
 <div class="input-group mt-4">
-	{#if bookType !== BookType.Journal}
-		<input
-			type="text"
-			class="form-control"
-			placeholder="New Name"
-			aria-label="New Name"
-			required
-			bind:value={bookName}
-		/>
-	{/if}
 	<select
 		class="form-select"
 		placeholder="New Type"
@@ -88,6 +78,16 @@
 			<option {value}>{key}</option>
 		{/each}
 	</select>
+	{#if bookType !== BookType.Journal}
+		<input
+			type="text"
+			class="form-control"
+			placeholder="New Name"
+			aria-label="New Name"
+			required
+			bind:value={bookName}
+		/>
+	{/if}
 	<button type="submit" class="btn btn-primary" aria-label="Update" on:click={onCreateBook}>
 		Create
 	</button>

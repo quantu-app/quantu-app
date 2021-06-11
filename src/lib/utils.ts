@@ -21,7 +21,7 @@ export function applyOpsToText(text: Text, ops: Op[]): void {
 		}
 		if (typeof op.insert === 'string') {
 			const chars = op.insert.split('');
-			text.insertAt!(i, ...chars);
+			text.insertAt(i, ...chars);
 			i += chars.length;
 		} else if (op.delete) {
 			let deleteCount = op.delete || 0;
@@ -29,7 +29,7 @@ export function applyOpsToText(text: Text, ops: Op[]): void {
 			if (diff < 0) {
 				deleteCount += diff;
 			}
-			text.deleteAt!(i, deleteCount);
+			text.deleteAt(i, deleteCount);
 		}
 	}
 }

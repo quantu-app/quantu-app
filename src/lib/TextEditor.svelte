@@ -4,18 +4,23 @@
 	import type Delta from 'quill-delta';
 	import type { Text } from 'automerge';
 	import { addEventListener, removeEventListener } from '$lib/utils';
+	import type { Quill, Sources } from 'quill';
 
 	export let text: Text;
 
-	const dispatch = createEventDispatcher<{ textchange: Delta }>();
-
-	let textString = text.toString();
+	const dispatch = createEventDispatcher<{
+		textchange: Delta;
+	}>();
 
 	let edit: boolean;
 	let prevEdit: boolean;
 
-	function onTextChange(event: CustomEvent<Delta>) {
-		dispatch('textchange', event.detail);
+	function onTextChange({
+		detail: [delta, _oldContents, source]
+	}: CustomEvent<[delta: Delta, oldContents: Delta, source: Sources]>) {
+		if (source === 'user') {
+			dispatch('textchange', delta);
+		}
 	}
 
 	function onWindowClick() {
@@ -25,9 +30,12 @@
 	beforeUpdate(() => {
 		if (edit !== prevEdit) {
 			prevEdit = edit;
-			textString = text.toString();
 		}
 	});
+
+	function onQuill(quill: Quill) {
+		quill.setText(text.toString());
+	}
 
 	onMount(() => {
 		addEventListener('click', onWindowClick);
@@ -40,7 +48,7 @@
 
 <div on:click|stopPropagation={() => (edit = true)}>
 	{#if edit}
-		<QuillEditor text={textString} multiline={false} on:textchange={onTextChange} />
+		<QuillEditor multiline={false} toolbar={false} on:textchange={onTextChange} {onQuill} />
 	{:else if text.toString().trim().length > 0}
 		{text.toString()}
 	{:else}

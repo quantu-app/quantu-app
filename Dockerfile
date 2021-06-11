@@ -1,6 +1,6 @@
 FROM node:14-slim as builder
 
-RUN npm i npm@7.15.0 -g
+RUN npm i npm@7.16.0 -g
 
 WORKDIR /usr/src/app
 

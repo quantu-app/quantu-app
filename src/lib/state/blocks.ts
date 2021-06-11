@@ -1,4 +1,5 @@
-import type { Text } from 'automerge';
+import type { List } from 'automerge';
+import type Op from 'quill-delta/dist/Op';
 
 export enum BlockType {
 	Text = 'text'
@@ -12,7 +13,7 @@ export interface IBlockBase {
 
 export interface ITextBlock extends IBlockBase {
 	type: BlockType.Text;
-	text: Text;
+	text: List<Op>;
 }
 
 export function isTextBlock(value: unknown): value is ITextBlock {

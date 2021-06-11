@@ -17,10 +17,13 @@
 		"docker.run": "docker run --name quantu --rm -it -p 3000:3000 docker.pkg.github.com/quantu-app/quantu-app/quantu-app-ui:latest",
 		"helm.delete": "helm delete -n ui quantu",
 		"helm": "helm upgrade quantu helm/quantu -n ui --install --set image.hash=$(docker inspect --format='\"{{index .Id}}\"' docker.pkg.github.com/quantu-app/quantu-app/quantu-app-ui:latest)",
-		"deploy": "npm run docker.build && npm run docker.push && npm run helm"
+		"helm.deploy": "npm run docker.build && npm run docker.push && npm run helm"
 	},
 	"type": "module",
 	"main": "src/electron.cjs",
+	"engines": {
+		"node": "14"
+	},
 	"devDependencies": {
 		"@sveltejs/adapter-node": "next",
 		"@types/cookie": "^0.4.0",

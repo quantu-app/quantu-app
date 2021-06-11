@@ -1,21 +1,31 @@
 <script lang="ts">
+	import type { Sources } from 'quill';
 	import type Quill from 'quill';
 	import type Delta from 'quill-delta';
 	import { onMount, createEventDispatcher } from 'svelte';
 
-	export let text: string;
 	export let multiline = true;
-	let prevText: string;
-
-	const dispatch = createEventDispatcher<{ textchange: Delta }>();
+	export let toolbar = true;
+	export let onQuill: ((quill: Quill) => void) | undefined;
 
 	let quill: Quill;
 	let element: HTMLDivElement;
 
-	$: {
-		if (text !== prevText && quill) {
-			prevText = text;
-			quill.setText(text);
+	const dispatch = createEventDispatcher<{
+		textchange: [delta: Delta, oldContents: Delta, source: Sources];
+		selectionchange: [
+			range: { index: Number; length: Number },
+			oldRange: { index: Number; length: Number },
+			source: String
+		];
+	}>();
+
+	function onKeyDown(e: KeyboardEvent) {
+		if (!multiline) {
+			if (e.key === 'Enter') {
+				e.preventDefault();
+				e.stopPropagation();
+			}
 		}
 	}
 
@@ -24,36 +34,33 @@
 
 		quill = new Quill(element, {
 			modules: {
-				toolbar: false
+				toolbar: toolbar
 			},
 			theme: 'snow'
 		});
 
-		if (text) {
-			quill.setText(text);
+		function onTextChange() {
+			dispatch(
+				'textchange',
+				arguments as unknown as [delta: Delta, oldContents: Delta, source: Sources]
+			);
+		}
+		function onSelectionChange() {
+			dispatch(
+				'selectionchange',
+				arguments as unknown as [
+					range: { index: Number; length: Number },
+					oldRange: { index: Number; length: Number },
+					source: String
+				]
+			);
 		}
 
-		function onChange(delta: Delta, _oldContents: Delta, source: string) {
-			if (source === 'user') {
-				dispatch('textchange', delta);
-			}
-		}
+		quill.on('text-change', onTextChange);
+		quill.on('selection-change', onSelectionChange);
 
-		function onKeyDown(e: KeyboardEvent) {
-			if (e.key === 'Backspace') {
-				const str = quill.getText();
-
-				if (str !== '' && str !== '\n') {
-					e.stopPropagation();
-				}
-			}
-		}
-
-		quill.focus();
-		quill.on('text-change', onChange);
-
-		element.addEventListener('keydown', onKeyDown, { capture: true });
+		onQuill && onQuill(quill);
 	});
 </script>
 
-<div bind:this={element} />
+<div bind:this={element} on:keydown|capture={onKeyDown} />

@@ -2,52 +2,43 @@
 	import type { ITextBlock } from '$lib/state/blocks';
 	import type { BookStore } from '$lib/state/books';
 	import QuillEditor from '$lib/QuillEditor.svelte';
-	import Markdown from '$lib/Markdown.svelte';
-	import { beforeUpdate } from 'svelte';
+	import { beforeUpdate, onMount } from 'svelte';
 	import type { TableRow } from 'automerge';
 	import type Delta from 'quill-delta';
-	import { applyOpsToText } from '$lib/utils';
+	import type Quill from 'quill';
 
 	export let bookStore: BookStore;
 	export let block: ITextBlock & TableRow;
-	export let edit: boolean;
 
-	let prevEdit: boolean;
+	let prevBlock = block;
+	let quill: Quill;
+	let DeltaClass: typeof Delta;
 
-	let text = block.text.toString();
-	let rendered = text;
+	function onQuill(q: Quill) {
+		quill = q;
+		quill.setContents(new DeltaClass(block.text), 'silent');
+	}
 
 	beforeUpdate(() => {
-		if (edit !== prevEdit) {
-			prevEdit = edit;
-			text = block.text.toString();
-			rendered = text;
+		if (prevBlock.id !== block.id) {
+			quill.setContents(new DeltaClass(block.text), 'silent');
 		}
 	});
 
-	function onTextChange(event: CustomEvent<Delta>) {
-		bookStore.updateBlock(block.id, (block) => {
-			applyOpsToText(block.text, event.detail.ops);
-			rendered = block.text.toString();
-		});
+	onMount(async () => {
+		const module = await import('quill-delta');
+		DeltaClass = module.default;
+	});
+
+	function onTextChange({
+		detail: [delta, oldContents, source]
+	}: CustomEvent<[delta: Delta, oldContents: Delta, source: string]>) {
+		if (quill && source === 'user') {
+			bookStore.updateBlock(block.id, (block) => {
+				block.text = quill.getContents().ops.map((op) => ({ ...op }));
+			});
+		}
 	}
 </script>
 
-<div>
-	{#if edit}
-		<div class="row">
-			<div class="col-6">
-				<QuillEditor {text} on:textchange={onTextChange} />
-			</div>
-			<div class="col-6">
-				<Markdown markdown={rendered} />
-			</div>
-		</div>
-	{:else if text.trim()}
-		<Markdown markdown={text.toString()} />
-	{:else}
-		<div class="d-flex align-items-center justify-content-center">
-			<h3>Click to Edit</h3>
-		</div>
-	{/if}
-</div>
+<QuillEditor {onQuill} on:textchange={onTextChange} />

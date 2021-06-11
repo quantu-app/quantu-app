@@ -3,7 +3,6 @@
 	import { BlockType } from '$lib/state/blocks';
 	import { booksStore, BookStore, isJournalBook } from '$lib/state/books';
 	import type { IBlock } from '$lib/state/blocks';
-	import type { IBook } from '$lib/state/books';
 	import Block from '$lib/Block/Block.svelte';
 	import type { FreezeObject, TableRow } from 'automerge';
 	import { onMount } from 'svelte';
@@ -21,16 +20,16 @@
 		await bookStore.createBlock(blockType);
 	}
 
-	function onBookNameChange(event: CustomEvent<Delta>) {
+	function onBookNameChange({ detail }: CustomEvent<Delta>) {
 		bookStore.change((doc) => {
-			applyOpsToText(doc.name, event.detail.ops);
+			applyOpsToText(doc.name, detail.ops);
 		});
 	}
 
-	function onBookLocationChange(event: CustomEvent<Delta>) {
+	function onBookLocationChange({ detail }: CustomEvent<Delta>) {
 		bookStore.change((doc) => {
 			if (isJournalBook(doc)) {
-				applyOpsToText(doc.location, event.detail.ops);
+				applyOpsToText(doc.location, detail.ops);
 			}
 		});
 	}

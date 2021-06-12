@@ -7,7 +7,7 @@
 	import type { TableRow } from 'automerge';
 	import type Delta from 'quill-delta';
 	import type Quill from 'quill';
-	import { applyDiff } from 'deep-diff';
+	import deepDiff from 'deep-diff';
 
 	export let bookStore: BookStore;
 	export let block: ITextBlock & TableRow;
@@ -20,6 +20,24 @@
 		quill = q;
 		if (DeltaClass) {
 			quill.setContents(new DeltaClass(block.text), 'silent');
+		}
+	}
+
+	function updateBlockText() {
+		if (quill) {
+			bookStore.updateBlock(block.id, (block) => {
+				deepDiff.applyDiff(block.text, quill.getContents().ops);
+			});
+		}
+	}
+
+	const debouncedUpdateBlockText = debounce(updateBlockText, 5000);
+
+	function onTextChange({
+		detail: [delta, oldContents, source]
+	}: CustomEvent<[delta: Delta, oldContents: Delta, source: string]>) {
+		if (source === 'user') {
+			debouncedUpdateBlockText();
 		}
 	}
 
@@ -36,24 +54,6 @@
 			quill.setContents(new DeltaClass(block.text), 'silent');
 		}
 	});
-
-	function updateBlockText() {
-		if (quill) {
-			bookStore.updateBlock(block.id, (block) => {
-				applyDiff(block.text, quill.getContents().ops);
-			});
-		}
-	}
-
-	const debouncedUpdateBlockText = debounce(updateBlockText, 5000);
-
-	function onTextChange({
-		detail: [delta, oldContents, source]
-	}: CustomEvent<[delta: Delta, oldContents: Delta, source: string]>) {
-		if (source === 'user') {
-			debouncedUpdateBlockText();
-		}
-	}
 </script>
 
 <QuillEditor {onQuill} on:textchange={onTextChange} />

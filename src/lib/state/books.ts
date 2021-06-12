@@ -49,16 +49,23 @@ export function isNotesBook(value: unknown): value is INotesBook {
 
 export type IBook = IJournalBook | INotesBook;
 
-export class BookStore extends AutomergePersistentStore<IBook> {
+export class BookStore<T extends IBookBase = IBookBase> extends AutomergePersistentStore<T> {
 	private bookId: string;
 
-	constructor(bookId: string, initialState: FreezeObject<IBook>) {
+	constructor(bookId: string, initialState: FreezeObject<T>) {
 		super(`${BOOKS_TABLE}/${bookId}`, initialState);
 		this.bookId = bookId;
 	}
 
 	static async deleteBook(bookId: string) {
 		await forage.removeItem({ key: `${BOOKS_TABLE}/${bookId}` })();
+	}
+
+	asJournalBook(): BookStore<IJournalBook> {
+		return this as unknown as BookStore<IJournalBook>;
+	}
+	asNotesBook(): BookStore<INotesBook> {
+		return this as unknown as BookStore<INotesBook>;
 	}
 
 	getBookId() {

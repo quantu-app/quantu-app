@@ -12,12 +12,18 @@
 	},
 	"build": {
 		"appId": "app.quantu.main",
+		"files": [
+			"package.json",
+			"electron.cjs"
+		],
 		"directories": {
 			"output": "electron-build"
 		},
-		"files": [
-			"build/*",
-			"electron.cjs"
+		"extraFiles": [
+			{
+				"from": "build",
+				"to": "resources/app.asar.unpacked/build"
+			}
 		]
 	},
 	"main": "electron.cjs",
@@ -28,8 +34,8 @@
 		"web.build": "svelte-kit build",
 		"desktop": "electron electron.dev.cjs",
 		"desktop.linux": "electron-builder -l",
-		"desktop.mac": "electron-builder -m --dir -c.compression=store -c.mac.identity=null",
-		"desktop.windows": "electron-builder -w",
+		"desktop.mac": "npm run web.build && electron-builder -m --dir -c.compression=store -c.mac.identity=null",
+		"desktop.windows": "npm run web.build && electron-builder -w",
 		"check": "svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-check --tsconfig ./tsconfig.json --watch",
 		"lint": "prettier --check --plugin-search-dir=. . && eslint --ignore-path .gitignore .",
@@ -77,6 +83,7 @@
 		"cookie": "^0.4.1",
 		"deep-diff": "^1.0.2",
 		"eventemitter3": "^4.0.7",
+		"find-open-port": "^2.0.3",
 		"katex": "^0.13.11",
 		"pascal-case": "^3.1.2",
 		"quill": "^1.3.7",

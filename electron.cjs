@@ -1,9 +1,8 @@
 const { app, BrowserWindow } = require('electron');
-
-const { HOST = 'localhost', PORT = 3000 } = process.env;
+const findPort = require('find-open-port');
 
 async function whenServerReady() {
-	const { instance } = await import('build/index.js');
+	const { instance } = await import('./build/index.js');
 
 	function isReady(resolve) {
 		if (instance.server.listening) {
@@ -19,9 +18,9 @@ async function whenServerReady() {
 let win = null;
 
 async function main() {
-	if (app.isPackaged) {
-		await whenServerReady();
-	}
+	process.env.HOST = 'localhost';
+	process.env.PORT = await findPort();
+	await whenServerReady();
 	win = new BrowserWindow({
 		webPreferences: {
 			nodeIntegration: true,
@@ -29,10 +28,7 @@ async function main() {
 		}
 	});
 	win.setMenu(null);
-	if (!app.isPackaged) {
-		win.webContents.openDevTools();
-	}
-	win.loadURL(`http://${HOST}:${PORT}`);
+	win.loadURL(`http://${process.env.HOST}:${process.env.PORT}`);
 }
 
 app.on('window-all-closed', () => {

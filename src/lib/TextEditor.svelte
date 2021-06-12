@@ -23,6 +23,10 @@
 		}
 	}
 
+	function onQuill(quill: Quill) {
+		quill.setText(text.toString());
+	}
+
 	function onWindowClick() {
 		edit = false;
 	}
@@ -32,10 +36,6 @@
 			prevEdit = edit;
 		}
 	});
-
-	function onQuill(quill: Quill) {
-		quill.setText(text.toString());
-	}
 
 	onMount(() => {
 		addEventListener('click', onWindowClick);

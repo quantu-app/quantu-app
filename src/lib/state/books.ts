@@ -73,7 +73,7 @@ export class BookStore extends AutomergePersistentStore<IBook> {
 		};
 
 		if (isTextBlock(block)) {
-			block.text = new Automerge.Text();
+			block.text = [];
 		}
 
 		this.change((doc) => {

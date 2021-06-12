@@ -3,9 +3,11 @@
 	import type { BookStore } from '$lib/state/books';
 	import QuillEditor from '$lib/QuillEditor.svelte';
 	import { beforeUpdate, onMount } from 'svelte';
+	import { debounce } from '@aicacia/debounce';
 	import type { TableRow } from 'automerge';
 	import type Delta from 'quill-delta';
 	import type Quill from 'quill';
+	import { applyDiff } from 'deep-diff';
 
 	export let bookStore: BookStore;
 	export let block: ITextBlock & TableRow;
@@ -16,11 +18,13 @@
 
 	function onQuill(q: Quill) {
 		quill = q;
-		quill.setContents(new DeltaClass(block.text), 'silent');
+		if (DeltaClass) {
+			quill.setContents(new DeltaClass(block.text), 'silent');
+		}
 	}
 
 	beforeUpdate(() => {
-		if (prevBlock.id !== block.id) {
+		if (prevBlock.id !== block.id && quill && DeltaClass) {
 			quill.setContents(new DeltaClass(block.text), 'silent');
 		}
 	});
@@ -28,15 +32,26 @@
 	onMount(async () => {
 		const module = await import('quill-delta');
 		DeltaClass = module.default;
+		if (quill) {
+			quill.setContents(new DeltaClass(block.text), 'silent');
+		}
 	});
+
+	function updateBlockText() {
+		if (quill) {
+			bookStore.updateBlock(block.id, (block) => {
+				applyDiff(block.text, quill.getContents().ops);
+			});
+		}
+	}
+
+	const debouncedUpdateBlockText = debounce(updateBlockText, 5000);
 
 	function onTextChange({
 		detail: [delta, oldContents, source]
 	}: CustomEvent<[delta: Delta, oldContents: Delta, source: string]>) {
-		if (quill && source === 'user') {
-			bookStore.updateBlock(block.id, (block) => {
-				block.text = quill.getContents().ops.map((op) => ({ ...op }));
-			});
+		if (source === 'user') {
+			debouncedUpdateBlockText();
 		}
 	}
 </script>

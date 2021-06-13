@@ -1,28 +1,28 @@
 import { debounce } from '@aicacia/debounce';
-import { forage } from '@tauri-apps/tauri-forage';
-import Automerge from 'automerge';
+import Automerge, { BinaryDocument } from 'automerge';
 import eventemitter3 from 'eventemitter3';
-import type { ChangeFn, Doc, BinaryDocument } from 'automerge';
+import type { ChangeFn, Doc } from 'automerge';
 import { get, Readable, Subscriber, writable, Writable } from 'svelte/store';
+import { remoteStorage } from './remoteStorage';
 
-export interface AutomergePersistentStoreEvents<T> {
+export interface AutomergeRSStoreEvents<T> {
 	persist: (doc: Doc<T>) => void;
 }
 
-export class AutomergePersistentStore<T>
-	extends eventemitter3.EventEmitter<AutomergePersistentStoreEvents<T>>
+export class AutomergeRSStore<T>
+	extends eventemitter3.EventEmitter<AutomergeRSStoreEvents<T>>
 	implements Readable<Doc<T>>
 {
-	protected name: string;
+	protected path: string;
 	protected store: Writable<Doc<T>>;
 	protected initialized = false;
 	protected saved = false;
 	protected changeFns: ChangeFn<T>[] = [];
 	protected debouncedPersist: () => void;
 
-	constructor(name: string, initialState: Doc<T>, timeoutMS = 5000) {
+	constructor(path: string, initialState: Doc<T>, timeoutMS = 5000) {
 		super();
-		this.name = name;
+		this.path = path;
 		this.store = writable(initialState);
 		this.init();
 		this.debouncedPersist = debounce(this.persist, timeoutMS, {
@@ -33,10 +33,11 @@ export class AutomergePersistentStore<T>
 
 	private async init() {
 		try {
-			const raw: string = await forage.getItem({ key: this.name })();
-
-			if (raw) {
-				this.store.set(this.fromString(raw));
+			const { data } = await remoteStorage.scope('/').getFile(this.path, false);
+			if (data) {
+				const binaryDocument = new Uint8Array(Object.values(data)) as unknown as BinaryDocument;
+				binaryDocument.__binaryDocument = true;
+				this.store.set(Automerge.load<T>(binaryDocument));
 			}
 		} catch (error) {
 			console.error(error);
@@ -57,12 +58,14 @@ export class AutomergePersistentStore<T>
 	}
 
 	persist = async () => {
-		await forage.setItem({ key: this.name, value: this.toString() })();
 		this.emit('persist', this.get());
+		await remoteStorage
+			.scope('/')
+			.storeFile('application/octet-stream ', this.path, Automerge.save(this.get()));
 	};
 
-	static async remove(key: string) {
-		await forage.removeItem({ key })();
+	static async remove(path: string) {
+		await remoteStorage.scope('/').remove(path);
 	}
 
 	get() {
@@ -80,28 +83,4 @@ export class AutomergePersistentStore<T>
 	subscribe(subscriber: Subscriber<Doc<T>>, invalidate?: (value?: Doc<T>) => void) {
 		return this.store.subscribe(subscriber, invalidate);
 	}
-
-	toString() {
-		const bytes = Automerge.save(this.get());
-		return bytesToString(bytes);
-	}
-
-	fromString(str: string): Doc<T> {
-		const bytes = stringToBytes(str);
-		return Automerge.load<T>(bytes);
-	}
-}
-
-export function bytesToString(bytes: BinaryDocument): string {
-	return bytes.reduce((str, byte) => str + byte.toString(16).padStart(2, '0'), '');
-}
-
-export function stringToBytes(hexString: string): BinaryDocument {
-	const result = [];
-	for (let i = 0; i < hexString.length; i += 2) {
-		result.push(parseInt(hexString.substr(i, 2), 16));
-	}
-	const array = new Uint8Array(result) as unknown as BinaryDocument;
-	array.__binaryDocument = true;
-	return array;
 }

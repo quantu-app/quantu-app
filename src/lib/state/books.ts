@@ -1,13 +1,10 @@
 import Automerge, { FreezeObject } from 'automerge';
 import type { Table, Text, ChangeFn, UUID } from 'automerge';
-import { AutomergePersistentStore } from '$lib/state/AutomergePersistentStore';
 import { getLocationName } from '$lib/utils';
 import { BlockType, isTextBlock } from './blocks';
 import type { IBlock, IBlockBase } from './blocks';
-import { PersistentStore } from './PersistentStore';
-import { forage } from '@tauri-apps/tauri-forage';
-
-export const BOOKS_TABLE = 'books';
+import { RSStore } from './RSStore';
+import { AutomergeRSStore } from './AutomergeRSStore';
 
 export enum BookType {
 	Journal = 'journal',
@@ -49,16 +46,16 @@ export function isNotesBook(value: unknown): value is INotesBook {
 
 export type IBook = IJournalBook | INotesBook;
 
-export class BookStore<T extends IBookBase = IBookBase> extends AutomergePersistentStore<T> {
+export class BookStore<T extends IBookBase = IBookBase> extends AutomergeRSStore<T> {
 	private bookId: string;
 
 	constructor(bookId: string, initialState: FreezeObject<T>) {
-		super(`${BOOKS_TABLE}/${bookId}`, initialState);
+		super(`books/${bookId}`, initialState);
 		this.bookId = bookId;
 	}
 
 	static async deleteBook(bookId: string) {
-		await forage.removeItem({ key: `${BOOKS_TABLE}/${bookId}` })();
+		await AutomergeRSStore.remove(`books/${bookId}`);
 	}
 
 	asJournalBook(): BookStore<IJournalBook> {
@@ -127,7 +124,7 @@ async function createBook(id: UUID, type: BookType, name?: string) {
 	return book;
 }
 
-class BooksStore extends PersistentStore<IBooks> {
+class BooksStore extends RSStore<IBooks> {
 	private bookStores: Record<UUID, BookStore> = {};
 
 	private createBookStore(bookId: string, book: IBook) {
@@ -207,4 +204,4 @@ class BooksStore extends PersistentStore<IBooks> {
 	}
 }
 
-export const booksStore = new BooksStore(BOOKS_TABLE, {});
+export const booksStore = new BooksStore('book_metas', 'book_metas', {});

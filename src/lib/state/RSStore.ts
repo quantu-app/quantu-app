@@ -1,26 +1,28 @@
 import { debounce } from '@aicacia/debounce';
-import { forage } from '@tauri-apps/tauri-forage';
 import eventemitter3 from 'eventemitter3';
 import { get, Subscriber, Updater, writable, Writable } from 'svelte/store';
+import { remoteStorage } from './remoteStorage';
 
-export interface PersistentStoreEvents<T> {
-	persist: (doc: T) => void;
+export interface RSStoreEvents<T> {
+	persist: (state: T) => void;
 }
 
-export class PersistentStore<T>
-	extends eventemitter3.EventEmitter<PersistentStoreEvents<T>>
+export class RSStore<T>
+	extends eventemitter3.EventEmitter<RSStoreEvents<T>>
 	implements Writable<T>
 {
-	protected name: string;
+	protected type: string;
+	protected path: string;
 	protected store: Writable<T>;
 	protected initialized = false;
 	protected saved = false;
-	protected updaters: Updater<T>[] = [];
+	protected updateFns: Updater<T>[] = [];
 	protected debouncedPersist: () => void;
 
-	constructor(name: string, initialState: T, timeoutMS = 5000) {
+	constructor(type: string, path: string, initialState: T, timeoutMS = 5000) {
 		super();
-		this.name = name;
+		this.type = type;
+		this.path = path;
 		this.store = writable(initialState);
 		this.init();
 		this.debouncedPersist = debounce(this.persist, timeoutMS, {
@@ -31,18 +33,18 @@ export class PersistentStore<T>
 
 	private async init() {
 		try {
-			const raw: string = await forage.getItem({ key: this.name })();
+			const data = await remoteStorage.scope('/').getObject(this.path, false);
 
-			if (raw) {
-				this.store.set(this.fromString(raw));
+			if (data) {
+				this.store.set(data);
 			}
 		} catch (error) {
 			console.error(error);
 		}
 
-		const updaters = [...this.updaters];
-		this.updaters.length = 0;
-		updaters.forEach((updater) => this.store.update(updater));
+		const updateFns = [...this.updateFns];
+		this.updateFns.length = 0;
+		updateFns.forEach((updateFn) => this.store.update(updateFn));
 		await this.persist();
 
 		this.initialized = true;
@@ -50,41 +52,35 @@ export class PersistentStore<T>
 
 	async close() {
 		await this.persist();
+		this.removeAllListeners();
 		return this;
 	}
 
 	persist = async () => {
-		await forage.setItem({ key: this.name, value: this.toString() })();
+		this.emit('persist', this.get());
+		await remoteStorage.scope('/').storeObject(this.type, this.path, this.get());
 	};
 
-	static async remove(key: string) {
-		await forage.removeItem({ key })();
+	static async remove(path: string) {
+		await remoteStorage.scope('/').remove(path);
 	}
 
 	get() {
 		return get(this.store);
 	}
-	set(value: T) {
-		return this.update(() => value);
+	set(state: T) {
+		return this.update(() => state);
 	}
-	update(updater: Updater<T>) {
+	update(updateFn: Updater<T>) {
 		if (this.initialized) {
-			this.store.update(updater);
+			this.store.update(updateFn);
 			this.debouncedPersist();
 		} else {
-			this.updaters.push(updater);
+			this.updateFns.push(updateFn);
 		}
 		return this;
 	}
 	subscribe(subscriber: Subscriber<T>, invalidate?: (value?: T) => void) {
 		return this.store.subscribe(subscriber, invalidate);
-	}
-
-	toString() {
-		return JSON.stringify(this.get());
-	}
-
-	fromString(str: string): T {
-		return JSON.parse(str);
 	}
 }

@@ -1,6 +1,22 @@
 <script context="module" lang="ts">
 	import '../app.scss';
+	import { remoteStorage } from '$lib/state/remoteStorage';
+	import { once } from 'svelte/internal';
+
+	const attachRS = once(async () => {
+		const { default: Widget } = await import('remotestorage-widget');
+		const widget = new Widget(remoteStorage);
+		widget.attach('rs-widget-container');
+	});
 </script>
+
+<script lang="ts">
+	import { onMount } from 'svelte';
+
+	onMount(attachRS);
+</script>
+
+<div id="rs-widget-container" />
 
 <main class="d-flex flex-row">
 	<div class="d-flex flex-column flex-shrink-0 px-3" style="width: 320px;">
@@ -21,4 +37,10 @@
 </main>
 
 <style lang="scss">
+	#rs-widget-container {
+		position: absolute;
+		bottom: 0;
+		right: 0;
+		z-index: 10001;
+	}
 </style>

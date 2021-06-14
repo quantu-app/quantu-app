@@ -3,7 +3,7 @@ import Automerge, { BinaryDocument } from 'automerge';
 import eventemitter3 from 'eventemitter3';
 import type { ChangeFn, Doc } from 'automerge';
 import { get, Readable, Subscriber, writable, Writable } from 'svelte/store';
-import { remoteStorage } from './remoteStorage';
+import { getRemoteStorage } from './remoteStorage';
 
 export interface AutomergeRSStoreEvents<T> {
 	persist: (doc: Doc<T>) => void;
@@ -33,7 +33,8 @@ export class AutomergeRSStore<T>
 
 	private async init() {
 		try {
-			const { data } = await remoteStorage.scope('/').getFile(this.path, false);
+			const remoteStorage = await getRemoteStorage();
+			const { data } = (await remoteStorage.scope('/').getFile(this.path, false)) as { data: T };
 			if (data) {
 				const binaryDocument = new Uint8Array(Object.values(data)) as unknown as BinaryDocument;
 				binaryDocument.__binaryDocument = true;
@@ -59,12 +60,14 @@ export class AutomergeRSStore<T>
 
 	persist = async () => {
 		this.emit('persist', this.get());
+		const remoteStorage = await getRemoteStorage();
 		await remoteStorage
 			.scope('/')
 			.storeFile('application/octet-stream ', this.path, Automerge.save(this.get()));
 	};
 
 	static async remove(path: string) {
+		const remoteStorage = await getRemoteStorage();
 		await remoteStorage.scope('/').remove(path);
 	}
 

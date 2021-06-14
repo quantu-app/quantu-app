@@ -1,11 +1,11 @@
 <script context="module" lang="ts">
 	import '../app.scss';
-	import { remoteStorage } from '$lib/state/remoteStorage';
 	import { once } from 'svelte/internal';
+	import { getRemoteStorage } from '$lib/state/remoteStorage';
 
 	const attachRS = once(async () => {
 		const { default: Widget } = await import('remotestorage-widget');
-		const widget = new Widget(remoteStorage);
+		const widget = new Widget(await getRemoteStorage());
 		widget.attach('rs-widget-container');
 	});
 </script>

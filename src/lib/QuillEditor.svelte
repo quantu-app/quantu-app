@@ -2,7 +2,7 @@
 	import type { Sources } from 'quill';
 	import type Quill from 'quill';
 	import type Delta from 'quill-delta';
-	import { onMount, createEventDispatcher, onDestroy } from 'svelte';
+	import { onMount, createEventDispatcher } from 'svelte';
 
 	export let multiline = true;
 	export let toolbar = true;

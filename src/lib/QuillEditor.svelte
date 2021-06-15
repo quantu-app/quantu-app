@@ -1,3 +1,35 @@
+<script context="module" lang="ts">
+	const toolbarOptions = [
+		[
+			{
+				header: [1, 2, 3, false]
+			}
+		],
+		['bold', 'italic', 'underline', 'strike'],
+		['blockquote', 'code-block', 'formula'],
+		[
+			{
+				list: 'ordered'
+			},
+			{
+				list: 'bullet'
+			}
+		],
+		[
+			{
+				direction: 'rtl'
+			}
+		],
+		[
+			{
+				align: []
+			}
+		],
+		['link', 'image'],
+		['clean']
+	];
+</script>
+
 <script lang="ts">
 	import type { Sources } from 'quill';
 	import type Quill from 'quill';
@@ -34,9 +66,11 @@
 
 		quill = new Quill(element, {
 			modules: {
-				toolbar: toolbar
+				toolbar: toolbar ? toolbarOptions : false,
+				autoformat: true
 			},
-			theme: 'snow'
+			theme: 'snow',
+			placeholder: 'Write something...'
 		});
 
 		function onTextChange() {

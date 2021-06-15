@@ -4,3 +4,12 @@
 .ql-editor {
 	height: inherit !important;
 }
+
+.ql-container,
+.ql-toolbar {
+	border: none !important;
+}
+
+.ql-toolbar {
+	border-bottom: 1px solid #ccc !important;
+}

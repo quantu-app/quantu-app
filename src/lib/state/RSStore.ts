@@ -1,7 +1,7 @@
 import { debounce } from '@aicacia/debounce';
 import eventemitter3 from 'eventemitter3';
 import { get, Subscriber, Updater, writable, Writable } from 'svelte/store';
-import { getRemoteStorage } from './remoteStorage';
+import { getClient } from './remoteStorage';
 
 export interface RSStoreEvents<T> {
 	persist: (state: T) => void;
@@ -33,8 +33,8 @@ export class RSStore<T>
 
 	private async init() {
 		try {
-			const remoteStorage = await getRemoteStorage();
-			const data = (await remoteStorage.scope('/').getObject(this.path, false)) as T;
+			const client = await getClient();
+			const data = (await client.getObject(this.path, false)) as T;
 
 			if (data) {
 				this.store.set(data);
@@ -59,13 +59,13 @@ export class RSStore<T>
 
 	persist = async () => {
 		this.emit('persist', this.get());
-		const remoteStorage = await getRemoteStorage();
-		await remoteStorage.scope('/').storeObject(this.type, this.path, this.get() as any);
+		const client = await getClient();
+		await client.storeObject(this.type, this.path, this.get() as any);
 	};
 
 	static async remove(path: string) {
-		const remoteStorage = await getRemoteStorage();
-		await remoteStorage.scope('/').remove(path);
+		const client = await getClient();
+		await client.remove(path);
 	}
 
 	get() {

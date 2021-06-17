@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { ITextBlock } from '$lib/state/blocks';
 	import type { BookStore } from '$lib/state/books';
-	import QuillEditor from '$lib/QuillEditor.svelte';
+	import RichEditor from '$lib/RichEditor.svelte';
 	import { beforeUpdate, onMount } from 'svelte';
 	import { debounce } from '@aicacia/debounce';
 	import type { TableRow } from 'automerge';
@@ -56,4 +56,4 @@
 	});
 </script>
 
-<QuillEditor {onQuill} on:textchange={onTextChange} />
+<RichEditor {onQuill} on:textchange={onTextChange} />

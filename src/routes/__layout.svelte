@@ -1,46 +1,31 @@
 <script context="module" lang="ts">
 	import '../app.scss';
-	import { once } from 'svelte/internal';
-	import { getRemoteStorage } from '$lib/state/remoteStorage';
-
-	const attachRS = once(async () => {
-		const { default: Widget } = await import('remotestorage-widget');
-		const widget = new Widget(await getRemoteStorage());
-		widget.attach('rs-widget-container');
-	});
 </script>
 
-<script lang="ts">
-	import { onMount } from 'svelte';
-
-	onMount(attachRS);
-</script>
-
-<div id="rs-widget-container" />
-
-<main class="d-flex flex-row">
-	<div class="d-flex flex-column flex-shrink-0 px-3" style="width: 320px;">
-		<a href="/" class="navbar-brand" role="button">Quant[U]</a>
-		<hr />
+<div class="d-flex flex-row h-100">
+	<div class="d-flex flex-column flex-shrink-0 p-3" style="width: 64px;">
+		<button class="btn btn-light" role="button"><i class="bi bi-list" /></button>
+		<ul class="nav nav-pills flex-column mb-auto" />
+		<div class="flex-grow-1" />
 		<ul class="nav nav-pills flex-column mb-auto">
 			<li class="nav-item">
 				<a href="/" class="nav-link">
-					Home
-					<i class="bi bi-house" />
+					<i class="bi bi-gear" />
 				</a>
 			</li>
 		</ul>
 	</div>
 	<div class="d-flex flex-column flex-grow-1 pe-3">
-		<slot />
+		<nav class="navbar">
+			<div class="container-fluid">
+				<a href="/" class="navbar-brand" role="button">Q[U]</a>
+				<hr />
+			</div>
+		</nav>
+		<main class="d-flex">
+			<div class="d-flex flex-column flex-grow-1">
+				<slot />
+			</div>
+		</main>
 	</div>
-</main>
-
-<style lang="scss">
-	#rs-widget-container {
-		position: absolute;
-		bottom: 0;
-		right: 0;
-		z-index: 10001;
-	}
-</style>
+</div>

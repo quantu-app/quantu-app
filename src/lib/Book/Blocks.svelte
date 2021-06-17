@@ -4,7 +4,6 @@
 	import type { IBlock } from '$lib/state/blocks';
 	import Block from '$lib/Block/Block.svelte';
 	import type { FreezeObject, TableRow } from 'automerge';
-	import CreateBlock from './CreateBlock.svelte';
 
 	export let bookStore: BookStore;
 
@@ -40,33 +39,35 @@
 
 <SortableList list={blocks} key="id" handle=".drag-sort-btn" let:item on:sort={onSort} klass="mt-4">
 	<li class={`item ${$bookStore.type.toLowerCase()}`}>
-		<div class="d-flex justify-content-between align-items-start control">
-			<button type="button" class="btn btn-primary btn-sm drag-sort-btn"
-				><i class="bi bi-arrows-move" /></button
-			>
-			<button type="button" class="btn btn-danger btn-sm" on:click={createOnDeleteBlock(item)}
-				><i class="bi bi-x" /></button
-			>
-		</div>
+		<slot {item}>
+			<div class="d-flex flex-column justify-content-between align-items-center control p-3">
+				<button type="button" class="btn btn-primary btn-sm drag-sort-btn d-flex"
+					><i class="bi bi-arrows-move" /></button
+				>
+				<button
+					type="button"
+					class="btn btn-danger btn-sm d-flex"
+					on:click={createOnDeleteBlock(item)}><i class="bi bi-x" /></button
+				>
+			</div>
+		</slot>
 		<Block {bookStore} block={item} />
 	</li>
 </SortableList>
 
-<CreateBlock {bookStore} />
-
 <style lang="scss">
 	.control {
 		display: none !important;
-		width: 32px;
+		height: 100%;
 		position: absolute;
-		right: 0;
+		left: -48px;
 		top: 0;
 	}
 	.item {
 		position: relative;
-		border: 2px dotted transparent;
+		border-left: 1px dotted transparent;
 		&:hover {
-			border-color: rgba(48, 12, 200, 0.2);
+			border-left-color: #ccc;
 			.control {
 				display: inherit !important;
 			}

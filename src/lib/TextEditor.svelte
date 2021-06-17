@@ -48,10 +48,10 @@
 
 <div on:click|stopPropagation={() => (edit = true)}>
 	{#if edit}
-		<QuillEditor multiline={false} toolbar={false} on:textchange={onTextChange} {onQuill} />
+		<QuillEditor multiline={false} on:textchange={onTextChange} {onQuill} />
 	{:else if text.toString().trim().length > 0}
 		{text.toString()}
 	{:else}
-		Click to Edit
+		Write...
 	{/if}
 </div>

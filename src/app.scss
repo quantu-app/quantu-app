@@ -1,5 +1,11 @@
 @import './theme.scss';
 
+html,
+body,
+#svelte {
+	height: 100%;
+}
+
 .ql-container,
 .ql-editor {
 	height: inherit !important;

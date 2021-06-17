@@ -3,8 +3,8 @@ import type { Table, Text, ChangeFn, UUID } from 'automerge';
 import { getLocationName } from '$lib/utils';
 import { BlockType, isTextBlock } from './blocks';
 import type { IBlock, IBlockBase } from './blocks';
-import { RSStore } from './RSStore';
-import { AutomergeRSStore } from './AutomergeRSStore';
+import { PersistentStore } from './PersistentStore';
+import { AutomergePersistentStore } from './AutomergePersistentStore';
 
 export enum BookType {
 	Journal = 'journal',
@@ -46,7 +46,7 @@ export function isNotesBook(value: unknown): value is INotesBook {
 
 export type IBook = IJournalBook | INotesBook;
 
-export class BookStore<T extends IBookBase = IBookBase> extends AutomergeRSStore<T> {
+export class BookStore<T extends IBookBase = IBookBase> extends AutomergePersistentStore<T> {
 	private bookId: string;
 
 	constructor(bookId: string, initialState: FreezeObject<T>) {
@@ -55,7 +55,7 @@ export class BookStore<T extends IBookBase = IBookBase> extends AutomergeRSStore
 	}
 
 	static async deleteBook(bookId: string) {
-		await AutomergeRSStore.remove(`books/${bookId}`);
+		await AutomergePersistentStore.remove(`books/${bookId}`);
 	}
 
 	asJournalBook(): BookStore<IJournalBook> {
@@ -124,7 +124,7 @@ async function createBook(id: UUID, type: BookType, name?: string) {
 	return book;
 }
 
-class BooksStore extends RSStore<IBooks> {
+class BooksStore extends PersistentStore<IBooks> {
 	private bookStores: Record<UUID, BookStore> = {};
 
 	private createBookStore(bookId: string, book: IBook) {
@@ -204,4 +204,4 @@ class BooksStore extends RSStore<IBooks> {
 	}
 }
 
-export const booksStore = new BooksStore('book_metas', 'book_metas', {});
+export const booksStore = new BooksStore('book_metas', {});

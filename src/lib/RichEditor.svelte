@@ -1,15 +1,48 @@
+<script context="module" lang="ts">
+	const toolbarOptions = [
+		[
+			{
+				header: [1, 2, 3, false]
+			}
+		],
+		['bold', 'italic', 'underline', 'strike'],
+		['blockquote', 'code-block', 'formula'],
+		[
+			{
+				list: 'ordered'
+			},
+			{
+				list: 'bullet'
+			}
+		],
+		[
+			{
+				direction: 'rtl'
+			}
+		],
+		[
+			{
+				align: []
+			}
+		],
+		['link', 'image'],
+		['clean']
+	];
+</script>
+
 <script lang="ts">
 	import type { Sources } from 'quill';
 	import type Quill from 'quill';
 	import type Delta from 'quill-delta';
-	import { onMount, createEventDispatcher } from 'svelte';
+	import { onMount, createEventDispatcher, beforeUpdate } from 'svelte';
 
-	export let multiline = true;
-	export let placeholder = 'Write...';
 	export let onQuill: ((quill: Quill) => void) | undefined;
 
 	let quill: Quill;
+	let container: HTMLDivElement;
 	let element: HTMLDivElement;
+	let edit: boolean = false;
+	let prevEdit: boolean;
 
 	const dispatch = createEventDispatcher<{
 		textchange: [delta: Delta, oldContents: Delta, source: Sources];
@@ -20,23 +53,33 @@
 		];
 	}>();
 
-	function onKeyDown(e: KeyboardEvent) {
-		if (!multiline) {
-			if (e.key === 'Enter') {
-				e.preventDefault();
-				e.stopPropagation();
-			}
+	function onWindowClick() {
+		edit = false;
+	}
+
+	function syncToolbar() {
+		const toolbar = container?.querySelector<HTMLDivElement>('.ql-toolbar');
+
+		if (toolbar) {
+			toolbar.style.display = edit ? 'inherit' : 'none';
 		}
 	}
+
+	beforeUpdate(() => {
+		if (edit !== prevEdit) {
+			prevEdit = edit;
+			syncToolbar();
+		}
+	});
 
 	onMount(() => {
 		import('quill').then(({ default: Quill }) => {
 			quill = new Quill(element, {
 				modules: {
-					toolbar: false
+					toolbar: toolbarOptions
 				},
 				theme: 'snow',
-				placeholder
+				placeholder: 'Write...'
 			});
 
 			function onTextChange() {
@@ -60,10 +103,18 @@
 			quill.on('selection-change', onSelectionChange);
 
 			onQuill && onQuill(quill);
+
+			syncToolbar();
 		});
+
+		addEventListener('click', onWindowClick);
+
+		return () => {
+			removeEventListener('click', onWindowClick);
+		};
 	});
 </script>
 
-<div>
-	<div bind:this={element} on:keydown|capture={onKeyDown} />
+<div bind:this={container} on:click|stopPropagation={() => (edit = true)}>
+	<div bind:this={element} />
 </div>

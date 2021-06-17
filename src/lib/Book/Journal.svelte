@@ -19,4 +19,6 @@
 	<TextEditor text={$bookStore.location} on:textchange={onBookLocationChange} />
 </h3>
 
-<Blocks {bookStore} />
+<Blocks {bookStore}>
+	<div />
+</Blocks>

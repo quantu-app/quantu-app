@@ -6,4 +6,6 @@
 	<title>Books</title>
 </svelte:head>
 
-<Books />
+<div class="container">
+	<Books />
+</div>

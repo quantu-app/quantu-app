@@ -1,7 +1,7 @@
 import Automerge, { FreezeObject } from 'automerge';
 import type { Table, Text, ChangeFn, UUID } from 'automerge';
 import { getLocationName } from '$lib/utils';
-import { BlockType, isTextBlock } from './blocks';
+import { BlockType, isTextBlock, ITextBlock } from './blocks';
 import type { IBlock, IBlockBase } from './blocks';
 import { PersistentStore } from './PersistentStore';
 import { AutomergePersistentStore } from './AutomergePersistentStore';
@@ -46,6 +46,20 @@ export function isNotesBook(value: unknown): value is INotesBook {
 
 export type IBook = IJournalBook | INotesBook;
 
+function createEmptyBlock(type: BlockType) {
+	const block: IBlockBase = {
+		type,
+		index: 0,
+		createdAt: new Date().toJSON()
+	};
+
+	if (isTextBlock(block)) {
+		block.text = [];
+	}
+
+	return block;
+}
+
 export class BookStore<T extends IBookBase = IBookBase> extends AutomergePersistentStore<T> {
 	private bookId: string;
 
@@ -70,15 +84,7 @@ export class BookStore<T extends IBookBase = IBookBase> extends AutomergePersist
 	}
 
 	createBlock(type: BlockType) {
-		const block: IBlockBase = {
-			type,
-			index: 0,
-			createdAt: new Date().toJSON()
-		};
-
-		if (isTextBlock(block)) {
-			block.text = [];
-		}
+		const block = createEmptyBlock(type);
 
 		this.change((doc) => {
 			block.index = doc.blocks.rows.reduce(
@@ -129,7 +135,11 @@ class BooksStore extends PersistentStore<IBooks> {
 
 	private createBookStore(bookId: string, book: IBook) {
 		const bookStore = new BookStore(bookId, Automerge.from(book));
-		bookStore.persist();
+		bookStore.change((doc) => {
+			if (isJournalBook(doc)) {
+				doc.blocks.add(createEmptyBlock(BlockType.Text) as ITextBlock);
+			}
+		});
 		bookStore.on('persist', (doc) => {
 			const book = this.get()[doc.id],
 				name = doc.name.toString();

@@ -57,6 +57,17 @@
 		edit = false;
 	}
 
+	function onKeyDown(e: KeyboardEvent) {
+		if (e.key !== 'Backspace') {
+			return;
+		}
+
+		const str = quill?.getText();
+		if (str !== '' && str !== '\n') {
+			e.stopPropagation();
+		}
+	}
+
 	function syncToolbar() {
 		const toolbar = container?.querySelector<HTMLDivElement>('.ql-toolbar');
 
@@ -116,5 +127,5 @@
 </script>
 
 <div bind:this={container} on:click|stopPropagation={() => (edit = true)}>
-	<div bind:this={element} />
+	<div bind:this={element} on:keydown|capture={onKeyDown} />
 </div>

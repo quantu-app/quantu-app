@@ -1,6 +1,3 @@
-@import 'bootstrap/scss/bootstrap';
-@import 'bootstrap/scss/functions';
-
 $spacer: 0.5rem;
 $enable-rounded: false;
 $font-family-base: 'Roboto Mono', monospace;
@@ -10,6 +7,9 @@ $success: #1d8225;
 $info: #531d82;
 $warning: #826a1d;
 $danger: #82381d;
+
+@import 'bootstrap/scss/bootstrap';
+@import 'bootstrap/scss/functions';
 
 @import 'bootstrap/scss/variables';
 @import 'bootstrap/scss/mixins';

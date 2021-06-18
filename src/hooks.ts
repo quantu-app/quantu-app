@@ -1,10 +1,10 @@
 import cookie from 'cookie';
-import { v4 } from 'uuid';
+import Automerge from 'automerge';
 import type { Handle } from '@sveltejs/kit';
 
 export const handle: Handle = async ({ request, resolve }) => {
 	const cookies = cookie.parse(request.headers.cookie || '');
-	request.locals.userid = cookies.userid || v4();
+	request.locals.userid = cookies.userid || Automerge.uuid();
 
 	// TODO https://github.com/sveltejs/kit/issues/1046
 	if (request.query.has('_method')) {

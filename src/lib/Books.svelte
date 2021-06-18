@@ -1,3 +1,17 @@
+<script context="module" lang="ts">
+	import { writable } from 'svelte/store';
+
+	interface IState {
+		bookType: BookType;
+		bookNameFilter: string | undefined;
+	}
+
+	const state = writable<IState>({
+		bookType: BookType.Journal,
+		bookNameFilter: undefined
+	});
+</script>
+
 <script lang="ts">
 	import { booksStore, BookType } from '$lib/state/books';
 	import type { IBookMeta } from '$lib/state/books';
@@ -7,11 +21,8 @@
 
 	let bookName: string;
 
-	let bookType: BookType = BookType.Journal;
-	let prevBookType: BookType = bookType;
-
-	let bookNameFilter: string;
-	let prevBookNameFilter: string;
+	let prevBookType: BookType = $state.bookType;
+	let prevBookNameFilter: string = $state.bookNameFilter;
 
 	let bookSortBy = 'createdAt';
 	let prevBookSortBy = bookSortBy;
@@ -24,7 +35,8 @@
 
 	function filter([_id, book]: [UUID, IBookMeta]) {
 		return (
-			book.type === bookType && (bookNameFilter ? fuzzyEquals(bookNameFilter, book.name) : true)
+			book.type === $state.bookType &&
+			($state.bookNameFilter ? fuzzyEquals($state.bookNameFilter, book.name) : true)
 		);
 	}
 
@@ -35,7 +47,7 @@
 	}
 
 	function onCreateBook() {
-		booksStore.createBook(bookType, bookName);
+		booksStore.createBook($state.bookType, bookName);
 	}
 
 	function createOnDelete(bookId: string, book: IBookMeta) {
@@ -54,12 +66,12 @@
 
 	beforeUpdate(() => {
 		if (
-			bookNameFilter !== prevBookNameFilter ||
+			$state.bookNameFilter !== prevBookNameFilter ||
 			bookSortBy !== prevBookSortBy ||
-			bookType !== prevBookType
+			$state.bookType !== prevBookType
 		) {
-			prevBookType = bookType;
-			prevBookNameFilter = bookNameFilter;
+			prevBookType = $state.bookType;
+			prevBookNameFilter = $state.bookNameFilter;
 			prevBookSortBy = bookSortBy;
 			books = Object.entries($booksStore).filter(filter).sort(sort);
 		}
@@ -72,13 +84,13 @@
 		placeholder="New Type"
 		aria-label="New Type"
 		required
-		bind:value={bookType}
+		bind:value={$state.bookType}
 	>
 		{#each Object.entries(BookType) as [key, value]}
 			<option {value}>{key}</option>
 		{/each}
 	</select>
-	{#if bookType !== BookType.Journal}
+	{#if $state.bookType !== BookType.Journal}
 		<input
 			type="text"
 			class="form-control"
@@ -98,7 +110,7 @@
 		type="search"
 		class="form-control"
 		placeholder="Filter by name"
-		bind:value={bookNameFilter}
+		bind:value={$state.bookNameFilter}
 	/>
 </div>
 
@@ -116,12 +128,11 @@
 				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" />
 			</div>
 			<div class="modal-body">
-				<p>Type <code>delete</code> to permanently remove.</p>
 				<div class="input-group mt-4">
 					<input
 						type="search"
 						class="form-control"
-						placeholder="Name to Delete"
+						placeholder="Type delete to permanently remove."
 						bind:value={deleteBookText}
 					/>
 				</div>
@@ -152,7 +163,7 @@
 				>
 				<button
 					type="button"
-					class="btn btn-danger"
+					class="btn btn-danger text-white"
 					data-bs-toggle="modal"
 					data-bs-target="#delete-book"
 					aria-label="Delete"

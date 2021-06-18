@@ -1,12 +1,15 @@
 $spacer: 0.5rem;
-$enable-rounded: false;
+$enable-rounded: true;
 $font-family-base: 'Roboto Mono', monospace;
 
-$primary: #1d7a82;
-$success: #1d8225;
-$info: #531d82;
-$warning: #826a1d;
-$danger: #82381d;
+$primary: #2f3c48;
+$secondary: #6f7f8c;
+$success: #3e4d59;
+$danger: #cc330d;
+$info: #5c8f94;
+$warning: #6e9fa5;
+$light: #eceeec;
+$dark: #1e2b37;
 
 @import 'bootstrap/scss/bootstrap';
 @import 'bootstrap/scss/functions';

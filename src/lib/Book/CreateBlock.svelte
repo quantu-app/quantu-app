@@ -12,8 +12,8 @@
 </script>
 
 <div class="d-flex align-items-center justify-content-center">
-	<form action="javascript:void(0);" class="row mt-4">
-		<div class="col-auto">
+	<div class="flex-shrink-0">
+		<div class="input-group">
 			<select
 				class="form-select"
 				placeholder="New Block Type"
@@ -25,16 +25,14 @@
 					<option {value}>{key}</option>
 				{/each}
 			</select>
-		</div>
-		<div class="col-auto">
 			<button
 				type="submit"
 				class="btn btn-primary"
 				aria-label="Create Block"
 				on:click={onCreateBlock}
 			>
-				Create
+				<i class="bi bi-plus" />
 			</button>
 		</div>
-	</form>
+	</div>
 </div>

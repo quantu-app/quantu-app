@@ -63,12 +63,11 @@
 				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" />
 			</div>
 			<div class="modal-body">
-				<p>Type <code>delete</code> to permanently remove.</p>
 				<div class="input-group mt-4">
 					<input
 						type="search"
 						class="form-control"
-						placeholder="Name to Delete"
+						placeholder="Type delete to permanently remove."
 						bind:value={deleteBlockText}
 					/>
 				</div>
@@ -96,7 +95,7 @@
 				>
 				<button
 					type="button"
-					class="btn btn-danger btn-sm d-flex"
+					class="btn btn-danger btn-sm text-white d-flex"
 					data-bs-toggle="modal"
 					data-bs-target="#delete-block"
 					aria-label="Delete"

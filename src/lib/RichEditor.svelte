@@ -41,15 +41,15 @@
 	let quill: Quill;
 	let container: HTMLDivElement;
 	let element: HTMLDivElement;
-	let edit: boolean = false;
+	let edit = false;
 	let prevEdit: boolean;
 
 	const dispatch = createEventDispatcher<{
 		textchange: [delta: Delta, oldContents: Delta, source: Sources];
 		selectionchange: [
-			range: { index: Number; length: Number },
-			oldRange: { index: Number; length: Number },
-			source: String
+			range: { index: number; length: number },
+			oldRange: { index: number; length: number },
+			source: Sources
 		];
 	}>();
 
@@ -92,9 +92,9 @@
 				dispatch(
 					'selectionchange',
 					arguments as unknown as [
-						range: { index: Number; length: Number },
-						oldRange: { index: Number; length: Number },
-						source: String
+						range: { index: number; length: number },
+						oldRange: { index: number; length: number },
+						source: Sources
 					]
 				);
 			}
@@ -107,10 +107,10 @@
 			syncToolbar();
 		});
 
-		addEventListener('click', onWindowClick);
+		window.addEventListener('click', onWindowClick);
 
 		return () => {
-			removeEventListener('click', onWindowClick);
+			window.removeEventListener('click', onWindowClick);
 		};
 	});
 </script>

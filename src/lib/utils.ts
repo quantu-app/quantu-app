@@ -1,18 +1,6 @@
 import type { Text } from 'automerge';
 import type Op from 'quill-delta/dist/Op';
 
-export const addEventListener: typeof window.addEventListener = (type, listener, options) => {
-	if (typeof window !== 'undefined') {
-		window.addEventListener(type, listener, options);
-	}
-};
-
-export const removeEventListener: typeof window.removeEventListener = (type, listener, options) => {
-	if (typeof window !== 'undefined') {
-		window.removeEventListener(type, listener, options);
-	}
-};
-
 export function applyOpsToText(text: Text, ops: Op[]): void {
 	let i = 0;
 	for (const op of ops) {

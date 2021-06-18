@@ -6,8 +6,8 @@
 
 	let blockType: BlockType = BlockType.Text;
 
-	async function onCreateBlock() {
-		await bookStore.createBlock(blockType);
+	function onCreateBlock() {
+		bookStore.createBlock(blockType);
 	}
 </script>
 

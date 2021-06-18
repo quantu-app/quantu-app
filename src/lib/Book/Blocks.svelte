@@ -3,9 +3,13 @@
 	import { booksStore, BookStore } from '$lib/state/books';
 	import type { IBlock } from '$lib/state/blocks';
 	import Block from '$lib/Block/Block.svelte';
-	import type { FreezeObject, TableRow } from 'automerge';
+	import type { FreezeObject, TableRow, UUID } from 'automerge';
 
 	export let bookStore: BookStore;
+
+	let deleteBlockId: UUID;
+	let deleteBlock: IBlock;
+	let deleteBlockText = '';
 
 	$: blocks = $bookStore.blocks.rows.sort(sortBlocks);
 
@@ -15,10 +19,18 @@
 
 	function createOnDeleteBlock(block: FreezeObject<IBlock & TableRow>) {
 		return function onDeleteBlock() {
-			booksStore.getBookById(bookStore.get().id).change((doc) => {
-				doc.blocks.remove(block.id);
-			});
+			deleteBlockId = block.id;
+			deleteBlock = block;
+			deleteBlockText = '';
 		};
+	}
+
+	function onDeleteBlock() {
+		if (deleteBlockId) {
+			booksStore.getBookById(bookStore.get().id).change((doc) => {
+				doc.blocks.remove(deleteBlockId);
+			});
+		}
 	}
 
 	function onSort(e: CustomEvent<Array<FreezeObject<IBlock & TableRow>>>) {
@@ -37,6 +49,44 @@
 	}
 </script>
 
+<div
+	class="modal fade"
+	id="delete-block"
+	tabindex="-1"
+	aria-labelledby="delete-block-label"
+	aria-hidden="true"
+>
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 id="delete-block-label" class="modal-title">Delete {deleteBlock?.type}</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" />
+			</div>
+			<div class="modal-body">
+				<p>Type <code>delete</code> to permanently remove.</p>
+				<div class="input-group mt-4">
+					<input
+						type="search"
+						class="form-control"
+						placeholder="Name to Delete"
+						bind:value={deleteBlockText}
+					/>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button
+					type="button"
+					on:click={onDeleteBlock}
+					disabled={deleteBlockText.trim().toLowerCase() !== 'delete'}
+					data-bs-dismiss="modal"
+					class="btn btn-danger">Delete</button
+				>
+				<button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+
 <SortableList list={blocks} key="id" handle=".drag-sort-btn" let:item on:sort={onSort} klass="mt-4">
 	<li class={`item ${$bookStore.type.toLowerCase()}`}>
 		<slot {item}>
@@ -47,7 +97,10 @@
 				<button
 					type="button"
 					class="btn btn-danger btn-sm d-flex"
-					on:click={createOnDeleteBlock(item)}><i class="bi bi-x" /></button
+					data-bs-toggle="modal"
+					data-bs-target="#delete-block"
+					aria-label="Delete"
+					on:click={createOnDeleteBlock(item)}><i class="bi bi-trash" /></button
 				>
 			</div>
 		</slot>

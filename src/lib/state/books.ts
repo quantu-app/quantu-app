@@ -135,11 +135,6 @@ class BooksStore extends PersistentStore<IBooks> {
 
 	private createBookStore(bookId: string, book: IBook) {
 		const bookStore = new BookStore(bookId, Automerge.from(book));
-		bookStore.change((doc) => {
-			if (isJournalBook(doc)) {
-				doc.blocks.add(createEmptyBlock(BlockType.Text) as ITextBlock);
-			}
-		});
 		bookStore.on('persist', (doc) => {
 			const book = this.get()[doc.id],
 				name = doc.name.toString();
@@ -175,6 +170,11 @@ class BooksStore extends PersistentStore<IBooks> {
 		});
 
 		const bookStore = this.createBookStore(bookId, book);
+		bookStore.change((doc) => {
+			if (isJournalBook(doc)) {
+				doc.blocks.add(createEmptyBlock(BlockType.Text) as ITextBlock);
+			}
+		});
 		bookStore;
 		this.bookStores[bookId] = bookStore;
 		return bookStore;

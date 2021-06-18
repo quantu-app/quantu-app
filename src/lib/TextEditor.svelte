@@ -3,7 +3,6 @@
 	import { beforeUpdate, createEventDispatcher, onMount } from 'svelte';
 	import type Delta from 'quill-delta';
 	import type { Text } from 'automerge';
-	import { addEventListener, removeEventListener } from '$lib/utils';
 	import type { Quill, Sources } from 'quill';
 
 	export let text: Text;
@@ -38,10 +37,10 @@
 	});
 
 	onMount(() => {
-		addEventListener('click', onWindowClick);
+		window.addEventListener('click', onWindowClick);
 
 		return () => {
-			removeEventListener('click', onWindowClick);
+			window.removeEventListener('click', onWindowClick);
 		};
 	});
 </script>

@@ -34,7 +34,7 @@
 	const debouncedUpdateBlockText = debounce(updateBlockText, 5000);
 
 	function onTextChange({
-		detail: [delta, oldContents, source]
+		detail: [_delta, _oldContents, source]
 	}: CustomEvent<[delta: Delta, oldContents: Delta, source: string]>) {
 		if (source === 'user') {
 			debouncedUpdateBlockText();

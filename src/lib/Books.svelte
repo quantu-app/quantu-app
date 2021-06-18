@@ -18,7 +18,7 @@
 
 	let deleteBookId: UUID;
 	let deleteBook: IBookMeta;
-	let deleteBookName = '';
+	let deleteBookText = '';
 
 	$: books = Object.entries($booksStore).filter(filter).sort(sort);
 
@@ -42,7 +42,7 @@
 		return function onDelete() {
 			deleteBookId = bookId;
 			deleteBook = book;
-			deleteBookName = '';
+			deleteBookText = '';
 		};
 	}
 
@@ -116,13 +116,13 @@
 				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" />
 			</div>
 			<div class="modal-body">
-				<p>Type <code>{deleteBook?.name}</code> to Delete.</p>
+				<p>Type <code>delete</code> to permanently remove.</p>
 				<div class="input-group mt-4">
 					<input
 						type="search"
 						class="form-control"
 						placeholder="Name to Delete"
-						bind:value={deleteBookName}
+						bind:value={deleteBookText}
 					/>
 				</div>
 			</div>
@@ -130,7 +130,7 @@
 				<button
 					type="button"
 					on:click={onDeleteBook}
-					disabled={deleteBookName.trim() !== deleteBook?.name.trim()}
+					disabled={deleteBookText.trim().toLowerCase() !== 'delete'}
 					data-bs-dismiss="modal"
 					class="btn btn-danger">Delete</button
 				>

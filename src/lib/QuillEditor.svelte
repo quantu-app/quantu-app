@@ -14,9 +14,9 @@
 	const dispatch = createEventDispatcher<{
 		textchange: [delta: Delta, oldContents: Delta, source: Sources];
 		selectionchange: [
-			range: { index: Number; length: Number },
-			oldRange: { index: Number; length: Number },
-			source: String
+			range: { index: number; length: number },
+			oldRange: { index: number; length: number },
+			source: Sources
 		];
 	}>();
 
@@ -49,9 +49,9 @@
 				dispatch(
 					'selectionchange',
 					arguments as unknown as [
-						range: { index: Number; length: Number },
-						oldRange: { index: Number; length: Number },
-						source: String
+						range: { index: number; length: number },
+						oldRange: { index: number; length: number },
+						source: Sources
 					]
 				);
 			}

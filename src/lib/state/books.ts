@@ -1,6 +1,6 @@
 import Automerge, { FreezeObject } from 'automerge';
 import type { Table, Text, ChangeFn, UUID } from 'automerge';
-import { getLocationName } from '$lib/utils';
+import { getLocationName, applyOpsToText } from '$lib/utils';
 import { BlockType, isTextBlock, ITextBlock } from './blocks';
 import type { IBlock, IBlockBase } from './blocks';
 import { PersistentStore } from './PersistentStore';
@@ -24,7 +24,11 @@ export interface IBookBase {
 export interface IBookMeta {
 	name: string;
 	type: BookType;
+	tags: string[];
+	language: string;
+	wordCount: number;
 	createdAt: string;
+	updatedAt: string;
 }
 
 export interface IJournalBook extends IBookBase {
@@ -130,17 +134,45 @@ async function createBook(id: UUID, type: BookType, name?: string) {
 	return book;
 }
 
+function getWordCount(book: IBook) {
+	return book.blocks.rows.reduce((count, block) => {
+		if (isTextBlock(block)) {
+			return (
+				count +
+				applyOpsToText(new Automerge.Text(), block.text)
+					.toString()
+					.replace(/[\s]+/g, ' ')
+					.trim()
+					.split(' ').length
+			);
+		} else {
+			return count;
+		}
+	}, 0);
+}
+
 class BooksStore extends PersistentStore<IBooks> {
 	private bookStores: Record<UUID, BookStore> = {};
+
+	private onPersist = (book: IBook) => {
+		this.update((state) => ({
+			...state,
+			[book.id]: {
+				...state[book.id],
+				name: book.name.toString(),
+				wordCount: getWordCount(book),
+				updatedAt: new Date().toJSON()
+			}
+		}));
+	};
 
 	private createBookStore(bookId: string, book: IBook) {
 		const bookStore = new BookStore(bookId, Automerge.from(book));
 		bookStore.on('persist', (doc) => {
-			const book = this.get()[doc.id],
-				name = doc.name.toString();
+			const bookMeta = this.get()[doc.id];
 
-			if (book && book.name !== name) {
-				this.update((state) => ({ ...state, [doc.id]: { ...state[doc.id], name } }));
+			if (bookMeta) {
+				this.onPersist(doc, bookMeta);
 			}
 		});
 		return bookStore;
@@ -160,14 +192,18 @@ class BooksStore extends PersistentStore<IBooks> {
 		const bookId = this.createBookUUID(),
 			book = await createBook(bookId, type, name);
 
-		this.update((state) => {
-			const bookMeta = {
+		this.update((state) => ({
+			...state,
+			[bookId]: {
 				name: book.name.toString(),
 				type,
-				createdAt: book.createdAt
-			};
-			return { ...state, [bookId]: bookMeta };
-		});
+				tags: [],
+				wordCount: 0,
+				language: 'en',
+				createdAt: book.createdAt,
+				updatedAt: book.createdAt
+			}
+		}));
 
 		const bookStore = this.createBookStore(bookId, book);
 		bookStore.change((doc) => {

@@ -87,6 +87,7 @@
 		import('quill').then(({ default: Quill }) => {
 			quill = new Quill(element, {
 				modules: {
+					syntax: true,
 					toolbar: toolbarOptions
 				},
 				theme: 'snow',

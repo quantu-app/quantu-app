@@ -1,7 +1,7 @@
 import type { Text } from 'automerge';
 import type Op from 'quill-delta/dist/Op';
 
-export function applyOpsToText(text: Text, ops: Op[]): void {
+export function applyOpsToText(text: Text, ops: Op[]): Text {
 	let i = 0;
 	for (const op of ops) {
 		if (op.retain) {
@@ -20,6 +20,7 @@ export function applyOpsToText(text: Text, ops: Op[]): void {
 			text.deleteAt(i, deleteCount);
 		}
 	}
+	return text;
 }
 
 export async function getGeolocation(position: GeolocationPosition) {

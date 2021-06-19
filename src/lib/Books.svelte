@@ -18,6 +18,7 @@
 	import { fuzzyEquals } from '@aicacia/string-fuzzy_equals';
 	import type { UUID } from 'automerge';
 	import { beforeUpdate } from 'svelte';
+	import BookMetaRow from './BookMetaRow.svelte';
 
 	let bookName: string;
 
@@ -151,25 +152,21 @@
 	</div>
 </div>
 
-<ul class="list-group list-group-flush mt-4">
-	{#each books as [id, book]}
-		<li class="d-flex justify-content-between align-items-start list-group-item">
-			<div>
-				<h3>{book.name}</h3>
-			</div>
-			<div class="btn-group" role="group">
-				<a type="button" class="btn btn-primary" aria-label="Edit" href={`/books/${id}`}
-					><i class="bi bi-pencil" /></a
-				>
-				<button
-					type="button"
-					class="btn btn-danger text-white"
-					data-bs-toggle="modal"
-					data-bs-target="#delete-book"
-					aria-label="Delete"
-					on:click={createOnDelete(id, book)}><i class="bi bi-trash" /></button
-				>
-			</div>
-		</li>
-	{/each}
-</ul>
+<table class="table">
+	<thead>
+		<tr>
+			<th scope="col">Title</th>
+			<th scope="col">Created</th>
+			<th scope="col">Last Updated</th>
+			<th scope="col">Words</th>
+			<th scope="col">Tags</th>
+			<th scope="col">Language</th>
+			<th scope="col" />
+		</tr>
+	</thead>
+	<tbody>
+		{#each books as [id, book]}
+			<BookMetaRow {id} {book} onDelete={createOnDelete(id, book)} />
+		{/each}
+	</tbody>
+</table>

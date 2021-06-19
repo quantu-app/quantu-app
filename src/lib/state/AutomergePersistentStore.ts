@@ -83,25 +83,21 @@ export class AutomergePersistentStore<T>
 
 	toString() {
 		const bytes = Automerge.save(this.get());
-		return bytesToString(bytes);
+		return bytesToJSON(bytes);
 	}
 
 	fromString(str: string): Doc<T> {
-		const bytes = stringToBytes(str);
+		const bytes = jsonToBytes(str);
 		return Automerge.load<T>(bytes);
 	}
 }
 
-export function bytesToString(bytes: BinaryDocument): string {
-	return bytes.reduce((str, byte) => str + byte.toString(16).padStart(2, '0'), '');
+function bytesToJSON(bytes: BinaryDocument) {
+	return JSON.stringify(Array.from(bytes));
 }
 
-export function stringToBytes(hexString: string): BinaryDocument {
-	const result = [];
-	for (let i = 0; i < hexString.length; i += 2) {
-		result.push(parseInt(hexString.substr(i, 2), 16));
-	}
-	const array = new Uint8Array(result) as unknown as BinaryDocument;
+function jsonToBytes(str: string): BinaryDocument {
+	const array = Uint8Array.from(JSON.parse(str)) as unknown as BinaryDocument;
 	array.__binaryDocument = true;
 	return array;
 }

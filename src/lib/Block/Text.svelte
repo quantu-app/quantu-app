@@ -2,7 +2,7 @@
 	import type { ITextBlock } from '$lib/state/blocks';
 	import type { BookStore } from '$lib/state/books';
 	import RichEditor from '$lib/RichEditor.svelte';
-	import { beforeUpdate, onDestroy, onMount } from 'svelte';
+	import { beforeUpdate, onMount } from 'svelte';
 	import { debounce } from '@aicacia/debounce';
 	import type { TableRow } from 'automerge';
 	import type Delta from 'quill-delta';
@@ -15,7 +15,7 @@
 	let prevBlock = block;
 	let quill: Quill;
 	let DeltaClass: typeof Delta;
-	let updating: boolean = false;
+	let updating = false;
 
 	function onQuill(q: Quill) {
 		quill = q;

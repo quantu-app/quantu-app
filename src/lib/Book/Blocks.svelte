@@ -89,7 +89,7 @@
 <SortableList list={blocks} key="id" handle=".drag-sort-btn" let:item on:sort={onSort} klass="mt-4">
 	<li class={`item ${$bookStore.type.toLowerCase()}`}>
 		<slot {item}>
-			<div class="d-flex flex-column justify-content-between align-items-center control p-3">
+			<div class="d-flex flex-column justify-content-between align-items-center control">
 				<button type="button" class="btn btn-primary btn-sm drag-sort-btn d-flex"
 					><i class="bi bi-arrows-move" /></button
 				>
@@ -114,6 +114,7 @@
 		position: absolute;
 		left: -48px;
 		top: 0;
+		padding: 16px;
 	}
 	.item {
 		position: relative;

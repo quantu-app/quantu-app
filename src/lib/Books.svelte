@@ -19,14 +19,14 @@
 	import type { UUID } from 'automerge';
 	import { beforeUpdate } from 'svelte';
 	import BookMetaRow from './BookMetaRow.svelte';
+	import { goto } from '$app/navigation';
 
 	let bookName: string;
+	let bookCreating = false;
 
 	let prevBookType: BookType = $state.bookType;
 	let prevBookNameFilter: string = $state.bookNameFilter;
-
-	let bookSortBy = 'createdAt';
-	let prevBookSortBy = bookSortBy;
+	let prevBooks = $booksStore;
 
 	let deleteBookId: UUID;
 	let deleteBook: IBookMeta;
@@ -47,8 +47,14 @@
 		return aValue < bValue ? 1 : aValue > bValue ? -1 : 0;
 	}
 
-	function onCreateBook() {
-		booksStore.createBook($state.bookType, bookName);
+	async function onCreateBook() {
+		bookCreating = true;
+		try {
+			const book = await booksStore.createBook($state.bookType, bookName);
+			goto(`/books/${book.getBookId()}`);
+		} finally {
+			bookCreating = false;
+		}
 	}
 
 	function createOnDelete(bookId: string, book: IBookMeta) {
@@ -68,18 +74,17 @@
 	beforeUpdate(() => {
 		if (
 			$state.bookNameFilter !== prevBookNameFilter ||
-			bookSortBy !== prevBookSortBy ||
-			$state.bookType !== prevBookType
+			$state.bookType !== prevBookType ||
+			prevBooks !== $booksStore
 		) {
 			prevBookType = $state.bookType;
 			prevBookNameFilter = $state.bookNameFilter;
-			prevBookSortBy = bookSortBy;
 			books = Object.entries($booksStore).filter(filter).sort(sort);
 		}
 	});
 </script>
 
-<div class="input-group mt-4">
+<!-- <div class="input-group mt-4">
 	<select
 		class="form-select"
 		placeholder="New Type"
@@ -104,7 +109,7 @@
 	<button type="submit" class="btn btn-primary" aria-label="Update" on:click={onCreateBook}>
 		Create
 	</button>
-</div>
+</div> -->
 
 <div class="input-group mt-4">
 	<input
@@ -113,6 +118,18 @@
 		placeholder="Filter by name"
 		bind:value={$state.bookNameFilter}
 	/>
+	<button
+		type="submit"
+		disabled={bookCreating}
+		class="btn btn-primary"
+		aria-label="Update"
+		on:click={onCreateBook}
+	>
+		{#if bookCreating}
+			<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" />
+		{/if}
+		Create
+	</button>
 </div>
 
 <div

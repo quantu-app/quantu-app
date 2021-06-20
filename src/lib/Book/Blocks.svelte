@@ -39,10 +39,11 @@
 			e.detail
 				.map((block) => block.id)
 				.forEach((blockId) => {
-					const block = doc.blocks.byId(blockId);
+					const block = doc.blocks.byId(blockId),
+						nextIndex = index++;
 
-					if (block) {
-						block.index = index++;
+					if (block && block.index !== nextIndex) {
+						block.index = nextIndex;
 					}
 				});
 		});

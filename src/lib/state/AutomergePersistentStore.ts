@@ -16,7 +16,7 @@ export class AutomergePersistentStore<T>
 	protected name: string;
 	protected store: Writable<Doc<T>>;
 	protected initialized = false;
-	protected saved = false;
+	protected updating = false;
 	protected changeFns: ChangeFn<T>[] = [];
 	protected debouncedPersist: () => void;
 
@@ -25,10 +25,7 @@ export class AutomergePersistentStore<T>
 		this.name = name;
 		this.store = writable(initialState);
 		this.init();
-		this.debouncedPersist = debounce(this.persist, timeoutMS, {
-			after: () => (this.saved = true),
-			before: () => (this.saved = false)
-		});
+		this.debouncedPersist = debounce(this.persist, timeoutMS);
 	}
 
 	private async init() {
@@ -45,7 +42,7 @@ export class AutomergePersistentStore<T>
 		const changeFns = [...this.changeFns];
 		this.changeFns.length = 0;
 		changeFns.forEach((changeFn) => this.store.update((doc) => Automerge.change(doc, changeFn)));
-		await this.persist();
+		this.persist();
 
 		this.initialized = true;
 	}
@@ -56,9 +53,12 @@ export class AutomergePersistentStore<T>
 		return this;
 	}
 
-	persist = async () => {
-		await forage.setItem({ key: this.name, value: this.toString() })();
-		this.emit('persist', this.get());
+	persist = async (force = false) => {
+		if (this.updating || force) {
+			this.updating = false;
+			await forage.setItem({ key: this.name, value: this.toString() })();
+			this.emit('persist', this.get());
+		}
 	};
 
 	static async remove(key: string) {
@@ -69,6 +69,7 @@ export class AutomergePersistentStore<T>
 		return get(this.store);
 	}
 	change(changeFn: ChangeFn<T>) {
+		this.updating = true;
 		if (this.initialized) {
 			this.store.update((doc) => Automerge.change(doc, changeFn));
 			this.debouncedPersist();

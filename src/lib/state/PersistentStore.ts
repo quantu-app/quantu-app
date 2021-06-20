@@ -14,7 +14,7 @@ export class PersistentStore<T>
 	protected name: string;
 	protected store: Writable<T>;
 	protected initialized = false;
-	protected saved = false;
+	protected updating = false;
 	protected updaters: Updater<T>[] = [];
 	protected debouncedPersist: () => void;
 
@@ -23,10 +23,7 @@ export class PersistentStore<T>
 		this.name = name;
 		this.store = writable(initialState);
 		this.init();
-		this.debouncedPersist = debounce(this.persist, timeoutMS, {
-			after: () => (this.saved = true),
-			before: () => (this.saved = false)
-		});
+		this.debouncedPersist = debounce(this.persist, timeoutMS);
 	}
 
 	private async init() {
@@ -53,8 +50,12 @@ export class PersistentStore<T>
 		return this;
 	}
 
-	persist = async () => {
-		await forage.setItem({ key: this.name, value: this.toString() })();
+	persist = async (force = false) => {
+		if (this.updating || force) {
+			this.updating = false;
+			await forage.setItem({ key: this.name, value: this.toString() })();
+			this.emit('persist', this.get());
+		}
 	};
 
 	static async remove(key: string) {
@@ -68,6 +69,7 @@ export class PersistentStore<T>
 		return this.update(() => value);
 	}
 	update(updater: Updater<T>) {
+		this.updating = true;
 		if (this.initialized) {
 			this.store.update(updater);
 			this.debouncedPersist();

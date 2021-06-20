@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { booksStore, BookStore, isJournalBook, isNotesBook } from '$lib/state/books';
-	import { onMount } from 'svelte';
+	import { onDestroy } from 'svelte';
 	import TextEditor from '$lib/TextEditor.svelte';
 	import type Delta from 'quill-delta';
 	import { applyOpsToText } from '$lib/utils';
@@ -15,10 +15,11 @@
 		});
 	}
 
-	onMount(() => {
-		return () => {
+	onDestroy(() => {
+		// Run after sub components unmount to allow update before closing
+		setTimeout(() => {
 			booksStore.unloadBookById(bookStore.get().id);
-		};
+		});
 	});
 </script>
 

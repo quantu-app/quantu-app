@@ -172,7 +172,7 @@ class BooksStore extends PersistentStore<IBooks> {
 			const bookMeta = this.get()[doc.id];
 
 			if (bookMeta) {
-				this.onPersist(doc, bookMeta);
+				this.onPersist(doc);
 			}
 		});
 		return bookStore;

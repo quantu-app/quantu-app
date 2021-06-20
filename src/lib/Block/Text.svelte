@@ -26,13 +26,12 @@
 
 	function updateBlockText() {
 		if (quill && updating) {
+			const ops = quill.getContents().ops;
 			// TODO: fix this so it doesnt throw errors when the sizes are not the same
 			bookStore.updateBlock(block.id, (block) => {
-				const ops = quill.getContents().ops;
 				try {
 					deepDiff.applyDiff(block.text, ops);
 				} catch (error) {
-					console.error(error);
 					block.text = ops;
 				}
 			});

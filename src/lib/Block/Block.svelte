@@ -10,5 +10,5 @@
 </script>
 
 {#if block.type === BlockType.Text}
-	<Text {bookStore} {block} />
+	<Text {bookStore} id={block.id} text={block.text} />
 {/if}

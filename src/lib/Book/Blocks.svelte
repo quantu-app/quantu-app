@@ -4,6 +4,7 @@
 	import type { IBlock } from '$lib/state/blocks';
 	import Block from '$lib/Block/Block.svelte';
 	import type { FreezeObject, TableRow, UUID } from 'automerge';
+	import { beforeUpdate } from 'svelte';
 
 	export let bookStore: BookStore;
 
@@ -11,7 +12,7 @@
 	let deleteBlock: IBlock;
 	let deleteBlockText = '';
 
-	$: blocks = $bookStore.blocks.rows.sort(sortBlocks);
+	let blocks = $bookStore.blocks.rows.sort(sortBlocks);
 
 	function sortBlocks(a: FreezeObject<IBlock>, b: FreezeObject<IBlock>) {
 		return a.index - b.index;
@@ -48,6 +49,11 @@
 				});
 		});
 	}
+
+	beforeUpdate(() => {
+		blocks = $bookStore.blocks.rows.sort(sortBlocks);
+		console.log(blocks);
+	});
 </script>
 
 <div

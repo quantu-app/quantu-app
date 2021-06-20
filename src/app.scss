@@ -19,3 +19,8 @@ body,
 .ql-toolbar {
 	border-bottom: 1px solid #ccc !important;
 }
+
+.ql-editor pre.ql-syntax {
+	background-color: transparent !important;
+	color: $body-color !important;
+}

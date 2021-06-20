@@ -1,34 +1,39 @@
 <script lang="ts">
-	import type { ITextBlock } from '$lib/state/blocks';
 	import type { BookStore } from '$lib/state/books';
 	import RichEditor from '$lib/RichEditor.svelte';
-	import { beforeUpdate, onMount } from 'svelte';
+	import { afterUpdate, onMount } from 'svelte';
 	import { debounce } from '@aicacia/debounce';
-	import type { TableRow } from 'automerge';
 	import type Delta from 'quill-delta';
 	import type Quill from 'quill';
 	import deepDiff from 'deep-diff';
+	import type Op from 'quill-delta/dist/Op';
+	import type { List, UUID } from 'automerge';
 
 	export let bookStore: BookStore;
-	export let block: ITextBlock & TableRow;
+	export let id: UUID;
+	export let text: List<Op>;
 
-	let prevBlock = block;
+	let prevText = text;
+
 	let quill: Quill;
 	let DeltaClass: typeof Delta;
 	let updating = false;
+	let initialized = false;
+
+	$: if (!initialized && quill && DeltaClass) {
+		initialized = true;
+		quill.setContents(new DeltaClass(text), 'silent');
+	}
 
 	function onQuill(q: Quill) {
 		quill = q;
-		if (DeltaClass) {
-			quill.setContents(new DeltaClass(block.text), 'silent');
-		}
 	}
 
 	function updateBlockText() {
 		if (quill && updating) {
 			const ops = quill.getContents().ops;
 			// TODO: fix this so it doesnt throw errors when the sizes are not the same
-			bookStore.updateBlock(block.id, (block) => {
+			bookStore.updateBlock(id, (block) => {
 				try {
 					deepDiff.applyDiff(block.text, ops);
 				} catch (error) {
@@ -50,17 +55,16 @@
 		}
 	}
 
-	beforeUpdate(() => {
-		if (prevBlock.id !== block.id && quill && DeltaClass) {
-			quill.setContents(new DeltaClass(block.text), 'silent');
+	afterUpdate(() => {
+		if (DeltaClass && quill && prevText !== text) {
+			prevText = text;
+			quill.setContents(new DeltaClass(text), 'silent');
 		}
 	});
 
 	onMount(() => {
-		import('quill-delta').then(({ default: DeltaClass }) => {
-			if (quill) {
-				quill.setContents(new DeltaClass(block.text), 'silent');
-			}
+		import('quill-delta').then((module) => {
+			DeltaClass = module.default;
 		});
 
 		return updateBlockText;

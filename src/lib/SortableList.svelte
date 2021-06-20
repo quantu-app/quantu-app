@@ -1,12 +1,12 @@
 <script lang="ts">
-	import { afterUpdate, createEventDispatcher, onMount } from 'svelte';
+	import { afterUpdate, beforeUpdate, createEventDispatcher, onMount } from 'svelte';
 
 	export let klass: string;
 	export let list: T[];
 	export let key: string;
 	export let handle: string;
 
-	let prevList: T[] = [...list];
+	let prevList: T[] = list;
 
 	type T = any;
 
@@ -84,8 +84,8 @@
 	}
 
 	afterUpdate(() => {
-		if (prevList.length !== list.length) {
-			prevList = [...list];
+		if (prevList !== list) {
+			prevList = list;
 			document.querySelectorAll<HTMLElement>(handle).forEach(initHandle);
 		}
 	});

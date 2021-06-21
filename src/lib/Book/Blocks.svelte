@@ -12,7 +12,7 @@
 	let deleteBlock: IBlock;
 	let deleteBlockText = '';
 
-	let blocks = $bookStore.blocks.rows.sort(sortBlocks);
+	$: blocks = $bookStore.blocks.rows.sort(sortBlocks);
 
 	function sortBlocks(a: FreezeObject<IBlock>, b: FreezeObject<IBlock>) {
 		return a.index - b.index;
@@ -49,11 +49,6 @@
 				});
 		});
 	}
-
-	beforeUpdate(() => {
-		blocks = $bookStore.blocks.rows.sort(sortBlocks);
-		console.log(blocks);
-	});
 </script>
 
 <div
@@ -85,7 +80,7 @@
 					on:click={onDeleteBlock}
 					disabled={deleteBlockText.trim().toLowerCase() !== 'delete'}
 					data-bs-dismiss="modal"
-					class="btn btn-danger">Delete</button
+					class="btn btn-danger text-white">Delete</button
 				>
 				<button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
 			</div>

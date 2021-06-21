@@ -161,7 +161,7 @@
 					on:click={onDeleteBook}
 					disabled={deleteBookText.trim().toLowerCase() !== 'delete'}
 					data-bs-dismiss="modal"
-					class="btn btn-danger">Delete</button
+					class="btn btn-danger text-white">Delete</button
 				>
 				<button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
 			</div>

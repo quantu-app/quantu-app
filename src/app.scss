@@ -1,26 +1,8 @@
 @import './theme.scss';
+@import './quill.scss';
 
 html,
 body,
 #svelte {
 	height: 100%;
-}
-
-.ql-container,
-.ql-editor {
-	height: inherit !important;
-}
-
-.ql-container,
-.ql-toolbar {
-	border: none !important;
-}
-
-.ql-toolbar {
-	border-bottom: 1px solid #ccc !important;
-}
-
-.ql-editor pre.ql-syntax {
-	background-color: transparent !important;
-	color: $body-color !important;
 }

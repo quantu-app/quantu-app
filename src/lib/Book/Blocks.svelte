@@ -49,6 +49,8 @@
 				});
 		});
 	}
+
+	beforeUpdate(() => {});
 </script>
 
 <div

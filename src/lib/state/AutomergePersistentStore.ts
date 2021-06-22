@@ -1,6 +1,6 @@
 import { debounce } from '@aicacia/debounce';
 import { forage } from '@tauri-apps/tauri-forage';
-import Automerge from 'automerge';
+import Automerge, { FreezeObject } from 'automerge';
 import eventemitter3 from 'eventemitter3';
 import type { ChangeFn, Doc, BinaryDocument } from 'automerge';
 import { get, Readable, Subscriber, writable, Writable } from 'svelte/store';
@@ -67,6 +67,10 @@ export class AutomergePersistentStore<T>
 
 	get() {
 		return get(this.store);
+	}
+	set(doc: FreezeObject<T>) {
+		this.store.set(doc);
+		return this;
 	}
 	change(changeFn: ChangeFn<T>) {
 		this.updating = true;

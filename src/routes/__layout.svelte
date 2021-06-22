@@ -1,6 +1,9 @@
 <script context="module" lang="ts">
+	import Notifications from '$lib/Notifications.svelte';
 	import '../app.scss';
 </script>
+
+<Notifications />
 
 <div class="d-flex flex-row h-100">
 	<div class="d-flex flex-column flex-shrink-0 p-3" style="width: 64px;">

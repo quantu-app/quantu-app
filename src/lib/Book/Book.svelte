@@ -75,9 +75,10 @@
 	}
 
 	onDestroy(() => {
+		const bookId = bookStore.get().id;
 		// Run after sub components unmount to allow update before closing
 		setTimeout(() => {
-			booksStore.unloadBookById(bookStore.get().id);
+			booksStore.unloadBookById(bookId);
 		});
 	});
 </script>

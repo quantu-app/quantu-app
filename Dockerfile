@@ -1,4 +1,4 @@
-FROM node:14-slim as builder
+FROM node:14-alpine as builder
 
 RUN npm install -g npm@7.18.1
 
@@ -11,7 +11,7 @@ COPY . .
 
 RUN NODE_ENV=production npm run web.build
 
-FROM node:14-slim
+FROM node:14-alpine
 
 WORKDIR /usr/src/app
 

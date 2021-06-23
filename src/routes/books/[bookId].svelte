@@ -17,10 +17,13 @@
 	export let bookId: string;
 
 	const bookStore = booksStore.getBookById(bookId);
+
+	$: bookType = $bookStore.type;
+	$: bookName = $bookStore.name;
 </script>
 
 <svelte:head>
-	<title>{pascalCase($bookStore.type)} - {$bookStore.name}</title>
+	<title>{pascalCase(bookType)} - {bookName}</title>
 </svelte:head>
 
 <div class="container">

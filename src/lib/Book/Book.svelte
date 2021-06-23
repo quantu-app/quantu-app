@@ -83,8 +83,10 @@
 	});
 </script>
 
-<h1 class="d-flex flex-row">
-	<TextEditor text={$bookStore.name} on:textchange={onBookNameChange} />
+<div class="d-flex">
+	<h1>
+		<TextEditor text={$bookStore.name} on:textchange={onBookNameChange} />
+	</h1>
 	<div class="flex-grow-1" />
 	<div class="btn-group" role="group">
 		<button class="btn btn-primary" role="button" on:click={onDownload}>
@@ -94,7 +96,7 @@
 			<i class="bi bi-upload" />
 		</button>
 	</div>
-</h1>
+</div>
 
 {#if isJournalBook($bookStore)}
 	<Journal bookStore={bookStore.asJournalBook()} />

@@ -17,11 +17,6 @@
 		],
 		[
 			{
-				direction: 'rtl'
-			}
-		],
-		[
-			{
 				align: []
 			}
 		],

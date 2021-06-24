@@ -16,8 +16,8 @@
 	<td>{book.wordCount || 0}</td>
 	<td>{(book.tags || []).join(', ')}</td>
 	<td>{(book.language || '').toUpperCase()}</td>
-	<td>
-		<div class="btn-group" role="group">
+	<td class="clearfix">
+		<div class="btn-group float-end" role="group">
 			<a type="button" class="btn btn-primary" aria-label="Edit" href={`/books/${id}`}
 				><i class="bi bi-pencil" /></a
 			>

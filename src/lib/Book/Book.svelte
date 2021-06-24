@@ -83,18 +83,23 @@
 	});
 </script>
 
-<div class="d-flex">
-	<h1>
-		<TextEditor text={$bookStore.name} on:textchange={onBookNameChange} />
-	</h1>
-	<div class="flex-grow-1" />
-	<div class="btn-group" role="group">
-		<button class="btn btn-primary" role="button" on:click={onDownload}>
-			<i class="bi bi-download" />
-		</button>
-		<button class="btn btn-primary" role="button" on:click={onUpload}>
-			<i class="bi bi-upload" />
-		</button>
+<div class="container">
+	<div class="row justify-content-between">
+		<div class="col-auto">
+			<h1>
+				<TextEditor text={$bookStore.name} on:textchange={onBookNameChange} />
+			</h1>
+		</div>
+		<div class="col-auto">
+			<div class="btn-group" role="group">
+				<button class="btn btn-primary" role="button" on:click={onDownload}>
+					<i class="bi bi-download" />
+				</button>
+				<button class="btn btn-primary" role="button" on:click={onUpload}>
+					<i class="bi bi-upload" />
+				</button>
+			</div>
+		</div>
 	</div>
 </div>
 

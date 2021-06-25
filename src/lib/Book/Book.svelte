@@ -13,6 +13,8 @@
 
 	export let bookStore: BookStore;
 
+	let settings = false;
+
 	function onBookNameChange({ detail }: CustomEvent<Delta>) {
 		bookStore.change((doc) => {
 			applyOpsToText(doc.name, detail.ops);
@@ -85,13 +87,20 @@
 
 <div class="container">
 	<div class="row justify-content-between">
-		<div class="col-auto">
+		<div class="col-auto ps-0">
 			<h1>
 				<TextEditor text={$bookStore.name} on:textchange={onBookNameChange} />
 			</h1>
 		</div>
-		<div class="col-auto">
+		<div class="col-auto pe-0">
 			<div class="btn-group" role="group">
+				<button
+					class={`btn btn-${settings ? 'primary' : 'secondary'}`}
+					role="button"
+					on:click={() => (settings = !settings)}
+				>
+					<i class="bi bi-gear" />
+				</button>
 				<button class="btn btn-primary" role="button" on:click={onDownload}>
 					<i class="bi bi-download" />
 				</button>

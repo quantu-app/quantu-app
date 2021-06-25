@@ -1,5 +1,5 @@
 import Automerge, { FreezeObject } from 'automerge';
-import type { Table, Text, ChangeFn, UUID } from 'automerge';
+import type { Table, Text, List, ChangeFn, UUID } from 'automerge';
 import { getLocationName, applyOpsToText } from '$lib/utils';
 import { BlockType, isTextBlock, ITextBlock } from './blocks';
 import type { IBlock, IBlockBase } from './blocks';
@@ -24,7 +24,7 @@ export interface IBookBase {
 export interface IBookMeta {
 	name: string;
 	type: BookType;
-	tags: string[];
+	tags: List<string>;
 	language: string;
 	wordCount: number;
 	createdAt: string;

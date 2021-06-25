@@ -53,8 +53,8 @@ export class PersistentStore<T>
 	persist = async (force = false) => {
 		if (this.updating || force) {
 			this.updating = false;
-			await forage.setItem({ key: this.name, value: this.toString() })();
 			this.emit('persist', this.get());
+			await forage.setItem({ key: this.name, value: this.toString() })();
 		}
 	};
 

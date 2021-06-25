@@ -124,7 +124,7 @@
 		position: relative;
 		border-left: 1px dotted transparent;
 		&:hover {
-			border-left-color: #ccc;
+			border-left-color: #ebedef;
 			.control {
 				display: inherit !important;
 			}

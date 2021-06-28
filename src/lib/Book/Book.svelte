@@ -1,5 +1,6 @@
 <script lang="ts">
-	import { booksStore, BookStore, isJournalBook, isNotesBook } from '$lib/state/books';
+	import { booksStore, BookStore, isJournalBook } from '$lib/state/books';
+	import type { IJournalBook } from '$lib/state/books';
 	import type { IBookBase } from '$lib/state/books';
 	import { addNotification, NotificationType } from '$lib/state/notifications';
 	import { onDestroy } from 'svelte';
@@ -8,8 +9,8 @@
 	import type { BinaryDocument } from 'automerge';
 	import Automerge from 'automerge';
 	import { applyOpsToText } from '$lib/utils';
-	import Journal from './Journal.svelte';
-	import Notes from './Notes.svelte';
+	import Blocks from './Blocks.svelte';
+	import CreateBlock from './CreateBlock.svelte';
 
 	export let bookStore: BookStore;
 
@@ -18,6 +19,12 @@
 	function onBookNameChange({ detail }: CustomEvent<Delta>) {
 		bookStore.change((doc) => {
 			applyOpsToText(doc.name, detail.ops);
+		});
+	}
+
+	function onBookLocationChange({ detail }: CustomEvent<Delta>) {
+		bookStore.change((doc) => {
+			applyOpsToText((doc as IJournalBook).location, detail.ops);
 		});
 	}
 
@@ -92,6 +99,13 @@
 				<TextEditor text={$bookStore.name} on:textchange={onBookNameChange} />
 			</h1>
 		</div>
+		{#if isJournalBook($bookStore)}
+			<div class="col-auto">
+				<h3 style="margin: 12px;">
+					<TextEditor text={$bookStore.location} on:textchange={onBookLocationChange} />
+				</h3>
+			</div>
+		{/if}
 		<div class="col-auto pe-0">
 			<div class="btn-group" role="group">
 				<button
@@ -112,8 +126,8 @@
 	</div>
 </div>
 
-{#if isJournalBook($bookStore)}
-	<Journal bookStore={bookStore.asJournalBook()} />
-{:else if isNotesBook($bookStore)}
-	<Notes bookStore={bookStore.asNotesBook()} />
+<Blocks {bookStore} />
+
+{#if !isJournalBook($bookStore)}
+	<CreateBlock {bookStore} />
 {/if}

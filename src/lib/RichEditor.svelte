@@ -29,15 +29,13 @@
 	import type { Sources } from 'quill';
 	import type Quill from 'quill';
 	import type Delta from 'quill-delta';
-	import { onMount, createEventDispatcher, beforeUpdate } from 'svelte';
+	import { onMount, createEventDispatcher } from 'svelte';
 
 	export let onQuill: ((quill: Quill) => void) | undefined;
 
 	let quill: Quill;
 	let container: HTMLDivElement;
 	let element: HTMLDivElement;
-	let edit = false;
-	let prevEdit: boolean;
 
 	const dispatch = createEventDispatcher<{
 		textchange: [delta: Delta, oldContents: Delta, source: Sources];
@@ -47,10 +45,6 @@
 			source: Sources
 		];
 	}>();
-
-	function onWindowClick() {
-		edit = false;
-	}
 
 	function onKeyDown(e: KeyboardEvent) {
 		if (e.key !== 'Backspace') {
@@ -62,21 +56,6 @@
 			e.stopPropagation();
 		}
 	}
-
-	function syncToolbar() {
-		const toolbar = container?.querySelector<HTMLDivElement>('.ql-toolbar');
-
-		if (toolbar) {
-			toolbar.style.display = edit ? 'inherit' : 'none';
-		}
-	}
-
-	beforeUpdate(() => {
-		if (edit !== prevEdit) {
-			prevEdit = edit;
-			syncToolbar();
-		}
-	});
 
 	onMount(() => {
 		import('quill').then(({ default: Quill }) => {
@@ -110,18 +89,10 @@
 			quill.on('selection-change', onSelectionChange);
 
 			onQuill && onQuill(quill);
-
-			syncToolbar();
 		});
-
-		window.addEventListener('click', onWindowClick);
-
-		return () => {
-			window.removeEventListener('click', onWindowClick);
-		};
 	});
 </script>
 
-<div bind:this={container} on:click|stopPropagation={() => (edit = true)}>
+<div bind:this={container}>
 	<div bind:this={element} on:keydown|capture={onKeyDown} />
 </div>

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import SortableList from '$lib/SortableList.svelte';
-	import { booksStore, BookStore } from '$lib/state/books';
+	import { booksStore, BookStore, isJournalBook } from '$lib/state/books';
 	import type { IBlock } from '$lib/state/blocks';
 	import Block from '$lib/Block/Block.svelte';
 	import type { FreezeObject, TableRow, UUID } from 'automerge';
@@ -92,21 +92,23 @@
 
 <SortableList list={blocks} key="id" handle=".drag-sort-btn" let:item on:sort={onSort} klass="mt-4">
 	<li class={`item ${$bookStore.type.toLowerCase()}`}>
-		<slot {item}>
-			<div class="d-flex flex-column justify-content-between align-items-center control">
-				<button type="button" class="btn btn-primary btn-sm drag-sort-btn d-flex"
-					><i class="bi bi-arrows-move" /></button
-				>
-				<button
-					type="button"
-					class="btn btn-danger btn-sm text-white d-flex"
-					data-bs-toggle="modal"
-					data-bs-target="#delete-block"
-					aria-label="Delete"
-					on:click={createOnDeleteBlock(item)}><i class="bi bi-trash" /></button
-				>
-			</div>
-		</slot>
+		{#if !isJournalBook($bookStore)}
+			<slot {item}>
+				<div class="d-flex flex-column justify-content-between align-items-center control">
+					<button type="button" class="btn btn-primary btn-sm drag-sort-btn d-flex"
+						><i class="bi bi-arrows-move" /></button
+					>
+					<button
+						type="button"
+						class="btn btn-danger btn-sm text-white d-flex"
+						data-bs-toggle="modal"
+						data-bs-target="#delete-block"
+						aria-label="Delete"
+						on:click={createOnDeleteBlock(item)}><i class="bi bi-trash" /></button
+					>
+				</div>
+			</slot>
+		{/if}
 		<Block {bookStore} block={item} />
 	</li>
 </SortableList>

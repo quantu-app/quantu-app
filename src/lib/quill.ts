@@ -1,85 +1,118 @@
 import Quill from 'quill';
 
-const Block = Quill.import('blots/block'),
-	Module = Quill.import('core/module'),
+const Embed = Quill.import('blots/embed'),
 	Icons = Quill.import('ui/icons');
 
-export class MathBlock extends Block {
-	static blotName = 'math-block';
-	static tagName = 'DIV';
+const MODAL_TEMPLATE = `<div class="modal" style="display:block" tabindex="-1">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="btn-close" aria-label="Close" data-bs-dismiss="modal" />
+			</div>
+			<div class="modal-body">
+				<div class="input-group">
+					<input type="text" class="form-control" placeholder="Type Latex Math." />
+				</div>
+				<div class="input-group">
+					<div class="output" />
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-primary" data-bs-dismiss="modal">Update</button>
+			</div>
+		</div>
+	</div>
+</div>`;
 
-	private inputNode: HTMLInputElement;
-	private cachedText: string;
+class MathBlock extends Embed {
+	static blotName = 'math-block';
+	static className = 'ql-math-block';
+	static tagName = 'SPAN';
+
+	static create(value) {
+		if ((window as any).katex == null) {
+			throw new Error('Math block module requires KaTeX.');
+		}
+		const node = super.create(value);
+		MathBlock.updateDataValue(node, value);
+		return node;
+	}
+
+	private deleteModal() {
+		this.modal.remove();
+		this.modal = null;
+	}
+
+	private createModal(value: string) {
+		const builder: HTMLSpanElement = this.domNode.ownerDocument.createElement('span');
+		builder.innerHTML = MODAL_TEMPLATE;
+		this.modal = builder.firstChild as HTMLDivElement;
+		document.body.appendChild(this.modal);
+
+		const output = this.modal.querySelector<HTMLDivElement>('.modal-body .output'),
+			input = this.modal.querySelector<HTMLInputElement>('.modal-body input'),
+			close = this.modal.querySelector<HTMLButtonElement>('.modal-header button'),
+			update = this.modal.querySelector<HTMLButtonElement>('.modal-footer button');
+
+		input.value = value;
+
+		input?.addEventListener('input', (e) => {
+			(window as any).katex.render((e.target as HTMLInputElement).value, output, {
+				throwOnError: false,
+				errorColor: '#f00'
+			});
+		});
+		close?.addEventListener('click', () => this.deleteModal());
+		update?.addEventListener('click', () => {
+			MathBlock.updateDataValue(this.domNode, input.value);
+			this.deleteModal();
+		});
+	}
+
+	private static updateDataValue(node: HTMLElement, value: string) {
+		if (typeof value === 'string') {
+			(window as any).katex.render(value, node, {
+				throwOnError: false,
+				errorColor: '#f00'
+			});
+			node.setAttribute('data-value', value);
+		}
+	}
+
+	private modal: HTMLDivElement;
+
+	private onEdit = () => {
+		if (this.modal) {
+			this.deleteModal();
+		} else {
+			this.createModal(this.domNode.getAttribute('data-value'));
+		}
+	};
 
 	attach() {
-		if (!this.inputNode) {
-			const document = this.domNode.ownerDocument;
-			this.inputNode = document.createElement('input');
-			this.inputNode.style.position = 'absolute';
-			this.inputNode.value = this.domNode.innerText;
-			document.body.appendChild(this.inputNode);
-		}
-		return super.attach();
+		super.attach();
+		const domNode: HTMLElement = this.domNode;
+		domNode.addEventListener('click', this.onEdit);
 	}
 
-	detach() {
-		if (this.inputNode) {
-			this.inputNode.remove();
-		}
-		return super.detach();
+	remove() {
+		const domNode: HTMLElement = this.domNode;
+		domNode.removeEventListener('click', this.onEdit);
+		super.remove();
 	}
 
-	renderMath() {
-		const domNode: HTMLElement = this.domNode,
-			text = this.inputNode.value;
+	static value(domNode: HTMLElement) {
+		return domNode.getAttribute('data-value');
+	}
 
-		if (this.cachedText !== text) {
-			if (text.trim().length > 0 || this.cachedText == null) {
-				const position = domNode.getBoundingClientRect();
-				this.inputNode.style.left = `${position.x}px`;
-				this.inputNode.style.top = `${position.bottom}px`;
-				(window as any).katex.render(text, this.domNode, {
-					throwOnError: false,
-					errorColor: '#f00'
-				});
-			}
-			this.cachedText = text;
-		}
+	html() {
+		const { formula } = this.value();
+		return `<span>${formula}</span>`;
 	}
 }
 
 Icons['math-block'] = Icons['formula'];
 
-export class MathModule extends Module {
-	static register() {
-		Quill.register(MathBlock, true);
-	}
-
-	constructor(quill, options) {
-		super(quill, options);
-		let timer = null;
-		this.quill.on(Quill.events.SCROLL_OPTIMIZE, () => {
-			clearTimeout(timer);
-			timer = setTimeout(() => {
-				this.renderMath();
-				timer = null;
-			}, this.options.interval);
-		});
-		this.renderMath();
-	}
-
-	renderMath() {
-		if (this.quill.selection.composing) return;
-		this.quill.update(Quill.sources.USER);
-		const range = this.quill.getSelection();
-		this.quill.scroll.descendants(MathBlock).forEach((block) => block.renderMath());
-		this.quill.update(Quill.sources.SILENT);
-		if (range != null) {
-			this.quill.setSelection(range, Quill.sources.SILENT);
-		}
-	}
-}
-
-Quill.register('modules/math', MathModule, true);
+Quill.register('formats/math', MathBlock, true);
 
 export default Quill;

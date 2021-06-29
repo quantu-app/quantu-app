@@ -33,6 +33,7 @@
 		import('quill').then(({ default: Quill }) => {
 			quill = new Quill(element, {
 				modules: {
+					math: true,
 					toolbar: false
 				},
 				theme: 'snow',

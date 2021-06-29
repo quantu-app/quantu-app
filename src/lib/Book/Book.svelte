@@ -93,7 +93,7 @@
 </script>
 
 <div class="container">
-	<div class="row justify-content-between">
+	<div class="row justify-content-between align-items-end">
 		<div class="col-auto ps-0">
 			<h1>
 				<TextEditor text={$bookStore.name} on:textchange={onBookNameChange} />
@@ -101,7 +101,7 @@
 		</div>
 		{#if isJournalBook($bookStore)}
 			<div class="col-auto">
-				<h3 style="margin: 12px;">
+				<h3>
 					<TextEditor text={$bookStore.location} on:textchange={onBookLocationChange} />
 				</h3>
 			</div>

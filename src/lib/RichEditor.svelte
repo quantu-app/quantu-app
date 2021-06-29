@@ -6,7 +6,7 @@
 			}
 		],
 		['bold', 'italic', 'underline', 'strike'],
-		['blockquote', 'code-block', 'formula'],
+		['blockquote', 'code-block', 'math-block'],
 		[
 			{
 				list: 'ordered'
@@ -58,7 +58,7 @@
 	}
 
 	onMount(() => {
-		import('quill').then(({ default: Quill }) => {
+		import('./quill').then(({ default: Quill }) => {
 			quill = new Quill(element, {
 				modules: {
 					syntax: true,

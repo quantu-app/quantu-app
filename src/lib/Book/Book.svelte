@@ -1,20 +1,35 @@
 <script lang="ts">
 	import { booksStore, BookStore, isJournalBook } from '$lib/state/books';
 	import type { IJournalBook } from '$lib/state/books';
-	import type { IBookBase } from '$lib/state/books';
-	import { addNotification, NotificationType } from '$lib/state/notifications';
 	import { onDestroy } from 'svelte';
 	import TextEditor from '$lib/TextEditor.svelte';
 	import type Delta from 'quill-delta';
-	import type { BinaryDocument } from 'automerge';
-	import Automerge from 'automerge';
 	import { applyOpsToText } from '$lib/utils';
 	import Blocks from './Blocks.svelte';
 	import CreateBlock from './CreateBlock.svelte';
+	import Tags from '$lib/Tags.svelte';
 
 	export let bookStore: BookStore;
 
+	$: bookId = $bookStore.id;
+	$: bookMeta = $booksStore[bookId];
+
 	let settings = false;
+
+	function onLanguageChange(e: Event) {
+		const value = (e.currentTarget as HTMLInputElement).value;
+		booksStore.updateBook(bookId, (bookMeta) => ({
+			...bookMeta,
+			language: value
+		}));
+	}
+
+	function onTagsChange(e: CustomEvent<string[]>) {
+		booksStore.updateBook(bookId, (bookMeta) => ({
+			...bookMeta,
+			tags: e.detail
+		}));
+	}
 
 	function onBookNameChange({ detail }: CustomEvent<Delta>) {
 		bookStore.change((doc) => {
@@ -26,61 +41,6 @@
 		bookStore.change((doc) => {
 			applyOpsToText((doc as IJournalBook).location, detail.ops);
 		});
-	}
-
-	function onUpload() {
-		const input = window.document.createElement('input');
-
-		input.type = 'file';
-		input.name = 'filename';
-
-		document.body.appendChild(input);
-		input.addEventListener('change', () => {
-			const reader = new FileReader();
-
-			reader.addEventListener('load', (e) => {
-				const binaryDocument = new Uint8Array(
-					e.target.result as ArrayBuffer
-				) as unknown as BinaryDocument;
-				binaryDocument.__binaryDocument = true;
-				try {
-					const fileDoc = Automerge.load<IBookBase>(binaryDocument),
-						doc = bookStore.get();
-
-					if (fileDoc.id !== doc.id) {
-						throw new Error(
-							`Trying to merge two documents that are not related ${fileDoc.name} and ${doc.name}`
-						);
-					}
-
-					bookStore.set(Automerge.merge(doc, fileDoc));
-				} catch (error) {
-					console.error(error);
-					addNotification({
-						type: NotificationType.Danger,
-						heading: 'Failed to Upload',
-						description: error.message
-					});
-				}
-			});
-			reader.readAsArrayBuffer(input.files[0]);
-		});
-		input.click();
-		document.body.removeChild(input);
-	}
-
-	function onDownload() {
-		const binaryDocument = Automerge.save($bookStore),
-			a = window.document.createElement('a');
-
-		a.href = window.URL.createObjectURL(
-			new Blob([binaryDocument], { type: 'application/octet-stream' })
-		);
-		a.download = `${$bookStore.name}.book`;
-
-		document.body.appendChild(a);
-		a.click();
-		document.body.removeChild(a);
 	}
 
 	onDestroy(() => {
@@ -115,19 +75,30 @@
 				>
 					<i class="bi bi-gear" />
 				</button>
-				<button class="btn btn-primary" role="button" on:click={onDownload}>
-					<i class="bi bi-download" />
-				</button>
-				<button class="btn btn-primary" role="button" on:click={onUpload}>
-					<i class="bi bi-upload" />
-				</button>
 			</div>
 		</div>
 	</div>
 </div>
+
+{#if bookMeta && settings}
+	<div class="input-group">
+		<input
+			type="text"
+			class="form-control"
+			placeholder="Enter langauge"
+			value={bookMeta.language}
+			on:change={onLanguageChange}
+		/>
+	</div>
+	<div class="input-group mt-4">
+		<Tags tags={bookMeta.tags} on:change={onTagsChange} />
+	</div>
+{/if}
 
 <Blocks {bookStore} />
 
 {#if !isJournalBook($bookStore)}
 	<CreateBlock {bookStore} />
 {/if}
+
+<p>Words: {bookMeta?.wordCount}</p>

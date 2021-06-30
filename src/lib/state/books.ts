@@ -5,6 +5,7 @@ import { BlockType, isTextBlock, ITextBlock } from './blocks';
 import type { IBlock, IBlockBase } from './blocks';
 import { PersistentStore } from './PersistentStore';
 import { AutomergePersistentStore } from './AutomergePersistentStore';
+import type { Updater } from 'svelte/store';
 
 export enum BookType {
 	Journal = 'journal',
@@ -186,6 +187,21 @@ class BooksStore extends PersistentStore<IBooks> {
 		} else {
 			return bookId;
 		}
+	}
+
+	updateBook(id: UUID, updater: Updater<IBookMeta>) {
+		this.update((state) => {
+			const bookMeta = state[id];
+
+			if (bookMeta) {
+				return {
+					...state,
+					[id]: updater(bookMeta)
+				};
+			} else {
+				return state;
+			}
+		});
 	}
 
 	async createBook(type: BookType, name?: string) {

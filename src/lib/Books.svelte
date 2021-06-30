@@ -113,7 +113,7 @@
 
 <div class="input-group mt-4">
 	<input
-		type="search"
+		type="text"
 		class="form-control"
 		placeholder="Filter by name"
 		bind:value={$state.bookNameFilter}

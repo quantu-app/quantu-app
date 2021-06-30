@@ -1,9 +1,10 @@
 <script lang="ts">
 	import QuillEditor from '$lib/QuillEditor.svelte';
-	import { beforeUpdate, createEventDispatcher, onMount } from 'svelte';
+	import { createEventDispatcher } from 'svelte';
 	import type Delta from 'quill-delta';
 	import type { Text } from 'automerge';
 	import type { Quill, Sources } from 'quill';
+	import ClickAway from '$lib/ClickAway.svelte';
 
 	export let text: Text;
 
@@ -12,7 +13,6 @@
 	}>();
 
 	let edit: boolean;
-	let prevEdit: boolean;
 
 	function onTextChange({
 		detail: [delta, _oldContents, source]
@@ -25,27 +25,9 @@
 	function onQuill(quill: Quill) {
 		quill.setText(text.toString());
 	}
-
-	function onWindowClick() {
-		edit = false;
-	}
-
-	beforeUpdate(() => {
-		if (edit !== prevEdit) {
-			prevEdit = edit;
-		}
-	});
-
-	onMount(() => {
-		window.addEventListener('click', onWindowClick);
-
-		return () => {
-			window.removeEventListener('click', onWindowClick);
-		};
-	});
 </script>
 
-<div on:click|stopPropagation={() => (edit = true)}>
+<ClickAway on:click={() => (edit = true)} on:clickaway={() => (edit = false)}>
 	{#if edit}
 		<QuillEditor multiline={false} on:textchange={onTextChange} {onQuill} />
 	{:else if text.toString().trim().length > 0}
@@ -53,4 +35,4 @@
 	{:else}
 		Write...
 	{/if}
-</div>
+</ClickAway>

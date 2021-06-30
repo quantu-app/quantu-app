@@ -33,7 +33,6 @@
 		import('quill').then(({ default: Quill }) => {
 			quill = new Quill(element, {
 				modules: {
-					math: true,
 					toolbar: false
 				},
 				theme: 'snow',
@@ -60,11 +59,11 @@
 			quill.on('text-change', onTextChange);
 			quill.on('selection-change', onSelectionChange);
 
+			quill.focus();
+
 			onQuill && onQuill(quill);
 		});
 	});
 </script>
 
-<div>
-	<div bind:this={element} on:keydown|capture={onKeyDown} />
-</div>
+<div bind:this={element} on:keydown|capture={onKeyDown} />

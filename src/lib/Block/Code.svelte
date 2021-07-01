@@ -1,0 +1,76 @@
+<script lang="ts">
+	import type { BookStore } from '$lib/state/books';
+	import RichEditor from '$lib/RichEditor.svelte';
+	import { afterUpdate, onMount } from 'svelte';
+	import { debounce } from '@aicacia/debounce';
+	import type Delta from 'quill-delta';
+	import type Quill from 'quill';
+	import deepDiff from 'deep-diff';
+	import type Op from 'quill-delta/dist/Op';
+	import type { List, UUID } from 'automerge';
+
+	export let bookStore: BookStore;
+	export let id: UUID;
+	export let lang: string;
+	export let text: List<Op>;
+
+	let prevText = text;
+
+	let quill: Quill;
+	let DeltaClass: typeof Delta;
+	let updating = false;
+	let initialized = false;
+
+	$: if (!initialized && quill && DeltaClass) {
+		initialized = true;
+		quill.setContents(new DeltaClass(text), 'silent');
+	}
+
+	function onQuill(q: Quill) {
+		quill = q;
+	}
+
+	function updateBlockText() {
+		if (quill && updating) {
+			const ops = quill.getContents().ops;
+			// TODO: fix this so it doesnt throw errors when the sizes are not the same
+			bookStore.updateBlock(id, (block) => {
+				try {
+					deepDiff.applyDiff(block.text, ops);
+				} catch (error) {
+					block.text = ops;
+				}
+			});
+			updating = false;
+		}
+	}
+
+	const debouncedUpdateBlockText = debounce(updateBlockText, 5000);
+
+	function onTextChange({
+		detail: [_delta, _oldContents, source]
+	}: CustomEvent<[delta: Delta, oldContents: Delta, source: string]>) {
+		if (source === 'user') {
+			updating = true;
+			debouncedUpdateBlockText();
+		}
+	}
+
+	afterUpdate(() => {
+		if (DeltaClass && quill && prevText !== text) {
+			prevText = text;
+			quill.setContents(new DeltaClass(text), 'silent');
+		}
+	});
+
+	onMount(() => {
+		import('quill-delta').then((module) => {
+			DeltaClass = module.default;
+		});
+
+		return updateBlockText;
+	});
+</script>
+
+<p>Language: {lang}</p>
+<RichEditor {onQuill} on:textchange={onTextChange} />

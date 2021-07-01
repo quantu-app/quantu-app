@@ -1,5 +1,5 @@
 <script lang="ts">
-	import QuillEditor from '$lib/QuillEditor.svelte';
+	import QuillEditor from '$lib/quill/QuillEditor.svelte';
 	import { createEventDispatcher } from 'svelte';
 	import type Delta from 'quill-delta';
 	import type { Text } from 'automerge';

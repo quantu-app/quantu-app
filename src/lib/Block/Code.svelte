@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { BookStore } from '$lib/state/books';
-	import RichEditor from '$lib/RichEditor.svelte';
+	import RichEditor from '$lib/quill/RichEditor.svelte';
 	import { afterUpdate, onMount } from 'svelte';
 	import { debounce } from '@aicacia/debounce';
 	import type Delta from 'quill-delta';

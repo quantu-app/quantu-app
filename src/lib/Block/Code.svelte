@@ -38,6 +38,7 @@
 				try {
 					deepDiff.applyDiff(block.text, ops);
 				} catch (error) {
+					console.log(error);
 					block.text = ops;
 				}
 			});

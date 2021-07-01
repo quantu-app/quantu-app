@@ -78,7 +78,7 @@
 		"@tauri-apps/tauri-forage": "latest",
 		"automerge": "latest",
 		"cookie": "^0.4.1",
-		"deep-diff": "^1.0.2",
+		"deep-diff": "nathanfaucett/diff",
 		"eventemitter3": "^4.0.7",
 		"find-open-port": "^2.0.3",
 		"katex": "^0.13.11",

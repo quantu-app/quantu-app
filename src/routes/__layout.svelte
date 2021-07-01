@@ -8,11 +8,11 @@
 <div class="d-flex flex-row h-100">
 	<div class="d-flex flex-column flex-shrink-0 p-3" style="width: 64px;">
 		<a href="/" class="navbar-brand" role="button">Q[U]</a>
-		<ul class="nav nav-pills flex-column mb-auto">
+		<!-- <ul class="nav nav-pills flex-column mb-auto">
 			<li class="nav-item">
 				<button class="btn btn-light nav-link" role="button"><i class="bi bi-list" /></button>
 			</li>
-		</ul>
+		</ul> -->
 		<div class="flex-grow-1" />
 		<ul class="nav nav-pills flex-column mb-auto">
 			<li class="nav-item">

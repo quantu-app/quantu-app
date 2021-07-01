@@ -100,5 +100,3 @@
 {#if !isJournalBook($bookStore)}
 	<CreateBlock {bookStore} />
 {/if}
-
-<p>Words: {bookMeta?.wordCount}</p>

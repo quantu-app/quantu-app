@@ -46,8 +46,7 @@
 		"docker.stop": "docker stop quantu",
 		"helm.delete": "helm delete -n ui quantu",
 		"helm": "helm upgrade quantu helm/quantu -n ui --install --set image.hash=\"$(docker inspect --format='{{index .Id}}' docker.pkg.github.com/quantu-app/quantu-app/quantu-app-ui:latest)\"",
-		"helm.deploy": "npm run docker.build && npm run docker.push && npm run helm",
-		"postinstall": "electron-builder install-app-deps"
+		"helm.deploy": "npm run docker.build && npm run docker.push && npm run helm"
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-node": "next",
@@ -76,9 +75,9 @@
 		"@aicacia/string-fuzzy_equals": "^0.1.0",
 		"@sveltejs/kit": "next",
 		"@tauri-apps/tauri-forage": "latest",
-		"automerge": "latest",
+		"automerge": "nathanfaucett/automerge",
 		"cookie": "^0.4.1",
-		"deep-diff": "nathanfaucett/diff",
+		"deep-diff": "^1.0.2",
 		"eventemitter3": "^4.0.7",
 		"find-open-port": "^2.0.3",
 		"katex": "^0.13.11",

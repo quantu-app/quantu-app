@@ -1,6 +1,6 @@
 FROM node:14-alpine as builder
 
-RUN npm install -g npm@7.18.1
+RUN npm install -g npm@7.19.1
 
 WORKDIR /usr/src/app
 
@@ -12,6 +12,8 @@ COPY . .
 RUN NODE_ENV=production npm run web.build
 
 FROM node:14-alpine
+
+RUN npm install -g npm@7.19.1
 
 WORKDIR /usr/src/app
 

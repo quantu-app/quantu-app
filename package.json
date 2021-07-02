@@ -50,12 +50,12 @@
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-node": "next",
+		"@types/bootstrap": "^5.0.16",
 		"@types/cookie": "^0.4.0",
 		"@types/deep-diff": "^1.0.0",
 		"@types/quill": "^2.0.8",
 		"@typescript-eslint/eslint-plugin": "^4.27.0",
 		"@typescript-eslint/parser": "^4.27.0",
-		"bootstrap": "^5.0.1",
 		"electron": "^13.1.2",
 		"electron-builder": "^22.11.7",
 		"eslint": "^7.29.0",

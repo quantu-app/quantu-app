@@ -59,8 +59,9 @@
 
 	onMount(() => {
 		Promise.all([import('quill'), import('./registerMathBlock')]).then(
-			([{ default: Quill }, { registerMathBlock }]) => {
+			([{ default: Quill }, { registerMathBlock, mathBlockHandler }]) => {
 				registerMathBlock(Quill);
+
 				quill = new Quill(element, {
 					modules: {
 						syntax: true,
@@ -69,6 +70,8 @@
 					theme: 'snow',
 					placeholder: 'Write...'
 				});
+				const toolbar = quill.getModule('toolbar');
+				toolbar.addHandler('math-block', mathBlockHandler);
 
 				function onTextChange() {
 					dispatch(
@@ -95,6 +98,33 @@
 		);
 	});
 </script>
+
+<div
+	id="math-block-modal"
+	class="modal fade"
+	tabindex="-1"
+	aria-labelledby="delete-book-label"
+	aria-hidden="true"
+>
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="btn-close" aria-label="Close" data-bs-dismiss="modal" />
+			</div>
+			<div class="modal-body">
+				<div class="input-group">
+					<input type="text" class="form-control" placeholder="Type Latex Math." />
+				</div>
+				<div class="input-group">
+					<div class="output" />
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-primary" data-bs-dismiss="modal">Update</button>
+			</div>
+		</div>
+	</div>
+</div>
 
 <div bind:this={container}>
 	<div bind:this={element} on:keydown|capture={onKeyDown} />

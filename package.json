@@ -50,26 +50,26 @@
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-node": "next",
-		"@types/bootstrap": "^5.0.16",
-		"@types/cookie": "^0.4.0",
-		"@types/deep-diff": "^1.0.0",
-		"@types/quill": "^2.0.8",
-		"@typescript-eslint/eslint-plugin": "^4.27.0",
-		"@typescript-eslint/parser": "^4.27.0",
+		"@types/bootstrap": "^5.0.17",
+		"@types/cookie": "^0.4.1",
+		"@types/deep-diff": "^1.0.1",
+		"@types/quill": "^2.0.9",
+		"@typescript-eslint/eslint-plugin": "^4.28.2",
+		"@typescript-eslint/parser": "^4.28.2",
 		"bootstrap": "^5.0.2",
-		"electron": "^13.1.2",
+		"electron": "^13.1.6",
 		"electron-builder": "^22.11.7",
-		"eslint": "^7.29.0",
+		"eslint": "^7.30.0",
 		"eslint-config-prettier": "^8.3.0",
 		"eslint-plugin-svelte3": "^3.2.0",
-		"prettier": "^2.3.1",
+		"prettier": "^2.3.2",
 		"prettier-plugin-svelte": "^2.3.1",
-		"sass": "^1.35.1",
-		"svelte-check": "^2.1.0",
+		"sass": "^1.35.2",
+		"svelte-check": "^2.2.0",
 		"svelte-preprocess": "^4.7.3",
 		"tslib": "^2.3.0",
-		"typescript": "^4.3.4",
-		"vite": "^2.3.7"
+		"typescript": "^4.3.5",
+		"vite": "^2.4.1"
 	},
 	"dependencies": {
 		"@aicacia/debounce": "^0.1.9",
@@ -85,6 +85,6 @@
 		"pascal-case": "^3.1.2",
 		"quill": "2.0.0-dev.4",
 		"quill-delta": "^4.2.2",
-		"svelte": "^3.38.2"
+		"svelte": "^3.38.3"
 	}
 }

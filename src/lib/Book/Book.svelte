@@ -79,6 +79,7 @@
 		</div>
 	</div>
 </div>
+<hr />
 
 {#if bookMeta && settings}
 	<div class="input-group">

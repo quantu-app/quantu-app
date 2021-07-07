@@ -152,7 +152,7 @@ function getWordCount(book: IBook) {
 	}, 0);
 }
 
-class BooksStore extends PersistentStore<IBooks> {
+export class BooksStore extends PersistentStore<IBooks> {
 	private bookStores: Record<UUID, BookStore> = {};
 
 	private onPersist = (book: IBook) => {

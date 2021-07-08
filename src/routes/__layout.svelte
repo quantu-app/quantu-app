@@ -23,11 +23,7 @@
 		</ul>
 	</div>
 	<div class="d-flex flex-column flex-grow-1 pe-3">
-		<main class="d-flex">
-			<div class="d-flex flex-column flex-grow-1">
-				<slot />
-			</div>
-		</main>
+		<slot />
 	</div>
 </div>
 

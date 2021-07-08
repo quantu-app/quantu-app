@@ -83,8 +83,10 @@
 
 <DeleteBook {deleteBook} {deleteBookText} {onDeleteBook} />
 
-{#if $state.bookType === BookType.Journal}
-	<JournalList {books} {createOnDelete} />
-{:else}
-	<DefaultList {books} {createOnDelete} />
-{/if}
+<div class="w-100">
+	{#if $state.bookType === BookType.Journal}
+		<JournalList {books} {createOnDelete} />
+	{:else}
+		<DefaultList {books} {createOnDelete} />
+	{/if}
+</div>

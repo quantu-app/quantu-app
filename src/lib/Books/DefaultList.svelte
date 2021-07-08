@@ -5,17 +5,23 @@
 
 	export let books: [UUID, IBookMeta][];
 	export let createOnDelete: (id: string, book: IBookMeta) => () => void;
+
+	let innerWidth: number;
 </script>
+
+<svelte:window bind:innerWidth />
 
 <table class="table">
 	<thead>
 		<tr>
 			<th scope="col">Title</th>
-			<th scope="col">Created</th>
-			<th scope="col">Last Updated</th>
-			<th scope="col">Words</th>
-			<th scope="col">Tags</th>
-			<th scope="col">Language</th>
+			{#if innerWidth >= 768}
+				<th scope="col">Created</th>
+				<th scope="col">Last Updated</th>
+				<th scope="col">Words</th>
+				<th scope="col">Tags</th>
+				<th scope="col">Language</th>
+			{/if}
 			<th scope="col" />
 		</tr>
 	</thead>

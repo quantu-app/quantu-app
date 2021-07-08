@@ -26,7 +26,7 @@
 	<title>{pascalCase(bookType)} - {bookName}</title>
 </svelte:head>
 
-<div class="container">
+<div class="container-md">
 	{#if bookStore}
 		<Book {bookStore} />
 	{:else}

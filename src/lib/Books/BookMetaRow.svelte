@@ -5,17 +5,23 @@
 	export let book: IBookMeta;
 	export let onDelete: () => void;
 
+	let innerWidth: number;
+
 	$: createdAt = new Date(book.createdAt || '');
 	$: updatedAt = new Date(book.updatedAt || '');
 </script>
 
+<svelte:window bind:innerWidth />
+
 <tr>
 	<th scope="row">{book.name}</th>
-	<td>{createdAt.toLocaleTimeString()} {createdAt.toLocaleDateString()}</td>
-	<td>{updatedAt.toLocaleTimeString()} {updatedAt.toLocaleDateString()}</td>
-	<td>{book.wordCount || 0}</td>
-	<td>{(book.tags || []).join(', ')}</td>
-	<td>{(book.language || '').toUpperCase()}</td>
+	{#if innerWidth >= 768}
+		<td>{createdAt.toLocaleTimeString()} {createdAt.toLocaleDateString()}</td>
+		<td>{updatedAt.toLocaleTimeString()} {updatedAt.toLocaleDateString()}</td>
+		<td>{book.wordCount || 0}</td>
+		<td>{(book.tags || []).join(', ')}</td>
+		<td>{(book.language || '').toUpperCase()}</td>
+	{/if}
 	<td class="clearfix">
 		<div class="btn-group float-end" role="group">
 			<a type="button" class="btn btn-primary" aria-label="Edit" href={`/books/${id}`}

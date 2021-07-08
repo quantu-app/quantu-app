@@ -30,7 +30,7 @@
 	"scripts": {
 		"svelte-kit": "svelte-kit",
 		"clean": "rm -rf node_modules/.vite && rm -rf .svelte-kit && rm -rf build && rm -rf electron-build",
-		"web": "svelte-kit dev --open",
+		"web": "svelte-kit dev --host --open",
 		"web.build": "svelte-kit build",
 		"desktop": "electron electron.dev.cjs",
 		"desktop.linux": "electron-builder -l",

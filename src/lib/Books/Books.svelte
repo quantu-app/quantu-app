@@ -75,10 +75,8 @@
 
 <SearchBar
 	{booksStore}
-	bookType={$state.bookType}
-	bookNameFilter={$state.bookNameFilter}
-	on:bookType={(e) => ($state.bookType = e.detail)}
-	on:bookNameFilter={(e) => ($state.bookNameFilter = e.detail)}
+	bind:bookType={$state.bookType}
+	bind:bookNameFilter={$state.bookNameFilter}
 />
 
 <DeleteBook {deleteBook} {deleteBookText} {onDeleteBook} />

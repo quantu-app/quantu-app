@@ -73,7 +73,7 @@
 	},
 	"dependencies": {
 		"@aicacia/debounce": "^0.1.9",
-		"@aicacia/string-fuzzy_equals": "^0.1.0",
+		"@aicacia/string-fuzzy_equals": "^0.1.2",
 		"@sveltejs/kit": "next",
 		"@tauri-apps/tauri-forage": "latest",
 		"automerge": "nathanfaucett/automerge",
@@ -83,7 +83,7 @@
 		"find-open-port": "^2.0.3",
 		"katex": "^0.13.11",
 		"pascal-case": "^3.1.2",
-		"quill": "2.0.0-dev.4",
+		"quill": "^2.0.0-dev.4",
 		"quill-delta": "^4.2.2",
 		"svelte": "^3.38.3"
 	}

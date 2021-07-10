@@ -1,7 +1,7 @@
 import Automerge, { FreezeObject } from 'automerge';
-import type { Table, Text, List, ChangeFn, UUID } from 'automerge';
+import type { Table, Text, List, ChangeFn, UUID, TableRow } from 'automerge';
 import { getLocationName, applyOpsToText } from '$lib/utils';
-import { BlockType, isTextBlock, ITextBlock } from './blocks';
+import { BlockType, isCodeBlock, isTextBlock, ITextBlock } from './blocks';
 import type { IBlock, IBlockBase } from './blocks';
 import { PersistentStore } from './PersistentStore';
 import { AutomergePersistentStore } from './AutomergePersistentStore';
@@ -60,6 +60,9 @@ function createEmptyBlock(type: BlockType) {
 
 	if (isTextBlock(block)) {
 		block.text = [];
+	} else if (isCodeBlock(block)) {
+		block.text = new Automerge.Text();
+		block.lang = 'typescript';
 	}
 
 	return block;
@@ -88,7 +91,7 @@ export class BookStore<T extends IBookBase = IBookBase> extends AutomergePersist
 		return this.bookId;
 	}
 
-	createBlock(type: BlockType) {
+	createBlock<B extends IBlockBase = IBlockBase>(type: BlockType) {
 		const block = createEmptyBlock(type);
 
 		this.change((doc) => {
@@ -99,15 +102,15 @@ export class BookStore<T extends IBookBase = IBookBase> extends AutomergePersist
 			doc.blocks.add(block as IBlock);
 		});
 
-		return block;
+		return block as B;
 	}
 
-	updateBlock(blockId: string, changeFn: ChangeFn<IBlock>) {
+	updateBlock<B extends IBlockBase = IBlockBase>(blockId: string, changeFn: ChangeFn<B>) {
 		this.change((doc) => {
 			const block = doc.blocks.byId(blockId);
 
 			if (block) {
-				changeFn(block);
+				changeFn(block as unknown as B & TableRow);
 			}
 		});
 	}

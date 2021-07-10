@@ -1,52 +1,52 @@
+<script context="module" lang="ts">
+	function getLanguages(): string[] {
+		return (window as any).hljs.listLanguages();
+	}
+</script>
+
 <script lang="ts">
 	import type { BookStore } from '$lib/state/books';
-	import RichEditor from '$lib/quill/RichEditor.svelte';
+	import CodeEditor from '$lib/quill/CodeEditor.svelte';
 	import { afterUpdate, onMount } from 'svelte';
 	import { debounce } from '@aicacia/debounce';
 	import type Delta from 'quill-delta';
 	import type Quill from 'quill';
-	import deepDiff from 'deep-diff';
-	import type Op from 'quill-delta/dist/Op';
-	import type { List, UUID } from 'automerge';
+	import type { Text, UUID } from 'automerge';
+	import { applyOpsToText } from '$lib/utils';
+	import type { ICodeBlock } from '$lib/state/blocks';
 
 	export let bookStore: BookStore;
 	export let id: UUID;
 	export let lang: string;
-	export let text: List<Op>;
+	export let text: Text;
 
 	let prevText = text;
 
 	let quill: Quill;
-	let DeltaClass: typeof Delta;
 	let updating = false;
-	let initialized = false;
-
-	$: if (!initialized && quill && DeltaClass) {
-		initialized = true;
-		quill.setContents(new DeltaClass(text), 'silent');
-	}
 
 	function onQuill(q: Quill) {
 		quill = q;
+		if (text) quill.setText(text.toString(), 'silent');
 	}
 
 	function updateBlockText() {
 		if (quill && updating) {
 			const ops = quill.getContents().ops;
-			// TODO: fix this so it doesnt throw errors when the sizes are not the same
-			bookStore.updateBlock(id, (block) => {
-				try {
-					deepDiff.applyDiff(block.text, ops);
-				} catch (error) {
-					console.log(error);
-					block.text = ops;
-				}
+			bookStore.updateBlock<ICodeBlock>(id, (block) => {
+				applyOpsToText(block.text, ops);
 			});
 			updating = false;
 		}
 	}
 
 	const debouncedUpdateBlockText = debounce(updateBlockText, 5000);
+
+	function onLangSelect() {
+		bookStore.updateBlock<ICodeBlock>(id, (block) => {
+			block.lang = lang;
+		});
+	}
 
 	function onTextChange({
 		detail: [_delta, _oldContents, source]
@@ -58,20 +58,31 @@
 	}
 
 	afterUpdate(() => {
-		if (DeltaClass && quill && prevText !== text) {
+		if (quill && prevText !== text) {
 			prevText = text;
-			quill.setContents(new DeltaClass(text), 'silent');
+			if (text) quill.setText(text.toString(), 'silent');
 		}
 	});
 
-	onMount(() => {
-		import('quill-delta').then((module) => {
-			DeltaClass = module.default;
-		});
-
-		return updateBlockText;
-	});
+	onMount(() => updateBlockText);
 </script>
 
-<p>Language: {lang}</p>
-<RichEditor {onQuill} on:textchange={onTextChange} />
+<div class="d-flex align-items-start justify-content-start">
+	<div class="flex-shrink-0">
+		<div class="input-group">
+			<select
+				class="form-select"
+				placeholder="Language"
+				aria-label="Language"
+				required
+				bind:value={lang}
+				on:select={onLangSelect}
+			>
+				{#each getLanguages() as value}
+					<option {value}>{value}</option>
+				{/each}
+			</select>
+		</div>
+	</div>
+</div>
+<CodeEditor {lang} {onQuill} on:textchange={onTextChange} />

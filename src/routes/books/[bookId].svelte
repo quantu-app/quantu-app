@@ -18,8 +18,8 @@
 
 	const bookStore = booksStore.getBookById(bookId);
 
-	$: bookType = $bookStore.type;
-	$: bookName = $bookStore.name;
+	$: bookType = $bookStore?.type;
+	$: bookName = $bookStore?.name;
 </script>
 
 <svelte:head>

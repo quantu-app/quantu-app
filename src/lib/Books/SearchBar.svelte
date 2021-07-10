@@ -11,11 +11,6 @@
 	let bookName = '';
 	let bookCreating = false;
 
-	const dispatch = createEventDispatcher<{
-		bookType: BookType;
-		bookNameFilter: string;
-	}>();
-
 	async function onCreateBook() {
 		bookCreating = true;
 		try {
@@ -25,28 +20,20 @@
 			bookCreating = false;
 		}
 	}
-
-	function onBookTypeInput() {
-		dispatch('bookType', bookType);
-	}
-	function onBookNameFilterInput() {
-		dispatch('bookNameFilter', bookNameFilter);
-	}
 </script>
 
 <div class="input-group mt-4">
-	<!-- <select
+	<select
 		class="form-select"
 		placeholder="New Type"
 		aria-label="New Type"
 		required
 		bind:value={bookType}
-		on:select={onBookTypeInput}
 	>
 		{#each Object.entries(BookType) as [key, value]}
 			<option {value}>{key}</option>
 		{/each}
-	</select> -->
+	</select>
 	{#if bookType !== BookType.Journal}
 		<input
 			type="text"
@@ -57,12 +44,13 @@
 			bind:value={bookName}
 		/>
 	{/if}
+</div>
+<div class="input-group mt-4 mb-4">
 	<input
 		type="text"
 		class="form-control"
 		placeholder="Filter by name"
 		bind:value={bookNameFilter}
-		on:input={onBookNameFilterInput}
 	/>
 	<button
 		type="submit"

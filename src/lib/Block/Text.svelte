@@ -8,6 +8,7 @@
 	import deepDiff from 'deep-diff';
 	import type Op from 'quill-delta/dist/Op';
 	import type { List, UUID } from 'automerge';
+	import type { ITextBlock } from '$lib/state/blocks';
 
 	export let bookStore: BookStore;
 	export let id: UUID;
@@ -33,7 +34,7 @@
 		if (quill && updating) {
 			const ops = quill.getContents().ops;
 			// TODO: fix this so it doesnt throw errors when the sizes are not the same
-			bookStore.updateBlock(id, (block) => {
+			bookStore.updateBlock<ITextBlock>(id, (block) => {
 				try {
 					deepDiff.applyDiff(block.text, ops);
 				} catch (error) {

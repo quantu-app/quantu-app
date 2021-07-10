@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { createEventDispatcher, onMount } from 'svelte';
 
+	export let inline = false;
+
 	let element: HTMLDivElement;
 
 	const dispatch = createEventDispatcher<{ clickaway: MouseEvent; click: MouseEvent }>();
@@ -28,6 +30,6 @@
 	});
 </script>
 
-<div bind:this={element}>
+<div class:d-inline={inline} bind:this={element}>
 	<slot />
 </div>

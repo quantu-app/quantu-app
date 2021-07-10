@@ -1,5 +1,6 @@
-import Automerge, { FreezeObject } from 'automerge';
-import type { Table, Text, List, ChangeFn, UUID, TableRow } from 'automerge';
+import CryptoJS from 'crypto-js';
+import Automerge from 'automerge';
+import type { Table, Text, ChangeFn, UUID, TableRow, FreezeObject } from 'automerge';
 import { getLocationName, applyOpsToText } from '$lib/utils';
 import { BlockType, isCodeBlock, isTextBlock, ITextBlock } from './blocks';
 import type { IBlock, IBlockBase } from './blocks';
@@ -25,7 +26,8 @@ export interface IBookBase {
 export interface IBookMeta {
 	name: string;
 	type: BookType;
-	tags: List<string>;
+	hash: string;
+	tags: string[];
 	language: string;
 	wordCount: number;
 	createdAt: string;
@@ -149,6 +151,8 @@ function getWordCount(book: IBook) {
 					.trim()
 					.split(' ').length
 			);
+		} else if (isCodeBlock(block)) {
+			return count + block.text.toString().replace(/[\s]+/g, ' ').trim().split(' ').length;
 		} else {
 			return count;
 		}
@@ -158,11 +162,16 @@ function getWordCount(book: IBook) {
 export class BooksStore extends PersistentStore<IBooks> {
 	private bookStores: Record<UUID, BookStore> = {};
 
-	private onPersist = (book: IBook) => {
+	private onPersist = (book: FreezeObject<IBook>) => {
 		this.update((state) => ({
 			...state,
 			[book.id]: {
 				...state[book.id],
+				hash: CryptoJS.enc.Base64.stringify(
+					CryptoJS.SHA256(
+						CryptoJS.lib.WordArray.create(Automerge.save(book) as unknown as number[])
+					)
+				),
 				name: book.name.toString(),
 				wordCount: getWordCount(book),
 				updatedAt: new Date().toJSON()

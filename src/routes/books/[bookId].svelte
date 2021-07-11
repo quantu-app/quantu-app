@@ -26,12 +26,10 @@
 	<title>{pascalCase(bookType)} - {bookName}</title>
 </svelte:head>
 
-<div class="container-md">
-	{#if bookStore}
-		<Book {bookStore} />
-	{:else}
-		<div class="d-flex align-items-center justify-content-center">
-			<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" />
-		</div>
-	{/if}
-</div>
+{#if bookStore}
+	<Book {bookStore} />
+{:else}
+	<div class="d-flex align-items-center justify-content-center">
+		<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" />
+	</div>
+{/if}

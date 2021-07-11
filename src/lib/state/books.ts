@@ -26,7 +26,7 @@ export interface IBookBase {
 export interface IBookMeta {
 	name: string;
 	type: BookType;
-	hash: string;
+	contentHash: string;
 	tags: string[];
 	language: string;
 	wordCount: number;
@@ -167,7 +167,7 @@ export class BooksStore extends PersistentStore<IBooks> {
 			...state,
 			[book.id]: {
 				...state[book.id],
-				hash: CryptoJS.enc.Base64.stringify(
+				contentHash: CryptoJS.enc.Base64.stringify(
 					CryptoJS.SHA256(
 						CryptoJS.lib.WordArray.create(Automerge.save(book) as unknown as number[])
 					)

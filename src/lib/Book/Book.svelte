@@ -14,8 +14,6 @@
 	$: bookId = $bookStore.id;
 	$: bookMeta = $booksStore[bookId];
 
-	let settings = false;
-
 	function onLanguageChange(e: Event) {
 		const value = (e.currentTarget as HTMLInputElement).value;
 		booksStore.updateBook(bookId, (bookMeta) => ({
@@ -52,50 +50,77 @@
 	});
 </script>
 
-<div class="row justify-content-between align-items-end">
-	<div class="col-auto ps-0">
-		<h1>
-			<TextEditor text={$bookStore.name} on:textchange={onBookNameChange} />
-		</h1>
+<div class="d-flex flex-row">
+	<div class="d-flex flex-column flex-shrink-0 p-3">
+		<a href="/" class="navbar-brand" role="button">Q[U]</a>
 	</div>
-	{#if isJournalBook($bookStore)}
-		<div class="col-auto">
-			<h3>
-				<TextEditor text={$bookStore.location} on:textchange={onBookLocationChange} />
-			</h3>
+	<div class="d-flex flex-column flex-grow-1 pe-3">
+		<div class="row justify-content-between align-items-end">
+			<div class="col-auto">
+				<h1>
+					<TextEditor text={$bookStore.name} on:textchange={onBookNameChange} />
+				</h1>
+			</div>
+			{#if isJournalBook($bookStore)}
+				<div class="col-auto">
+					<h3>
+						<TextEditor text={$bookStore.location} on:textchange={onBookLocationChange} />
+					</h3>
+				</div>
+			{/if}
+			<div class="col-auto">
+				<button
+					type="button"
+					role="button"
+					class="btn btn-primary"
+					data-bs-toggle="modal"
+					data-bs-target="#book-settings"
+					aria-label="Book Settings"><i class="bi bi-gear" /></button
+				>
+			</div>
 		</div>
-	{/if}
-	<div class="col-auto pe-0">
-		<div class="btn-group" role="group">
-			<button
-				class={`btn btn-${settings ? 'primary' : 'secondary'}`}
-				role="button"
-				on:click={() => (settings = !settings)}
-			>
-				<i class="bi bi-gear" />
-			</button>
+		<hr />
+	</div>
+</div>
+
+<div
+	class="modal fade"
+	id="book-settings"
+	tabindex="-1"
+	aria-labelledby="book-settings-label"
+	aria-hidden="true"
+>
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 id="book-settings-label" class="modal-title">Settings</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" />
+			</div>
+			<div class="modal-body">
+				<div class="input-group">
+					<input
+						type="text"
+						class="form-control"
+						placeholder="Enter langauge"
+						value={bookMeta.language}
+						on:change={onLanguageChange}
+					/>
+				</div>
+				<div class="input-group mt-4">
+					<Tags tags={bookMeta.tags} on:change={onTagsChange} />
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+			</div>
 		</div>
 	</div>
 </div>
-<hr />
 
-{#if bookMeta && settings}
-	<div class="input-group">
-		<input
-			type="text"
-			class="form-control"
-			placeholder="Enter langauge"
-			value={bookMeta.language}
-			on:change={onLanguageChange}
-		/>
-	</div>
-	<div class="input-group mt-4">
-		<Tags tags={bookMeta.tags} on:change={onTagsChange} />
-	</div>
-{/if}
+<div class="container-md">
+	<Blocks {bookStore} />
 
-<Blocks {bookStore} />
-
-{#if !isJournalBook($bookStore)}
-	<CreateBlock {bookStore} />
-{/if}
+	{#if !isJournalBook($bookStore)}
+		<CreateBlock {bookStore} />
+	{/if}
+</div>

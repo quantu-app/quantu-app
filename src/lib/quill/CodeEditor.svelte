@@ -5,7 +5,7 @@
 	import { onMount, createEventDispatcher } from 'svelte';
 
 	export let onQuill: ((quill: Quill) => void) | undefined;
-	export let lang: string;
+	export let language: string;
 
 	let quill: Quill;
 	let container: HTMLDivElement;

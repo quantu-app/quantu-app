@@ -1,9 +1,8 @@
 import type Quill from 'quill';
 import Delta from 'quill-delta';
-import type bootstrap from 'bootstrap';
 
-function renderkatex(node: Element, value: string) {
-	(window as any).katex.render(value, node, {
+function renderkatex(node: HTMLElement, value: string) {
+	window.katex.render(value, node, {
 		throwOnError: false,
 		errorColor: '#f00'
 	});
@@ -14,7 +13,7 @@ function getModal(value: string, onUpdate: (value: string) => void) {
 		input = element.querySelector<HTMLInputElement>('.modal-body input'),
 		output = element.querySelector<HTMLDivElement>('.modal-body .output'),
 		update = element.querySelector<HTMLButtonElement>('.modal-footer button'),
-		modal = new (window as unknown as { bootstrap: typeof bootstrap }).bootstrap.Modal(element, {
+		modal = window.bootstrap.Modal.getInstance(element, {
 			keyboard: false
 		});
 
@@ -59,10 +58,7 @@ export function registerMathBlock(quill: typeof Quill) {
 		static className = 'ql-math-block';
 		static tagName = 'DIV';
 
-		static create(value) {
-			if ((window as any).katex == null) {
-				throw new Error('Math block module requires KaTeX.');
-			}
+		static create(value: string) {
 			const node = super.create(value);
 			renderkatex(node, value);
 			if (value) {

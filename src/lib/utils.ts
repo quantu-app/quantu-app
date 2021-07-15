@@ -1,5 +1,13 @@
-import type { Text } from 'automerge';
+import CryptoJS from 'crypto-js';
+import Automerge from 'automerge';
+import type { Text, FreezeObject } from 'automerge';
 import type Op from 'quill-delta/dist/Op';
+
+export function getAutomergeContentHash<T>(object: FreezeObject<T>) {
+	return CryptoJS.enc.Base64.stringify(
+		CryptoJS.SHA256(CryptoJS.lib.WordArray.create(Automerge.save(object) as unknown as number[]))
+	);
+}
 
 export function applyOpsToText(text: Text, ops: Op[]): Text {
 	let i = 0;

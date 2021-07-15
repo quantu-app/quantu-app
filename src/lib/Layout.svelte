@@ -1,0 +1,134 @@
+<script lang="ts">
+	import { user, signIn, signUp, signOut } from './state/user';
+
+	let isSignIn = true;
+	let usernameOrEmail: string;
+	let password: string;
+	let passwordConfirmation: string;
+	let loading = false;
+
+	function signInUp() {
+		if (isSignIn) {
+			return signIn(usernameOrEmail, password);
+		} else {
+			return signUp(usernameOrEmail, password, passwordConfirmation);
+		}
+	}
+	async function onSignInUp() {
+		loading = false;
+		try {
+			await signInUp();
+		} finally {
+			loading = true;
+		}
+
+		const modal = window.bootstrap.Modal.getInstance(document.getElementById('sign-in-up-modal'));
+		modal.hide();
+	}
+</script>
+
+<div class="container-fluid">
+	<div class="d-flex flex-row">
+		<div class="d-flex flex-column align-items-center flex-shrink-0">
+			<div class="d-flex">
+				<a type="button" class="btn btn-ghost" href="/">Q[U]</a>
+			</div>
+		</div>
+		<div class="d-flex flex-column flex-grow-1">
+			<slot />
+		</div>
+		<div class="d-flex flex-column align-items-center flex-shrink-0">
+			<div class="d-flex">
+				{#if $user}
+					<button type="button" class="btn btn-light" on:click={signOut}>
+						<i class="bi bi-person-circle" />
+					</button>
+				{:else}
+					<button
+						type="button"
+						data-bs-toggle="modal"
+						data-bs-target="#sign-in-up-modal"
+						class="btn btn-light"
+					>
+						<i class="bi bi-box-arrow-in-right" />
+					</button>
+				{/if}
+			</div>
+		</div>
+	</div>
+</div>
+
+<div
+	class="modal fade"
+	id="sign-in-up-modal"
+	tabindex="-1"
+	aria-labelledby="sign-in-up-modal-label"
+	aria-hidden="true"
+>
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 id="sign-in-up-modal-label" class="modal-title">Sign {isSignIn ? 'in' : 'up'}</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" />
+			</div>
+			<div class="modal-body">
+				<div class="input-group mt-4">
+					<h3>
+						{isSignIn ? 'Not a member?' : 'Already a member?'}
+						<button type="button" on:click={() => (isSignIn = !isSignIn)} class="btn btn-primary"
+							>Sign {isSignIn ? 'up' : 'in'}</button
+						>
+					</h3>
+					{#if isSignIn}
+						<div class="input-group mt-4">
+							<input
+								type="text"
+								class="form-control"
+								placeholder="Type Username or Email"
+								bind:value={usernameOrEmail}
+							/>
+						</div>
+						<div class="input-group mt-4">
+							<input
+								type="password"
+								class="form-control"
+								placeholder="Type Password"
+								bind:value={password}
+							/>
+						</div>
+					{:else}<div class="input-group mt-4">
+							<input
+								type="text"
+								class="form-control"
+								placeholder="Type Username"
+								bind:value={usernameOrEmail}
+							/>
+						</div>
+						<div class="input-group mt-4">
+							<input
+								type="password"
+								class="form-control"
+								placeholder="Type Password"
+								bind:value={password}
+							/>
+						</div>
+						<div class="input-group mt-4">
+							<input
+								type="password"
+								class="form-control"
+								placeholder="Type Password Confirmation"
+								bind:value={passwordConfirmation}
+							/>
+						</div>
+					{/if}
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" disabled={loading} on:click={onSignInUp} class="btn btn-primary"
+					>Sign {isSignIn ? 'in' : 'up'}</button
+				>
+				<button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>

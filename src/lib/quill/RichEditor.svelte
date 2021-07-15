@@ -103,7 +103,7 @@
 	id="math-block-modal"
 	class="modal fade"
 	tabindex="-1"
-	aria-labelledby="delete-book-label"
+	aria-labelledby="delete-document-label"
 	aria-hidden="true"
 >
 	<div class="modal-dialog">

@@ -1,10 +1,10 @@
 <script lang="ts">
-	import type { IBookMeta } from '$lib/state/books';
+	import type { IDocumentMeta } from '$lib/state/documents/documents';
 	import type { UUID } from 'automerge';
-	import BookMetaRow from '$lib/Books/BookMetaRow.svelte';
+	import DocumentMetaRow from '$lib/Documents/DocumentMetaRow.svelte';
 
-	export let books: [UUID, IBookMeta][];
-	export let createOnDelete: (id: string, book: IBookMeta) => () => void;
+	export let documents: [UUID, IDocumentMeta][];
+	export let createOnDelete: (id: string, document: IDocumentMeta) => () => void;
 
 	let innerWidth: number;
 </script>
@@ -26,8 +26,8 @@
 		</tr>
 	</thead>
 	<tbody>
-		{#each books as [id, book]}
-			<BookMetaRow {id} {book} onDelete={createOnDelete(id, book)} />
+		{#each documents as [id, document]}
+			<DocumentMetaRow {id} {document} onDelete={createOnDelete(id, document)} />
 		{/each}
 	</tbody>
 </table>

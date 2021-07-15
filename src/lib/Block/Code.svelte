@@ -1,11 +1,5 @@
-<script context="module" lang="ts">
-	function getLanguages(): string[] {
-		return (window as any).hljs.listLanguages();
-	}
-</script>
-
 <script lang="ts">
-	import type { BookStore } from '$lib/state/books';
+	import type { DocumentStore } from '$lib/state/documents/DocumentStore';
 	import CodeEditor from '$lib/quill/CodeEditor.svelte';
 	import { afterUpdate, onMount } from 'svelte';
 	import { debounce } from '@aicacia/debounce';
@@ -13,17 +7,21 @@
 	import type Quill from 'quill';
 	import type { Text, UUID } from 'automerge';
 	import { applyOpsToText } from '$lib/utils';
-	import type { ICodeBlock } from '$lib/state/blocks';
+	import type { ICodeBlock } from '$lib/state/documents/blocks';
 
-	export let bookStore: BookStore;
+	export let documentStore: DocumentStore;
 	export let id: UUID;
-	export let lang: string;
+	export let language: string;
 	export let text: Text;
 
 	let prevText = text;
 
 	let quill: Quill;
 	let updating = false;
+
+	function getLanguages(): string[] {
+		return window.hljs.listLanguages();
+	}
 
 	function onQuill(q: Quill) {
 		quill = q;
@@ -33,7 +31,7 @@
 	function updateBlockText() {
 		if (quill && updating) {
 			const ops = quill.getContents().ops;
-			bookStore.updateBlock<ICodeBlock>(id, (block) => {
+			documentStore.updateBlock<ICodeBlock>(id, (block) => {
 				applyOpsToText(block.text, ops);
 			});
 			updating = false;
@@ -43,8 +41,8 @@
 	const debouncedUpdateBlockText = debounce(updateBlockText, 5000);
 
 	function onLangSelect() {
-		bookStore.updateBlock<ICodeBlock>(id, (block) => {
-			block.lang = lang;
+		documentStore.updateBlock<ICodeBlock>(id, (block) => {
+			block.language = language;
 		});
 	}
 
@@ -75,7 +73,7 @@
 				placeholder="Language"
 				aria-label="Language"
 				required
-				bind:value={lang}
+				bind:value={language}
 				on:select={onLangSelect}
 			>
 				{#each getLanguages() as value}
@@ -85,4 +83,4 @@
 		</div>
 	</div>
 </div>
-<CodeEditor {lang} {onQuill} on:textchange={onTextChange} />
+<CodeEditor {language} {onQuill} on:textchange={onTextChange} />

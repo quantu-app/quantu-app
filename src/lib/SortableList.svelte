@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { afterUpdate, beforeUpdate, createEventDispatcher, onMount } from 'svelte';
+	import { afterUpdate, createEventDispatcher, onMount } from 'svelte';
 
 	export let klass: string;
 	export let list: T[];

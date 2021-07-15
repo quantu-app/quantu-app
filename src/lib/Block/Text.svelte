@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { BookStore } from '$lib/state/books';
+	import type { DocumentStore } from '$lib/state/documents/DocumentStore';
 	import RichEditor from '$lib/quill/RichEditor.svelte';
 	import { afterUpdate, onMount } from 'svelte';
 	import { debounce } from '@aicacia/debounce';
@@ -8,9 +8,9 @@
 	import deepDiff from 'deep-diff';
 	import type Op from 'quill-delta/dist/Op';
 	import type { List, UUID } from 'automerge';
-	import type { ITextBlock } from '$lib/state/blocks';
+	import type { ITextBlock } from '$lib/state/documents/blocks';
 
-	export let bookStore: BookStore;
+	export let documentStore: DocumentStore;
 	export let id: UUID;
 	export let text: List<Op>;
 
@@ -34,7 +34,7 @@
 		if (quill && updating) {
 			const ops = quill.getContents().ops;
 			// TODO: fix this so it doesnt throw errors when the sizes are not the same
-			bookStore.updateBlock<ITextBlock>(id, (block) => {
+			documentStore.updateBlock<ITextBlock>(id, (block) => {
 				try {
 					deepDiff.applyDiff(block.text, ops);
 				} catch (error) {

@@ -1,13 +1,13 @@
 <script lang="ts">
-	import { BlockType } from '$lib/state/blocks';
-	import type { BookStore } from '$lib/state/books';
+	import { BlockType } from '$lib/state/documents/blocks';
+	import type { DocumentStore } from '$lib/state/documents/DocumentStore';
 
-	export let bookStore: BookStore;
+	export let documentStore: DocumentStore;
 
 	let blockType: BlockType = BlockType.Text;
 
 	function onCreateBlock() {
-		bookStore.createBlock(blockType);
+		documentStore.createBlock(blockType);
 	}
 </script>
 

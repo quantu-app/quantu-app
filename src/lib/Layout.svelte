@@ -82,7 +82,7 @@
 						>
 					</h3>
 					{#if isSigningIn}
-						<div class="input-group">
+						<div>
 							<label for="modal-username-or-email" class="form-label">Username or Email</label>
 							<input
 								id="modal-username-or-email"
@@ -92,7 +92,7 @@
 								bind:value={usernameOrEmail}
 							/>
 						</div>
-						<div class="input-group">
+						<div>
 							<label for="modal-password" class="form-label">Password</label>
 							<input
 								id="modal-password"
@@ -103,7 +103,7 @@
 							/>
 						</div>
 					{:else}
-						<div class="input-group">
+						<div>
 							<label for="modal-username" class="form-label">Username</label>
 							<input
 								id="modal-username"
@@ -113,7 +113,7 @@
 								bind:value={usernameOrEmail}
 							/>
 						</div>
-						<div class="input-group">
+						<div>
 							<label for="modal-password" class="form-label">Password</label>
 							<input
 								id="modal-password"
@@ -123,7 +123,7 @@
 								bind:value={password}
 							/>
 						</div>
-						<div class="input-group">
+						<div>
 							<input
 								type="password"
 								class="form-control"

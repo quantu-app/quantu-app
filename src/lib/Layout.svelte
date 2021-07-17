@@ -83,34 +83,43 @@
 					</h3>
 					{#if isSigningIn}
 						<div class="input-group">
+							<label for="modal-username-or-email" class="form-label">Username or Email</label>
 							<input
+								id="modal-username-or-email"
 								type="text"
 								class="form-control"
-								placeholder="Type Username or Email"
+								placeholder="Username or Email"
 								bind:value={usernameOrEmail}
 							/>
 						</div>
 						<div class="input-group">
+							<label for="modal-password" class="form-label">Password</label>
 							<input
+								id="modal-password"
 								type="password"
 								class="form-control"
-								placeholder="Type Password"
+								placeholder="Password"
 								bind:value={password}
 							/>
 						</div>
-					{:else}<div class="input-group">
+					{:else}
+						<div class="input-group">
+							<label for="modal-username" class="form-label">Username</label>
 							<input
+								id="modal-username"
 								type="text"
 								class="form-control"
-								placeholder="Type Username"
+								placeholder="Username"
 								bind:value={usernameOrEmail}
 							/>
 						</div>
 						<div class="input-group">
+							<label for="modal-password" class="form-label">Password</label>
 							<input
+								id="modal-password"
 								type="password"
 								class="form-control"
-								placeholder="Type Password"
+								placeholder="Password"
 								bind:value={password}
 							/>
 						</div>
@@ -118,7 +127,7 @@
 							<input
 								type="password"
 								class="form-control"
-								placeholder="Type Password Confirmation"
+								placeholder="Password Confirmation"
 								bind:value={passwordConfirmation}
 							/>
 						</div>

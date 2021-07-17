@@ -2,15 +2,16 @@ FROM node:14-alpine as builder
 
 RUN npm install -g npm@7.20.0
 
-WORKDIR /usr/src/app
+WORKDIR /app
 
 COPY package*.json ./
 RUN npm install
 
-ARG VITE_QUANTU_API_URL https://api.quantu.app
+ARG VITE_QUANTU_API_URL=https://api.quantu.app
 ENV VITE_QUANTU_API_URL=$VITE_QUANTU_API_URL
 
 COPY . .
+RUN echo "VITE_QUANTU_API_URL=$VITE_QUANTU_API_URL" > .env
 
 RUN NODE_ENV=production npm run web.build
 
@@ -18,10 +19,10 @@ FROM node:14-alpine
 
 RUN npm install -g npm@7.20.0
 
-WORKDIR /usr/src/app
+WORKDIR /app
 
-COPY --from=builder /usr/src/app/package*.json ./
-COPY --from=builder /usr/src/app/build .
+COPY --from=builder /app/package*.json ./
+COPY --from=builder /app/build .
 
 RUN NODE_ENV=production npm install
 

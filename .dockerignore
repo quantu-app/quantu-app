@@ -5,3 +5,7 @@ node_modules
 /electron-build
 /helm
 /functions
+.env.example
+.electron.cjs
+.electron.dev.cjs
+README.md

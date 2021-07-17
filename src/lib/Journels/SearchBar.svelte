@@ -20,7 +20,7 @@
 	}
 </script>
 
-<div class="input-group">
+<div class="input-group mt-2">
 	<input
 		type="text"
 		class="form-control"

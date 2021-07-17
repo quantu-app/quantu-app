@@ -10,12 +10,10 @@ function renderkatex(node: HTMLElement, value: string) {
 
 function getModal(value: string, onUpdate: (value: string) => void) {
 	const element = document.getElementById('math-block-modal'),
-		input = element.querySelector<HTMLInputElement>('.modal-body input'),
+		input = element.querySelector<HTMLInputElement>('.modal-body .input'),
 		output = element.querySelector<HTMLDivElement>('.modal-body .output'),
 		update = element.querySelector<HTMLButtonElement>('.modal-footer button'),
-		modal = window.bootstrap.Modal.getInstance(element, {
-			keyboard: false
-		});
+		modal = new window.bootstrap.Modal(element);
 
 	input.value = value;
 	if (value) {

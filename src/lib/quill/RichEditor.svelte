@@ -112,8 +112,8 @@
 				<button type="button" class="btn-close" aria-label="Close" data-bs-dismiss="modal" />
 			</div>
 			<div class="modal-body">
-				<div class="input-group">
-					<input type="text" class="form-control" placeholder="Type Latex Math." />
+				<div class="input-group mb-2">
+					<textarea class="input form-control" placeholder="Type Latex Math." />
 				</div>
 				<div class="input-group">
 					<div class="output" />

@@ -1,4 +1,4 @@
-import { EventEmitter } from 'eventemitter3';
+import EventEmitter from 'eventemitter3';
 import { Readable, get, writable } from 'svelte/store';
 
 const { set, subscribe } = writable(typeof navigator === 'object' ? navigator.onLine : false);

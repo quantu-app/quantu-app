@@ -1,3 +1,5 @@
+declare const self: ServiceWorkerGlobalScope;
+
 import { build, files, timestamp } from '$service-worker';
 
 const CACHE_NAME = `static-cache-v${timestamp}`;

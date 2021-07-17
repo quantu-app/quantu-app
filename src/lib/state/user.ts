@@ -3,16 +3,19 @@ import type { Readable } from 'svelte/store';
 import { get, writable, derived } from 'svelte/store';
 import { isOnline, onlineEmitter } from './online';
 import { LocalJSON } from './LocalJSON';
-import { EventEmitter } from 'eventemitter3';
+import EventEmitter from 'eventemitter3';
 
 const usersLocal = new LocalJSON<User>('users'),
 	usersWritable = writable<Record<string, User>>({});
 
 export const users: Readable<Record<string, User>> = { subscribe: usersWritable.subscribe };
 export const currentUser = derived(usersWritable, (users) =>
-	Object.values(users).find((user) => user.token !== null)
+	Object.values(users).find((user) => user.token != null)
 );
-export const userEmitter = new EventEmitter<{ signIn: () => void; signOut: () => void }>();
+export const userEmitter = new EventEmitter<{
+	signIn: (user: User) => void;
+	signOut: () => void;
+}>();
 
 export function getCurrentUser(): User {
 	return get(currentUser);
@@ -51,62 +54,59 @@ export async function fetchCurrentUser() {
 		const headers = OpenAPI.HEADERS || (OpenAPI.HEADERS = {});
 		headers['authorization'] = `Bearer ${currentUser.token}`;
 		const user = await AuthService.quantuAppWebControllerAuthCurrent();
-		signInUser(user);
+		await signInUser(user);
+	} else {
+		await signOutUser();
 	}
 }
 
-async function signInUser(user: User) {
-	usersWritable.update((oldUsers) => {
-		const users = Object.entries(oldUsers).reduce(
+async function signInUser(currentUser: User) {
+	usersWritable.update((state) => {
+		const users = Object.entries(state).reduce(
 			(users, [id, user]) => ({
 				...users,
 				[id]: { ...user, token: null }
 			}),
-			{}
+			state
 		);
-		users[user.id] = user;
+		users[currentUser.id] = currentUser;
 		return users;
 	});
-	await usersLocal.batch(Object.entries(get(usersWritable)));
-	userEmitter.emit('signIn');
+	await usersLocal.batch(Object.entries(get(users)));
+	userEmitter.emit('signIn', getCurrentUser());
 }
 
 async function signOutUser() {
 	const headers = OpenAPI.HEADERS || (OpenAPI.HEADERS = {});
 	delete headers['authorization'];
-	usersWritable.update((oldUsers) =>
-		Object.entries(oldUsers).reduce(
+	usersWritable.update((state) =>
+		Object.entries(state).reduce(
 			(users, [id, user]) => ({
 				...users,
 				[id]: { ...user, token: null }
 			}),
-			{}
+			state
 		)
 	);
-	await usersLocal.batch(Object.entries(get(usersWritable)));
+	await usersLocal.batch(Object.entries(get(users)));
 	userEmitter.emit('signOut');
 }
 
 if (typeof window === 'object') {
 	usersLocal.all().then((localUsers) => {
-		let userWithToken: User | null = null;
 		usersWritable.update((state) =>
-			Object.entries(localUsers).reduce((state, [id, user]) => {
-				if (user.token) {
-					userWithToken = user;
-				}
-				state[id] = user;
-				return state;
-			}, state)
+			Object.entries(localUsers).reduce(
+				(state, [id, localUser]) => ({
+					...state,
+					[id]: localUser
+				}),
+				state
+			)
 		);
-		if (userWithToken) {
-			signInUser(userWithToken);
+		if (isOnline()) {
+			fetchCurrentUser();
 		}
 	});
 
 	onlineEmitter.on('online', fetchCurrentUser);
-
-	if (isOnline()) {
-		fetchCurrentUser();
-	}
 }

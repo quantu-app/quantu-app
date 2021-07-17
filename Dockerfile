@@ -7,6 +7,9 @@ WORKDIR /usr/src/app
 COPY package*.json ./
 RUN npm install
 
+ARG VITE_QUANTU_API_URL https://api.quantu.app
+ENV VITE_QUANTU_API_URL=$VITE_QUANTU_API_URL
+
 COPY . .
 
 RUN NODE_ENV=production npm run web.build

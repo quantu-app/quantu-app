@@ -1,10 +1,11 @@
-import { Journel, JournelService } from '$lib/api/quantu-app-api';
+import { Journel, JournelService, User } from '$lib/api/quantu-app-api';
 import type { Readable } from 'svelte/store';
 import { get, writable } from 'svelte/store';
-import { isOnline, onlineEmitter } from './online';
+import { isOnline } from './online';
 import { LocalJSON } from './LocalJSON';
 import { getCurrentUser, isSignedIn, userEmitter } from './user';
 import { getLocationName } from '$lib/utils';
+import diff from 'object-diff';
 
 const journelsLocal = new LocalJSON<Journel>('journels'),
 	journelsWritable = writable<Record<string, Journel>>({});
@@ -22,7 +23,7 @@ export async function createJournel(name: string) {
 	};
 
 	if (isOnline() && isSignedIn()) {
-		Object.assign(journel, await JournelService.quantuAppWebControllerJournelCreate({ name }));
+		Object.assign(journel, await JournelService.quantuAppWebControllerJournelCreate(journel));
 	}
 
 	const localId = await journelsLocal.createTableId();
@@ -81,18 +82,86 @@ function emptyJournel(): Journel {
 	};
 }
 
-async function syncJournels() {
-	// const [serverJournels, localJournels] = await Promise.all([
-	// 	JournelService.quantuAppWebControllerJournelIndex(),
-	// 	journelsLocal.all()
-	// ]);
-	// Object.entries(localJournels).map(([localId, localJournel]) => {
-	// 	return [localId, localJournel];
-	// });
+let syncing = false;
+async function syncJournels(localJournelsByLocalId: Record<string, Journel>, _user: User) {
+	if (syncing) {
+		return;
+	}
+	syncing = true;
+	try {
+		const serverJournels = await JournelService.quantuAppWebControllerJournelIndex(),
+			localJournelsById: Record<string, [string, Journel]> = {},
+			onlyLocalJournelsByLocalId: [string, Journel][] = [],
+			promises: Promise<[string, Journel]>[] = [];
+
+		Object.entries(localJournelsByLocalId).forEach(([localId, journel]) => {
+			if (journel.id) {
+				localJournelsById[journel.id] = [localId, journel];
+			} else {
+				onlyLocalJournelsByLocalId.push([localId, journel]);
+			}
+		});
+
+		serverJournels.forEach((serverJournel) => {
+			const localEntry = localJournelsById[serverJournel.id];
+
+			if (localEntry) {
+				const [localId, localJournel] = localEntry,
+					serverUpdatedAt = new Date(serverJournel.updatedAt),
+					localUpdatedAt = new Date(localJournel.updatedAt);
+
+				console.log(serverUpdatedAt, localUpdatedAt);
+
+				if (serverUpdatedAt !== localUpdatedAt) {
+					const updates =
+						serverUpdatedAt > localUpdatedAt
+							? diff(localJournel, serverJournel)
+							: diff(serverJournel, localJournel);
+
+					promises.push(
+						JournelService.quantuAppWebControllerJournelUpdate(serverJournel.id, updates).then(
+							(journel) => journelsLocal.set(localId, journel).then(() => [localId, journel])
+						)
+					);
+				}
+			} else {
+				promises.push(
+					journelsLocal
+						.createTableId()
+						.then((localId) =>
+							journelsLocal.set(localId, serverJournel).then(() => [localId, serverJournel])
+						)
+				);
+			}
+		});
+
+		onlyLocalJournelsByLocalId.forEach(([localId, localJournel]) => {
+			promises.push(
+				JournelService.quantuAppWebControllerJournelCreate(localJournel).then((journel) =>
+					journelsLocal.set(localId, journel).then(() => [localId, journel])
+				)
+			);
+		});
+
+		const updatedJournels = await Promise.all(promises);
+		journelsWritable.update((state) =>
+			updatedJournels.reduce(
+				(state, [localId, journel]) => ({
+					...state,
+					[localId]: journel
+				}),
+				state
+			)
+		);
+	} finally {
+		syncing = false;
+	}
 }
 
 if (typeof window === 'object') {
-	userEmitter.on('signIn', syncJournels);
+	userEmitter.on('signIn', (user) =>
+		journelsLocal.all().then((localJournels) => syncJournels(localJournels, user))
+	);
 
 	journelsLocal.all().then((journels) => {
 		journelsWritable.update((state) =>
@@ -105,7 +174,7 @@ if (typeof window === 'object') {
 			)
 		);
 		if (isSignedIn()) {
-			syncJournels();
+			syncJournels(journels, getCurrentUser());
 		}
 	});
 }

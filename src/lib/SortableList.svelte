@@ -86,11 +86,11 @@
 	afterUpdate(() => {
 		if (prevList !== list) {
 			prevList = list;
-			journel.querySelectorAll<HTMLElement>(handle).forEach(initHandle);
+			document.querySelectorAll<HTMLElement>(handle).forEach(initHandle);
 		}
 	});
 	onMount(() => {
-		journel.querySelectorAll<HTMLElement>(handle).forEach(initHandle);
+		document.querySelectorAll<HTMLElement>(handle).forEach(initHandle);
 	});
 </script>
 

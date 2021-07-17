@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
 
+	export let id: string;
 	export let tags: string[];
 
 	const dispatch = createEventDispatcher<{ change: string[] }>();
@@ -32,7 +33,7 @@
 	}
 </script>
 
-<div class="d-flex">
+<div class="d-flex flex-wrap">
 	{#each currentTags as tag}
 		<button type="button" class="btn btn-primary mt-2 me-2">
 			{tag}
@@ -42,6 +43,7 @@
 	<div class="d-inline mt-2">
 		<div class="input-group">
 			<input
+				{id}
 				type="text"
 				class="form-control"
 				placeholder="Enter a tag"

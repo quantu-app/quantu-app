@@ -1,9 +1,9 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { SignIn_UsernameOrEmailAndPassword } from '../models/SignIn_UsernameOrEmailAndPassword';
-import type { SignUp_UsernamePassword } from '../models/SignUp_UsernamePassword';
-import type { User_Private } from '../models/User_Private';
+import type { SignInUsernameOrEmailAndPassword } from '../models/SignInUsernameOrEmailAndPassword';
+import type { SignUpUsernamePassword } from '../models/SignUpUsernamePassword';
+import type { User } from '../models/User';
 import { request as __request } from '../core/request';
 
 export class AuthService {
@@ -27,10 +27,10 @@ export class AuthService {
      * Gets the Current User
      * Returns the current user based on the bearer token
      *
-     * @returns User_Private Current User Response
+     * @returns User Current User Response
      * @throws ApiError
      */
-    public static async quantuAppWebControllerAuthCurrent(): Promise<User_Private> {
+    public static async quantuAppWebControllerAuthCurrent(): Promise<User> {
         const result = await __request({
             method: 'GET',
             path: `/auth`,
@@ -43,12 +43,12 @@ export class AuthService {
      * Signs in user and returns the User with the Bearer Token
      *
      * @param requestBody Request body to sign in
-     * @returns User_Private Sign in User Response
+     * @returns User Sign in User Response
      * @throws ApiError
      */
     public static async quantuAppWebControllerAuthSignInSignIn(
-        requestBody: SignIn_UsernameOrEmailAndPassword,
-    ): Promise<User_Private> {
+        requestBody: SignInUsernameOrEmailAndPassword,
+    ): Promise<User> {
         const result = await __request({
             method: 'POST',
             path: `/auth/sign-in`,
@@ -62,12 +62,12 @@ export class AuthService {
      * Signs up a user and returns the User with the Bearer Token
      *
      * @param requestBody Request body to sign up
-     * @returns User_Private Sign up User Response
+     * @returns User Sign up User Response
      * @throws ApiError
      */
     public static async quantuAppWebControllerAuthSignUpSignUp(
-        requestBody: SignUp_UsernamePassword,
-    ): Promise<User_Private> {
+        requestBody: SignUpUsernamePassword,
+    ): Promise<User> {
         const result = await __request({
             method: 'POST',
             path: `/auth/sign-up`,

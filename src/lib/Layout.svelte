@@ -1,25 +1,25 @@
 <script lang="ts">
-	import { user, signIn, signUp, signOut } from './state/user';
+	import { currentUser, signIn, signUp, signOut } from './state/user';
 
-	let isSignIn = true;
+	let isSigningIn = true;
 	let usernameOrEmail: string;
 	let password: string;
 	let passwordConfirmation: string;
 	let loading = false;
 
 	function signInUp() {
-		if (isSignIn) {
+		if (isSigningIn) {
 			return signIn(usernameOrEmail, password);
 		} else {
 			return signUp(usernameOrEmail, password, passwordConfirmation);
 		}
 	}
 	async function onSignInUp() {
-		loading = false;
+		loading = true;
 		try {
 			await signInUp();
 		} finally {
-			loading = true;
+			loading = false;
 		}
 
 		const modal = window.bootstrap.Modal.getInstance(document.getElementById('sign-in-up-modal'));
@@ -39,7 +39,7 @@
 		</div>
 		<div class="d-flex flex-column align-items-center flex-shrink-0">
 			<div class="d-flex">
-				{#if $user}
+				{#if $currentUser}
 					<button type="button" class="btn btn-light" on:click={signOut}>
 						<i class="bi bi-person-circle" />
 					</button>
@@ -68,19 +68,21 @@
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h5 id="sign-in-up-modal-label" class="modal-title">Sign {isSignIn ? 'in' : 'up'}</h5>
+				<h5 id="sign-in-up-modal-label" class="modal-title">Sign {isSigningIn ? 'in' : 'up'}</h5>
 				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" />
 			</div>
 			<div class="modal-body">
-				<div class="input-group mt-4">
+				<div class="input-group">
 					<h3>
-						{isSignIn ? 'Not a member?' : 'Already a member?'}
-						<button type="button" on:click={() => (isSignIn = !isSignIn)} class="btn btn-primary"
-							>Sign {isSignIn ? 'up' : 'in'}</button
+						{isSigningIn ? 'Not a member?' : 'Already a member?'}
+						<button
+							type="button"
+							on:click={() => (isSigningIn = !isSigningIn)}
+							class="btn btn-primary">Sign {isSigningIn ? 'up' : 'in'}</button
 						>
 					</h3>
-					{#if isSignIn}
-						<div class="input-group mt-4">
+					{#if isSigningIn}
+						<div class="input-group">
 							<input
 								type="text"
 								class="form-control"
@@ -88,7 +90,7 @@
 								bind:value={usernameOrEmail}
 							/>
 						</div>
-						<div class="input-group mt-4">
+						<div class="input-group">
 							<input
 								type="password"
 								class="form-control"
@@ -96,7 +98,7 @@
 								bind:value={password}
 							/>
 						</div>
-					{:else}<div class="input-group mt-4">
+					{:else}<div class="input-group">
 							<input
 								type="text"
 								class="form-control"
@@ -104,7 +106,7 @@
 								bind:value={usernameOrEmail}
 							/>
 						</div>
-						<div class="input-group mt-4">
+						<div class="input-group">
 							<input
 								type="password"
 								class="form-control"
@@ -112,7 +114,7 @@
 								bind:value={password}
 							/>
 						</div>
-						<div class="input-group mt-4">
+						<div class="input-group">
 							<input
 								type="password"
 								class="form-control"
@@ -125,7 +127,7 @@
 			</div>
 			<div class="modal-footer">
 				<button type="button" disabled={loading} on:click={onSignInUp} class="btn btn-primary"
-					>Sign {isSignIn ? 'in' : 'up'}</button
+					>Sign {isSigningIn ? 'in' : 'up'}</button
 				>
 				<button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
 			</div>

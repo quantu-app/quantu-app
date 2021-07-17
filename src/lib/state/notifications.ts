@@ -1,5 +1,4 @@
-import type { UUID } from 'automerge';
-import Automerge from 'automerge';
+import { v4 } from 'uuid';
 import { writable } from 'svelte/store';
 
 export enum NotificationType {
@@ -21,7 +20,7 @@ export interface INotificationOptions {
 }
 
 export interface INotification {
-	id: UUID;
+	id: string;
 	type: NotificationType;
 	heading?: string;
 	description: string;
@@ -29,7 +28,7 @@ export interface INotification {
 
 function createNotification(options: INotificationOptions) {
 	return {
-		id: Automerge.uuid(),
+		id: v4(),
 		type: options.type || NotificationType.Primary,
 		heading: options.heading,
 		description: options.description
@@ -50,7 +49,7 @@ function createStore() {
 		setTimeout(() => removeNotification(notification.id), timeout);
 	}
 
-	function removeNotification(id: UUID) {
+	function removeNotification(id: string) {
 		update((state) => {
 			const index = state.findIndex((notification) => notification.id === id);
 

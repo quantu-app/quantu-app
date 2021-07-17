@@ -47,16 +47,15 @@
 		"check:watch": "svelte-check --tsconfig ./tsconfig.json --watch",
 		"lint": "prettier --check --plugin-search-dir=. . && eslint --ignore-path .gitignore .",
 		"format": "prettier --write --plugin-search-dir=. .",
-		"generate.api": "rm -rf src/lib/api/quantu-app-api && openapi --input http://localhost:4000/swagger.json --output src/lib/api/quantu-app-api"
+		"gen.api": "rm -rf src/lib/api/quantu-app-api && openapi --input http://localhost:4000/swagger.json --output src/lib/api/quantu-app-api"
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-node": "next",
 		"@types/bootstrap": "^5.0.17",
-		"@types/crypto-js": "^4.0.2",
-		"@types/deep-diff": "^1.0.1",
 		"@types/highlight.js": "^10.1.0",
 		"@types/katex": "^0.11.1",
 		"@types/quill": "^2.0.9",
+		"@types/uuid": "^8.3.1",
 		"@typescript-eslint/eslint-plugin": "^4.28.2",
 		"@typescript-eslint/parser": "^4.28.2",
 		"bootstrap": "^5.0.2",
@@ -80,16 +79,14 @@
 		"@aicacia/debounce": "^0.1.9",
 		"@aicacia/string-fuzzy_equals": "^0.1.2",
 		"@sveltejs/kit": "next",
-		"@tauri-apps/tauri-forage": "latest",
-		"automerge": "nathanfaucett/automerge",
-		"crypto-js": "^4.0.0",
-		"deep-diff": "^1.0.2",
 		"eventemitter3": "^4.0.7",
 		"find-open-port": "^2.0.3",
 		"katex": "^0.13.11",
+		"localforage": "^1.9.0",
 		"pascal-case": "^3.1.2",
 		"quill": "^2.0.0-dev.4",
 		"quill-delta": "^4.2.2",
-		"svelte": "^3.38.3"
+		"svelte": "^3.38.3",
+		"uuid": "^8.3.2"
 	}
 }

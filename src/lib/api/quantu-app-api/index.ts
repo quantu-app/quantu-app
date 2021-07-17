@@ -4,19 +4,20 @@
 export { ApiError } from './core/ApiError';
 export { OpenAPI } from './core/OpenAPI';
 
-export type { Document_Create } from './models/Document_Create';
-export type { Document_List } from './models/Document_List';
-export type { Document_Show } from './models/Document_Show';
-export type { Document_Update } from './models/Document_Update';
-export type { SignIn_UsernameOrEmailAndPassword } from './models/SignIn_UsernameOrEmailAndPassword';
-export type { SignUp_UsernamePassword } from './models/SignUp_UsernamePassword';
-export type { User_Email } from './models/User_Email';
-export type { User_EmailCreate } from './models/User_EmailCreate';
-export type { User_Private } from './models/User_Private';
-export type { User_UsernameUpdate } from './models/User_UsernameUpdate';
-export type { Util_HealthCheck } from './models/Util_HealthCheck';
+export type { Email } from './models/Email';
+export type { EmailCreate } from './models/EmailCreate';
+export type { HealthCheck } from './models/HealthCheck';
+export type { Journel } from './models/Journel';
+export type { JournelCreate } from './models/JournelCreate';
+export type { JournelList } from './models/JournelList';
+export type { JournelUpdate } from './models/JournelUpdate';
+export type { PasswordReset } from './models/PasswordReset';
+export type { SignInUsernameOrEmailAndPassword } from './models/SignInUsernameOrEmailAndPassword';
+export type { SignUpUsernamePassword } from './models/SignUpUsernamePassword';
+export type { User } from './models/User';
+export type { UsernameUpdate } from './models/UsernameUpdate';
 
 export { AuthService } from './services/AuthService';
-export { DocumentService } from './services/DocumentService';
+export { JournelService } from './services/JournelService';
 export { UserService } from './services/UserService';
 export { UtilService } from './services/UtilService';

@@ -1,36 +1,3 @@
-import CryptoJS from 'crypto-js';
-import Automerge from 'automerge';
-import type { Text, FreezeObject } from 'automerge';
-import type Op from 'quill-delta/dist/Op';
-
-export function getAutomergeContentHash<T>(object: FreezeObject<T>) {
-	return CryptoJS.enc.Base64.stringify(
-		CryptoJS.SHA256(CryptoJS.lib.WordArray.create(Automerge.save(object) as unknown as number[]))
-	);
-}
-
-export function applyOpsToText(text: Text, ops: Op[]): Text {
-	let i = 0;
-	for (const op of ops) {
-		if (op.retain) {
-			i += op.retain;
-		}
-		if (typeof op.insert === 'string') {
-			const chars = op.insert.split('');
-			text.insertAt(i, ...chars);
-			i += chars.length;
-		} else if (op.delete) {
-			let deleteCount = op.delete || 0;
-			const diff = text.length - (i + deleteCount);
-			if (diff < 0) {
-				deleteCount += diff;
-			}
-			text.deleteAt(i, deleteCount);
-		}
-	}
-	return text;
-}
-
 export async function getGeolocation(position: GeolocationPosition) {
 	const response = await fetch(
 			`https://nominatim.openstreetmap.org/reverse?format=xml&lat=${position.coords.latitude}&lon=${position.coords.longitude}&zoom=18&addressdetails=1`

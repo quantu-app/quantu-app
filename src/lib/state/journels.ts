@@ -6,9 +6,12 @@ import { LocalJSON } from './LocalJSON';
 import { getCurrentUser, isSignedIn, userEmitter } from './user';
 import { getLocationName, isEmptyObject } from '$lib/utils';
 import { deepEqual } from 'fast-equals';
+import { EventEmitter } from 'eventemitter3';
 
 const journelsLocal = new LocalJSON<Journel>('journels'),
 	journelsWritable = writable<Record<string, Journel>>({});
+
+export const journelEmitter = new EventEmitter<{ sync: () => void }>();
 
 export const journels: Readable<Record<string, Journel>> = {
 	subscribe: journelsWritable.subscribe
@@ -176,6 +179,7 @@ async function syncJournels(localJournelsByLocalId: Record<string, Journel>, _us
 		);
 	} finally {
 		syncing = false;
+		journelEmitter.emit('sync');
 	}
 }
 

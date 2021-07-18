@@ -1,9 +1,9 @@
 <script lang="ts">
-	import { updateJournel } from '$lib/state/journels';
+	import { journelEmitter, updateJournel } from '$lib/state/journels';
 	import type { Journel } from '$lib/api/quantu-app-api';
 	import Tags from '$lib/Tags.svelte';
 	import Text from './Text.svelte';
-	import { beforeUpdate } from 'svelte';
+	import { beforeUpdate, onMount } from 'svelte';
 
 	export let localId: string;
 	export let journel: Journel;
@@ -43,6 +43,17 @@
 			prevLocalId = localId;
 			text = journel.content;
 		}
+	});
+
+	function onSync() {
+		text = journel.content;
+	}
+
+	onMount(() => {
+		journelEmitter.on('sync', onSync);
+		return () => {
+			journelEmitter.off('sync', onSync);
+		};
 	});
 </script>
 

@@ -64,6 +64,4 @@
 
 <DeleteJournal {journalToDelete} {onDeleteJournal} />
 
-<div class="w-100">
-	<JournalList journals={list} {createOnDelete} />
-</div>
+<JournalList journals={list} {createOnDelete} />

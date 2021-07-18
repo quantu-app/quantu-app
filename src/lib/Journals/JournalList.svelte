@@ -5,17 +5,29 @@
 	export let journals: [string, Journal][];
 	export let createOnDelete: (localId: string, journal: Journal) => () => void;
 
-	$: journalsByMonth = Object.entries(
-		journals.reduce<Record<string, [string, Journal][]>>((journalsByMonth, [localId, journal]) => {
+	$: journalsByMonth = createJournalsByMonth(journals);
+
+	function createJournalsByMonth(journals: [string, Journal][]) {
+		const journalsByMonth: Record<string, [string, Journal][]> = {},
+			journalsByMonthInOrder: [string, [string, Journal][]][] = [];
+
+		for (const [localId, journal] of journals) {
 			const date = new Date(journal.insertedAt),
 				month = new Date(date).toLocaleString('en-us', { month: 'short', year: 'numeric' });
 
-			const monthJournals = journalsByMonth[month] || (journalsByMonth[month] = []);
+			let monthJournals = journalsByMonth[month];
+
+			if (!monthJournals) {
+				monthJournals = [];
+				journalsByMonth[month] = monthJournals;
+				journalsByMonthInOrder.push([month, monthJournals]);
+			}
 
 			monthJournals.push([localId, journal]);
-			return journalsByMonth;
-		}, {})
-	);
+		}
+
+		return journalsByMonthInOrder;
+	}
 </script>
 
 {#each journalsByMonth as [month, journals]}

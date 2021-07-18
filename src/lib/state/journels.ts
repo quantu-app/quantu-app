@@ -6,7 +6,7 @@ import { LocalJSON } from './LocalJSON';
 import { getCurrentUser, isSignedIn, userEmitter } from './user';
 import { getLocationName, isEmptyObject } from '$lib/utils';
 import { deepEqual } from 'fast-equals';
-import { EventEmitter } from 'eventemitter3';
+import EventEmitter from 'eventemitter3';
 
 const journelsLocal = new LocalJSON<Journel>('journels'),
 	journelsWritable = writable<Record<string, Journel>>({});

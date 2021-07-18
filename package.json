@@ -42,7 +42,7 @@
 		"docker.stop": "docker stop quantu",
 		"helm.delete": "helm delete -n ui quantu",
 		"helm.upgrade": "helm upgrade quantu helm/quantu -n ui --install --set image.hash=\"$(docker inspect --format='{{index .Id}}' docker.pkg.github.com/quantu-app/quantu-app/quantu-app-ui:latest)\"",
-		"helm": "npm run docker.build && npm run docker.push && npm run helm",
+		"helm": "npm run docker.build && npm run docker.push && npm run helm.upgrade",
 		"check": "svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-check --tsconfig ./tsconfig.json --watch",
 		"lint": "prettier --check --plugin-search-dir=. . && eslint --ignore-path .gitignore .",

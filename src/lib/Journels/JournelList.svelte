@@ -20,7 +20,7 @@
 
 {#each journelsByMonth as [month, journels]}
 	<h2>{month}</h2>
-	<div class="list-group">
+	<div class="list-group list-group-flush">
 		{#each journels as [localId, journel]}
 			<JournelListItem {localId} {journel} onDelete={createOnDelete(localId, journel)} />
 		{/each}

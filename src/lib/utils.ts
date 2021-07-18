@@ -55,3 +55,10 @@ export function isEmptyObject(value: unknown, checkOwnProperty = false) {
 	}
 	return checkPrototypeProperty(value as Record<string, unknown>);
 }
+
+export function getWordCount(text: string): number {
+	return text
+		.replace(/[^\w]+/gi, ' ')
+		.trim()
+		.split(' ').length;
+}

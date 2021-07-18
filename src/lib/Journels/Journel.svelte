@@ -66,6 +66,9 @@
 		</div>
 		<div class="col-auto flex-grow-1" />
 		<div class="col-auto">
+			<p class="mb-0">Words: {journel.wordCount}</p>
+		</div>
+		<div class="col-auto">
 			<button
 				type="button"
 				role="button"

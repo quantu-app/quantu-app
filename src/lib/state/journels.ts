@@ -75,7 +75,7 @@ function emptyJournel(): Journel {
 		id: null,
 		content: [],
 		location: '',
-		language: 'en',
+		language: 'English',
 		name: null,
 		tags: [],
 		userId: null,

@@ -120,7 +120,10 @@
 				</div>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-primary" data-bs-dismiss="modal">Update</button>
+				<button type="button" class="btn btn-danger text-white delete" data-bs-dismiss="modal"
+					>Delete</button
+				>
+				<button type="button" class="btn btn-primary update" data-bs-dismiss="modal">Update</button>
 			</div>
 		</div>
 	</div>

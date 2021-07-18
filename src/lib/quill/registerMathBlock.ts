@@ -8,11 +8,12 @@ function renderkatex(node: HTMLElement, value: string) {
 	});
 }
 
-function getModal(value: string, onUpdate: (value: string) => void) {
+function getModal(value: string, onUpdate: (value: string) => void, onDelete: () => void) {
 	const element = document.getElementById('math-block-modal'),
 		input = element.querySelector<HTMLInputElement>('.modal-body .input'),
 		output = element.querySelector<HTMLDivElement>('.modal-body .output'),
-		update = element.querySelector<HTMLButtonElement>('.modal-footer button'),
+		remove = element.querySelector<HTMLButtonElement>('.modal-footer button.delete'),
+		update = element.querySelector<HTMLButtonElement>('.modal-footer button.update'),
 		modal = new window.bootstrap.Modal(element);
 
 	input.value = value;
@@ -20,6 +21,10 @@ function getModal(value: string, onUpdate: (value: string) => void) {
 		renderkatex(output, value);
 	}
 
+	function onClickDelete() {
+		removeClickDelete();
+		onDelete();
+	}
 	function onClickUpdate() {
 		removeClickUpdate();
 		onUpdate(input.value);
@@ -28,6 +33,9 @@ function getModal(value: string, onUpdate: (value: string) => void) {
 		renderkatex(output, (e.target as HTMLInputElement).value);
 	}
 
+	function removeClickDelete() {
+		remove.removeEventListener('click', onClickDelete);
+	}
 	function removeClickUpdate() {
 		update.removeEventListener('click', onClickUpdate);
 	}
@@ -35,10 +43,12 @@ function getModal(value: string, onUpdate: (value: string) => void) {
 		update.removeEventListener('input', onInputChange);
 	}
 	function removeAll() {
+		removeClickDelete();
 		removeClickUpdate();
 		removeInputChange();
 	}
 
+	remove.addEventListener('click', onClickDelete);
 	update.addEventListener('click', onClickUpdate);
 	input.addEventListener('input', onInputChange);
 
@@ -66,10 +76,16 @@ export function registerMathBlock(quill: typeof Quill) {
 		}
 
 		private onEdit = () => {
-			getModal(this.domNode.getAttribute('data-value'), (value) => {
-				renderkatex(this.domNode, value);
-				this.domNode.setAttribute('data-value', value);
-			});
+			getModal(
+				this.domNode.getAttribute('data-value'),
+				(value) => {
+					renderkatex(this.domNode, value);
+					this.domNode.setAttribute('data-value', value);
+				},
+				() => {
+					this.remove();
+				}
+			);
 		};
 
 		attach() {
@@ -102,10 +118,13 @@ export function registerMathBlock(quill: typeof Quill) {
 export function mathBlockHandler(this: { quill: Quill }) {
 	const [range] = (this.quill as any).selection.getRange();
 
-	getModal('', (value) =>
-		this.quill.updateContents(
-			new Delta().retain(range.index).delete(range.length).insert({ 'math-block': value }),
-			'user'
-		)
+	getModal(
+		'',
+		(value) =>
+			this.quill.updateContents(
+				new Delta().retain(range.index).delete(range.length).insert({ 'math-block': value }),
+				'user'
+			),
+		() => undefined
 	);
 }

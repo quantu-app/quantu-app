@@ -46,6 +46,7 @@
 	});
 
 	function onSync() {
+		prevLocalId = undefined;
 		text = journel.content;
 	}
 

@@ -120,12 +120,17 @@ async function syncJournels(localJournelsByLocalId: Record<string, Journel>, _us
 					localUpdatedAt = new Date(localJournel.updatedAt);
 
 				if (serverUpdatedAt !== localUpdatedAt) {
-					const requestBody =
-						serverUpdatedAt > localUpdatedAt
+					const isServerUpdate = serverUpdatedAt > localUpdatedAt,
+						requestBody = isServerUpdate
 							? journelChanges(localJournel, serverJournel)
 							: journelChanges(serverJournel, localJournel);
 
-					if (!isEmptyObject(requestBody)) {
+					if (isEmptyObject(requestBody)) {
+						journelsLocal.set(localId, isServerUpdate ? serverJournel : localJournel);
+						promises.push(
+							Promise.resolve([localId, isServerUpdate ? serverJournel : localJournel, true])
+						);
+					} else {
 						promises.push(
 							JournelService.quantuAppWebControllerJournelUpdate(
 								serverJournel.id,

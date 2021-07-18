@@ -33,8 +33,8 @@
 		<input
 			type="text"
 			class="form-control"
-			placeholder="New Name (Leave blank to use current Date)"
-			aria-label="New Name (Leave blank to use current Date)"
+			placeholder="Name (Leave blank to use current Date)"
+			aria-label="Name (Leave blank to use current Date)"
 			required
 			bind:value={journelName}
 		/>

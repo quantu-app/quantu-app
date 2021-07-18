@@ -11,7 +11,15 @@
 		journelCreating = true;
 		try {
 			const name = journelName.trim(),
-				[localId, _journel] = await createJournel(name ? name : new Date().toDateString());
+				[localId, _journel] = await createJournel(
+					name
+						? name
+						: new Date().toLocaleString('en-us', {
+								month: 'short',
+								day: 'numeric',
+								year: 'numeric'
+						  })
+				);
 			journelName = '';
 			goto(`/journels/${localId}`);
 		} finally {

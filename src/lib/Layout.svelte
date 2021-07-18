@@ -31,7 +31,7 @@
 	<div class="d-flex flex-row">
 		<div class="d-flex flex-column align-items-center flex-shrink-0">
 			<div class="d-flex">
-				<a type="button" class="btn btn-ghost" href="/">Q[U]</a>
+				<a type="button" class="logo btn btn-ghost" href="/">Q[U]</a>
 			</div>
 		</div>
 		<div class="d-flex flex-column flex-grow-1">
@@ -150,3 +150,11 @@
 		</div>
 	</div>
 </div>
+
+<style lang="scss">
+	.logo {
+		font-family: Poppins, sans-serif;
+		font-size: 2rem;
+		padding: 0;
+	}
+</style>

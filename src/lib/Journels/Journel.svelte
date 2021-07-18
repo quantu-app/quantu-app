@@ -46,14 +46,13 @@
 	});
 </script>
 
-<div class="container-fluid">
+<div class="container-fluid mt-2">
 	<div class="row justify-content-between align-items-end">
 		<div class="col-auto">
-			<h1>{journel.name}</h1>
+			<h2 class="d-inline">{journel.name}</h2>
+			<h4 class="d-inline">- {journel.location}</h4>
 		</div>
-		<div class="col-auto">
-			{journel.location}
-		</div>
+		<div class="col-auto flex-grow-1" />
 		<div class="col-auto">
 			<button
 				type="button"
@@ -65,63 +64,63 @@
 			>
 		</div>
 	</div>
-	<hr />
+	<hr class="mt-0" />
+</div>
 
-	<div
-		class="modal fade"
-		id="journel-settings"
-		tabindex="-1"
-		aria-labelledby="journel-settings-label"
-		aria-hidden="true"
-	>
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h5 id="journel-settings-label" class="modal-title">Settings</h5>
-					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" />
+<div
+	class="modal fade"
+	id="journel-settings"
+	tabindex="-1"
+	aria-labelledby="journel-settings-label"
+	aria-hidden="true"
+>
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 id="journel-settings-label" class="modal-title">Settings</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" />
+			</div>
+			<div class="modal-body">
+				<div class="mb-4">
+					<label for="settings-journel-name" class="form-label">Title</label>
+					<input
+						id="settings-journel-name"
+						type="text"
+						class="form-control"
+						placeholder="Enter title"
+						value={journel.name}
+						on:change={onNameChange}
+					/>
 				</div>
-				<div class="modal-body">
-					<div class="mb-4">
-						<label for="settings-journel-name" class="form-label">Title</label>
-						<input
-							id="settings-journel-name"
-							type="text"
-							class="form-control"
-							placeholder="Enter title"
-							value={journel.name}
-							on:change={onNameChange}
-						/>
-					</div>
-					<div class="mb-4">
-						<label for="settings-journel-location" class="form-label">Location</label>
-						<input
-							id="settings-journel-location"
-							type="text"
-							class="form-control"
-							placeholder="Enter location"
-							value={journel.location}
-							on:change={onLocationChange}
-						/>
-					</div>
-					<div class="mb-4">
-						<label for="settings-journel-language" class="form-label">Language</label>
-						<input
-							id="settings-journel-language"
-							type="text"
-							class="form-control"
-							placeholder="Enter langauge"
-							value={journel.language}
-							on:change={onLanguageChange}
-						/>
-					</div>
-					<div class="mb-4">
-						<label for="settings-journel-tags" class="form-label mb-0">Tags</label>
-						<Tags id="settings-journel-tags" tags={journel.tags || []} on:change={onTagsChange} />
-					</div>
+				<div class="mb-4">
+					<label for="settings-journel-location" class="form-label">Location</label>
+					<input
+						id="settings-journel-location"
+						type="text"
+						class="form-control"
+						placeholder="Enter location"
+						value={journel.location}
+						on:change={onLocationChange}
+					/>
 				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+				<div class="mb-4">
+					<label for="settings-journel-language" class="form-label">Language</label>
+					<input
+						id="settings-journel-language"
+						type="text"
+						class="form-control"
+						placeholder="Enter langauge"
+						value={journel.language}
+						on:change={onLanguageChange}
+					/>
 				</div>
+				<div class="mb-4">
+					<label for="settings-journel-tags" class="form-label mb-0">Tags</label>
+					<Tags id="settings-journel-tags" tags={journel.tags || []} on:change={onTagsChange} />
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
 			</div>
 		</div>
 	</div>

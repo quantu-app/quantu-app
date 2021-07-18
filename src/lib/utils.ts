@@ -24,15 +24,12 @@ export async function getLocationName() {
 	const position = await getGeolocationPosition();
 
 	if (position) {
-		const location = await getGeolocation(position),
-			city =
-				location.town || location.neighbourhood
-					? (location.town || location.neighbourhood) + ' '
-					: '',
-			state = location.state ? location.state + ' ' : '',
-			country = location.country ? location.country : '';
-
-		return city + state + country;
+		const location = await getGeolocation(position);
+		return (
+			[location.town || location.neighbourhood, location.state, location.country]
+				.filter((value) => !!value)
+				.join(', ') || 'Unknown'
+		);
 	} else {
 		return 'Unknown';
 	}

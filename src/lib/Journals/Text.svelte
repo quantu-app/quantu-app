@@ -5,7 +5,7 @@
 	import type Delta from 'quill-delta';
 	import type Quill from 'quill';
 	import type Op from 'quill-delta/dist/Op';
-	import { updateJournel } from '$lib/state/journels';
+	import { updateJournal } from '$lib/state/journals';
 	import { getWordCount } from '$lib/utils';
 
 	export let localId: string;
@@ -29,7 +29,7 @@
 
 	function updateBlockText() {
 		if (quill && updating) {
-			updateJournel(localId, {
+			updateJournal(localId, {
 				content: quill.getContents().ops,
 				wordCount: getWordCount(quill.getText())
 			});

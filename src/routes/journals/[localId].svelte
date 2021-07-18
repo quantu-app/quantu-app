@@ -14,22 +14,22 @@
 </script>
 
 <script lang="ts">
-	import { journels } from '$lib/state/journels';
-	import Journel from '$lib/Journels/Journel.svelte';
+	import { journals } from '$lib/state/journals';
+	import Journal from '$lib/Journals/Journal.svelte';
 	import Layout from '$lib/Layout.svelte';
 
 	export let localId: string;
 
-	$: journel = $journels[localId];
+	$: journal = $journals[localId];
 </script>
 
 <svelte:head>
-	<title>{journel?.name}</title>
+	<title>{journal?.name}</title>
 </svelte:head>
 
 <Layout>
-	{#if journel}
-		<Journel {localId} {journel} />
+	{#if journal}
+		<Journal {localId} {journal} />
 	{:else}
 		<div class="d-flex align-items-center justify-content-center">
 			<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" />

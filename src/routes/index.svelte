@@ -2,7 +2,7 @@
 	/** @type {import('@sveltejs/kit').Load} */
 	export async function load() {
 		return {
-			redirect: '/journels',
+			redirect: '/journals',
 			status: 301
 		};
 	}

@@ -1,12 +1,12 @@
 <script lang="ts">
-	import type { Journel } from '$lib/api/quantu-app-api';
+	import type { Journal } from '$lib/api/quantu-app-api';
 
 	export let localId: string;
-	export let journel: Journel;
+	export let journal: Journal;
 	export let onDelete: () => void;
 
-	$: insertedAt = new Date(journel.insertedAt || '');
-	$: updatedAt = new Date(journel.updatedAt || '');
+	$: insertedAt = new Date(journal.insertedAt || '');
+	$: updatedAt = new Date(journal.updatedAt || '');
 
 	let innerWidth: number;
 </script>
@@ -18,7 +18,7 @@
 		<h4>
 			<span class="badge bg-primary">{insertedAt.toLocaleString('en-us', { day: 'numeric' })}</span>
 			-
-			<a aria-label="Edit" href={`/journels/${localId}`}>{journel.name}</a>
+			<a aria-label="Edit" href={`/journals/${localId}`}>{journal.name}</a>
 		</h4>
 		<div class="dropdown">
 			<button
@@ -32,14 +32,14 @@
 			</button>
 			<ul class="dropdown-menu dropdown-menu-end" aria-labelledby={`dropdown-${localId}`}>
 				<li>
-					<a class="dropdown-item justify-content-between" href={`/journels/${localId}`}>Edit</a>
+					<a class="dropdown-item justify-content-between" href={`/journals/${localId}`}>Edit</a>
 				</li>
 				<li>
 					<button
 						type="button"
 						class="dropdown-item justify-content-between"
 						data-bs-toggle="modal"
-						data-bs-target="#delete-journel"
+						data-bs-target="#delete-journal"
 						aria-label="Delete"
 						on:click={onDelete}>Delete</button
 					>
@@ -55,7 +55,7 @@
 		{#if innerWidth >= 768}
 			<div class="flex-grow-1" />
 			<div class="d-inline" style="margin-right:60px;">
-				<p class="mb-0">{journel.location}, {journel.language}, {journel.wordCount} words</p>
+				<p class="mb-0">{journal.location}, {journal.language}, {journal.wordCount} words</p>
 			</div>
 		{/if}
 	</div>

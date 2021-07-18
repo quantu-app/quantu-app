@@ -1,17 +1,17 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import { createJournel } from '$lib/state/journels';
+	import { createJournal } from '$lib/state/journals';
 
-	export let journelNameFilter: string;
+	export let journalNameFilter: string;
 
-	let journelName = '';
-	let journelCreating = false;
+	let journalName = '';
+	let journalCreating = false;
 
-	async function onCreateJournel() {
-		journelCreating = true;
+	async function onCreateJournal() {
+		journalCreating = true;
 		try {
-			const name = journelName.trim(),
-				[localId, _journel] = await createJournel(
+			const name = journalName.trim(),
+				[localId, _journal] = await createJournal(
 					name
 						? name
 						: new Date().toLocaleString('en-us', {
@@ -20,10 +20,10 @@
 								year: 'numeric'
 						  })
 				);
-			journelName = '';
-			goto(`/journels/${localId}`);
+			journalName = '';
+			goto(`/journals/${localId}`);
 		} finally {
-			journelCreating = false;
+			journalCreating = false;
 		}
 	}
 </script>
@@ -36,16 +36,16 @@
 			placeholder="Name (Leave blank to use current Date)"
 			aria-label="Name (Leave blank to use current Date)"
 			required
-			bind:value={journelName}
+			bind:value={journalName}
 		/>
 		<button
 			type="submit"
-			disabled={journelCreating}
+			disabled={journalCreating}
 			class="btn btn-primary"
 			aria-label="Create"
-			on:click={onCreateJournel}
+			on:click={onCreateJournal}
 		>
-			{#if journelCreating}
+			{#if journalCreating}
 				<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" />
 			{/if}
 			Create
@@ -56,7 +56,7 @@
 			type="text"
 			class="form-control"
 			placeholder="Filter by name"
-			bind:value={journelNameFilter}
+			bind:value={journalNameFilter}
 		/>
 	</div>
 </form>

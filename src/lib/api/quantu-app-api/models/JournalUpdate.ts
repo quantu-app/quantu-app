@@ -3,31 +3,31 @@
 /* eslint-disable */
 
 /**
- * journel update
+ * journal update
  */
-export type JournelUpdate = {
+export type JournalUpdate = {
     /**
-     * Journel content
+     * Journal content
      */
     content?: Array<any>;
     /**
-     * Journel language
+     * Journal language
      */
     language?: string;
     /**
-     * Journel location
+     * Journal location
      */
     location?: string;
     /**
-     * Journel name
+     * Journal name
      */
     name?: string;
     /**
-     * Journel tags
+     * Journal tags
      */
     tags?: Array<string>;
     /**
-     * Journel word count
+     * Journal word count
      */
     wordCount?: number;
 }

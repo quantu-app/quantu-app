@@ -1,28 +1,28 @@
 <script lang="ts">
-	import type { Journel } from '$lib/api/quantu-app-api';
+	import type { Journal } from '$lib/api/quantu-app-api';
 
-	export let journelToDelete: Journel;
-	export let onDeleteJournel: () => void;
+	export let journalToDelete: Journal;
+	export let onDeleteJournal: () => void;
 
-	let deleteJournelText = '';
+	let deleteJournalText = '';
 
-	function internalOnDeleteJournel() {
-		deleteJournelText = '';
-		onDeleteJournel();
+	function internalOnDeleteJournal() {
+		deleteJournalText = '';
+		onDeleteJournal();
 	}
 </script>
 
 <div
 	class="modal fade"
-	id="delete-journel"
+	id="delete-journal"
 	tabindex="-1"
-	aria-labelledby="delete-journel-label"
+	aria-labelledby="delete-journal-label"
 	aria-hidden="true"
 >
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h5 id="delete-journel-label" class="modal-title">Delete {journelToDelete?.name}</h5>
+				<h5 id="delete-journal-label" class="modal-title">Delete {journalToDelete?.name}</h5>
 				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" />
 			</div>
 			<div class="modal-body">
@@ -31,15 +31,15 @@
 						type="text"
 						class="form-control"
 						placeholder="Type delete to permanently remove."
-						bind:value={deleteJournelText}
+						bind:value={deleteJournalText}
 					/>
 				</div>
 			</div>
 			<div class="modal-footer">
 				<button
 					type="button"
-					on:click={internalOnDeleteJournel}
-					disabled={deleteJournelText.trim().toLowerCase() !== 'delete'}
+					on:click={internalOnDeleteJournal}
+					disabled={deleteJournalText.trim().toLowerCase() !== 'delete'}
 					data-bs-dismiss="modal"
 					class="btn btn-danger text-white">Delete</button
 				>

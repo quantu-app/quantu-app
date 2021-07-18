@@ -8,16 +8,16 @@
 </script>
 
 <script lang="ts">
-	import Journels from '$lib/Journels/Journels.svelte';
+	import Journals from '$lib/Journals/Journals.svelte';
 	import Layout from '$lib/Layout.svelte';
 </script>
 
 <svelte:head>
-	<title>Journels</title>
+	<title>Journals</title>
 </svelte:head>
 
 <Layout>
 	<div class="container-md">
-		<Journels />
+		<Journals />
 	</div>
 </Layout>

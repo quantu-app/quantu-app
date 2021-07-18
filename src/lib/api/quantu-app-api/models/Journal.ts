@@ -3,11 +3,11 @@
 /* eslint-disable */
 
 /**
- * journel show
+ * journal show
  */
-export type Journel = {
+export type Journal = {
     /**
-     * Journel content
+     * Journal content
      */
     content: Array<any>;
     /**
@@ -19,19 +19,19 @@ export type Journel = {
      */
     insertedAt: string;
     /**
-     * Journel language
+     * Journal language
      */
     language: string;
     /**
-     * Journel location
+     * Journal location
      */
     location: string;
     /**
-     * Journel name
+     * Journal name
      */
     name: string;
     /**
-     * Journel tags
+     * Journal tags
      */
     tags: Array<string>;
     /**
@@ -43,7 +43,7 @@ export type Journel = {
      */
     userId: string;
     /**
-     * Journel word count
+     * Journal word count
      */
     wordCount: number;
 }

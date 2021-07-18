@@ -3,9 +3,13 @@
 	import type { Journel } from '$lib/api/quantu-app-api';
 	import Tags from '$lib/Tags.svelte';
 	import Text from './Text.svelte';
+	import { beforeUpdate } from 'svelte';
 
 	export let localId: string;
 	export let journel: Journel;
+
+	let text = journel.content;
+	let prevLocalId = localId;
 
 	function onNameChange(e: Event) {
 		const name = (e.currentTarget as HTMLInputElement).value;
@@ -33,6 +37,13 @@
 			tags: e.detail
 		});
 	}
+
+	beforeUpdate(() => {
+		if (localId !== prevLocalId) {
+			prevLocalId = localId;
+			text = journel.content;
+		}
+	});
 </script>
 
 <div class="container-fluid">
@@ -117,5 +128,5 @@
 </div>
 
 <div class="container-md">
-	<Text {localId} text={journel.content} />
+	<Text {localId} {text} />
 </div>

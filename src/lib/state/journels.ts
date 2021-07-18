@@ -19,7 +19,7 @@ export async function createJournel(name: string) {
 		...emptyJournel(),
 		name,
 		userId: isSignedIn() ? getCurrentUser().id : null,
-		location: await getLocationName()
+		location: isOnline() ? await getLocationName() : 'Unknown'
 	};
 
 	if (isOnline() && isSignedIn()) {
@@ -55,9 +55,9 @@ export async function updateJournel(localId: string, updates: Partial<Journel>) 
 }
 
 export async function deleteJournel(localId: string) {
-	const journel = get(journelsWritable)[localId] || emptyJournel();
+	const journel = get(journelsWritable)[localId];
 
-	if (journel.id && isOnline() && isSignedIn()) {
+	if (journel?.id && isOnline() && isSignedIn()) {
 		await JournelService.quantuAppWebControllerJournelDelete(journel.id);
 	}
 	journelsWritable.update((state) => {
@@ -95,19 +95,19 @@ async function syncJournels(localJournelsByLocalId: Record<string, Journel>, _us
 				return byId;
 			}, {}),
 			localJournelsById: Record<string, [string, Journel]> = {},
-			localJournelsToCreateByLocalId: [string, Journel][] = [],
-			localJournelsToDeleteById: [string, Journel][] = [],
-			promises: Promise<[string, Journel, boolean]>[] = [];
+			localJournelsToCreate: [string, Journel][] = [],
+			localJournelsToDelete: [string, Journel][] = [],
+			promises: Promise<[localId: string, journel: Journel, remove?: boolean]>[] = [];
 
-		Object.entries(localJournelsByLocalId).forEach(([localId, journel]) => {
-			if (journel.id) {
-				if (serverJournelsById[journel.id]) {
-					localJournelsById[journel.id] = [localId, journel];
+		Object.entries(localJournelsByLocalId).forEach(([localId, localJournel]) => {
+			if (localJournel.id && localJournel.userId) {
+				if (serverJournelsById[localJournel.id]) {
+					localJournelsById[localJournel.id] = [localId, localJournel];
 				} else {
-					localJournelsToDeleteById.push([localId, journel]);
+					localJournelsToDelete.push([localId, localJournel]);
 				}
 			} else {
-				localJournelsToCreateByLocalId.push([localId, journel]);
+				localJournelsToCreate.push([localId, localJournel]);
 			}
 		});
 
@@ -115,30 +115,29 @@ async function syncJournels(localJournelsByLocalId: Record<string, Journel>, _us
 			const localEntry = localJournelsById[serverJournel.id];
 
 			if (localEntry) {
-				const [localId, localJournel] = localEntry,
-					serverUpdatedAt = new Date(serverJournel.updatedAt),
-					localUpdatedAt = new Date(localJournel.updatedAt);
+				const [localId, localJournel] = localEntry;
 
-				if (serverUpdatedAt !== localUpdatedAt) {
-					const isServerUpdate = serverUpdatedAt > localUpdatedAt,
-						requestBody = isServerUpdate
-							? journelChanges(localJournel, serverJournel)
-							: journelChanges(serverJournel, localJournel);
+				if (serverJournel.updatedAt !== localJournel.updatedAt) {
+					const serverUpdatedAt = new Date(serverJournel.updatedAt),
+						localUpdatedAt = new Date(localJournel.updatedAt);
 
-					if (isEmptyObject(requestBody)) {
-						journelsLocal.set(localId, isServerUpdate ? serverJournel : localJournel);
+					if (serverUpdatedAt > localUpdatedAt) {
 						promises.push(
-							Promise.resolve([localId, isServerUpdate ? serverJournel : localJournel, true])
+							journelsLocal.set(localId, serverJournel).then(() => [localId, serverJournel])
 						);
 					} else {
-						promises.push(
-							JournelService.quantuAppWebControllerJournelUpdate(
-								serverJournel.id,
-								requestBody
-							).then((journel) =>
-								journelsLocal.set(localId, journel).then(() => [localId, journel, true])
-							)
-						);
+						const requestBody = journelChanges(serverJournel, localJournel);
+
+						if (!isEmptyObject(requestBody)) {
+							promises.push(
+								JournelService.quantuAppWebControllerJournelUpdate(
+									serverJournel.id,
+									requestBody
+								).then((journel) =>
+									journelsLocal.set(localId, journel).then(() => [localId, journel])
+								)
+							);
+						}
 					}
 				}
 			} else {
@@ -146,31 +145,31 @@ async function syncJournels(localJournelsByLocalId: Record<string, Journel>, _us
 					journelsLocal
 						.createTableId()
 						.then((localId) =>
-							journelsLocal.set(localId, serverJournel).then(() => [localId, serverJournel, true])
+							journelsLocal.set(localId, serverJournel).then(() => [localId, serverJournel])
 						)
 				);
 			}
 		});
 
-		localJournelsToCreateByLocalId.forEach(([localId, localJournel]) => {
+		localJournelsToCreate.forEach(([localId, localJournel]) => {
 			promises.push(
 				JournelService.quantuAppWebControllerJournelCreate(localJournel).then((journel) =>
-					journelsLocal.set(localId, journel).then(() => [localId, journel, true])
+					journelsLocal.set(localId, journel).then(() => [localId, journel])
 				)
 			);
 		});
-		localJournelsToDeleteById.forEach(([localId, journel]) => {
-			promises.push(journelsLocal.remove(localId).then(() => [localId, journel, false]));
+		localJournelsToDelete.forEach(([localId, journel]) => {
+			promises.push(journelsLocal.remove(localId).then(() => [localId, journel, true]));
 		});
 
 		const journelUpdates = await Promise.all(promises);
 
 		journelsWritable.update((state) =>
-			journelUpdates.reduce((state, [localId, journel, add]) => {
-				if (add) {
-					state[localId] = journel;
-				} else {
+			journelUpdates.reduce((state, [localId, journel, remove]) => {
+				if (remove) {
 					delete state[localId];
+				} else {
+					state[localId] = journel;
 				}
 				return state;
 			}, state)
@@ -197,7 +196,7 @@ function journelChanges(prev: Journel, next: Journel) {
 	if (!deepEqual(prev.tags, next.tags)) {
 		updates.tags = next.tags;
 	}
-	if (deepEqual(prev.content, next.content)) {
+	if (!deepEqual(prev.content, next.content)) {
 		updates.content = next.content;
 	}
 	return updates;
@@ -205,21 +204,28 @@ function journelChanges(prev: Journel, next: Journel) {
 
 if (typeof window === 'object') {
 	userEmitter.on('signIn', (user) =>
-		journelsLocal.all().then((localJournels) => syncJournels(localJournels, user))
+		journelsLocal
+			.all((journel) => journel.userId === user.id || !journel.userId)
+			.then((localJournels) => syncJournels(localJournels, user))
 	);
 
 	journelsLocal.all().then((journels) => {
+		const user = getCurrentUser();
+
+		Object.entries(journels).forEach(([localId, journel]) => {
+			if (journel.userId && user && journel.userId !== user.id) {
+				delete journels[localId];
+			}
+		});
+
 		journelsWritable.update((state) =>
-			Object.entries(journels).reduce(
-				(state, [localId, journel]) => ({
-					...state,
-					[localId]: journel
-				}),
-				state
-			)
+			Object.entries(journels).reduce((state, [localId, journel]) => {
+				state[localId] = journel;
+				return state;
+			}, state)
 		);
-		if (isSignedIn()) {
-			syncJournels(journels, getCurrentUser());
+		if (user) {
+			syncJournels(journels, user);
 		}
 	});
 }

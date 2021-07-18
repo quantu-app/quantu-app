@@ -51,13 +51,21 @@ export async function fetchCurrentUser() {
 	const currentUser = getCurrentUser();
 
 	if (currentUser && currentUser.token) {
-		const headers = OpenAPI.HEADERS || (OpenAPI.HEADERS = {});
-		headers['authorization'] = `Bearer ${currentUser.token}`;
-		const user = await AuthService.quantuAppWebControllerAuthCurrent();
-		await signInUser(user);
+		try {
+			setAuthToken(currentUser);
+			const user = await AuthService.quantuAppWebControllerAuthCurrent();
+			await signInUser(user);
+		} catch {
+			await signOutUser();
+		}
 	} else {
 		await signOutUser();
 	}
+}
+
+function setAuthToken(currentUser: User) {
+	const headers = OpenAPI.HEADERS || (OpenAPI.HEADERS = {});
+	headers['authorization'] = `Bearer ${currentUser.token}`;
 }
 
 async function signInUser(currentUser: User) {
@@ -73,7 +81,8 @@ async function signInUser(currentUser: User) {
 		return users;
 	});
 	await usersLocal.batch(Object.entries(get(users)));
-	userEmitter.emit('signIn', getCurrentUser());
+	setAuthToken(currentUser);
+	userEmitter.emit('signIn', currentUser);
 }
 
 async function signOutUser() {

@@ -72,23 +72,23 @@
 				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" />
 			</div>
 			<div class="modal-body">
-				<div class="input-group">
-					<h3>
-						{isSigningIn ? 'Not a member?' : 'Already a member?'}
-						<button
-							type="button"
-							on:click={() => (isSigningIn = !isSigningIn)}
-							class="btn btn-primary">Sign {isSigningIn ? 'up' : 'in'}</button
-						>
-					</h3>
+				<h3>
+					{isSigningIn ? 'Not a member?' : 'Already a member?'}
+					<button
+						type="button"
+						on:click={() => (isSigningIn = !isSigningIn)}
+						class="btn btn-primary">Sign {isSigningIn ? 'up' : 'in'}</button
+					>
+				</h3>
+				<form on:submit|preventDefault>
 					{#if isSigningIn}
 						<div>
-							<label for="modal-username-or-email" class="form-label">Username or Email</label>
+							<label for="modal-username-or-email" class="form-label">Username</label>
 							<input
 								id="modal-username-or-email"
 								type="text"
 								class="form-control"
-								placeholder="Username or Email"
+								placeholder="Username"
 								bind:value={usernameOrEmail}
 							/>
 						</div>
@@ -124,7 +124,11 @@
 							/>
 						</div>
 						<div>
+							<label for="modal-password-confirmation" class="form-label"
+								>Password Confirmation</label
+							>
 							<input
+								id="modal-password-confirmation"
 								type="password"
 								class="form-control"
 								placeholder="Password Confirmation"
@@ -132,11 +136,14 @@
 							/>
 						</div>
 					{/if}
-				</div>
+				</form>
 			</div>
 			<div class="modal-footer">
-				<button type="button" disabled={loading} on:click={onSignInUp} class="btn btn-primary"
-					>Sign {isSigningIn ? 'in' : 'up'}</button
+				<button type="button" disabled={loading} on:click={onSignInUp} class="btn btn-primary">
+					{#if loading}
+						<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" />
+					{/if}
+					Sign {isSigningIn ? 'in' : 'up'}</button
 				>
 				<button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
 			</div>

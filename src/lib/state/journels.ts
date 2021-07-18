@@ -4,8 +4,8 @@ import { get, writable } from 'svelte/store';
 import { isOnline } from './online';
 import { LocalJSON } from './LocalJSON';
 import { getCurrentUser, isSignedIn, userEmitter } from './user';
-import { getLocationName } from '$lib/utils';
-import diff from 'object-diff';
+import { getLocationName, isEmptyObject } from '$lib/utils';
+import { deepEqual } from 'fast-equals';
 
 const journelsLocal = new LocalJSON<Journel>('journels'),
 	journelsWritable = writable<Record<string, Journel>>({});
@@ -122,14 +122,19 @@ async function syncJournels(localJournelsByLocalId: Record<string, Journel>, _us
 				if (serverUpdatedAt !== localUpdatedAt) {
 					const requestBody =
 						serverUpdatedAt > localUpdatedAt
-							? diff(localJournel, serverJournel)
-							: diff(serverJournel, localJournel);
+							? journelChanges(localJournel, serverJournel)
+							: journelChanges(serverJournel, localJournel);
 
-					promises.push(
-						JournelService.quantuAppWebControllerJournelUpdate(serverJournel.id, requestBody).then(
-							(journel) => journelsLocal.set(localId, journel).then(() => [localId, journel, true])
-						)
-					);
+					if (!isEmptyObject(requestBody)) {
+						promises.push(
+							JournelService.quantuAppWebControllerJournelUpdate(
+								serverJournel.id,
+								requestBody
+							).then((journel) =>
+								journelsLocal.set(localId, journel).then(() => [localId, journel, true])
+							)
+						);
+					}
 				}
 			} else {
 				promises.push(
@@ -168,6 +173,29 @@ async function syncJournels(localJournelsByLocalId: Record<string, Journel>, _us
 	} finally {
 		syncing = false;
 	}
+}
+
+function journelChanges(prev: Journel, next: Journel) {
+	const updates: Partial<Journel> = {};
+	if (prev.name !== next.name) {
+		updates.name = next.name;
+	}
+	if (prev.location !== next.location) {
+		updates.location = next.location;
+	}
+	if (prev.wordCount !== next.wordCount) {
+		updates.wordCount = next.wordCount;
+	}
+	if (prev.language !== next.language) {
+		updates.language = next.language;
+	}
+	if (!deepEqual(prev.tags, next.tags)) {
+		updates.tags = next.tags;
+	}
+	if (deepEqual(prev.content, next.content)) {
+		updates.content = next.content;
+	}
+	return updates;
 }
 
 if (typeof window === 'object') {

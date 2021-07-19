@@ -10,8 +10,12 @@ RUN npm install
 ARG VITE_QUANTU_API_URL=https://api.quantu.app
 ENV VITE_QUANTU_API_URL=$VITE_QUANTU_API_URL
 
+ARG VITE_QUANTU_WS_URL=wss://api.quantu.app
+ENV VITE_QUANTU_WS_URL=$VITE_QUANTU_WS_URL
+
 COPY . .
-RUN echo "VITE_QUANTU_API_URL=$VITE_QUANTU_API_URL" > .env
+RUN echo "VITE_QUANTU_API_URL=$VITE_QUANTU_API_URL" >> .env && \
+  echo "VITE_QUANTU_WS_URL=$VITE_QUANTU_WS_URL" >> .env
 
 RUN NODE_ENV=production npm run web.build
 

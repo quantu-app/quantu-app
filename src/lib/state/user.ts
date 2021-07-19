@@ -80,7 +80,7 @@ async function signInUser(currentUser: User) {
 		users[currentUser.id] = currentUser;
 		return users;
 	});
-	await usersLocal.batch(Object.entries(get(users)));
+	await Promise.all(Object.values(get(users)).map((user) => usersLocal.set(user.id, user)));
 	setAuthToken(currentUser);
 	userEmitter.emit('signIn', currentUser);
 }
@@ -97,7 +97,7 @@ async function signOutUser() {
 			state
 		)
 	);
-	await usersLocal.batch(Object.entries(get(users)));
+	await Promise.all(Object.values(get(users)).map((user) => usersLocal.set(user.id, user)));
 	userEmitter.emit('signOut');
 }
 

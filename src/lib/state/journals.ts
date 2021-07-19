@@ -86,7 +86,7 @@ function emptyJournal(): Journal {
 }
 
 let syncing = false;
-async function syncJournals(localJournalsByLocalId: Record<string, Journal>, _user: User) {
+async function syncJournals(localJournalsByLocalId: Record<string, Journal>) {
 	if (syncing) {
 		return;
 	}
@@ -136,12 +136,16 @@ async function syncJournals(localJournalsByLocalId: Record<string, Journal>, _us
 								JournalService.quantuAppWebControllerJournalUpdate(
 									serverJournal.id,
 									requestBody
-								).then((journal) =>
-									journalsLocal.set(localId, journal).then(() => [localId, journal])
+								).then((updatedJournal) =>
+									journalsLocal.set(localId, updatedJournal).then(() => [localId, updatedJournal])
 								)
 							);
 						}
 					}
+				} else {
+					promises.push(
+						journalsLocal.set(localId, serverJournal).then(() => [localId, serverJournal])
+					);
 				}
 			} else {
 				promises.push(
@@ -177,6 +181,15 @@ async function syncJournals(localJournalsByLocalId: Record<string, Journal>, _us
 				return state;
 			}, state)
 		);
+
+		const allIds = new Set(await journalsLocal.getIds()),
+			activeIds = new Set(Object.keys(get(journalsWritable)));
+
+		for (const id of activeIds) {
+			allIds.delete(id);
+		}
+
+		await Promise.all([...allIds].map((id) => journalsLocal.remove(id)));
 	} finally {
 		syncing = false;
 		journalEmitter.emit('sync');
@@ -210,26 +223,39 @@ if (typeof window === 'object') {
 	userEmitter.on('signIn', (user) =>
 		journalsLocal
 			.all((journal) => journal.userId === user.id || !journal.userId)
-			.then((localJournals) => syncJournals(localJournals, user))
+			.then((localJournals) => syncJournals(localJournals))
+	);
+	userEmitter.on('signOut', () =>
+		journalsLocal
+			.all((journal) => !journal.userId)
+			.then((localJournals) =>
+				journalsWritable.update(() =>
+					Object.entries(localJournals).reduce((state, [localId, journal]) => {
+						state[localId] = journal;
+						return state;
+					}, {})
+				)
+			)
 	);
 
 	journalsLocal.all().then((journals) => {
 		const user = getCurrentUser();
 
 		Object.entries(journals).forEach(([localId, journal]) => {
-			if (journal.userId && user && journal.userId !== user.id) {
+			if (user ? journal.userId !== user.id : journal.userId) {
 				delete journals[localId];
 			}
 		});
 
-		journalsWritable.update((state) =>
+		journalsWritable.update(() =>
 			Object.entries(journals).reduce((state, [localId, journal]) => {
 				state[localId] = journal;
 				return state;
-			}, state)
+			}, {})
 		);
+
 		if (user) {
-			syncJournals(journals, user);
+			syncJournals(journals);
 		}
 	});
 }

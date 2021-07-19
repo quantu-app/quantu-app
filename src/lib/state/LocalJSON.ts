@@ -10,7 +10,7 @@ export class LocalJSON<T> {
 		this.regex = new RegExp(`\\b${table}\\b/(.*)`);
 	}
 
-	async getKeys() {
+	async getIds() {
 		const fullKeys = await localforage.keys(),
 			keys: string[] = [];
 
@@ -25,7 +25,7 @@ export class LocalJSON<T> {
 	}
 
 	async createTableId() {
-		const keys = new Set(await this.getKeys());
+		const keys = new Set(await this.getIds());
 		let key = v4();
 		while (keys.has(key)) {
 			key = v4();
@@ -36,7 +36,7 @@ export class LocalJSON<T> {
 	all(filter: (value: T, key: string) => boolean = () => true) {
 		const records: Record<string, T> = {};
 
-		return new Promise<Record<string, T>>((resolve) =>
+		return new Promise<Record<string, T>>((resolve, reject) =>
 			localforage.iterate(
 				(json: string, fullKey) => {
 					const match = fullKey.match(this.regex);
@@ -50,8 +50,7 @@ export class LocalJSON<T> {
 				},
 				(error) => {
 					if (error) {
-						console.error(error);
-						return records;
+						reject(error);
 					} else {
 						resolve(records);
 					}
@@ -67,10 +66,6 @@ export class LocalJSON<T> {
 
 	async set(key: string, value: T) {
 		await localforage.setItem(`${this.table}/${key}`, this.valueToJSON(value));
-	}
-
-	async batch(values: Array<[string, T]>) {
-		await Promise.all(values.map(([key, value]) => this.set(key, value)));
 	}
 
 	async remove(key: string) {

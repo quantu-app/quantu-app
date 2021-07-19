@@ -40,9 +40,25 @@
 		<div class="d-flex flex-column align-items-center flex-shrink-0">
 			<div class="d-flex">
 				{#if $currentUser}
-					<button type="button" class="btn btn-light" on:click={signOut}>
-						<i class="bi bi-person-circle" />
-					</button>
+					<div class="dropdown">
+						<button
+							id="dropdown-user"
+							class="btn btn-ghost dropdown-toggle"
+							type="button"
+							data-bs-toggle="dropdown"
+							aria-expanded="false"
+						>
+							<i class="bi bi-person-circle" />
+						</button>
+						<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdown-user">
+							<li><span class="dropdown-item disabled">{$currentUser.username}</span></li>
+							<li>
+								<button type="button" class="dropdown-item" aria-label="Sign out" on:click={signOut}
+									>Sign out</button
+								>
+							</li>
+						</ul>
+					</div>
 				{:else}
 					<button
 						type="button"

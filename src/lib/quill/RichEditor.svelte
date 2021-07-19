@@ -106,17 +106,23 @@
 	aria-labelledby="delete-journal-label"
 	aria-hidden="true"
 >
-	<div class="modal-dialog">
+	<div class="modal-dialog modal-lg">
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="btn-close" aria-label="Close" data-bs-dismiss="modal" />
 			</div>
 			<div class="modal-body">
+				<p>
+					This uses latex to display math, click <a
+						href="https://katex.org/docs/supported.html"
+						target="_blank">here</a
+					> for help
+				</p>
 				<div class="input-group mb-2">
-					<textarea class="input form-control" placeholder="Type Latex Math." />
+					<textarea class="input form-control" placeholder="Type Latex" />
 				</div>
 				<div class="input-group">
-					<div class="output" />
+					<div class="output w-100" />
 				</div>
 			</div>
 			<div class="modal-footer">

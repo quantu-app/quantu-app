@@ -11,6 +11,10 @@
 	h3 {
 		font-size: 1.5rem !important;
 	}
+
+	.katex-display {
+		margin: 0;
+	}
 }
 
 .ql-container,
@@ -27,8 +31,8 @@
 	border-bottom: 1px solid #ccc !important;
 }
 
-.ql-editor pre.ql-syntax {
-	border: 1px solid #ebedef;
+.ql-editor .ql-code-block-container {
+	border: 1px solid #ebedef !important;
 	background-color: #f6f8fa !important;
 	color: $body-color !important;
 }

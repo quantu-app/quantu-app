@@ -3,8 +3,14 @@ import Delta from 'quill-delta';
 
 function renderkatex(node: HTMLElement, value: string) {
 	window.katex.render(value, node, {
+		displayMode: true,
+		leqno: false,
+		fleqn: false,
 		throwOnError: false,
-		errorColor: '#f00'
+		strict: 'warn',
+		output: 'html',
+		trust: false,
+		macros: { '\\f': '#1f(#2)' }
 	});
 }
 
@@ -67,11 +73,12 @@ export function registerMathBlock(quill: typeof Quill) {
 		static tagName = 'DIV';
 
 		static create(value: string) {
-			const node = super.create(value);
+			const node: HTMLDivElement = super.create(value);
 			renderkatex(node, value);
 			if (value) {
 				node.setAttribute('data-value', value);
 			}
+			node.style.backgroundColor = '#f6f8fa';
 			return node;
 		}
 

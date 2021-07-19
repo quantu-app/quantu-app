@@ -10,6 +10,7 @@
 
 	let text = journal.content;
 	let prevLocalId = localId;
+	let innerWidth: number;
 
 	function onNameChange(e: Event) {
 		const name = (e.currentTarget as HTMLInputElement).value;
@@ -58,11 +59,15 @@
 	});
 </script>
 
+<svelte:window bind:innerWidth />
+
 <div class="container-fluid mt-2">
 	<div class="row justify-content-between align-items-end">
 		<div class="col-auto">
 			<h2 class="d-inline">{journal.name}</h2>
-			<h4 class="d-inline">- {journal.location}</h4>
+			{#if innerWidth >= 1200}
+				<h4 class="d-inline">- {journal.location}</h4>
+			{/if}
 		</div>
 		<div class="col-auto flex-grow-1" />
 		<div class="col-auto">

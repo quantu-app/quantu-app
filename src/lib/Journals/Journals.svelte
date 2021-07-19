@@ -60,8 +60,13 @@
 	});
 </script>
 
-<SearchBar bind:journalNameFilter={$state.journalNameFilter} />
+<div class="container-md">
+	<SearchBar bind:journalNameFilter={$state.journalNameFilter} />
+</div>
 
-<DeleteJournal {journalToDelete} {onDeleteJournal} />
+<hr class="mt-2" />
 
-<JournalList journals={list} {createOnDelete} />
+<div class="container-md">
+	<JournalList journals={list} {createOnDelete} />
+	<DeleteJournal {journalToDelete} {onDeleteJournal} />
+</div>

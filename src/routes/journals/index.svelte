@@ -17,7 +17,5 @@
 </svelte:head>
 
 <Layout>
-	<div class="container-md">
-		<Journals />
-	</div>
+	<Journals />
 </Layout>

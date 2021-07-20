@@ -4,7 +4,7 @@ import { get, writable, derived } from 'svelte/store';
 import { isOnline, onlineEmitter } from './online';
 import { LocalJSON } from './LocalJSON';
 import EventEmitter from 'eventemitter3';
-import Phoenix from 'phoenix';
+import * as Phoenix from 'phoenix';
 
 const usersLocal = new LocalJSON<User>('users'),
 	usersWritable = writable<Record<string, User>>({}),
@@ -101,8 +101,7 @@ async function signInUser(currentUser: User) {
 }
 
 function removeUserSocket() {
-	const socket = get(socketWritable);
-	socket.disconnect();
+	get(socketWritable)?.disconnect();
 	socketWritable.set(null);
 }
 

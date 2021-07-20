@@ -8,6 +8,7 @@ import type katex from 'katex';
 
 interface ImportMetaEnv {
 	VITE_QUANTU_API_URL: string;
+	VITE_QUANTU_WS_URL: string;
 }
 
 interface Window {

@@ -4,11 +4,11 @@ import { get, writable, derived } from 'svelte/store';
 import { isOnline, onlineEmitter } from './online';
 import { LocalJSON } from './LocalJSON';
 import EventEmitter from 'eventemitter3';
-import * as Phoenix from 'phoenix';
+import type { Socket } from 'phoenix';
 
 const usersLocal = new LocalJSON<User>('users'),
 	usersWritable = writable<Record<string, User>>({}),
-	socketWritable = writable<Phoenix.Socket>();
+	socketWritable = writable<Socket>();
 
 export const users: Readable<Record<string, User>> = { subscribe: usersWritable.subscribe };
 export const currentUser = derived(usersWritable, (users) =>
@@ -74,8 +74,9 @@ function setAuthToken(currentUser: User) {
 	headers['authorization'] = `Bearer ${currentUser.token}`;
 }
 
-function setUserSocket(currentUser: User) {
-	const socket = new Phoenix.Socket(`${import.meta.env.VITE_QUANTU_WS_URL}/socket`, {
+async function setUserSocket(currentUser: User) {
+	const { Socket } = await import('phoenix');
+	const socket = new Socket(`${import.meta.env.VITE_QUANTU_WS_URL}/socket`, {
 		params: { token: currentUser.token }
 	});
 	socket.onOpen(() => socketWritable.set(socket));
@@ -96,7 +97,7 @@ async function signInUser(currentUser: User) {
 	});
 	await Promise.all(Object.values(get(users)).map((user) => usersLocal.set(user.id, user)));
 	setAuthToken(currentUser);
-	setUserSocket(currentUser);
+	await setUserSocket(currentUser);
 	userEmitter.emit('signIn', currentUser);
 }
 

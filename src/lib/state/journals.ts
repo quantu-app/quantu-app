@@ -1,4 +1,4 @@
-import { Journal, JournalService, User } from '$lib/api/quantu-app-api';
+import { Journal, JournalService } from '$lib/api/quantu-app-api';
 import type { Readable } from 'svelte/store';
 import { get, writable } from 'svelte/store';
 import { isOnline } from './online';

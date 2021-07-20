@@ -6,7 +6,7 @@
 			}
 		],
 		['bold', 'italic', 'underline', 'strike'],
-		['blockquote', 'code-block', 'math-block'],
+		['code-block', 'math-block'],
 		[
 			{
 				list: 'ordered'

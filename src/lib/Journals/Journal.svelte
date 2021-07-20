@@ -69,15 +69,16 @@
 				<h4 class="d-inline">- {journal.location}</h4>
 			{/if}
 		</div>
-		<div class="col-auto flex-grow-1" />
-		<div class="col-auto">
-			<p class="mb-0">Words: {journal.wordCount}</p>
-		</div>
+		{#if innerWidth >= 480}
+			<div class="col-auto ms-auto">
+				<p class="mb-0">Words: {journal.wordCount}</p>
+			</div>
+		{/if}
 		<div class="col-auto">
 			<button
 				type="button"
 				role="button"
-				class="btn btn-primary"
+				class="btn btn-sm btn-primary"
 				data-bs-toggle="modal"
 				data-bs-target="#journal-settings"
 				aria-label="Journal Settings"><i class="bi bi-gear" /></button
@@ -101,6 +102,9 @@
 				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" />
 			</div>
 			<div class="modal-body">
+				<div class="mb-4">
+					<p>Words: {journal.wordCount}</p>
+				</div>
 				<div class="mb-4">
 					<label for="settings-journal-name" class="form-label">Title</label>
 					<input

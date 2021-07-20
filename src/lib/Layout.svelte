@@ -27,18 +27,13 @@
 	}
 </script>
 
-<div class="container-fluid">
-	<div class="d-flex flex-row">
+<div class="container-fluid h-100">
+	<div class="d-flex flex-row h-100">
 		<div class="d-flex flex-column align-items-center flex-shrink-0">
 			<div class="d-flex">
 				<a type="button" class="logo btn btn-ghost" href="/"><strong>Q[U]</strong></a>
 			</div>
-		</div>
-		<div class="d-flex flex-column flex-grow-1">
-			<slot />
-		</div>
-		<div class="d-flex flex-column align-items-center flex-shrink-0">
-			<div class="d-flex">
+			<div class="d-flex mt-auto">
 				{#if $currentUser}
 					<div class="dropdown">
 						<button
@@ -70,6 +65,9 @@
 					</button>
 				{/if}
 			</div>
+		</div>
+		<div class="d-flex flex-column flex-grow-1">
+			<slot />
 		</div>
 	</div>
 </div>

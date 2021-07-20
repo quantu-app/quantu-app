@@ -4,11 +4,11 @@ import { get, writable, derived } from 'svelte/store';
 import { isOnline, onlineEmitter } from './online';
 import { LocalJSON } from './LocalJSON';
 import EventEmitter from 'eventemitter3';
-import { Socket } from 'phoenix';
+import Phoenix from 'phoenix';
 
 const usersLocal = new LocalJSON<User>('users'),
 	usersWritable = writable<Record<string, User>>({}),
-	socketWritable = writable<Socket>();
+	socketWritable = writable<Phoenix.Socket>();
 
 export const users: Readable<Record<string, User>> = { subscribe: usersWritable.subscribe };
 export const currentUser = derived(usersWritable, (users) =>
@@ -75,7 +75,7 @@ function setAuthToken(currentUser: User) {
 }
 
 function setUserSocket(currentUser: User) {
-	const socket = new Socket(`${import.meta.env.VITE_QUANTU_WS_URL}/socket`, {
+	const socket = new Phoenix.Socket(`${import.meta.env.VITE_QUANTU_WS_URL}/socket`, {
 		params: { token: currentUser.token }
 	});
 	socket.onOpen(() => socketWritable.set(socket));

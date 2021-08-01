@@ -1,11 +1,11 @@
-# QuantU
+# Org AppName
 
-This is the main application repository for QuantU.
+This is the main application repository for Org AppName.
 
 ## Deployment
 
 ```bash
-export KUBECONFIG=~/my/path/to/quantu-kubeconfig.yaml
+export KUBECONFIG=~/my/path/to/appname-kubeconfig.yaml
 ```
 
 ## Todo

@@ -3,7 +3,7 @@
 	import Notifications from '$lib/Notifications.svelte';
 	import '../app.scss';
 
-	OpenAPI.BASE = import.meta.env.VITE_QUANTU_API_URL as string;
+	OpenAPI.BASE = import.meta.env.VITE_API_URL as string;
 </script>
 
 <Notifications />

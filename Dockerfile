@@ -1,27 +1,29 @@
 FROM node:14-alpine as builder
 
-RUN npm install -g npm@7.20.0
+RUN apk add --no-cache python3 g++ make
+RUN npm install -g npm@7.20.3
 
 WORKDIR /app
 
 COPY package*.json ./
 RUN npm install
 
-ARG VITE_QUANTU_API_URL=https://api.quantu.app
-ENV VITE_QUANTU_API_URL=$VITE_QUANTU_API_URL
+ARG VITE_API_URL=https://api.main.quantu.app
+ENV VITE_API_URL=$VITE_API_URL
 
-ARG VITE_QUANTU_WS_URL=wss://api.quantu.app
-ENV VITE_QUANTU_WS_URL=$VITE_QUANTU_WS_URL
+ARG VITE_WS_URL=wss://api.main.quantu.app
+ENV VITE_WS_URL=$VITE_WS_URL
 
 COPY . .
-RUN echo "VITE_QUANTU_API_URL=$VITE_QUANTU_API_URL" >> .env && \
-  echo "VITE_QUANTU_WS_URL=$VITE_QUANTU_WS_URL" >> .env
+RUN echo "VITE_API_URL=$VITE_API_URL" >> .env && \
+  echo "VITE_WS_URL=$VITE_WS_URL" >> .env
 
 RUN NODE_ENV=production npm run web.build
 
 FROM node:14-alpine
 
-RUN npm install -g npm@7.20.0
+RUN apk add --no-cache python3 g++ make
+RUN npm install -g npm@7.20.3
 
 WORKDIR /app
 

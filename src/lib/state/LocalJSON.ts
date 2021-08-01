@@ -3,7 +3,7 @@ import localforage from 'localforage';
 
 export class LocalJSON<T> {
 	private regex: RegExp;
-	protected table: string;
+	private table: string;
 
 	constructor(table: string) {
 		this.table = table;

@@ -1,11 +1,12 @@
 <script lang="ts">
+	import Organizations from '$lib/Organizations/Organizations.svelte';
 	import Layout from '$lib/Layout.svelte';
 </script>
 
 <svelte:head>
-	<title>Home</title>
+	<title>Organizations</title>
 </svelte:head>
 
 <Layout>
-	<div />
+	<Organizations />
 </Layout>

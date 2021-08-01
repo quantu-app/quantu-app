@@ -76,4 +76,19 @@ export class AuthService {
         return result.body;
     }
 
+    /**
+     * Signs in the Current User
+     * Returns the current user
+     *
+     * @returns User User Response
+     * @throws ApiError
+     */
+    public static async quantuAppWebControllerAuthCallback(): Promise<User> {
+        const result = await __request({
+            method: 'GET',
+            path: `/auth/${provider}/callback`,
+        });
+        return result.body;
+    }
+
 }

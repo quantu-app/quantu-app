@@ -1,7 +1,7 @@
 {
-	"name": "quantu",
+	"name": "@quantu/app",
 	"version": "0.1.0",
-	"description": "This is the main application repository for QuantU.",
+	"description": "This is the main application repository for QuantU App.",
 	"author": {
 		"name": "Nathan Faucett",
 		"email": "nathanfaucett@gmail.com"
@@ -11,7 +11,7 @@
 		"node": "14"
 	},
 	"build": {
-		"appId": "app.quantu.main",
+		"appId": "quantu.app",
 		"files": [
 			"package.json",
 			"electron.cjs"
@@ -36,12 +36,12 @@
 		"desktop.linux": "electron-builder -l",
 		"desktop.mac": "npm run web.build && electron-builder -m --dir -c.compression=store -c.mac.identity=null",
 		"desktop.windows": "npm run web.build && electron-builder -w",
-		"docker.build": "docker build -t docker.pkg.github.com/quantu-app/quantu-app/quantu-app-ui:latest .",
-		"docker.push": "docker push docker.pkg.github.com/quantu-app/quantu-app/quantu-app-ui:latest",
-		"docker.run": "docker run --name quantu --rm -it -p 3000:3000 docker.pkg.github.com/quantu-app/quantu-app/quantu-app-ui:latest",
-		"docker.stop": "docker stop quantu",
-		"helm.delete": "helm delete -n ui quantu",
-		"helm.upgrade": "helm upgrade quantu helm/quantu -n ui --install --set image.hash=\"$(docker inspect --format='{{index .Id}}' docker.pkg.github.com/quantu-app/quantu-app/quantu-app-ui:latest)\"",
+		"docker.build": "docker build -t docker.pkg.github.com/quantu-app/app/quantu-app-ui:latest .",
+		"docker.push": "docker push docker.pkg.github.com/quantu-app/app/quantu-app-ui:latest",
+		"docker.run": "docker run --name quantu-app --rm -it -p 3000:3000 docker.pkg.github.com/quantu-app/app/quantu-app-ui:latest",
+		"docker.stop": "docker stop quantu-app",
+		"helm.delete": "helm delete -n ui quantu-app",
+		"helm.upgrade": "helm upgrade quantu-app helm/quantu-app-ui -n ui --install --set image.hash=\"$(docker inspect --format='{{index .Id}}' docker.pkg.github.com/quantu-app/app/quantu-app-ui:latest)\"",
 		"helm": "npm run docker.build && npm run docker.push && npm run helm.upgrade",
 		"check": "svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-check --tsconfig ./tsconfig.json --watch",
@@ -52,44 +52,42 @@
 	"devDependencies": {
 		"@sveltejs/adapter-node": "next",
 		"@types/bootstrap": "^5.0.17",
-		"@types/highlight.js": "^10.1.0",
 		"@types/katex": "^0.11.1",
 		"@types/phoenix": "^1.5.2",
-		"@types/quill": "^2.0.9",
+		"@types/quill": "2.0.4",
 		"@types/uuid": "^8.3.1",
-		"@typescript-eslint/eslint-plugin": "^4.28.3",
-		"@typescript-eslint/parser": "^4.28.3",
+		"@typescript-eslint/eslint-plugin": "^4.28.5",
+		"@typescript-eslint/parser": "^4.28.5",
 		"bootstrap": "^5.0.2",
 		"electron": "^13.1.7",
 		"electron-builder": "^22.11.7",
 		"eslint": "^7.31.0",
 		"eslint-config-prettier": "^8.3.0",
 		"eslint-plugin-svelte3": "^3.2.0",
-		"install": "^0.13.0",
 		"openapi-typescript-codegen": "^0.9.3",
 		"prettier": "^2.3.2",
 		"prettier-plugin-svelte": "^2.3.1",
-		"sass": "^1.35.2",
+		"sass": "^1.36.0",
 		"svelte-check": "^2.2.3",
 		"svelte-preprocess": "^4.7.4",
 		"tslib": "^2.3.0",
 		"typescript": "^4.3.5",
-		"vite": "^2.4.2"
+		"vite": "^2.4.4"
 	},
 	"dependencies": {
 		"@aicacia/debounce": "^0.1.9",
 		"@aicacia/string-fuzzy_equals": "^0.1.2",
+		"@aicacia/quill-rich-editor": "aicacia/ts-quill-rich-editor#9214a995d0dfb971b58ae486662048cc4ba0a078",
 		"@sveltejs/kit": "next",
 		"eventemitter3": "^4.0.7",
 		"fast-equals": "^2.0.3",
 		"find-open-port": "^2.0.3",
 		"katex": "^0.13.11",
 		"localforage": "^1.9.0",
-		"pascal-case": "^3.1.2",
 		"phoenix": "^1.5.9",
-		"quill": "^2.0.0-dev.4",
+		"quill": "2.0.0-dev.4",
 		"quill-delta": "^4.2.2",
-		"svelte": "^3.38.3",
+		"svelte": "^3.41.0",
 		"uuid": "^8.3.2"
 	}
 }

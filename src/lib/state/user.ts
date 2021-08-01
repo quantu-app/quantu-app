@@ -57,27 +57,31 @@ export async function fetchCurrentUser() {
 	const currentUser = getCurrentUser();
 
 	if (currentUser && currentUser.token) {
-		try {
-			setAuthToken(currentUser);
-			const user = await AuthService.quantuAppWebControllerAuthCurrent();
-			await signInUser(user);
-		} catch {
-			await signOutUser();
-		}
+		await signInWithToken(currentUser.token);
 	} else {
 		await signOutUser();
 	}
 }
 
-function setAuthToken(currentUser: User) {
-	const headers = OpenAPI.HEADERS || (OpenAPI.HEADERS = {});
-	headers['authorization'] = `Bearer ${currentUser.token}`;
+export async function signInWithToken(token: string) {
+	try {
+		setAuthToken(token);
+		const user = await AuthService.quantuAppWebControllerAuthCurrent();
+		await signInUser(user);
+	} catch {
+		await signOutUser();
+	}
 }
 
-async function setUserSocket(currentUser: User) {
+function setAuthToken(token: string) {
+	const headers = OpenAPI.HEADERS || (OpenAPI.HEADERS = {});
+	headers['authorization'] = `Bearer ${token}`;
+}
+
+async function setUserSocket(token: string) {
 	const { Socket } = await import('phoenix');
-	const socket = new Socket(`${import.meta.env.VITE_QUANTU_WS_URL}/socket`, {
-		params: { token: currentUser.token }
+	const socket = new Socket(`${import.meta.env.VITE_WS_URL}/socket`, {
+		params: { token }
 	});
 	socket.onOpen(() => socketWritable.set(socket));
 	socket.connect();
@@ -96,8 +100,8 @@ async function signInUser(currentUser: User) {
 		return users;
 	});
 	await Promise.all(Object.values(get(users)).map((user) => usersLocal.set(user.id, user)));
-	setAuthToken(currentUser);
-	await setUserSocket(currentUser);
+	setAuthToken(currentUser.token);
+	await setUserSocket(currentUser.token);
 	userEmitter.emit('signIn', currentUser);
 }
 

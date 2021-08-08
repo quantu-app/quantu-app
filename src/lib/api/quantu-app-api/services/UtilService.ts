@@ -9,7 +9,6 @@ export class UtilService {
     /**
      * Health Check
      * Returns simple json response to see if the server is up and running
-     *
      * @returns HealthCheck Health Check Response
      * @throws ApiError
      */
@@ -24,7 +23,6 @@ export class UtilService {
     /**
      * Health Check
      * Returns simple json response to see if the server is up and running
-     *
      * @returns HealthCheck Health Check Response
      * @throws ApiError
      */

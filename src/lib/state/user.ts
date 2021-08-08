@@ -5,15 +5,26 @@ import { isOnline, onlineEmitter } from './online';
 import { LocalJSON } from './LocalJSON';
 import EventEmitter from 'eventemitter3';
 import type { Socket } from 'phoenix';
+import { load } from './loading';
 
-const usersLocal = new LocalJSON<User>('users'),
-	usersWritable = writable<Record<string, User>>({}),
+interface IUserState extends User {
+	current: boolean;
+}
+
+interface IUsersState {
+	[userId: string]: IUserState;
+}
+
+const usersLocal = new LocalJSON<IUserState>('users'),
+	usersWritable = writable<IUsersState>({}),
 	socketWritable = writable<Socket>();
 
-export const users: Readable<Record<string, User>> = { subscribe: usersWritable.subscribe };
+export const users: Readable<IUsersState> = { subscribe: usersWritable.subscribe };
 export const currentUser = derived(usersWritable, (users) =>
-	Object.values(users).find((user) => user.token != null)
+	Object.values(users).find((user) => user.current)
 );
+export const signedIn = derived(currentUser, (currentUser) => !!currentUser);
+
 export const userEmitter = new EventEmitter<{
 	signIn: (user: User) => void;
 	signOut: () => void;
@@ -32,24 +43,28 @@ export function isSignedIn() {
 }
 
 export async function signIn(username: string, password: string) {
-	const user = await AuthService.quantuAppWebControllerAuthSignInSignIn({
-		usernameOrEmail: username,
-		password
-	});
+	const user = await load(
+		AuthService.quantuAppWebControllerAuthSignInSignIn({
+			usernameOrEmail: username,
+			password
+		})
+	);
 	await signInUser(user);
 }
 
 export async function signUp(username: string, password: string, passwordConfirmation: string) {
-	const user = await AuthService.quantuAppWebControllerAuthSignUpSignUp({
-		username,
-		password,
-		passwordConfirmation
-	});
+	const user = await load(
+		AuthService.quantuAppWebControllerAuthSignUpSignUp({
+			username,
+			password,
+			passwordConfirmation
+		})
+	);
 	await signInUser(user);
 }
 
 export async function signOut() {
-	await AuthService.quantuAppWebControllerAuthDelete();
+	await load(AuthService.quantuAppWebControllerAuthDelete());
 	await signOutUser();
 }
 
@@ -66,7 +81,7 @@ export async function fetchCurrentUser() {
 export async function signInWithToken(token: string) {
 	try {
 		setAuthToken(token);
-		const user = await AuthService.quantuAppWebControllerAuthCurrent();
+		const user = await load(AuthService.quantuAppWebControllerAuthCurrent());
 		await signInUser(user);
 	} catch {
 		await signOutUser();
@@ -92,17 +107,17 @@ async function signInUser(currentUser: User) {
 		const users = Object.entries(state).reduce(
 			(users, [id, user]) => ({
 				...users,
-				[id]: { ...user, token: null }
+				[id]: { ...user, current: false }
 			}),
 			state
 		);
-		users[currentUser.id] = currentUser;
+		users[currentUser.id] = { ...currentUser, current: true };
 		return users;
 	});
-	await Promise.all(Object.values(get(users)).map((user) => usersLocal.set(user.id, user)));
+	await load(Promise.all(Object.values(get(users)).map((user) => usersLocal.set(user.id, user))));
 	setAuthToken(currentUser.token);
-	await setUserSocket(currentUser.token);
 	userEmitter.emit('signIn', currentUser);
+	await setUserSocket(currentUser.token);
 }
 
 function removeUserSocket() {
@@ -117,13 +132,13 @@ async function signOutUser() {
 		Object.entries(state).reduce(
 			(users, [id, user]) => ({
 				...users,
-				[id]: { ...user, token: null }
+				[id]: { ...user, current: false }
 			}),
 			state
 		)
 	);
 	removeUserSocket();
-	await Promise.all(Object.values(get(users)).map((user) => usersLocal.set(user.id, user)));
+	await load(Promise.all(Object.values(get(users)).map((user) => usersLocal.set(user.id, user))));
 	userEmitter.emit('signOut');
 }
 

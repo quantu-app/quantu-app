@@ -11,7 +11,6 @@ export class AuthService {
     /**
      * Sign current User out
      * Signs out the current User based on the bearer token
-     *
      * @returns void
      * @throws ApiError
      */
@@ -26,7 +25,6 @@ export class AuthService {
     /**
      * Gets the Current User
      * Returns the current user based on the bearer token
-     *
      * @returns User Current User Response
      * @throws ApiError
      */
@@ -39,9 +37,7 @@ export class AuthService {
     }
 
     /**
-     * Sign in
      * Signs in user and returns the User with the Bearer Token
-     *
      * @param requestBody Request body to sign in
      * @returns User Sign in User Response
      * @throws ApiError
@@ -58,9 +54,7 @@ export class AuthService {
     }
 
     /**
-     * Sign up
      * Signs up a user and returns the User with the Bearer Token
-     *
      * @param requestBody Request body to sign up
      * @returns User Sign up User Response
      * @throws ApiError
@@ -77,13 +71,32 @@ export class AuthService {
     }
 
     /**
+     * Requests the providers context
+     * Returns the providers context
+     * @param provider Auth Provider
+     * @returns void
+     * @throws ApiError
+     */
+    public static async quantuAppWebControllerAuthRequest(
+        provider: string,
+    ): Promise<void> {
+        const result = await __request({
+            method: 'GET',
+            path: `/auth/${provider}`,
+        });
+        return result.body;
+    }
+
+    /**
      * Signs in the Current User
      * Returns the current user
-     *
+     * @param provider Auth Provider
      * @returns User User Response
      * @throws ApiError
      */
-    public static async quantuAppWebControllerAuthCallback(): Promise<User> {
+    public static async quantuAppWebControllerAuthCallback(
+        provider: string,
+    ): Promise<User> {
         const result = await __request({
             method: 'GET',
             path: `/auth/${provider}/callback`,

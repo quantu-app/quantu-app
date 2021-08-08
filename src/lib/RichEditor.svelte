@@ -33,26 +33,26 @@
 		}
 	}
 
+	function onTextChange() {
+		dispatch(
+			'textchange',
+			arguments as unknown as [delta: Delta, oldContents: Delta, source: Sources]
+		);
+	}
+	function onSelectionChange() {
+		dispatch(
+			'selectionchange',
+			arguments as unknown as [
+				range: { index: number; length: number },
+				oldRange: { index: number; length: number },
+				source: Sources
+			]
+		);
+	}
+
 	onMount(() => {
 		import('@aicacia/quill-rich-editor').then(({ createQuill }) => {
 			quill = createQuill(element);
-
-			function onTextChange() {
-				dispatch(
-					'textchange',
-					arguments as unknown as [delta: Delta, oldContents: Delta, source: Sources]
-				);
-			}
-			function onSelectionChange() {
-				dispatch(
-					'selectionchange',
-					arguments as unknown as [
-						range: { index: number; length: number },
-						oldRange: { index: number; length: number },
-						source: Sources
-					]
-				);
-			}
 
 			quill.on('text-change', onTextChange);
 			quill.on('selection-change', onSelectionChange);

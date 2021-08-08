@@ -3,9 +3,13 @@
 /* eslint-disable */
 
 /**
- * organization show
+ * quiz show
  */
-export type Organization = {
+export type Quiz = {
+    /**
+     * Quiz description
+     */
+    description: string;
     /**
      * Id
      */
@@ -15,19 +19,19 @@ export type Organization = {
      */
     insertedAt: string;
     /**
-     * Organization name
+     * Quiz name
      */
     name: string;
+    /**
+     * Organization Id
+     */
+    organizationId: number;
+    /**
+     * Quiz tags
+     */
+    tags: Array<string>;
     /**
      * Update timestamp
      */
     updatedAt: string;
-    /**
-     * Organization url
-     */
-    url: string;
-    /**
-     * User Id
-     */
-    userId: string;
 }

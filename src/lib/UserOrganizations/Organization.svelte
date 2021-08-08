@@ -1,19 +1,43 @@
 <script lang="ts">
 	import type { Organization } from '$lib/api/quantu-app-api';
-	import { updateOrganization } from '$lib/state/organizations';
+	import { updateOrganization } from '$lib/state/userOrganizations';
+	import { beforeUpdate } from 'svelte';
 
-	export let localId: string;
 	export let organization: Organization;
 
+	let prevId = organization.id;
+	let url = organization.url;
+	let name = organization.name;
+
+	beforeUpdate(() => {
+		if (prevId !== organization.id) {
+			prevId = organization.id;
+			resetForm();
+		}
+	});
+
+	function resetForm() {
+		url = organization.url;
+		name = organization.name;
+	}
+
+	function onUrlChange() {
+		onChange();
+	}
+
 	function onNameChange() {
-		organization.url = organization.name
+		url = name
 			.toLowerCase()
 			.replace(/[^a-zA-Z0-9\-_]+/g, ' ')
 			.trim()
 			.replace(/\s+/g, '-');
-		updateOrganization(localId, {
-			name: organization.name,
-			url: organization.url
+		onChange();
+	}
+
+	async function onChange() {
+		await updateOrganization(organization.id, {
+			name,
+			url
 		});
 	}
 </script>
@@ -29,7 +53,8 @@
 					class="btn btn-sm btn-primary"
 					data-bs-toggle="modal"
 					data-bs-target="#organization-settings"
-					aria-label="Organization Settings"><i class="bi bi-gear" /></button
+					aria-label="Organization Settings"
+					on:click={resetForm}><i class="bi bi-gear" /></button
 				>
 			</div>
 		</div>
@@ -51,25 +76,25 @@
 			</div>
 			<div class="modal-body">
 				<div class="mb-4">
-					<label for="settings-organization-name" class="form-label">Title</label>
+					<label for="settings-organization-name" class="form-label">Name</label>
 					<input
 						id="settings-organization-name"
 						type="text"
 						class="form-control"
-						placeholder="Enter title"
-						bind:value={organization.name}
+						placeholder="Enter Name"
+						bind:value={name}
 						on:change={onNameChange}
 					/>
 				</div>
 				<div class="mb-4">
-					<label for="settings-organization-location" class="form-label">Location</label>
+					<label for="settings-organization-location" class="form-label">URL</label>
 					<input
 						id="settings-organization-location"
 						type="text"
-						disabled
 						class="form-control"
-						placeholder="Enter location"
-						bind:value={organization.url}
+						placeholder="Enter URL"
+						bind:value={url}
+						on:change={onUrlChange}
 					/>
 				</div>
 			</div>

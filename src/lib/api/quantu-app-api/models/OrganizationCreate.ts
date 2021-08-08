@@ -13,5 +13,5 @@ export type OrganizationCreate = {
     /**
      * Organization url
      */
-    url: string;
+    url?: string;
 }

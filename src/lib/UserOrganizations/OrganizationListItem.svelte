@@ -1,7 +1,6 @@
 <script lang="ts">
 	import type { Organization } from '$lib/api/quantu-app-api';
 
-	export let localId: string;
 	export let organization: Organization;
 	export let onDelete: () => void;
 
@@ -15,11 +14,11 @@
 <div class="list-group-item">
 	<div class="d-flex w-100 justify-content-between">
 		<h4>
-			<a aria-label="Edit" href={`/user/organizations/${localId}`}>{organization.name}</a>
+			<a aria-label="Edit" href={`/user/organizations/${organization.id}`}>{organization.name}</a>
 		</h4>
 		<div class="dropdown">
 			<button
-				id={`dropdown-${localId}`}
+				id={`organization-dropdown-${organization.id}`}
 				class="btn btn-ghost dropdown-toggle"
 				type="button"
 				data-bs-toggle="dropdown"
@@ -27,10 +26,14 @@
 			>
 				<i class="bi bi-three-dots-vertical" />
 			</button>
-			<ul class="dropdown-menu dropdown-menu-end" aria-labelledby={`dropdown-${localId}`}>
+			<ul
+				class="dropdown-menu dropdown-menu-end"
+				aria-labelledby={`organization-dropdown-${organization.id}`}
+			>
 				<li>
-					<a class="dropdown-item justify-content-between" href={`/user/organizations/${localId}`}
-						>Edit</a
+					<a
+						class="dropdown-item justify-content-between"
+						href={`/user/organizations/${organization.id}`}>Edit</a
 					>
 				</li>
 				<li>
@@ -55,7 +58,7 @@
 			<div class="flex-grow-1" />
 			<div class="d-inline" style="margin-right:60px;">
 				<p class="mb-0">
-					{organization.url} words
+					{organization.url}
 				</p>
 			</div>
 		{/if}

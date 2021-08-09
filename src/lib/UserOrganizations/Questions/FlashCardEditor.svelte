@@ -41,13 +41,13 @@
 </script>
 
 <label for="front" class="form-label">Front</label>
-<div id="front" class="form-control">
+<div id="front">
 	<RichEditor onQuill={onFrontQuill} on:textchange={onFrontChange} />
 </div>
 
 <hr />
 
 <label for="back" class="form-label">Back</label>
-<div id="back" class="form-control">
+<div id="back">
 	<RichEditor onQuill={onBackQuill} on:textchange={onBackChange} />
 </div>

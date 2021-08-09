@@ -37,6 +37,7 @@
 	class="modal fade"
 	id="create-question"
 	tabindex="-1"
+	data-bs-keyboard="false"
 	aria-labelledby="create-question-label"
 	aria-hidden="true"
 >

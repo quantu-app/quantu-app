@@ -15,6 +15,7 @@
 	class="modal fade"
 	id="update-question"
 	tabindex="-1"
+	data-bs-keyboard="false"
 	aria-labelledby="update-question-label"
 	aria-hidden="true"
 >

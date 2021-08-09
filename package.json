@@ -77,7 +77,7 @@
 	"dependencies": {
 		"@aicacia/debounce": "^0.1.9",
 		"@aicacia/string-fuzzy_equals": "^0.1.2",
-		"@aicacia/quill-rich-editor": "aicacia/ts-quill-rich-editor#11399ecad7b07628ef0de0abf1e9bc0c7200f26d",
+		"@aicacia/quill-rich-editor": "aicacia/ts-quill-rich-editor#363c63f8b69fa286bef8c9cb1ea2d3b35fcf39de",
 		"@sveltejs/kit": "next",
 		"eventemitter3": "^4.0.7",
 		"fast-equals": "^2.0.3",

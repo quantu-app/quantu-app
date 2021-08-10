@@ -1,7 +1,7 @@
 FROM node:14-alpine as builder
 
 RUN apk add --no-cache python3 g++ make
-RUN npm install -g npm@7.20.3
+RUN npm install -g npm@7.20.5
 
 WORKDIR /app
 
@@ -23,14 +23,14 @@ RUN NODE_ENV=production npm run web.build
 FROM node:14-alpine
 
 RUN apk add --no-cache python3 g++ make
-RUN npm install -g npm@7.20.3
+RUN npm install -g npm@7.20.5
 
 WORKDIR /app
 
 COPY --from=builder /app/package*.json ./
-COPY --from=builder /app/build .
-
 RUN NODE_ENV=production npm install
+
+COPY --from=builder /app/build .
 
 EXPOSE 3000
 

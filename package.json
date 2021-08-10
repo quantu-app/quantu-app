@@ -56,8 +56,8 @@
 		"@types/phoenix": "^1.5.2",
 		"@types/quill": "2.0.4",
 		"@types/uuid": "^8.3.1",
-		"@typescript-eslint/eslint-plugin": "^4.29.0",
-		"@typescript-eslint/parser": "^4.29.0",
+		"@typescript-eslint/eslint-plugin": "^4.29.1",
+		"@typescript-eslint/parser": "^4.29.1",
 		"bootstrap": "^5.1.0",
 		"electron": "^13.1.8",
 		"electron-builder": "^22.11.7",
@@ -87,7 +87,7 @@
 		"phoenix": "^1.5.10",
 		"quill": "2.0.0-dev.4",
 		"quill-delta": "^4.2.2",
-		"svelte": "^3.41.1",
+		"svelte": "^3.42.1",
 		"uuid": "^8.3.2"
 	}
 }

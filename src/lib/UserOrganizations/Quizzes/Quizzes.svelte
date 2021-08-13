@@ -15,19 +15,20 @@
 	import ActionBar from '$lib/UserOrganizations/Quizzes/ActionBar.svelte';
 	import QuizList from './QuizList.svelte';
 	import type { Quiz } from '$lib/api/quantu-app-api';
+	import Search from '$lib/Search.svelte';
 
 	export let organizationId: number;
 	export let quizzes: Quiz[];
 
-	function filter(quiz: Quiz) {
-		return $state.quizNameFilter ? fuzzyEquals($state.quizNameFilter, quiz.name) : true;
-	}
+	$: filter = (quiz: Quiz) =>
+		$state.quizNameFilter ? fuzzyEquals($state.quizNameFilter, quiz.name) : true;
 </script>
 
-<div class="container-md mb-2">
-	<ActionBar {organizationId} bind:quizNameFilter={$state.quizNameFilter} />
+<div class="container mb-2">
+	<ActionBar {organizationId} />
+	<Search bind:filter={$state.quizNameFilter} />
 </div>
 
-<div class="container-md">
+<div class="container">
 	<QuizList {organizationId} quizzes={quizzes.filter(filter)} />
 </div>

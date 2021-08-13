@@ -8,9 +8,9 @@ import type { OrganizationCreate } from '../models/OrganizationCreate';
 import type { OrganizationList } from '../models/OrganizationList';
 import type { OrganizationUpdate } from '../models/OrganizationUpdate';
 import type { PasswordReset } from '../models/PasswordReset';
-import type { Question } from '../models/Question';
 import type { QuestionCreate } from '../models/QuestionCreate';
-import type { QuestionList } from '../models/QuestionList';
+import type { QuestionListPrivate } from '../models/QuestionListPrivate';
+import type { QuestionPrivate } from '../models/QuestionPrivate';
 import type { QuestionUpdate } from '../models/QuestionUpdate';
 import type { Quiz } from '../models/Quiz';
 import type { QuizCreate } from '../models/QuizCreate';
@@ -256,13 +256,13 @@ export class UserService {
      * Returns organization's questions
      * @param organizationId Organization Id
      * @param quizId Quiz Id
-     * @returns QuestionList Organization/Quiz Questions
+     * @returns QuestionListPrivate Organization/Quiz Questions
      * @throws ApiError
      */
     public static async quantuAppWebControllerUserQuestionIndex(
         organizationId: number,
         quizId?: number,
-    ): Promise<QuestionList> {
+    ): Promise<QuestionListPrivate> {
         const result = await __request({
             method: 'GET',
             path: `/user/organizations/${organizationId}/questions`,
@@ -278,13 +278,13 @@ export class UserService {
      * Returns organization's created question
      * @param organizationId Organization Id
      * @param requestBody Request body to create question
-     * @returns Question Organization/Quiz Question
+     * @returns QuestionPrivate Organization/Quiz Question
      * @throws ApiError
      */
     public static async quantuAppWebControllerUserQuestionCreate(
         organizationId: number,
         requestBody: QuestionCreate,
-    ): Promise<Question> {
+    ): Promise<QuestionPrivate> {
         const result = await __request({
             method: 'POST',
             path: `/user/organizations/${organizationId}/questions`,
@@ -317,13 +317,13 @@ export class UserService {
      * Returns organization's question
      * @param id Question Id
      * @param organizationId Organization Id
-     * @returns Question Organization/Quiz Question
+     * @returns QuestionPrivate Organization/Quiz Question
      * @throws ApiError
      */
     public static async quantuAppWebControllerUserQuestionShow(
         id: number,
         organizationId: number,
-    ): Promise<Question> {
+    ): Promise<QuestionPrivate> {
         const result = await __request({
             method: 'GET',
             path: `/user/organizations/${organizationId}/questions/${id}`,
@@ -337,14 +337,14 @@ export class UserService {
      * @param id Question Id
      * @param organizationId Organization Id
      * @param requestBody Request body to update question
-     * @returns Question Organization/Quiz Question
+     * @returns QuestionPrivate Organization/Quiz Question
      * @throws ApiError
      */
     public static async quantuAppWebControllerUserQuestionUpdate(
         id: number,
         organizationId: number,
         requestBody: QuestionUpdate,
-    ): Promise<Question> {
+    ): Promise<QuestionPrivate> {
         const result = await __request({
             method: 'PATCH',
             path: `/user/organizations/${organizationId}/questions/${id}`,
@@ -359,14 +359,14 @@ export class UserService {
      * @param id Question Id
      * @param organizationId Organization Id
      * @param requestBody Request body to update question
-     * @returns Question Organization/Quiz Question
+     * @returns QuestionPrivate Organization/Quiz Question
      * @throws ApiError
      */
     public static async quantuAppWebControllerUserQuestionUpdate2(
         id: number,
         organizationId: number,
         requestBody: QuestionUpdate,
-    ): Promise<Question> {
+    ): Promise<QuestionPrivate> {
         const result = await __request({
             method: 'PUT',
             path: `/user/organizations/${organizationId}/questions/${id}`,

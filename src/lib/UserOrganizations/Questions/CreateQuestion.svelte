@@ -7,10 +7,12 @@
 	export let quizId: number | null;
 
 	let prevQuizId: number;
+	let creatingQuestion = false;
 
 	let question: QuestionCreate = {
 		quizId,
-		prompt: {},
+		type: 'flash_card',
+		prompt: {} as any,
 		tags: []
 	};
 
@@ -20,8 +22,16 @@
 	}
 
 	async function onCreateQuestion() {
-		await createQuestion(organizationId, question);
-		window.bootstrap.Modal.getInstance('#create-question');
+		creatingQuestion = true;
+		try {
+			await createQuestion(organizationId, question);
+			delete question.name;
+			question.prompt = {} as any;
+			question.tags = [];
+		} finally {
+			creatingQuestion = false;
+		}
+		window.bootstrap.Modal.getInstance('#create-question').hide();
 	}
 </script>
 
@@ -51,7 +61,17 @@
 				<QuestionEditor bind:question />
 			</div>
 			<div class="modal-footer">
-				<button type="button" on:click={onCreateQuestion} class="btn btn-primary">Create</button>
+				<button
+					type="button"
+					on:click={onCreateQuestion}
+					disabled={creatingQuestion}
+					class="btn btn-primary"
+				>
+					{#if creatingQuestion}
+						<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" />
+					{/if}
+					Create
+				</button>
 				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
 			</div>
 		</div>

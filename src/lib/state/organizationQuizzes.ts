@@ -24,18 +24,12 @@ export async function getQuiz(organizationId: number, id: number) {
 	if (cachedQuiz) {
 		return cachedQuiz;
 	}
-	const quiz = await load(UserService.quantuAppWebControllerUserQuizShow(organizationId, id));
+	const quiz = await load(UserService.quantuAppWebControllerUserQuizShow(id, organizationId));
 	organizationQuizzesWritable.update((state) => addToState(state, quiz));
 	return quiz;
 }
 
 export async function getQuizzes(organizationId: number) {
-	const cachedQuizzes = Object.values(
-		get(organizationQuizzes).byOrganizationId[organizationId] || {}
-	);
-	if (cachedQuizzes.length) {
-		return cachedQuizzes;
-	}
 	const quizzes = await load(UserService.quantuAppWebControllerUserQuizIndex(organizationId));
 	organizationQuizzesWritable.update((state) => {
 		delete state.byOrganizationId[organizationId];
@@ -69,7 +63,7 @@ function addToState(state: IOrganizationQuizzesStore, quiz: Quiz): IOrganization
 	const byOrganizationId =
 		state.byOrganizationId[quiz.organizationId] ||
 		(state.byOrganizationId[quiz.organizationId] = {});
-	byOrganizationId[quiz.organizationId] = quiz;
+	byOrganizationId[quiz.id] = quiz;
 	state.byId[quiz.id] = quiz;
 	return state;
 }
@@ -78,7 +72,7 @@ function deleteFromState(state: IOrganizationQuizzesStore, quiz: Quiz): IOrganiz
 	const byOrganizationId =
 		state.byOrganizationId[quiz.organizationId] ||
 		(state.byOrganizationId[quiz.organizationId] = {});
-	delete byOrganizationId[quiz.organizationId];
+	delete byOrganizationId[quiz.id];
 	delete state.byId[quiz.id];
 	return state;
 }

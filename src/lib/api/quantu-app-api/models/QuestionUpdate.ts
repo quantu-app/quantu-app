@@ -2,7 +2,7 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import type { QuestionPrompt } from './QuestionPrompt';
+import type { QuestionPromptPrivate } from './QuestionPromptPrivate';
 
 /**
  * question update
@@ -16,7 +16,7 @@ export type QuestionUpdate = {
      * Question name
      */
     name?: string | null;
-    prompt?: QuestionPrompt;
+    prompt?: QuestionPromptPrivate;
     /**
      * Quiz Id
      */
@@ -24,9 +24,9 @@ export type QuestionUpdate = {
     /**
      * Question tags
      */
-    tags?: Array<string>;
+    tags?: Array<string> | null;
     /**
      * Question type
      */
-    type?: string;
+    type?: string | null;
 }

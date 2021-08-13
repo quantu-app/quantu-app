@@ -3,9 +3,9 @@
 /* eslint-disable */
 
 /**
- * Question multiple choice prompt
+ * Question multiple choice private prompt
  */
-export type QuestionMultipleChoice = {
+export type QuestionMultipleChoicePrivate = {
     /**
      * answer choices
      */
@@ -15,10 +15,18 @@ export type QuestionMultipleChoice = {
          */
         content: Array<any>,
         /**
+         * is this choice correct?
+         */
+        correct?: boolean,
+        /**
          * choice key
          */
         key: string,
     }>;
+    /**
+     * question explanation
+     */
+    explanation?: Array<any> | null;
     /**
      * question content
      */

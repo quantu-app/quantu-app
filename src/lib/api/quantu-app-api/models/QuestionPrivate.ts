@@ -5,17 +5,29 @@
 import type { QuestionPromptPrivate } from './QuestionPromptPrivate';
 
 /**
- * question create
+ * question show private
  */
-export type QuestionCreate = {
+export type QuestionPrivate = {
     /**
-     * Quiz Index
+     * Id
+     */
+    id: number;
+    /**
+     * Question index in quiz
      */
     index?: number | null;
     /**
+     * Creation timestamp
+     */
+    insertedAt: string;
+    /**
      * Question name
      */
-    name?: string | null;
+    name: string | null;
+    /**
+     * Organization Id
+     */
+    organizationId: number;
     prompt: QuestionPromptPrivate;
     /**
      * Quiz Id
@@ -28,10 +40,14 @@ export type QuestionCreate = {
     /**
      * Question type
      */
-    type: QuestionCreate.type;
+    type: QuestionPrivate.type;
+    /**
+     * Update timestamp
+     */
+    updatedAt: string;
 }
 
-export namespace QuestionCreate {
+export namespace QuestionPrivate {
 
     /**
      * Question type

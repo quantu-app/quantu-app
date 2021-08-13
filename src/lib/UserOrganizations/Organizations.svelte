@@ -15,20 +15,21 @@
 	import ActionBar from '$lib/UserOrganizations/ActionBar.svelte';
 	import OrganizationList from './OrganizationList.svelte';
 	import type { Organization } from '$lib/api/quantu-app-api';
+	import Search from '$lib/Search.svelte';
 
 	export let organizations: Organization[];
 
-	function filter(organization: Organization) {
-		return $state.organizationNameFilter
+	$: filter = (organization: Organization) =>
+		$state.organizationNameFilter
 			? fuzzyEquals($state.organizationNameFilter, organization.name)
 			: true;
-	}
 </script>
 
-<div class="container-md mb-2">
-	<ActionBar bind:organizationNameFilter={$state.organizationNameFilter} />
+<div class="container mb-2">
+	<ActionBar />
+	<Search bind:filter={$state.organizationNameFilter} />
 </div>
 
-<div class="container-md">
+<div class="container">
 	<OrganizationList organizations={organizations.filter(filter)} />
 </div>

@@ -6,6 +6,7 @@ import { LocalJSON } from './LocalJSON';
 import EventEmitter from 'eventemitter3';
 import type { Socket } from 'phoenix';
 import { load } from './loading';
+import cookie from 'js-cookie';
 
 interface IUserState extends User {
 	current: boolean;
@@ -80,17 +81,12 @@ export async function fetchCurrentUser() {
 
 export async function signInWithToken(token: string) {
 	try {
-		setAuthToken(token);
+		OpenAPI.TOKEN = token;
 		const user = await load(AuthService.quantuAppWebControllerAuthCurrent());
 		await signInUser(user);
 	} catch {
 		await signOutUser();
 	}
-}
-
-function setAuthToken(token: string) {
-	const headers = OpenAPI.HEADERS || (OpenAPI.HEADERS = {});
-	headers['authorization'] = `Bearer ${token}`;
 }
 
 async function setUserSocket(token: string) {
@@ -115,9 +111,10 @@ async function signInUser(currentUser: User) {
 		return users;
 	});
 	await load(Promise.all(Object.values(get(users)).map((user) => usersLocal.set(user.id, user))));
-	setAuthToken(currentUser.token);
-	userEmitter.emit('signIn', currentUser);
+	OpenAPI.TOKEN = currentUser.token;
+	cookie.set('user', JSON.stringify({ id: currentUser.id, token: currentUser.token }));
 	await setUserSocket(currentUser.token);
+	userEmitter.emit('signIn', currentUser);
 }
 
 function removeUserSocket() {
@@ -126,8 +123,8 @@ function removeUserSocket() {
 }
 
 async function signOutUser() {
-	const headers = OpenAPI.HEADERS || (OpenAPI.HEADERS = {});
-	delete headers['authorization'];
+	OpenAPI.TOKEN = undefined;
+	cookie.remove('user');
 	usersWritable.update((state) =>
 		Object.entries(state).reduce(
 			(users, [id, user]) => ({

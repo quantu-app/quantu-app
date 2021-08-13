@@ -24,7 +24,10 @@
 
 	async function onUpdateQuestion() {
 		if (questionToUpdate) {
-			await updateQuestion(organizationId, questionToUpdate.id, questionToUpdate);
+			await updateQuestion(organizationId, questionToUpdate.id, {
+				...questionToUpdate,
+				index: null
+			});
 			questionToUpdate = undefined;
 		}
 	}
@@ -34,10 +37,14 @@
 			questionToDelete = undefined;
 		}
 	}
+
+	function sortQuestion(a: Question, b: Question) {
+		return a.index - b.index;
+	}
 </script>
 
 <div class="list-group list-group-flush">
-	{#each questions as question}
+	{#each questions.sort(sortQuestion) as question}
 		<QuestionListItem
 			{question}
 			onUpdate={createOnUpdate(question)}

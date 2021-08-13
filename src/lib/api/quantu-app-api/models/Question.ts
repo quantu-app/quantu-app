@@ -2,7 +2,7 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import type { QuestionPrompt } from './QuestionPrompt';
+import type { QuestionPromptPublic } from './QuestionPromptPublic';
 
 /**
  * question show
@@ -12,6 +12,10 @@ export type Question = {
      * Id
      */
     id: number;
+    /**
+     * Question index in quiz
+     */
+    index?: number | null;
     /**
      * Creation timestamp
      */
@@ -24,7 +28,7 @@ export type Question = {
      * Organization Id
      */
     organizationId: number;
-    prompt: QuestionPrompt;
+    prompt: QuestionPromptPublic;
     /**
      * Quiz Id
      */
@@ -36,9 +40,22 @@ export type Question = {
     /**
      * Question type
      */
-    type: string;
+    type: Question.type;
     /**
      * Update timestamp
      */
     updatedAt: string;
+}
+
+export namespace Question {
+
+    /**
+     * Question type
+     */
+    export enum type {
+        FLASH_CARD = 'flash_card',
+        MULTIPLE_CHOICE = 'multiple_choice',
+    }
+
+
 }

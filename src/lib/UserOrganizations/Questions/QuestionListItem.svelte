@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { Question } from '$lib/api/quantu-app-api';
+	import { titleCase } from 'title-case';
 
 	export let question: Question;
 	export let onUpdate: () => void;
@@ -11,7 +12,17 @@
 <div class="list-group-item">
 	<div class="d-flex w-100 justify-content-between">
 		<h4>
-			{question.type}
+			{#if question.index != null}
+				<span class="badge bg-primary">{question.index + 1}</span>
+			{/if}
+			<button
+				type="button"
+				class="btn btn-link"
+				data-bs-toggle="modal"
+				data-bs-target="#update-question"
+				on:click={onUpdate}>{question.name || 'No Name'}</button
+			>
+			<h6 class="d-inline">- {titleCase(question.type.replace('_', ' '))}</h6>
 		</h4>
 		<div class="dropdown">
 			<button

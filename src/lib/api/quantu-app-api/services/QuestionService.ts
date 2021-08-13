@@ -2,7 +2,9 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { Question } from '../models/Question';
+import type { QuestionAnswer } from '../models/QuestionAnswer';
 import type { QuestionList } from '../models/QuestionList';
+import type { QuestionResult } from '../models/QuestionResult';
 import { request as __request } from '../core/request';
 
 export class QuestionService {
@@ -43,6 +45,26 @@ export class QuestionService {
         const result = await __request({
             method: 'GET',
             path: `/questions/${id}`,
+        });
+        return result.body;
+    }
+
+    /**
+     * Answer a Question
+     * Returns correct status
+     * @param id Question Id
+     * @param requestBody Request body to answer question
+     * @returns QuestionResult Question Answer result
+     * @throws ApiError
+     */
+    public static async quantuAppWebControllerQuestionAnswer(
+        id: number,
+        requestBody: QuestionAnswer,
+    ): Promise<QuestionResult> {
+        const result = await __request({
+            method: 'POST',
+            path: `/questions/${id}/answer`,
+            body: requestBody,
         });
         return result.body;
     }

@@ -2,8 +2,6 @@
 	import { goto } from '$app/navigation';
 	import { createOrganization } from '$lib/state/userOrganizations';
 
-	export let organizationNameFilter: string;
-
 	let organizationCreating = false;
 	let newOrganizationName = '';
 
@@ -38,16 +36,5 @@
 			{/if}
 			Create
 		</button>
-	</div>
-</form>
-
-<form on:submit|preventDefault class="mt-2">
-	<div class="input-group">
-		<input
-			type="text"
-			class="form-control"
-			placeholder="Filter"
-			bind:value={organizationNameFilter}
-		/>
 	</div>
 </form>

@@ -44,7 +44,7 @@
 
 <div class="container-fluid h-100">
 	<div class="d-flex flex-row h-100">
-		<div class="container-md" />
+		<div class="container" />
 		<div class="d-flex flex-column h-100 align-items-center flex-shrink-0">
 			<div class="d-flex">
 				<button

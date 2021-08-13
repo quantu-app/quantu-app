@@ -29,7 +29,7 @@ export async function getQuestion(organizationId: number, id: number) {
 		return cachedQuestion;
 	}
 	const question = await load(
-		UserService.quantuAppWebControllerUserQuestionShow(organizationId, id)
+		UserService.quantuAppWebControllerUserQuestionShow(id, organizationId)
 	);
 	organizationQuestionsWritable.update((state) => addToState(state, question));
 	return question;
@@ -38,13 +38,6 @@ export async function getQuestion(organizationId: number, id: number) {
 export async function getQuestions(organizationId: number, quizId?: number) {
 	if (quizId) {
 		const cachedQuestions = Object.values(get(organizationQuestions).byQuizId[quizId] || {});
-		if (cachedQuestions.length) {
-			return cachedQuestions;
-		}
-	} else {
-		const cachedQuestions = Object.values(
-			get(organizationQuestions).byOrganizationId[organizationId] || {}
-		);
 		if (cachedQuestions.length) {
 			return cachedQuestions;
 		}
@@ -94,11 +87,14 @@ function addToState(
 	question: Question
 ): IOrganizationQuestionsStore {
 	const byOrganizationId =
-			state.byOrganizationId[question.organizationId] ||
-			(state.byOrganizationId[question.organizationId] = {}),
-		byQuizId = state.byQuizId[question.quizId] || (state.byQuizId[question.quizId] = {});
-	byOrganizationId[question.organizationId] = question;
-	byQuizId[question.quizId] = question;
+		state.byOrganizationId[question.organizationId] ||
+		(state.byOrganizationId[question.organizationId] = {});
+
+	if (question.quizId) {
+		const byQuizId = state.byQuizId[question.quizId] || (state.byQuizId[question.quizId] = {});
+		byQuizId[question.id] = { ...question };
+	}
+	byOrganizationId[question.id] = question;
 	state.byId[question.id] = question;
 	return state;
 }
@@ -108,11 +104,14 @@ function deleteFromState(
 	question: Question
 ): IOrganizationQuestionsStore {
 	const byOrganizationId =
-			state.byOrganizationId[question.organizationId] ||
-			(state.byOrganizationId[question.organizationId] = {}),
-		byQuizId = state.byQuizId[question.quizId] || (state.byQuizId[question.quizId] = {});
-	delete byOrganizationId[question.organizationId];
-	delete byQuizId[question.quizId];
+		state.byOrganizationId[question.organizationId] ||
+		(state.byOrganizationId[question.organizationId] = {});
+	for (const questions of Object.values(state.byQuizId || {})) {
+		if (question.id in questions) {
+			delete questions[question.id];
+		}
+	}
+	delete byOrganizationId[question.id];
 	delete state.byId[question.id];
 	return state;
 }

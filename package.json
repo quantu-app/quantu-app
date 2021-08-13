@@ -52,6 +52,7 @@
 	"devDependencies": {
 		"@sveltejs/adapter-node": "next",
 		"@types/bootstrap": "^5.1.0",
+		"@types/js-cookie": "^2.2.7",
 		"@types/katex": "^0.11.1",
 		"@types/phoenix": "^1.5.2",
 		"@types/quill": "2.0.4",
@@ -76,18 +77,20 @@
 	},
 	"dependencies": {
 		"@aicacia/debounce": "^0.1.9",
+		"@aicacia/quill-rich-editor": "aicacia/ts-quill-rich-editor#1decd24fb4bf6ae21a509ffbfb7d428a8c12222c",
 		"@aicacia/string-fuzzy_equals": "^0.1.2",
-		"@aicacia/quill-rich-editor": "aicacia/ts-quill-rich-editor#363c63f8b69fa286bef8c9cb1ea2d3b35fcf39de",
 		"@sveltejs/kit": "next",
 		"eventemitter3": "^4.0.7",
 		"fast-equals": "^2.0.3",
 		"find-open-port": "^2.0.3",
+		"js-cookie": "^3.0.0",
 		"katex": "^0.13.13",
 		"localforage": "^1.9.0",
 		"phoenix": "^1.5.10",
 		"quill": "2.0.0-dev.4",
 		"quill-delta": "^4.2.2",
 		"svelte": "^3.42.1",
+		"title-case": "^3.0.3",
 		"uuid": "^8.3.2"
 	}
 }

@@ -4,7 +4,6 @@
 	import { createQuiz } from '$lib/state/organizationQuizzes';
 
 	export let organizationId: number;
-	export let quizNameFilter: string;
 
 	let quizCreating = false;
 	let newQuizName = '';
@@ -42,11 +41,5 @@
 			{/if}
 			Create
 		</button>
-	</div>
-</form>
-
-<form on:submit|preventDefault class="mt-2">
-	<div class="input-group">
-		<input type="text" class="form-control" placeholder="Filter" bind:value={quizNameFilter} />
 	</div>
 </form>

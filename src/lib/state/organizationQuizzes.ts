@@ -1,7 +1,9 @@
+import { browser } from '$app/env';
 import { Quiz, QuizCreate, UserService } from '$lib/api/quantu-app-api';
 import type { Readable } from 'svelte/store';
 import { get, writable } from 'svelte/store';
 import { load } from './loading';
+import { userEmitter } from './user';
 
 interface IOrganizationQuizzesStore {
 	byId: { [id: number]: Quiz };
@@ -75,4 +77,13 @@ function deleteFromState(state: IOrganizationQuizzesStore, quiz: Quiz): IOrganiz
 	delete byOrganizationId[quiz.id];
 	delete state.byId[quiz.id];
 	return state;
+}
+
+if (browser) {
+	userEmitter.on('signOut', () =>
+		organizationQuizzesWritable.set({
+			byId: {},
+			byOrganizationId: {}
+		})
+	);
 }

@@ -1,7 +1,9 @@
-import { Question, QuestionCreate, UserService } from '$lib/api/quantu-app-api';
+import { browser } from '$app/env';
+import { Question, QuestionCreate, QuestionUpdate, UserService } from '$lib/api/quantu-app-api';
 import type { Readable } from 'svelte/store';
 import { get, writable } from 'svelte/store';
 import { load } from './loading';
+import { userEmitter } from './user';
 
 interface IOrganizationQuestionsStore {
 	byId: { [id: number]: Question };
@@ -63,11 +65,7 @@ export async function createQuestion(organizationId: number, params: QuestionCre
 	return question;
 }
 
-export async function updateQuestion(
-	organizationId: number,
-	id: number,
-	params: Partial<Question>
-) {
+export async function updateQuestion(organizationId: number, id: number, params: QuestionUpdate) {
 	const question = await load(
 		UserService.quantuAppWebControllerUserQuestionUpdate(id, organizationId, params)
 	);
@@ -114,4 +112,14 @@ function deleteFromState(
 	delete byOrganizationId[question.id];
 	delete state.byId[question.id];
 	return state;
+}
+
+if (browser) {
+	userEmitter.on('signOut', () =>
+		organizationQuestionsWritable.set({
+			byId: {},
+			byQuizId: {},
+			byOrganizationId: {}
+		})
+	);
 }

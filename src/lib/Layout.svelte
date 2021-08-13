@@ -1,34 +1,26 @@
 <script lang="ts">
-	import { loading } from './state/loading';
-	import UserDropdown from './UserDropdown.svelte';
+	import Notifications from '$lib/Notifications.svelte';
+	import Sidebar from '$lib/Sidebar.svelte';
+	import { loading } from '$lib/state/loading';
+
+	export let navItems: Array<{ href: string; icon: string; title: string }>;
 </script>
 
-<div class="h-100">
+<div class="h-100 w-100">
+	<div
+		class="position-absolute top-0 left-0 progressbar progress-bar progress-bar-striped progress-bar-animated"
+		class:d-none={!$loading}
+		role="progressbar"
+		aria-valuenow={100}
+		aria-valuemin={0}
+		aria-valuemax={100}
+		style="width: 100%; height: 4px"
+	/>
 	<div class="d-flex flex-row h-100">
-		<div class="d-flex flex-column align-items-stretch flex-shrink-0" aria-label="App navigation">
-			<a type="button" class="logo btn btn-secondary" href="/"><strong>Q[U]</strong></a>
-			<a type="button" class="btn btn-primary" href="/user/organizations">
-				<i class="bi bi-command" />
-			</a>
-			<div class="d-flex justify-content-center">
-				{#if $loading}
-					<span class="spinner-border spinner-border-lg" role="status" aria-hidden="true" />
-				{/if}
-			</div>
-			<div class="d-flex mt-auto">
-				<UserDropdown />
-			</div>
-		</div>
-		<div class="d-flex flex-column flex-grow-1">
+		<Sidebar {navItems} />
+		<div class="d-flex flex-column h-100 flex-grow-1">
 			<slot />
 		</div>
 	</div>
+	<Notifications />
 </div>
-
-<style lang="scss">
-	.logo {
-		font-family: Poppins, sans-serif;
-		font-size: 1.25rem;
-		padding: 0;
-	}
-</style>

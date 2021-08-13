@@ -1,15 +1,15 @@
+import { browser } from '$app/env';
 import { Organization, OrganizationCreate, UserService } from '$lib/api/quantu-app-api';
 import type { Readable } from 'svelte/store';
 import { get, writable } from 'svelte/store';
 import { load } from './loading';
+import { userEmitter } from './user';
 
 interface IUserOrganizationsStore {
 	byId: { [id: number]: Organization };
 }
 
-const userOrganizationsWritable = writable<IUserOrganizationsStore>({
-	byId: {}
-});
+const userOrganizationsWritable = writable<IUserOrganizationsStore>({ byId: {} });
 
 export const userOrganizations: Readable<IUserOrganizationsStore> = {
 	subscribe: userOrganizationsWritable.subscribe
@@ -70,4 +70,12 @@ function deleteFromState(
 ): IUserOrganizationsStore {
 	delete state.byId[organization.id];
 	return state;
+}
+
+if (browser) {
+	userEmitter.on('signOut', () =>
+		userOrganizationsWritable.set({
+			byId: {}
+		})
+	);
 }

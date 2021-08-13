@@ -25,8 +25,10 @@
 	async function onUpdateQuestion() {
 		if (questionToUpdate) {
 			await updateQuestion(organizationId, questionToUpdate.id, {
-				...questionToUpdate,
-				index: null
+				name: questionToUpdate.name,
+				type: questionToUpdate.type,
+				prompt: questionToUpdate.prompt,
+				tags: questionToUpdate.tags
 			});
 			questionToUpdate = undefined;
 		}

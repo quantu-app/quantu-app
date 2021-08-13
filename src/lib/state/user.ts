@@ -1,29 +1,17 @@
 import { AuthService, OpenAPI, User } from '$lib/api/quantu-app-api';
 import type { Readable } from 'svelte/store';
 import { get, writable, derived } from 'svelte/store';
-import { isOnline, onlineEmitter } from './online';
-import { LocalJSON } from './LocalJSON';
+import { onlineEmitter } from './online';
 import EventEmitter from 'eventemitter3';
 import type { Socket } from 'phoenix';
 import { load } from './loading';
 import cookie from 'js-cookie';
+import { session } from '$app/stores';
+import { browser } from '$app/env';
 
-interface IUserState extends User {
-	current: boolean;
-}
+const socketWritable = writable<Socket>();
 
-interface IUsersState {
-	[userId: string]: IUserState;
-}
-
-const usersLocal = new LocalJSON<IUserState>('users'),
-	usersWritable = writable<IUsersState>({}),
-	socketWritable = writable<Socket>();
-
-export const users: Readable<IUsersState> = { subscribe: usersWritable.subscribe };
-export const currentUser = derived(usersWritable, (users) =>
-	Object.values(users).find((user) => user.current)
-);
+export const currentUser: Readable<User> = derived(session, (user) => user);
 export const signedIn = derived(currentUser, (currentUser) => !!currentUser);
 
 export const userEmitter = new EventEmitter<{
@@ -89,6 +77,21 @@ export async function signInWithToken(token: string) {
 	}
 }
 
+async function signInUser(currentUser: User) {
+	OpenAPI.TOKEN = currentUser.token;
+	cookie.set('token', currentUser.token);
+
+	session.set(currentUser);
+	await fetch('/session', {
+		method: 'POST',
+		body: JSON.stringify(currentUser)
+	});
+
+	await setUserSocket(currentUser.token);
+
+	userEmitter.emit('signIn', currentUser);
+}
+
 async function setUserSocket(token: string) {
 	const { Socket } = await import('phoenix');
 	const socket = new Socket(`${import.meta.env.VITE_WS_URL}/socket`, {
@@ -98,62 +101,21 @@ async function setUserSocket(token: string) {
 	socket.connect();
 }
 
-async function signInUser(currentUser: User) {
-	usersWritable.update((state) => {
-		const users = Object.entries(state).reduce(
-			(users, [id, user]) => ({
-				...users,
-				[id]: { ...user, current: false }
-			}),
-			state
-		);
-		users[currentUser.id] = { ...currentUser, current: true };
-		return users;
-	});
-	await load(Promise.all(Object.values(get(users)).map((user) => usersLocal.set(user.id, user))));
-	OpenAPI.TOKEN = currentUser.token;
-	cookie.set('user', JSON.stringify({ id: currentUser.id, token: currentUser.token }));
-	await setUserSocket(currentUser.token);
-	userEmitter.emit('signIn', currentUser);
-}
-
-function removeUserSocket() {
-	get(socketWritable)?.disconnect();
-	socketWritable.set(null);
-}
-
 async function signOutUser() {
 	OpenAPI.TOKEN = undefined;
-	cookie.remove('user');
-	usersWritable.update((state) =>
-		Object.entries(state).reduce(
-			(users, [id, user]) => ({
-				...users,
-				[id]: { ...user, current: false }
-			}),
-			state
-		)
-	);
-	removeUserSocket();
-	await load(Promise.all(Object.values(get(users)).map((user) => usersLocal.set(user.id, user))));
+	cookie.remove('token');
+
+	await fetch('/session', {
+		method: 'DELETE'
+	});
+	session.set(null);
+
+	get(socketWritable)?.disconnect();
+	socketWritable.set(null);
+
 	userEmitter.emit('signOut');
 }
 
-if (typeof window === 'object') {
-	usersLocal.all().then((localUsers) => {
-		usersWritable.update((state) =>
-			Object.entries(localUsers).reduce(
-				(state, [id, localUser]) => ({
-					...state,
-					[id]: localUser
-				}),
-				state
-			)
-		);
-		if (isOnline()) {
-			fetchCurrentUser();
-		}
-	});
-
+if (browser) {
 	onlineEmitter.on('online', fetchCurrentUser);
 }

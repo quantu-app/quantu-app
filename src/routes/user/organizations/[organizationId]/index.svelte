@@ -1,13 +1,14 @@
-<script lang="ts" context="module">
-	/** @type {import('@sveltejs/kit').Load} */
-	export async function load({
-		page: {
-			params: { organizationId }
-		}
-	}) {
+<script context="module" lang="ts">
+	import { authGuard } from '$lib/guard/authGuard';
+	import type { LoadInput } from '@sveltejs/kit';
+
+	export async function load(input: LoadInput) {
+		const response = await authGuard(input);
+
 		return {
+			...response,
 			props: {
-				organizationId: parseInt(organizationId)
+				organizationId: parseInt(input.page.params.organizationId)
 			}
 		};
 	}

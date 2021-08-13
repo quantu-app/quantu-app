@@ -25,7 +25,7 @@
 </script>
 
 <div class="container">
-	<div class="d-flex justify-content-end">
+	<div class="d-flex justify-content-end mt-2">
 		<CreateQuestion {organizationId} quizId={null} />
 	</div>
 	<Search bind:filter={$state.questionNameFilter} />

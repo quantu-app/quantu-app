@@ -1,13 +1,13 @@
 <script lang="ts">
-	import type { QuestionFlashCard } from '$lib/api/quantu-app-api';
+	import type { QuestionFlashCardPrivate } from '$lib/api/quantu-app-api';
 	import RichEditor from '$lib/RichEditor.svelte';
 	import type Quill from 'quill';
 	import type Delta from 'quill-delta';
 	import { beforeUpdate } from 'svelte';
 
-	export let prompt: QuestionFlashCard;
+	export let prompt: QuestionFlashCardPrivate;
 
-	let prevPrompt: QuestionFlashCard;
+	let prevPrompt: QuestionFlashCardPrivate;
 	let frontQuill: Quill;
 	let backQuill: Quill;
 
@@ -24,30 +24,30 @@
 
 	function onFrontQuill(quill: Quill) {
 		frontQuill = quill;
-		frontQuill.setContents({ ops: prompt.front } as Delta);
+		frontQuill.setContents({ ops: prompt.front } as Delta, 'api');
 	}
 	function onBackQuill(quill: Quill) {
 		backQuill = quill;
-		backQuill.setContents({ ops: prompt.back } as Delta);
+		backQuill.setContents({ ops: prompt.back } as Delta, 'api');
 	}
 
 	beforeUpdate(() => {
 		if (prompt !== prevPrompt) {
 			prevPrompt = prompt;
-			frontQuill?.setContents({ ops: prompt.front } as Delta);
-			backQuill?.setContents({ ops: prompt.back } as Delta);
+			frontQuill?.setContents({ ops: prompt.front } as Delta, 'api');
+			backQuill?.setContents({ ops: prompt.back } as Delta, 'api');
 		}
 	});
 </script>
 
-<label for="front" class="form-label">Front</label>
-<div id="front">
+<div class="mt-4">
+	<label for="front" class="form-label">Front</label>
 	<RichEditor onQuill={onFrontQuill} on:textchange={onFrontChange} />
 </div>
 
 <hr />
 
-<label for="back" class="form-label">Back</label>
-<div id="back">
+<div>
+	<label for="back" class="form-label">Back</label>
 	<RichEditor onQuill={onBackQuill} on:textchange={onBackChange} />
 </div>

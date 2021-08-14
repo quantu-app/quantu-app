@@ -17,16 +17,21 @@
 	import CreateQuestion from '../Questions/CreateQuestion.svelte';
 	import QuestionList from '../Questions/QuestionList.svelte';
 	import { fuzzyEquals } from '@aicacia/string-fuzzy_equals';
+	import Tags from '$lib/Tags.svelte';
 
 	export let organizationId: number;
 	export let quiz: Quiz;
 	export let questions: Question[];
 
-	let name = quiz.name;
+	function onNameChange() {
+		updateQuiz(organizationId, quiz.id, {
+			name: quiz.name
+		});
+	}
 
-	async function onChange() {
-		await updateQuiz(organizationId, quiz.id, {
-			name
+	function onTagsChange() {
+		updateQuiz(organizationId, quiz.id, {
+			tags: quiz.tags
 		});
 	}
 
@@ -34,27 +39,31 @@
 		$state.questionNameFilter ? fuzzyEquals($state.questionNameFilter, question.name) : true;
 </script>
 
-<div class="container">
-	<div class="row">
-		<div class="col">
+<div class="container mb-2">
+	<div class="d-flex justify-content-between">
+		<div>
 			<form on:submit|preventDefault>
-				<div>
-					<label for="quiz-name" class="form-label">Quiz Name</label>
-					<input
-						id="quiz-name"
-						type="text"
-						class="form-control"
-						placeholder="Enter Name"
-						bind:value={name}
-						on:change={onChange}
-					/>
+				<div class="d-flex">
+					<div>
+						<label for="quiz-name" class="form-label">Quiz Name</label>
+						<input
+							id="quiz-name"
+							type="text"
+							class="form-control"
+							placeholder="Enter Name"
+							bind:value={quiz.name}
+							on:change={onNameChange}
+						/>
+					</div>
+					<div class="flex-grow-1 ms-2">
+						<label for="quiz-tags" class="form-label">Quiz Tags</label>
+						<Tags id="quiz-tags" bind:tags={quiz.tags} on:change={onTagsChange} />
+					</div>
 				</div>
 			</form>
 		</div>
-		<div class="col">
-			<div class="d-flex justify-content-end">
-				<CreateQuestion {organizationId} quizId={quiz.id} />
-			</div>
+		<div>
+			<CreateQuestion {organizationId} quizId={quiz.id} />
 		</div>
 	</div>
 </div>

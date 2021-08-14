@@ -2,7 +2,7 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import type { QuestionPromptPublic } from './QuestionPromptPublic';
+import type { QuestionPrompt } from './QuestionPrompt';
 
 /**
  * question show
@@ -28,7 +28,7 @@ export type Question = {
      * Organization Id
      */
     organizationId: number;
-    prompt: QuestionPromptPublic;
+    prompt: QuestionPrompt;
     /**
      * Quiz Id
      */

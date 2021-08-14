@@ -1,5 +1,14 @@
 import { browser } from '$app/env';
-import { Question, QuestionCreate, QuestionUpdate, UserService } from '$lib/api/quantu-app-api';
+import {
+	Question,
+	QuestionCreate,
+	QuestionFlashCardPrivate,
+	QuestionMultipleChoicePrivate,
+	QuestionPrompt,
+	QuestionPromptPrivate,
+	QuestionUpdate,
+	UserService
+} from '$lib/api/quantu-app-api';
 import type { Readable } from 'svelte/store';
 import { get, writable } from 'svelte/store';
 import { load } from './loading';
@@ -59,7 +68,7 @@ export async function getQuestions(organizationId: number, quizId?: number) {
 
 export async function createQuestion(organizationId: number, params: QuestionCreate) {
 	const question = await load(
-		UserService.quantuAppWebControllerUserQuestionCreate(organizationId, params)
+		UserService.quantuAppWebControllerUserQuestionCreate(organizationId, cleanQuestion(params))
 	);
 	organizationQuestionsWritable.update((state) => addToState(state, question));
 	return question;
@@ -67,7 +76,7 @@ export async function createQuestion(organizationId: number, params: QuestionCre
 
 export async function updateQuestion(organizationId: number, id: number, params: QuestionUpdate) {
 	const question = await load(
-		UserService.quantuAppWebControllerUserQuestionUpdate(id, organizationId, params)
+		UserService.quantuAppWebControllerUserQuestionUpdate(id, organizationId, cleanQuestion(params))
 	);
 	organizationQuestionsWritable.update((state) => addToState(state, question));
 	return question;
@@ -112,6 +121,29 @@ function deleteFromState(
 	delete byOrganizationId[question.id];
 	delete state.byId[question.id];
 	return state;
+}
+
+function cleanQuestion(question: QuestionCreate | QuestionUpdate): QuestionCreate | QuestionUpdate {
+	if (question.prompt) {
+		question.prompt = cleanQuestionPrompt(question.type, question.prompt);
+	}
+	return question;
+}
+function cleanQuestionPrompt(type: string, prompt: QuestionPromptPrivate): QuestionPromptPrivate {
+	if (type === 'flash_card') {
+		const flashCard = prompt as QuestionFlashCardPrivate;
+		return {
+			front: flashCard.front,
+			back: flashCard.back
+		};
+	} else if (type === 'multiple_choice') {
+		const multipleChoice = prompt as QuestionMultipleChoicePrivate;
+		return {
+			question: multipleChoice.question,
+			explanation: multipleChoice.explanation,
+			choices: multipleChoice.choices
+		};
+	}
 }
 
 if (browser) {

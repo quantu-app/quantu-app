@@ -19,6 +19,10 @@ export type Organization = {
      */
     name: string;
     /**
+     * Organization tags
+     */
+    tags: Array<string>;
+    /**
      * Update timestamp
      */
     updatedAt: string;

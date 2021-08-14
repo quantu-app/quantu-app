@@ -10,6 +10,7 @@
 	import { onMount, createEventDispatcher } from 'svelte';
 
 	export let onQuill: ((quill: Quill) => void) | undefined;
+	export let placeholder: string = undefined;
 
 	let quill: Quill;
 	let element: HTMLDivElement;
@@ -53,7 +54,7 @@
 
 	onMount(() => {
 		import('@aicacia/quill-rich-editor').then(({ createQuill }) => {
-			quill = createQuill(element);
+			quill = createQuill(element, placeholder);
 
 			quill.on('text-change', onTextChange);
 			quill.on('selection-change', onSelectionChange);

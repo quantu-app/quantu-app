@@ -7,7 +7,7 @@ export interface Locals {
 	token?: string;
 }
 
-export async function handle({
+export function handle({
 	request,
 	resolve
 }: {
@@ -20,13 +20,17 @@ export async function handle({
 		request.locals.token = token;
 	}
 
-	return await resolve(request);
+	return resolve(request);
 }
 
 export function getSession(request: ServerRequest<Locals>): MaybePromise<User | null> {
 	if (request.locals.token) {
 		OpenAPI.TOKEN = request.locals.token;
-		return AuthService.quantuAppWebControllerAuthCurrent();
+		return AuthService.quantuAppWebControllerAuthCurrent().catch(() => {
+			request.locals.token = undefined;
+			OpenAPI.TOKEN = undefined;
+			return null;
+		});
 	} else {
 		return null;
 	}

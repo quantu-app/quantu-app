@@ -6,6 +6,6 @@ import type { QuestionFlashCard } from './QuestionFlashCard';
 import type { QuestionMultipleChoice } from './QuestionMultipleChoice';
 
 /**
- * Question prompt public
+ * Question prompt
  */
-export type QuestionPromptPublic = (QuestionMultipleChoice | QuestionFlashCard);
+export type QuestionPrompt = (QuestionMultipleChoice | QuestionFlashCard);

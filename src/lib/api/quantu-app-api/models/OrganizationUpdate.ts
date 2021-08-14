@@ -11,6 +11,10 @@ export type OrganizationUpdate = {
      */
     name?: string;
     /**
+     * Organization tags
+     */
+    tags?: Array<string>;
+    /**
      * Organization url
      */
     url?: string;

@@ -9,16 +9,14 @@ export type QuestionMultipleChoice = {
     /**
      * answer choices
      */
-    choices: Array<{
-        /**
-         * choice content
-         */
-        content: Array<any>,
-        /**
-         * choice key
-         */
-        key: string,
-    }>;
+    choices: {
+        '.*'?: {
+            /**
+             * choice content
+             */
+            content: Array<any>,
+        },
+    };
     /**
      * question content
      */

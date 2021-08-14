@@ -3,12 +3,17 @@
 	import type { LoadInput } from '@sveltejs/kit';
 
 	export async function load(input: LoadInput) {
-		const response = await authGuard(input);
+		const response = await authGuard(input),
+			organizationId = parseInt(input.page.params.organizationId);
+
+		if (response.status !== 302) {
+			await getQuizzes(organizationId);
+		}
 
 		return {
 			...response,
 			props: {
-				organizationId: parseInt(input.page.params.organizationId)
+				organizationId
 			}
 		};
 	}
@@ -16,19 +21,12 @@
 
 <script lang="ts">
 	import { getQuizzes, organizationQuizzes } from '$lib/state/organizationQuizzes';
-	import { currentUser } from '$lib/state/user';
 	import OrganizationLayout from '$lib/UserOrganizations/OrganizationLayout.svelte';
 	import Quizzes from '$lib/UserOrganizations/Quizzes/Quizzes.svelte';
 
 	export let organizationId: number;
-	let prevOrganizationId: number;
 
 	$: quizzes = Object.values($organizationQuizzes.byOrganizationId[organizationId] || {});
-
-	$: if ($currentUser && organizationId !== prevOrganizationId) {
-		prevOrganizationId = organizationId;
-		getQuizzes(organizationId);
-	}
 </script>
 
 <svelte:head>

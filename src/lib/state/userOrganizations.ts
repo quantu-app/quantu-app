@@ -31,7 +31,7 @@ export async function getOrganizations() {
 		return cachedQuizzes;
 	}
 	const organizations = await load(UserService.quantuAppWebControllerUserOrganizationIndex());
-	userOrganizationsWritable.update((state) => organizations.reduce(addToState, state));
+	userOrganizationsWritable.set(organizations.reduce(addToState, { byId: {} }));
 	return organizations;
 }
 

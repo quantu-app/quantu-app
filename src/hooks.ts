@@ -1,10 +1,10 @@
-import type { User } from './lib/api/quantu-app-api';
+import { AuthService, OpenAPI, User } from './lib/api/quantu-app-api';
 import type { MaybePromise } from '@sveltejs/kit/types/helper';
 import type { ServerRequest, ServerResponse } from '@sveltejs/kit/types/hooks';
 import cookie from 'cookie';
 
 export interface Locals {
-	user?: User;
+	token?: string;
 }
 
 export async function handle({
@@ -14,22 +14,20 @@ export async function handle({
 	request: ServerRequest<Locals>;
 	resolve: (request: ServerRequest<Locals>) => MaybePromise<ServerResponse>;
 }) {
-	const { token } = request.headers.cookie
-		? cookie.parse(request.headers.cookie)
-		: { token: undefined };
+	const token = request.headers.cookie ? cookie.parse(request.headers.cookie).token : 'undefined';
 
-	if (token) {
-		const response = await fetch(`${import.meta.env.VITE_API_URL}/auth`, {
-			headers: {
-				authorization: `Bearer ${token}`
-			}
-		});
-		request.locals.user = await response.json();
+	if (token && token !== 'undefined') {
+		request.locals.token = token;
 	}
 
 	return await resolve(request);
 }
 
-export function getSession(request: ServerRequest<Locals>): MaybePromise<User> {
-	return request.locals.user;
+export function getSession(request: ServerRequest<Locals>): MaybePromise<User | null> {
+	if (request.locals.token) {
+		OpenAPI.TOKEN = request.locals.token;
+		return AuthService.quantuAppWebControllerAuthCurrent();
+	} else {
+		return null;
+	}
 }

@@ -3,7 +3,11 @@
 	import type { LoadInput } from '@sveltejs/kit';
 
 	export async function load(input: LoadInput) {
-		return authGuard(input);
+		const response = await authGuard(input);
+		if (response.status !== 302) {
+			await getOrganizations();
+		}
+		return response;
 	}
 </script>
 
@@ -11,13 +15,8 @@
 	import Organizations from '$lib/UserOrganizations/Organizations.svelte';
 	import AppLayout from '$lib/AppLayout.svelte';
 	import { getOrganizations, userOrganizations } from '$lib/state/userOrganizations';
-	import { currentUser } from '$lib/state/user';
 
 	$: organizations = Object.values($userOrganizations.byId);
-
-	$: if ($currentUser) {
-		getOrganizations();
-	}
 </script>
 
 <svelte:head>

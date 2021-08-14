@@ -34,7 +34,7 @@ export async function getQuiz(organizationId: number, id: number) {
 export async function getQuizzes(organizationId: number) {
 	const quizzes = await load(UserService.quantuAppWebControllerUserQuizIndex(organizationId));
 	organizationQuizzesWritable.update((state) => {
-		delete state.byOrganizationId[organizationId];
+		state.byOrganizationId[organizationId] = {};
 		return quizzes.reduce(addToState, state);
 	});
 	return quizzes;

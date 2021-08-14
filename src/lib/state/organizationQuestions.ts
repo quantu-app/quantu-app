@@ -48,9 +48,9 @@ export async function getQuestions(organizationId: number, quizId?: number) {
 		UserService.quantuAppWebControllerUserQuestionIndex(organizationId, quizId)
 	);
 	organizationQuestionsWritable.update((state) => {
-		delete state.byOrganizationId[organizationId];
+		state.byOrganizationId[organizationId] = {};
 		if (quizId) {
-			delete state.byQuizId[quizId];
+			state.byQuizId[quizId] = {};
 		}
 		return questions.reduce(addToState, state);
 	});

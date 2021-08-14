@@ -3,32 +3,30 @@
 	import type { LoadInput } from '@sveltejs/kit';
 
 	export async function load(input: LoadInput) {
-		const response = await authGuard(input);
+		const response = await authGuard(input),
+			organizationId = parseInt(input.page.params.organizationId);
+
+		if (response.status !== 302) {
+			await getOrganization(organizationId);
+		}
 
 		return {
 			...response,
 			props: {
-				organizationId: parseInt(input.page.params.organizationId)
+				organizationId
 			}
 		};
 	}
 </script>
 
 <script lang="ts">
-	import { currentUser } from '$lib/state/user';
 	import { getOrganization, userOrganizations } from '$lib/state/userOrganizations';
 	import Organization from '$lib/UserOrganizations/Organization.svelte';
 	import OrganizationLayout from '$lib/UserOrganizations/OrganizationLayout.svelte';
 
 	export let organizationId: number;
-	let prevOrganizationId: number;
 
 	$: organization = $userOrganizations.byId[organizationId];
-
-	$: if ($currentUser && organizationId !== prevOrganizationId) {
-		prevOrganizationId = organizationId;
-		getOrganization(organizationId);
-	}
 </script>
 
 <svelte:head>

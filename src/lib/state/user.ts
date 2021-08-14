@@ -1,13 +1,11 @@
 import { AuthService, OpenAPI, User } from '$lib/api/quantu-app-api';
 import type { Readable } from 'svelte/store';
 import { get, writable, derived } from 'svelte/store';
-import { onlineEmitter } from './online';
 import EventEmitter from 'eventemitter3';
 import type { Socket } from 'phoenix';
 import { load } from './loading';
-import cookie from 'js-cookie';
 import { session } from '$app/stores';
-import { browser } from '$app/env';
+import Cookies from 'js-cookie';
 
 const socketWritable = writable<Socket>();
 
@@ -57,16 +55,6 @@ export async function signOut() {
 	await signOutUser();
 }
 
-export async function fetchCurrentUser() {
-	const currentUser = getCurrentUser();
-
-	if (currentUser && currentUser.token) {
-		await signInWithToken(currentUser.token);
-	} else {
-		await signOutUser();
-	}
-}
-
 export async function signInWithToken(token: string) {
 	try {
 		OpenAPI.TOKEN = token;
@@ -79,16 +67,9 @@ export async function signInWithToken(token: string) {
 
 async function signInUser(currentUser: User) {
 	OpenAPI.TOKEN = currentUser.token;
-	cookie.set('token', currentUser.token);
-
+	Cookies.set('token', currentUser.token);
 	session.set(currentUser);
-	await fetch('/session', {
-		method: 'POST',
-		body: JSON.stringify(currentUser)
-	});
-
 	await setUserSocket(currentUser.token);
-
 	userEmitter.emit('signIn', currentUser);
 }
 
@@ -103,19 +84,9 @@ async function setUserSocket(token: string) {
 
 async function signOutUser() {
 	OpenAPI.TOKEN = undefined;
-	cookie.remove('token');
-
-	await fetch('/session', {
-		method: 'DELETE'
-	});
+	Cookies.remove('token');
 	session.set(null);
-
 	get(socketWritable)?.disconnect();
 	socketWritable.set(null);
-
 	userEmitter.emit('signOut');
-}
-
-if (browser) {
-	onlineEmitter.on('online', fetchCurrentUser);
 }

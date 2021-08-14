@@ -10,32 +10,18 @@
 	"engines": {
 		"node": "14"
 	},
-	"build": {
-		"appId": "quantu.app",
-		"files": [
-			"package.json",
-			"electron.cjs"
-		],
-		"directories": {
-			"output": "electron-build"
-		},
-		"extraFiles": [
-			{
-				"from": "build",
-				"to": "resources/app.asar.unpacked/build"
-			}
-		]
+	"bin": "build/index.js",
+	"pkg": {
+		"assets": "build/assets/**/*!(*.js|*.map|*.src)"
 	},
-	"main": "electron.cjs",
 	"scripts": {
+		"tauri": "tauri",
 		"svelte-kit": "svelte-kit",
 		"clean": "rm -rf node_modules/.vite && rm -rf .svelte-kit && rm -rf build && rm -rf electron-build",
 		"web": "svelte-kit dev --host --open",
 		"web.build": "svelte-kit build",
-		"desktop": "electron electron.dev.cjs",
-		"desktop.linux": "electron-builder -l",
-		"desktop.mac": "npm run web.build && electron-builder -m --dir -c.compression=store -c.mac.identity=null",
-		"desktop.windows": "npm run web.build && electron-builder -w",
+		"desktop": "tauri dev",
+		"desktop.build": "node scripts/pkg.cjs",
 		"docker.build": "docker build -t docker.pkg.github.com/quantu-app/app/quantu-app-ui:latest .",
 		"docker.push": "docker push docker.pkg.github.com/quantu-app/app/quantu-app-ui:latest",
 		"docker.run": "docker run --name quantu-app --rm -it -p 3000:3000 docker.pkg.github.com/quantu-app/app/quantu-app-ui:latest",
@@ -51,7 +37,9 @@
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-node": "next",
-		"@types/bootstrap": "^5.1.0",
+		"@tauri-apps/api": "^1.0.0-beta.5",
+		"@tauri-apps/cli": "^1.0.0-beta.6",
+		"@types/bootstrap": "^5.1.1",
 		"@types/js-cookie": "^2.2.7",
 		"@types/katex": "^0.11.1",
 		"@types/phoenix": "^1.5.2",
@@ -59,11 +47,7 @@
 		"@types/uuid": "^8.3.1",
 		"@typescript-eslint/eslint-plugin": "^4.29.1",
 		"@typescript-eslint/parser": "^4.29.1",
-		"autoprefixer": "^10.3.1",
 		"bootstrap": "^5.1.0",
-		"cssnano": "^5.0.6",
-		"electron": "^13.1.8",
-		"electron-builder": "^22.11.7",
 		"eslint": "^7.32.0",
 		"eslint-config-prettier": "^8.3.0",
 		"eslint-plugin-svelte3": "^3.2.0",
@@ -73,21 +57,19 @@
 		"sass": "^1.37.5",
 		"svelte-check": "^2.2.4",
 		"svelte-preprocess": "^4.7.4",
-		"tailwindcss": "^2.2.4",
-		"tslib": "^2.3.0",
+		"tslib": "^2.3.1",
 		"typescript": "^4.3.5",
 		"vite": "^2.4.4"
 	},
 	"dependencies": {
 		"@aicacia/debounce": "^0.1.9",
-		"@aicacia/quill-rich-editor": "aicacia/ts-quill-rich-editor#1decd24fb4bf6ae21a509ffbfb7d428a8c12222c",
+		"@aicacia/quill-rich-editor": "git+https://github.com/aicacia/ts-quill-rich-editor.git#1decd24fb4bf6ae21a509ffbfb7d428a8c12222c",
 		"@aicacia/string-fuzzy_equals": "^0.1.2",
 		"@sveltejs/kit": "next",
 		"@types/cookie": "^0.4.1",
 		"cookie": "^0.4.1",
 		"eventemitter3": "^4.0.7",
 		"fast-equals": "^2.0.3",
-		"find-open-port": "^2.0.3",
 		"js-cookie": "^3.0.0",
 		"katex": "^0.13.13",
 		"localforage": "^1.9.0",

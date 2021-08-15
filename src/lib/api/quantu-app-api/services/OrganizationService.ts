@@ -27,13 +27,19 @@ export class OrganizationService {
     /**
      * List Organizations
      * Returns all organizations
+     * @param subscriptions Only user's subscriptions
      * @returns OrganizationList User Organizations
      * @throws ApiError
      */
-    public static async quantuAppWebControllerOrganizationIndex(): Promise<OrganizationList> {
+    public static async quantuAppWebControllerOrganizationIndex(
+        subscriptions?: boolean,
+    ): Promise<OrganizationList> {
         const result = await __request({
             method: 'GET',
             path: `/organizations`,
+            query: {
+                'subscriptions': subscriptions,
+            },
         });
         return result.body;
     }

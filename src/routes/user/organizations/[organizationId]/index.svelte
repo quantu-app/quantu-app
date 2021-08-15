@@ -1,12 +1,14 @@
 <script context="module" lang="ts">
 	import { authGuard } from '$lib/guard/authGuard';
 	import type { LoadInput } from '@sveltejs/kit';
+	import { browser } from '$app/env';
+	import { isValidStatus } from '$lib/guard/isValidStatus';
 
 	export async function load(input: LoadInput) {
 		const response = await authGuard(input),
 			organizationId = parseInt(input.page.params.organizationId);
 
-		if (response.status !== 302) {
+		if (!browser && isValidStatus(response)) {
 			await getOrganization(organizationId);
 		}
 

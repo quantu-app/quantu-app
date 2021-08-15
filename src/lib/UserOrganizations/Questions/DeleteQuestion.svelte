@@ -1,7 +1,7 @@
 <script lang="ts">
-	import type { Question } from '$lib/api/quantu-app-api';
+	import type { QuestionPrivate } from '$lib/api/quantu-app-api';
 
-	export let question: Question;
+	export let question: QuestionPrivate;
 	export let onDeleteQuestion: () => Promise<void>;
 
 	let deleteQuestionText = '';

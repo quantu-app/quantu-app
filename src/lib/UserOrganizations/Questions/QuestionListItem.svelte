@@ -1,8 +1,8 @@
 <script lang="ts">
-	import type { Question } from '$lib/api/quantu-app-api';
+	import type { QuestionPrivate } from '$lib/api/quantu-app-api';
 	import { titleCase } from 'title-case';
 
-	export let question: Question;
+	export let question: QuestionPrivate;
 	export let onUpdate: () => void;
 	export let onDelete: () => void;
 

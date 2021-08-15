@@ -31,30 +31,32 @@
 </script>
 
 <div class="container">
-	<div class="mb-2">
-		<label for="organization-name" class="form-label">Name</label>
-		<input
-			id="organization-name"
-			type="text"
-			class="form-control"
-			placeholder="Enter Name"
-			bind:value={organization.name}
-			on:change={onNameChange}
-		/>
-	</div>
-	<div class="mb-2">
-		<label for="organization-location" class="form-label">URL</label>
-		<input
-			id="organization-location"
-			type="text"
-			class="form-control"
-			placeholder="Enter URL"
-			bind:value={organization.url}
-			on:change={onUrlChange}
-		/>
-	</div>
-	<div class="mb-2">
-		<label for="organization-tags" class="form-label">Quiz Tags</label>
-		<Tags id="organization-tags" bind:tags={organization.tags} on:change={onTagsChange} />
-	</div>
+	<form on:submit|preventDefault>
+		<div class="mb-2">
+			<label for="organization-name" class="form-label">Organization Name</label>
+			<input
+				id="organization-name"
+				type="text"
+				class="form-control"
+				placeholder="Enter Name"
+				bind:value={organization.name}
+				on:change={onNameChange}
+			/>
+		</div>
+		<div class="mb-2">
+			<label for="organization-location" class="form-label">Organization URL</label>
+			<input
+				id="organization-location"
+				type="text"
+				class="form-control"
+				placeholder="Enter URL"
+				bind:value={organization.url}
+				on:change={onUrlChange}
+			/>
+		</div>
+		<div class="mb-2">
+			<label for="organization-tags" class="form-label">Organization Tags</label>
+			<Tags id="organization-tags" bind:tags={organization.tags} on:change={onTagsChange} />
+		</div>
+	</form>
 </div>

@@ -10,6 +10,14 @@ $warning: #ff7e67;
 $light: #fafafa;
 $dark: #4e4e4e;
 
+$container-max-widths: (
+	sm: 320px,
+	md: 512px,
+	lg: 768px,
+	xl: 968px,
+	xxl: 1024px
+);
+
 @import 'bootstrap/scss/bootstrap';
 @import 'bootstrap/scss/functions';
 

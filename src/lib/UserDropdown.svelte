@@ -53,6 +53,12 @@
 		<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="user-dropdown">
 			<li><span class="dropdown-item disabled">{$currentUser.username}</span></li>
 			<li>
+				<a type="button" class="dropdown-item" aria-label="Organizations" href="/user/organizations"
+					>Organizations</a
+				>
+			</li>
+			<li><hr class="dropdown-divider" /></li>
+			<li>
 				<button type="button" class="dropdown-item" aria-label="Sign out" on:click={signOut}
 					>Sign out</button
 				>

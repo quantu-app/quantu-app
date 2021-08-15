@@ -11,26 +11,21 @@
 </script>
 
 <script lang="ts">
-	import type { QuestionPrivate } from '$lib/api/quantu-app-api';
-	import QuestionList from './QuestionList.svelte';
-	import CreateQuestion from './CreateQuestion.svelte';
+	import type { Question } from '$lib/api/quantu-app-api';
+	import QuestionList from '$lib/Questions/QuestionList.svelte';
 	import { fuzzyEquals } from '@aicacia/string-fuzzy_equals';
 	import Search from '$lib/Search.svelte';
 
-	export let organizationId: number;
-	export let questions: QuestionPrivate[];
+	export let questions: Question[];
 
-	$: filter = (question: QuestionPrivate) =>
+	$: filter = (question: Question) =>
 		$state.questionNameFilter ? fuzzyEquals($state.questionNameFilter, question.name) : true;
 </script>
 
 <div class="container">
-	<div class="d-flex justify-content-end mt-2">
-		<CreateQuestion {organizationId} quizId={null} />
-	</div>
 	<Search bind:filter={$state.questionNameFilter} />
 </div>
 
 <div class="container">
-	<QuestionList {organizationId} questions={questions.filter(filter)} />
+	<QuestionList questions={questions.filter(filter)} />
 </div>

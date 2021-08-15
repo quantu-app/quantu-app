@@ -1,10 +1,9 @@
 import { browser } from '$app/env';
 import {
-	Question,
+	QuestionPrivate,
 	QuestionCreate,
 	QuestionFlashCardPrivate,
 	QuestionMultipleChoicePrivate,
-	QuestionPrompt,
 	QuestionPromptPrivate,
 	QuestionUpdate,
 	UserService
@@ -15,12 +14,12 @@ import { load } from './loading';
 import { userEmitter } from './user';
 
 interface IOrganizationQuestionsStore {
-	byId: { [id: number]: Question };
+	byId: { [id: number]: QuestionPrivate };
 	byOrganizationId: {
-		[organizationId: number]: { [id: number]: Question };
+		[organizationId: number]: { [id: number]: QuestionPrivate };
 	};
 	byQuizId: {
-		[organizationId: number]: { [id: number]: Question };
+		[organizationId: number]: { [id: number]: QuestionPrivate };
 	};
 }
 
@@ -68,7 +67,10 @@ export async function getQuestions(organizationId: number, quizId?: number) {
 
 export async function createQuestion(organizationId: number, params: QuestionCreate) {
 	const question = await load(
-		UserService.quantuAppWebControllerUserQuestionCreate(organizationId, cleanQuestion(params))
+		UserService.quantuAppWebControllerUserQuestionCreate(
+			organizationId,
+			cleanQuestion(params) as QuestionCreate
+		)
 	);
 	organizationQuestionsWritable.update((state) => addToState(state, question));
 	return question;
@@ -91,7 +93,7 @@ export async function deleteQuestion(organizationId: number, id: number) {
 
 function addToState(
 	state: IOrganizationQuestionsStore,
-	question: Question
+	question: QuestionPrivate
 ): IOrganizationQuestionsStore {
 	const byOrganizationId =
 		state.byOrganizationId[question.organizationId] ||
@@ -99,7 +101,8 @@ function addToState(
 
 	if (question.quizId) {
 		const byQuizId = state.byQuizId[question.quizId] || (state.byQuizId[question.quizId] = {});
-		byQuizId[question.id] = { ...question };
+		byQuizId[question.id] = question;
+		question = { ...question, quizId: null, index: null };
 	}
 	byOrganizationId[question.id] = question;
 	state.byId[question.id] = question;
@@ -108,7 +111,7 @@ function addToState(
 
 function deleteFromState(
 	state: IOrganizationQuestionsStore,
-	question: Question
+	question: QuestionPrivate
 ): IOrganizationQuestionsStore {
 	const byOrganizationId =
 		state.byOrganizationId[question.organizationId] ||

@@ -5,8 +5,9 @@
 	import { isValidStatus } from '$lib/guard/isValidStatus';
 
 	export async function load(input: LoadInput) {
-		const response = await authGuard(input),
-			organizationId = parseInt(input.page.params.organizationId);
+		const response = authGuard(input),
+			organizationIdString = input.page.query.get('organizationId'),
+			organizationId = organizationIdString && parseInt(organizationIdString, 10);
 
 		if (!browser && isValidStatus(response)) {
 			await getQuestions(organizationId);
@@ -22,13 +23,15 @@
 </script>
 
 <script lang="ts">
-	import { getQuestions, organizationQuestions } from '$lib/state/organizationQuestions';
-	import OrganizationLayout from '$lib/UserOrganizations/OrganizationLayout.svelte';
-	import Questions from '$lib/UserOrganizations/Questions/Questions.svelte';
+	import { getQuestions, questions } from '$lib/state/questions';
+	import AppLayout from '$lib/AppLayout.svelte';
+	import Questions from '$lib/Questions/Questions.svelte';
 
 	export let organizationId: number;
 
-	$: questions = Object.values($organizationQuestions.byOrganizationId[organizationId] || {});
+	$: questionList = Object.values(
+		(organizationId ? $questions.byOrganizationId[organizationId] : $questions.byId) || {}
+	);
 
 	if (browser) {
 		getQuestions(organizationId);
@@ -39,6 +42,6 @@
 	<title>Questions</title>
 </svelte:head>
 
-<OrganizationLayout {organizationId}>
-	<Questions {organizationId} {questions} />
-</OrganizationLayout>
+<AppLayout>
+	<Questions questions={questionList} />
+</AppLayout>

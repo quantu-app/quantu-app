@@ -1,22 +1,22 @@
 <script lang="ts">
-	import type { Question } from '$lib/api/quantu-app-api';
+	import type { QuestionPrivate } from '$lib/api/quantu-app-api';
 	import { deleteQuestion, updateQuestion } from '$lib/state/organizationQuestions';
 	import DeleteQuestion from './DeleteQuestion.svelte';
 	import QuestionListItem from './QuestionListItem.svelte';
 	import UpdateQuestion from './UpdateQuestion.svelte';
 
 	export let organizationId: number;
-	export let questions: Question[];
+	export let questions: QuestionPrivate[];
 
-	let questionToUpdate: Question;
-	let questionToDelete: Question;
+	let questionToUpdate: QuestionPrivate;
+	let questionToDelete: QuestionPrivate;
 
-	function createOnUpdate(question: Question) {
+	function createOnUpdate(question: QuestionPrivate) {
 		return function onUpdate() {
 			questionToUpdate = question;
 		};
 	}
-	function createOnDelete(question: Question) {
+	function createOnDelete(question: QuestionPrivate) {
 		return function onDelete() {
 			questionToDelete = question;
 		};
@@ -40,7 +40,7 @@
 		}
 	}
 
-	function sortQuestion(a: Question, b: Question) {
+	function sortQuestion(a: QuestionPrivate, b: QuestionPrivate) {
 		return a.index - b.index;
 	}
 </script>

@@ -5,9 +5,14 @@
 <Layout
 	navItems={[
 		{
-			href: '/user/organizations',
-			icon: 'command',
-			title: 'Organizations'
+			href: `/quizzes`,
+			icon: 'question',
+			title: 'Quizzes'
+		},
+		{
+			href: `/questions`,
+			icon: 'list',
+			title: 'Questions'
 		}
 	]}
 >

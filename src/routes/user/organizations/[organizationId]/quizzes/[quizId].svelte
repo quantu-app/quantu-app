@@ -1,13 +1,15 @@
 <script context="module" lang="ts">
 	import { authGuard } from '$lib/guard/authGuard';
 	import type { LoadInput } from '@sveltejs/kit';
+	import { browser } from '$app/env';
+	import { isValidStatus } from '$lib/guard/isValidStatus';
 
 	export async function load(input: LoadInput) {
 		const response = await authGuard(input),
 			organizationId = parseInt(input.page.params.organizationId),
 			quizId = parseInt(input.page.params.quizId);
 
-		if (response.status !== 302) {
+		if (!browser && isValidStatus(response)) {
 			await Promise.all([getQuiz(organizationId, quizId), getQuestions(organizationId, quizId)]);
 		}
 
@@ -32,6 +34,11 @@
 
 	$: quiz = $organizationQuizzes.byId[quizId];
 	$: questions = Object.values($organizationQuestions.byQuizId[quizId] || {});
+
+	if (browser) {
+		getQuiz(organizationId, quizId);
+		getQuestions(organizationId, quizId);
+	}
 </script>
 
 <svelte:head>

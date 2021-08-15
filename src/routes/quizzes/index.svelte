@@ -6,7 +6,8 @@
 
 	export async function load(input: LoadInput) {
 		const response = await authGuard(input),
-			organizationId = parseInt(input.page.params.organizationId);
+			organizationIdString = input.page.query.get('organizationId'),
+			organizationId = organizationIdString && parseInt(organizationIdString, 10);
 
 		if (!browser && isValidStatus(response)) {
 			await getQuizzes(organizationId);
@@ -22,13 +23,15 @@
 </script>
 
 <script lang="ts">
-	import { getQuizzes, organizationQuizzes } from '$lib/state/organizationQuizzes';
-	import OrganizationLayout from '$lib/UserOrganizations/OrganizationLayout.svelte';
-	import Quizzes from '$lib/UserOrganizations/Quizzes/Quizzes.svelte';
+	import AppLayout from '$lib/AppLayout.svelte';
+	import Quizzes from '$lib/Quizzes/Quizzes.svelte';
+	import { getQuizzes, quizzes } from '$lib/state/quizzes';
 
-	export let organizationId: number;
+	export let organizationId: number | undefined;
 
-	$: quizzes = Object.values($organizationQuizzes.byOrganizationId[organizationId] || {});
+	$: quizList = Object.values(
+		(organizationId ? $quizzes.byOrganizationId[organizationId] : $quizzes.byId) || {}
+	);
 
 	if (browser) {
 		getQuizzes(organizationId);
@@ -39,6 +42,6 @@
 	<title>Quizzes</title>
 </svelte:head>
 
-<OrganizationLayout {organizationId}>
-	<Quizzes {organizationId} {quizzes} />
-</OrganizationLayout>
+<AppLayout>
+	<Quizzes quizzes={quizList} />
+</AppLayout>

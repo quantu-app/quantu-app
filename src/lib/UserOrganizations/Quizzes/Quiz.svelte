@@ -40,30 +40,30 @@
 </script>
 
 <div class="container mb-2">
-	<div class="d-flex justify-content-between">
-		<div>
-			<form on:submit|preventDefault>
-				<div class="d-flex">
-					<div>
-						<label for="quiz-name" class="form-label">Quiz Name</label>
-						<input
-							id="quiz-name"
-							type="text"
-							class="form-control"
-							placeholder="Enter Name"
-							bind:value={quiz.name}
-							on:change={onNameChange}
-						/>
-					</div>
-					<div class="flex-grow-1 ms-2">
-						<label for="quiz-tags" class="form-label">Quiz Tags</label>
-						<Tags id="quiz-tags" bind:tags={quiz.tags} on:change={onTagsChange} />
-					</div>
+	<div class="row justify-content-between">
+		<div class="col-md">
+			<form class="row" on:submit|preventDefault>
+				<div class="col-md">
+					<label for="quiz-name" class="form-label">Quiz Name</label>
+					<input
+						id="quiz-name"
+						type="text"
+						class="form-control"
+						placeholder="Enter Name"
+						bind:value={quiz.name}
+						on:change={onNameChange}
+					/>
+				</div>
+				<div class="col-md">
+					<label for="quiz-tags" class="form-label">Quiz Tags</label>
+					<Tags id="quiz-tags" bind:tags={quiz.tags} on:change={onTagsChange} />
 				</div>
 			</form>
 		</div>
-		<div>
-			<CreateQuestion {organizationId} quizId={quiz.id} />
+		<div class="col-md">
+			<div class="d-flex mt-2 justify-content-end">
+				<CreateQuestion {organizationId} quizId={quiz.id} />
+			</div>
 		</div>
 	</div>
 </div>

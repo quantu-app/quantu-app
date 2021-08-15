@@ -5,7 +5,7 @@
 	export let navItems: Array<{ href: string; icon: string; title: string }>;
 </script>
 
-<div class="d-flex flex-column flex-shrink-0" style="width: 4em;">
+<div class="d-flex flex-column flex-shrink-0 border-end" style="width: 4em;">
 	<a
 		href="/"
 		class="d-block px-2 py-3 link-dark text-decoration-none logo"

@@ -18,3 +18,16 @@ export function isEmptyObject(value: unknown, checkOwnProperty = false) {
 	}
 	return checkPrototypeProperty(value as Record<string, unknown>);
 }
+
+export function isEmptyArray(value: unknown) {
+	return (
+		value !== null &&
+		typeof value === 'object' &&
+		typeof value['length'] === 'number' &&
+		value['length'] === 0
+	);
+}
+
+export function isEmpty(value: unknown) {
+	return value == null || isEmptyArray(value) || isEmptyObject(value);
+}

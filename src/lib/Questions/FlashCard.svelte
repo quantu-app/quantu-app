@@ -4,19 +4,20 @@
 	import Prompt from './Prompt.svelte';
 
 	export let question: Question;
+	export let answered: boolean;
+	export let result: number;
 
-	let result;
 	let shown = false;
+	let input: number;
 
 	$: prompt = question.prompt as QuestionFlashCard;
-	$: getInput = () => result;
 
 	function onShow() {
 		shown = true;
 	}
 </script>
 
-<Prompt ready={result != null} {question} {getInput}>
+<Prompt {question} bind:answered bind:input bind:result>
 	<div slot="content">
 		<RichViewer content={prompt.front} />
 		{#if shown}
@@ -29,25 +30,26 @@
 			<div class="btn-group w-100">
 				<button
 					type="button"
-					disabled={result === 0}
+					disabled={input === 0}
 					class="btn btn-danger"
-					on:click={() => (result = 0)}>No idea</button
+					on:click={() => (input = 0)}>No idea</button
 				>
 				<button
 					type="button"
-					disabled={result === 0.5}
+					disabled={input === 0.5}
 					class="btn btn-secondary"
-					on:click={() => (result = 0.5)}>Somewhat</button
+					on:click={() => (input = 0.5)}>Somewhat</button
 				>
 				<button
 					type="button"
-					disabled={result === 1}
+					disabled={input === 1}
 					class="btn btn-success"
-					on:click={() => (result = 1)}>Exactly</button
+					on:click={() => (input = 1)}>Exactly</button
 				>
 			</div>
 		{:else}
 			<button type="button" class="btn btn-primary ms-auto" on:click={onShow}>Show</button>
 		{/if}
 	</div>
+	<slot slot="extra" name="extra" />
 </Prompt>

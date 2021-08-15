@@ -18,7 +18,7 @@
 	/>
 	<div class="d-flex flex-row h-100">
 		<Sidebar {navItems} />
-		<div class="d-flex flex-column h-100 flex-grow-1 border-start">
+		<div class="d-flex flex-column h-100 flex-grow-1">
 			<slot />
 		</div>
 	</div>

@@ -1,35 +1,48 @@
 <script context="module" lang="ts">
-	import { writable } from 'svelte/store';
-
-	interface IState {
-		questionNameFilter: string | undefined;
+	interface IQuizConfig {
+		seed: number;
+		questionCount: number;
 	}
-
-	const state = writable<IState>({
-		questionNameFilter: undefined
-	});
 </script>
 
 <script lang="ts">
 	import type { Quiz, Question } from '$lib/api/quantu-app-api';
-	import Search from '$lib/Search.svelte';
-	import QuestionList from '$lib/Questions/QuestionList.svelte';
-	import { fuzzyEquals } from '@aicacia/string-fuzzy_equals';
 
 	export let quiz: Quiz;
 	export let questions: Question[];
 
-	$: filter = (question: Question) =>
-		$state.questionNameFilter ? fuzzyEquals($state.questionNameFilter, question.name) : true;
+	let quizConfig: IQuizConfig = {
+		seed: Date.now(),
+		questionCount: questions.length
+	};
 </script>
 
 <div class="container mb-2">
-	<h3>{quiz.name}</h3>
-</div>
-
-<div class="container">
-	<Search bind:filter={$state.questionNameFilter} />
-</div>
-<div class="container">
-	<QuestionList questions={questions.filter(filter)} />
+	<h2>{quiz.name}</h2>
+	{#each quiz.tags as tag}
+		<span class="badge bg-primary me-2">{tag}</span>
+	{/each}
+	<hr />
+	<div class="row">
+		<div class="col-md">
+			<label for="question-count" class="form-label">Number of Questions</label>
+			<input
+				id="question-count"
+				type="number"
+				class="form-control"
+				placeholder="Question Name"
+				min={1}
+				max={questions.length}
+				bind:value={quizConfig.questionCount}
+			/>
+		</div>
+	</div>
+	<div class="d-flex justify-content-end mt-2">
+		<a
+			type="button"
+			class="btn btn-primary"
+			href={`/quizzes/${quiz.id}/answer?index=0&seed=${quizConfig.seed}&questionCount=${quizConfig.questionCount}`}
+			>Start</a
+		>
+	</div>
 </div>

@@ -32,6 +32,24 @@ export async function getQuestion(id: number) {
 }
 
 export async function getQuestions(organizationId?: number, quizId?: number) {
+	if (quizId) {
+		const cachedQuestions = Object.values(get(questionsWritable).byQuizId[quizId] || {});
+		if (cachedQuestions.length) {
+			if (organizationId) {
+				return cachedQuestions.filter((question) => question.organizationId === organizationId);
+			} else {
+				return cachedQuestions;
+			}
+		}
+	}
+	if (organizationId) {
+		const cachedQuestions = Object.values(
+			get(questionsWritable).byOrganizationId[organizationId] || {}
+		);
+		if (cachedQuestions.length) {
+			return cachedQuestions;
+		}
+	}
 	const questions = await load(
 		QuestionService.quantuAppWebControllerQuestionIndex(organizationId, quizId)
 	);

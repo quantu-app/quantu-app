@@ -4,14 +4,16 @@
 	import Prompt from './Prompt.svelte';
 
 	export let question: Question;
+	export let answered: boolean;
+	export let result: number;
 
 	let checked: Record<string, boolean> = {};
 
 	$: prompt = question.prompt as QuestionMultipleChoice;
-	$: getInput = () => Object.keys(checked).filter((key) => checked[key]);
+	$: input = Object.keys(checked).filter((key) => checked[key]);
 </script>
 
-<Prompt ready={true} {question} {getInput}>
+<Prompt {question} bind:answered bind:input bind:result>
 	<RichViewer slot="content" content={prompt.question} />
 	<ul slot="input" class="list-group list-group-flush">
 		{#each Object.entries(prompt.choices) as [key, choice], index}
@@ -35,4 +37,5 @@
 			</li>
 		{/each}
 	</ul>
+	<slot slot="extra" name="extra" />
 </Prompt>

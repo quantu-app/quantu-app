@@ -33,9 +33,17 @@
 			type="button"
 			disabled={!answered}
 			class="btn btn-primary"
-			href={`/quizzes/${quiz.id}/answer?index=${
-				index + 1
-			}&seed=${seed}&questionCount=${questionCount}`}>Next</a
+			href={index >= questionCount - 1
+				? `/quizzes/${quiz.id}/review?seed=${seed}&questionCount=${questionCount}`
+				: `/quizzes/${quiz.id}/answer?index=${
+						index + 1
+				  }&seed=${seed}&questionCount=${questionCount}`}
 		>
+			{#if index >= questionCount - 1}
+				Finish
+			{:else}
+				Next
+			{/if}
+		</a>
 	</QuestionComponent>
 </div>

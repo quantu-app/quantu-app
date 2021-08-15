@@ -12,4 +12,8 @@
 	{#each quiz.tags as tag}
 		<span class="badge bg-primary me-2">{tag}</span>
 	{/each}
+	<hr />
+	<div class="d-flex justify-content-end mt-2">
+		<a type="button" class="btn btn-primary" href={`/quizzes/${quiz.id}`}>Retake</a>
+	</div>
 </div>

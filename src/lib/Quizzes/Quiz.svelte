@@ -11,10 +11,17 @@
 	export let quiz: Quiz;
 	export let questions: Question[];
 
+	let lastQuestions: Question[];
+
 	let quizConfig: IQuizConfig = {
 		seed: Date.now(),
 		questionCount: questions.length
 	};
+
+	$: if (lastQuestions !== questions) {
+		lastQuestions = questions;
+		quizConfig.questionCount = questions.length;
+	}
 </script>
 
 <div class="container mb-2">

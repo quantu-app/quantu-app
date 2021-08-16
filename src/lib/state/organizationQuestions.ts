@@ -1,13 +1,13 @@
 import { browser } from '$app/env';
-import {
+import type {
 	QuestionPrivate,
 	QuestionCreate,
 	QuestionFlashCardPrivate,
 	QuestionMultipleChoicePrivate,
 	QuestionPromptPrivate,
-	QuestionUpdate,
-	UserService
+	QuestionUpdate
 } from '$lib/api/quantu-app-api';
+import { UserService } from '$lib/api/quantu-app-api';
 import type { Readable } from 'svelte/store';
 import { get, writable } from 'svelte/store';
 import { load } from './loading';

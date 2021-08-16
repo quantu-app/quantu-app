@@ -1,5 +1,6 @@
 import EventEmitter from 'eventemitter3';
-import { Readable, get, writable, derived } from 'svelte/store';
+import type { Readable } from 'svelte/store';
+import { get, writable, derived } from 'svelte/store';
 import { addNotification, NotificationType } from './notifications';
 
 const { update, subscribe } = writable(0);

@@ -1,5 +1,6 @@
 import { browser } from '$app/env';
-import { Organization, OrganizationCreate, UserService } from '$lib/api/quantu-app-api';
+import type { Organization, OrganizationCreate } from '$lib/api/quantu-app-api';
+import { UserService } from '$lib/api/quantu-app-api';
 import type { Readable } from 'svelte/store';
 import { get, writable } from 'svelte/store';
 import { load } from './loading';

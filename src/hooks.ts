@@ -1,4 +1,5 @@
-import { AuthService, OpenAPI, User } from './lib/api/quantu-app-api';
+import type { User } from './lib/api/quantu-app-api';
+import { AuthService, OpenAPI } from './lib/api/quantu-app-api';
 import type { MaybePromise } from '@sveltejs/kit/types/helper';
 import type { ServerRequest, ServerResponse } from '@sveltejs/kit/types/hooks';
 import cookie from 'cookie';

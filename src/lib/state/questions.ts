@@ -1,5 +1,6 @@
 import { browser } from '$app/env';
-import { Question, QuestionAnswer, QuestionService } from '$lib/api/quantu-app-api';
+import type { Question, QuestionAnswer } from '$lib/api/quantu-app-api';
+import { QuestionService } from '$lib/api/quantu-app-api';
 import type { Readable } from 'svelte/store';
 import { get, writable } from 'svelte/store';
 import { load } from './loading';

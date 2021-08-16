@@ -1,5 +1,6 @@
 import EventEmitter from 'eventemitter3';
-import { Readable, get, writable } from 'svelte/store';
+import type { Readable } from 'svelte/store';
+import { get, writable } from 'svelte/store';
 
 const { set, subscribe } = writable(typeof navigator === 'object' ? navigator.onLine : false);
 

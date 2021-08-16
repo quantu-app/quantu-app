@@ -1,4 +1,5 @@
-import { AuthService, OpenAPI, User } from '$lib/api/quantu-app-api';
+import type { User } from '$lib/api/quantu-app-api';
+import { AuthService, OpenAPI } from '$lib/api/quantu-app-api';
 import type { Readable } from 'svelte/store';
 import { get, writable, derived } from 'svelte/store';
 import EventEmitter from 'eventemitter3';

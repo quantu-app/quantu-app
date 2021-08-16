@@ -1,4 +1,5 @@
-import { OpenAPI, User } from '$lib/api/quantu-app-api';
+import type { User } from '$lib/api/quantu-app-api';
+import { OpenAPI } from '$lib/api/quantu-app-api';
 import type { LoadInput, LoadOutput } from '@sveltejs/kit';
 import type { Rec } from '@sveltejs/kit/types/helper';
 

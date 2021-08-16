@@ -1,5 +1,6 @@
 import { browser } from '$app/env';
-import { Quiz, QuizService } from '$lib/api/quantu-app-api';
+import type { Quiz } from '$lib/api/quantu-app-api';
+import { QuizService } from '$lib/api/quantu-app-api';
 import type { Readable } from 'svelte/store';
 import { get, writable } from 'svelte/store';
 import { load } from './loading';

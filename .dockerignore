@@ -4,7 +4,8 @@ node_modules
 /build
 /electron-build
 /helm
-/functions
+/scripts
+/src-tauri
 .env.example
 .electron.cjs
 .electron.dev.cjs

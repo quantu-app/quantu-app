@@ -35,22 +35,23 @@
 </script>
 
 <script lang="ts">
-	import { XorShiftRng } from '@aicacia/rand';
 	import { getQuestions, questions } from '$lib/state/questions';
 	import { getQuiz, quizzes } from '$lib/state/quizzes';
 	import AppLayout from '$lib/AppLayout.svelte';
 	import AnswerQuizQuestion from '$lib/Quizzes/AnswerQuizQuestion.svelte';
+	import { shuffle, createRandom } from '$lib/utils';
 
 	export let quizId: number;
 	export let questionCount: number;
 	export let seed: number;
 	export let index: number;
 
-	$: rng = XorShiftRng.fromSeed(seed);
+	$: rng = createRandom(seed);
 	$: quiz = $quizzes.byId[quizId];
-	$: questionList = rng
-		.shuffle(Object.values($questions.byQuizId[quizId] || {}))
-		.slice(0, questionCount);
+	$: questionList = shuffle(rng, Object.values($questions.byQuizId[quizId] || {})).slice(
+		0,
+		questionCount
+	);
 	$: question = questionList[index];
 
 	if (browser) {

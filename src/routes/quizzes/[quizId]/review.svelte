@@ -30,18 +30,17 @@
 	import { getQuiz, quizzes } from '$lib/state/quizzes';
 	import AppLayout from '$lib/AppLayout.svelte';
 	import ReviewQuizQuestion from '$lib/Quizzes/ReviewQuizQuestion.svelte';
-	import { createRandom } from '$lib/utils';
+	import { XorShiftRng } from '@aicacia/rand';
 
 	export let quizId: number;
 	export let questionCount: number;
 	export let seed: number;
 
-	$: rng = createRandom(seed);
+	$: rng = XorShiftRng.fromSeed(seed);
 	$: quiz = $quizzes.byId[quizId];
-	$: questionList = shuffle(rng, Object.values($questions.byQuizId[quizId] || {})).slice(
-		0,
-		questionCount
-	);
+	$: questionList = rng
+		.shuffle(Object.values($questions.byQuizId[quizId] || {}))
+		.slice(0, questionCount);
 
 	if (browser) {
 		getQuiz(quizId);

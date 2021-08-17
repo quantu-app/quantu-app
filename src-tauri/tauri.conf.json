@@ -1,6 +1,6 @@
 {
 	"build": {
-		"distDir": "index.html",
+		"distDir": "http://localhost:3000",
 		"devPath": "http://localhost:3000",
 		"beforeDevCommand": "",
 		"beforeBuildCommand": "",

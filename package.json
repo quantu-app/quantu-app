@@ -52,6 +52,7 @@
 		"eslint-config-prettier": "^8.3.0",
 		"eslint-plugin-svelte3": "^3.2.0",
 		"openapi-typescript-codegen": "^0.9.3",
+		"pkg": "^5.3.1",
 		"prettier": "^2.3.2",
 		"prettier-plugin-svelte": "^2.3.1",
 		"sass": "^1.37.5",
@@ -63,8 +64,8 @@
 	},
 	"dependencies": {
 		"@aicacia/debounce": "^0.1.9",
-		"@aicacia/rand": "^0.2.2",
 		"@aicacia/quill-rich-editor": "git+https://github.com/aicacia/ts-quill-rich-editor.git#0f6fb86d5f5f356e81e7965e44825e71b195c78e",
+		"@aicacia/rand": "^0.2.2",
 		"@aicacia/string-fuzzy_equals": "^0.1.2",
 		"@sveltejs/kit": "next",
 		"@types/cookie": "^0.4.1",

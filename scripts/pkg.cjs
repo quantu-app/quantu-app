@@ -1,9 +1,6 @@
-'use strict';
-
-const execa = require('execa');
-const fs = require('fs');
-const replace = require('replace-in-file');
+const fs = require('fs/promises');
 const { spawn } = require('child_process');
+const replaceInFile = require('./replaceInFile.cjs');
 
 let extension = '';
 if (process.platform === 'win32') {
@@ -13,28 +10,28 @@ if (process.platform === 'win32') {
 function runCommand(command, args) {
 	return new Promise((resolve, reject) => {
 		console.log(`${command} ${args.join(' ')}`);
-		const process = spawn(command, args);
-		process.stdout.on('data', (data) => console.log(data.toString()));
-		process.stderr.on('data', (data) => console.error(data.toString()));
-		process.on('close', (code) => (code === 0 ? resolve() : reject(code)));
+		const process = spawn(command, args),
+			data = {
+				stdout: '',
+				stderr: ''
+			};
+		process.stdout.on('data', (data) => (data.stdout += data.toString()));
+		process.stderr.on('data', (data) => (data.stderr += data.toString()));
+		process.on('close', (code) => (code === 0 ? resolve(data) : reject(data)));
 	});
 }
 
 async function main() {
-	await replace({
-		files: 'build/index.js',
-		from: /import\.meta\.url/g,
-		to: '__filename'
-	});
-
-	await runCommand('pkg', ['package.json', '--output', 'src-tauri/binaries/app']);
-
-	const rustInfo = (await execa('rustc', ['-vV'])).stdout;
-	const targetTriple = /host: (\S+)/g.exec(rustInfo)[1];
+	const [_replaceInFile, _pkg, { stdout }] = await Promise.all([
+		replaceInFile('build/index.js', /import\.meta\.url/g, '__filename'),
+		runCommand('pkg', ['package.json', '--output', 'src-tauri/binaries/app']),
+		runCommand('rustc', ['-vV'])
+	]);
+	const targetTriple = /host: (\S+)/g.exec(stdout)[1];
 	if (!targetTriple) {
 		console.error('Failed to determine platform target triple');
 	}
-	fs.renameSync(
+	await fs.rename(
 		`src-tauri/binaries/app${extension}`,
 		`src-tauri/binaries/app-${targetTriple}${extension}`
 	);

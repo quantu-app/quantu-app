@@ -4,7 +4,7 @@ node_modules
 /.vscode
 /build
 /functions
-src-tauri/target/
+/src-tauri/target/
 WixTools
 .env
 !.env.example

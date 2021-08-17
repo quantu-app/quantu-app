@@ -49,6 +49,14 @@ export async function getQuestions(organizationId: number, quizId?: number) {
 	if (quizId) {
 		const cachedQuestions = Object.values(get(organizationQuestions).byQuizId[quizId] || {});
 		if (cachedQuestions.length) {
+			return cachedQuestions.filter((question) => question.organizationId === organizationId);
+		}
+	}
+	if (organizationId) {
+		const cachedQuestions = Object.values(
+			get(organizationQuestions).byOrganizationId[organizationId] || {}
+		);
+		if (cachedQuestions.length) {
 			return cachedQuestions;
 		}
 	}

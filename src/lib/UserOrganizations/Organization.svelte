@@ -30,7 +30,7 @@
 	}
 </script>
 
-<div class="container">
+<div class="container mt-2">
 	<form on:submit|preventDefault>
 		<div class="mb-2">
 			<label for="organization-name" class="form-label">Organization Name</label>
@@ -59,4 +59,23 @@
 			<Tags id="organization-tags" bind:tags={organization.tags} on:change={onTagsChange} />
 		</div>
 	</form>
+
+	<hr />
+
+	<div class="row">
+		<div class="col">
+			<a
+				role="button"
+				class="btn btn-primary w-100"
+				href={`/user/organizations/${organization.id}/quizzes`}>Quizzes</a
+			>
+		</div>
+		<div class="col">
+			<a
+				role="button"
+				class="btn btn-primary w-100"
+				href={`/user/organizations/${organization.id}/questions`}>Questions</a
+			>
+		</div>
+	</div>
 </div>

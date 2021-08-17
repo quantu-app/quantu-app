@@ -33,6 +33,14 @@ export async function getQuiz(organizationId: number, id: number) {
 }
 
 export async function getQuizzes(organizationId: number) {
+	if (organizationId) {
+		const cachedQuizzes = Object.values(
+			get(organizationQuizzesWritable).byOrganizationId[organizationId] || {}
+		);
+		if (cachedQuizzes.length) {
+			return cachedQuizzes;
+		}
+	}
 	const quizzes = await load(UserService.quantuAppWebControllerUserQuizIndex(organizationId));
 	organizationQuizzesWritable.update((state) => {
 		state.byOrganizationId[organizationId] = {};

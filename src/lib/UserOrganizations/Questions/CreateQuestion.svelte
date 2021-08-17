@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { QuestionCreate } from '$lib/api/quantu-app-api';
+	import type { QuestionCreate, QuestionPromptPrivate } from '$lib/api/quantu-app-api';
 	import { createQuestion } from '$lib/state/organizationQuestions';
 	import QuestionEditor from './QuestionEditor.svelte';
 
@@ -12,7 +12,7 @@
 	let question: QuestionCreate = {
 		quizId,
 		type: 'flash_card' as QuestionCreate.type.FLASH_CARD,
-		prompt: {} as any,
+		prompt: {} as unknown as QuestionPromptPrivate,
 		tags: []
 	};
 
@@ -26,7 +26,7 @@
 		try {
 			await createQuestion(organizationId, question);
 			delete question.name;
-			question.prompt = {} as any;
+			question.prompt = {} as unknown as QuestionPromptPrivate;
 			question.tags = [];
 		} finally {
 			creatingQuestion = false;

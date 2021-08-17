@@ -33,8 +33,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tagName: v${{ env.GITHUB_SHA }}
-          releaseName: 'Quant[U] v${{ env.GITHUB_SHA }}'
-          body: 'See the assets to download this version and install.'
+          tagName: 'v$GITHUB_SHA'
+          releaseName: 'Quant[U] v$GITHUB_SHA'
+          body: See the assets to download this version and install.
           draft: true
           prerelease: false

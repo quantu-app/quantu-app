@@ -14,8 +14,9 @@
 	import type { Quiz, Question } from '$lib/api/quantu-app-api';
 	import Search from '$lib/Search.svelte';
 	import { updateQuiz } from '$lib/state/organizationQuizzes';
-	import CreateQuestion from '../Questions/CreateQuestion.svelte';
-	import QuestionList from '../Questions/QuestionList.svelte';
+	import CreateQuestion from '$lib/UserOrganizations/Questions/CreateQuestion.svelte';
+	import QuestionList from '$lib/UserOrganizations/Questions/QuestionList.svelte';
+	import AddQuestionsToQuiz from '$lib/UserOrganizations/Quizzes/AddQuestionsToQuiz.svelte';
 	import { fuzzyEquals } from '@aicacia/string-fuzzy_equals';
 	import Tags from '$lib/Tags.svelte';
 
@@ -62,6 +63,8 @@
 		</div>
 		<div class="col-md">
 			<div class="d-flex mt-2 justify-content-end">
+				<AddQuestionsToQuiz {organizationId} {quiz} />
+				<div class="p-1" />
 				<CreateQuestion {organizationId} quizId={quiz.id} />
 			</div>
 		</div>

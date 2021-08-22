@@ -5,7 +5,7 @@
 	import { isValidStatus } from '$lib/guard/isValidStatus';
 
 	export async function load(input: LoadInput) {
-		const response = await authGuard(input),
+		const response = authGuard(input),
 			seed = parseInt(input.page.query.get('seed')),
 			questionCount = parseInt(input.page.query.get('questionCount')),
 			index = parseInt(input.page.query.get('index')),

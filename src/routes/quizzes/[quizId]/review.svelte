@@ -5,7 +5,7 @@
 	import { isValidStatus } from '$lib/guard/isValidStatus';
 
 	export async function load(input: LoadInput) {
-		const response = await authGuard(input),
+		const response = authGuard(input),
 			seed = parseInt(input.page.query.get('seed')),
 			questionCount = parseInt(input.page.query.get('questionCount')),
 			quizId = parseInt(input.page.params.quizId);
@@ -54,6 +54,6 @@
 
 <AppLayout>
 	{#if quiz}
-		<ReviewQuizQuestion {quiz} questions={questionList} {questionCount} {seed} />
+		<ReviewQuizQuestion {quiz} questions={questionList} />
 	{/if}
 </AppLayout>

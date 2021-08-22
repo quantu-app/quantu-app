@@ -5,7 +5,7 @@
 	import { isValidStatus } from '$lib/guard/isValidStatus';
 
 	export async function load(input: LoadInput) {
-		const response = await authGuard(input),
+		const response = authGuard(input),
 			organizationId = parseInt(input.page.params.organizationId);
 
 		if (!browser && isValidStatus(response)) {

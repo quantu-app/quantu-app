@@ -4,8 +4,8 @@
 	import MultipleChoice from './MultipleChoice.svelte';
 
 	export let question: Question;
-	export let answered: boolean;
-	export let result: number;
+	export let answered = false;
+	export let result: number | undefined = undefined;
 </script>
 
 <div class="container h-100">

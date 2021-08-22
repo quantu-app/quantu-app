@@ -30,6 +30,7 @@
 	export let questionId: number;
 
 	$: question = $questions.byId[questionId];
+	let answered: boolean = false;
 
 	if (browser) {
 		getQuestion(questionId);
@@ -42,6 +43,10 @@
 
 <AppLayout>
 	{#if question}
-		<Question {question} />
+		<Question {question} bind:answered>
+			<a slot="extra" type="button" disabled={!answered} class="btn btn-primary" href="/questions">
+				Return to questions
+			</a>
+		</Question>
 	{/if}
 </AppLayout>

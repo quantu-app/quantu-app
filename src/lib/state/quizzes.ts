@@ -38,6 +38,11 @@ export async function getQuizzes(organizationId?: number) {
 		if (cachedQuizzes.length) {
 			return cachedQuizzes;
 		}
+	} else {
+		const cachedQuizzes = Object.values(get(quizzesWritable).byId || {});
+		if (cachedQuizzes.length) {
+			return cachedQuizzes;
+		}
 	}
 	const quizzes = await load(QuizService.quantuAppWebControllerQuizIndex(organizationId));
 	quizzesWritable.update((state) => quizzes.reduce(addToState, state));

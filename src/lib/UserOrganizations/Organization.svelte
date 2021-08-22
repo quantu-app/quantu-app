@@ -12,14 +12,8 @@
 	}
 
 	function onNameChange() {
-		organization.url = organization.name
-			.toLowerCase()
-			.replace(/[^a-zA-Z0-9\-_]+/g, ' ')
-			.trim()
-			.replace(/\s+/g, '-');
 		updateOrganization(organization.id, {
-			name: organization.name,
-			url: organization.url
+			name: organization.name
 		});
 	}
 

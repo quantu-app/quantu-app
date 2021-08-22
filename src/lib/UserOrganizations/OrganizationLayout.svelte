@@ -12,7 +12,7 @@
 		{
 			href: `/user/organizations`,
 			icon: 'command',
-			title: 'Organizations'
+			title: 'My Organizations'
 		},
 		{
 			href: `/user/organizations/${organizationId}`,

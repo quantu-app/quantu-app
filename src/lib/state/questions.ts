@@ -42,11 +42,15 @@ export async function getQuestions(organizationId?: number, quizId?: number) {
 				return cachedQuestions;
 			}
 		}
-	}
-	if (organizationId) {
+	} else if (organizationId) {
 		const cachedQuestions = Object.values(
 			get(questionsWritable).byOrganizationId[organizationId] || {}
 		);
+		if (cachedQuestions.length) {
+			return cachedQuestions;
+		}
+	} else {
+		const cachedQuestions = Object.values(get(questionsWritable).byId || {});
 		if (cachedQuestions.length) {
 			return cachedQuestions;
 		}

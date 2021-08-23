@@ -52,8 +52,11 @@ export async function signUp(username: string, password: string, passwordConfirm
 }
 
 export async function signOut() {
-	await load(AuthService.quantuAppWebControllerAuthDelete());
-	await signOutUser();
+	try {
+		await load(AuthService.quantuAppWebControllerAuthDelete());
+	} finally {
+		signOutUser();
+	}
 }
 
 export async function signInWithToken(token: string) {
@@ -62,7 +65,7 @@ export async function signInWithToken(token: string) {
 		const user = await load(AuthService.quantuAppWebControllerAuthCurrent());
 		await signInUser(user);
 	} catch {
-		await signOutUser();
+		signOutUser();
 	}
 }
 
@@ -83,7 +86,7 @@ async function setUserSocket(token: string) {
 	socket.connect();
 }
 
-async function signOutUser() {
+function signOutUser() {
 	OpenAPI.TOKEN = undefined;
 	Cookies.remove('token');
 	session.set(null);

@@ -15,6 +15,7 @@ import type { QuestionUpdate } from '../models/QuestionUpdate';
 import type { Quiz } from '../models/Quiz';
 import type { QuizCreate } from '../models/QuizCreate';
 import type { QuizList } from '../models/QuizList';
+import type { QuizQuestionIds } from '../models/QuizQuestionIds';
 import type { QuizUpdate } from '../models/QuizUpdate';
 import type { User } from '../models/User';
 import type { UsernameUpdate } from '../models/UsernameUpdate';
@@ -489,6 +490,50 @@ export class UserService {
         const result = await __request({
             method: 'PUT',
             path: `/user/organizations/${organizationId}/quizzes/${id}`,
+            body: requestBody,
+        });
+        return result.body;
+    }
+
+    /**
+     * Add Quertions to Quiz
+     * Returns nothing
+     * @param id Quiz Id
+     * @param organizationId Organization Id
+     * @param requestBody Request body to add questions to quiz
+     * @returns void
+     * @throws ApiError
+     */
+    public static async quantuAppWebControllerUserQuizAddQuestions(
+        id: number,
+        organizationId: number,
+        requestBody: QuizQuestionIds,
+    ): Promise<void> {
+        const result = await __request({
+            method: 'POST',
+            path: `/user/organizations/${organizationId}/quizzes/${id}/add-questions`,
+            body: requestBody,
+        });
+        return result.body;
+    }
+
+    /**
+     * Remove Quertions from Quiz
+     * Returns nothing
+     * @param id Quiz Id
+     * @param organizationId Organization Id
+     * @param requestBody Request body to remove questions from quiz
+     * @returns void
+     * @throws ApiError
+     */
+    public static async quantuAppWebControllerUserQuizRemoveQuestions(
+        id: number,
+        organizationId: number,
+        requestBody: QuizQuestionIds,
+    ): Promise<void> {
+        const result = await __request({
+            method: 'POST',
+            path: `/user/organizations/${organizationId}/quizzes/${id}/remove-questions`,
             body: requestBody,
         });
         return result.body;

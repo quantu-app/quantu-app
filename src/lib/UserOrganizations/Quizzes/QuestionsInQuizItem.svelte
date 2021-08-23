@@ -3,13 +3,14 @@
 	import { titleCase } from 'title-case';
 
 	export let question: QuestionPrivate;
-	export let checked: boolean;
-	export let onCheck: () => void;
+	export let onClick: (question: QuestionPrivate) => void;
+
+	$: internalOnClick = () => onClick(question);
 </script>
 
 <div class="d-flex w-100 justify-content-between">
 	<h4>
-		<input class="form-check-input" type="checkbox" {checked} on:input={onCheck} />
+		<button type="button" class="btn btn-primary" on:click={internalOnClick}><slot /></button>
 		<button
 			type="button"
 			class="btn btn-link"

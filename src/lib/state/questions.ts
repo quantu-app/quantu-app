@@ -68,6 +68,37 @@ export async function getQuestions(organizationId?: number, quizId?: number) {
 	return questions;
 }
 
+export async function addQuestionsToQuiz(
+	organizationId: number,
+	quizId: number,
+	questionIds: number[]
+) {
+	questionsWritable.update((state) => {
+		const byOrganizationId =
+				state.byOrganizationId[organizationId] || (state.byOrganizationId[organizationId] = {}),
+			byQuizId = state.byQuizId[quizId] || (state.byQuizId[quizId] = {});
+
+		for (const questionId of questionIds) {
+			const question = byOrganizationId[questionId];
+			byQuizId[questionId] = { ...question, quizId: quizId };
+		}
+
+		return state;
+	});
+}
+
+export async function removeQuestionsFromQuiz(quizId: number, questionIds: number[]) {
+	questionsWritable.update((state) => {
+		const byQuizId = state.byQuizId[quizId] || (state.byQuizId[quizId] = {});
+
+		for (const questionId of questionIds) {
+			delete byQuizId[questionId];
+		}
+
+		return state;
+	});
+}
+
 export async function answerQuestion(id: number, input: QuestionAnswer['input']) {
 	return await load(QuestionService.quantuAppWebControllerQuestionAnswer(id, { input }));
 }

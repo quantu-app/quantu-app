@@ -26,11 +26,12 @@ export type { QuestionMultipleChoicePrivate } from './models/QuestionMultipleCho
 export { QuestionPrivate } from './models/QuestionPrivate';
 export type { QuestionPrompt } from './models/QuestionPrompt';
 export type { QuestionPromptPrivate } from './models/QuestionPromptPrivate';
-export type { QuestionResult } from './models/QuestionResult';
+export { QuestionResult } from './models/QuestionResult';
 export type { QuestionUpdate } from './models/QuestionUpdate';
 export type { Quiz } from './models/Quiz';
 export type { QuizCreate } from './models/QuizCreate';
 export type { QuizList } from './models/QuizList';
+export type { QuizQuestionIds } from './models/QuizQuestionIds';
 export type { QuizUpdate } from './models/QuizUpdate';
 export type { SignInUsernameOrEmailAndPassword } from './models/SignInUsernameOrEmailAndPassword';
 export type { SignUpUsernamePassword } from './models/SignUpUsernamePassword';

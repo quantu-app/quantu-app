@@ -12,6 +12,10 @@ import type { Readable } from 'svelte/store';
 import { get, writable } from 'svelte/store';
 import { load } from './loading';
 import { userEmitter } from './user';
+import {
+	addQuestionsToQuiz as publicAddQuestionsToQuiz,
+	removeQuestionsFromQuiz as publicRemoveQuestionsFromQuiz
+} from './questions';
 
 interface IOrganizationQuestionsStore {
 	byId: { [id: number]: QuestionPrivate };
@@ -97,6 +101,62 @@ export async function deleteQuestion(organizationId: number, id: number) {
 
 	await load(UserService.quantuAppWebControllerUserQuestionDelete(question.id, organizationId));
 	organizationQuestionsWritable.update((state) => deleteFromState(state, question));
+}
+
+export async function addQuestionsToQuiz(
+	organizationId: number,
+	quizId: number,
+	questionIds: number[]
+) {
+	await load(
+		UserService.quantuAppWebControllerUserQuizAddQuestions(quizId, organizationId, {
+			questions: questionIds
+		})
+	);
+	organizationQuestionsWritable.update((state) => {
+		const byOrganizationId =
+				state.byOrganizationId[organizationId] || (state.byOrganizationId[organizationId] = {}),
+			byQuizId = state.byQuizId[quizId] || (state.byQuizId[quizId] = {}),
+			newIndexStart = Object.values(byQuizId).length;
+
+		for (let i = 0; i < questionIds.length; i++) {
+			const questionId = questionIds[i],
+				index = newIndexStart + i,
+				question = byOrganizationId[questionId];
+			byQuizId[questionId] = { ...question, quizId, index };
+		}
+
+		return state;
+	});
+	publicAddQuestionsToQuiz(organizationId, quizId, questionIds);
+}
+
+export async function removeQuestionsFromQuiz(
+	organizationId: number,
+	quizId: number,
+	questionIds: number[]
+) {
+	await load(
+		UserService.quantuAppWebControllerUserQuizRemoveQuestions(quizId, organizationId, {
+			questions: questionIds
+		})
+	);
+	organizationQuestionsWritable.update((state) => {
+		const byQuizId = state.byQuizId[quizId] || (state.byQuizId[quizId] = {});
+
+		for (const questionId of questionIds) {
+			delete byQuizId[questionId];
+		}
+
+		Object.values(byQuizId)
+			.sort((a, b) => a.index - b.index)
+			.forEach((question, index) => {
+				question.index = index;
+			});
+
+		return state;
+	});
+	publicRemoveQuestionsFromQuiz(quizId, questionIds);
 }
 
 function addToState(

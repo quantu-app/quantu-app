@@ -31,14 +31,12 @@
 	export let organizationId: number;
 	export let quiz: Quiz;
 
-	$: selected = Object.values($organizationQuestions.byQuizId[quiz.id] || {}).reduce(
-		reduceQuestions,
-		{}
-	);
+	$: questionsById = $organizationQuestions.byQuizId[quiz.id] || {};
+	$: selected = Object.values(questionsById).reduce(reduceQuestions, {});
 	$: unselected = Object.values($organizationQuestions.byOrganizationId[organizationId] || {})
 		.filter((question) => !selected[question.id])
 		.map((question) => {
-			const selectedQuestion = $organizationQuestions.byQuizId[quiz.id][question.id];
+			const selectedQuestion = questionsById[question.id];
 
 			if (selectedQuestion) {
 				return selectedQuestion;

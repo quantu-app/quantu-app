@@ -34,7 +34,7 @@
 	);
 
 	if (browser) {
-		getQuestions(organizationId);
+		getQuestions(organizationId, undefined, true);
 	}
 </script>
 

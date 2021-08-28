@@ -11,7 +11,7 @@
 			quizId = parseInt(input.page.params.quizId);
 
 		if (!browser && isValidStatus(response)) {
-			await Promise.all([getQuiz(quizId), getQuestions(undefined, quizId)]);
+			await Promise.all([getQuiz(quizId), getQuestionResults(quizId)]);
 		}
 
 		return {
@@ -26,11 +26,12 @@
 </script>
 
 <script lang="ts">
-	import { getQuestions, questions } from '$lib/state/questions';
+	import { questionResults } from '$lib/state/questionResults';
 	import { getQuiz, quizzes } from '$lib/state/quizzes';
 	import AppLayout from '$lib/AppLayout.svelte';
 	import ReviewQuizQuestion from '$lib/Quizzes/ReviewQuizQuestion.svelte';
 	import { XorShiftRng } from '@aicacia/rand';
+	import { getQuestionResults } from '$lib/state/questionResults';
 
 	export let quizId: number;
 	export let questionCount: number;
@@ -38,13 +39,13 @@
 
 	$: rng = XorShiftRng.fromSeed(seed);
 	$: quiz = $quizzes.byId[quizId];
-	$: questionList = rng
-		.shuffle(Object.values($questions.byQuizId[quizId] || {}))
+	$: questionResultList = rng
+		.shuffle(Object.values($questionResults.byQuizId[quizId] || {}))
 		.slice(0, questionCount);
 
 	if (browser) {
 		getQuiz(quizId);
-		getQuestions(undefined, quizId);
+		getQuestionResults(quizId);
 	}
 </script>
 
@@ -54,6 +55,6 @@
 
 <AppLayout>
 	{#if quiz}
-		<ReviewQuizQuestion {quiz} questions={questionList} />
+		<ReviewQuizQuestion {quiz} questionResults={questionResultList} />
 	{/if}
 </AppLayout>

@@ -1,25 +1,21 @@
 <script lang="ts">
-	import type { Question, QuestionAnswer } from '$lib/api/quantu-app-api';
-	import { answerQuestion } from '$lib/state/questions';
+	import type { Question, QuestionAnswer, QuestionResult } from '$lib/api/quantu-app-api';
+	import { answerQuestion } from '$lib/state/questionResults';
 	import { isEmpty } from '$lib/utils';
 
 	export let question: Question;
 	export let input: QuestionAnswer['input'];
-	export let answered = false;
-	export let result: number;
+	export let result: QuestionResult = undefined;
 
 	let answering = false;
 
-	$: onSubmit = () => {
+	$: onSubmit = async () => {
 		answering = true;
-		answerQuestion(question.id, input)
-			.then((response) => {
-				result = response.result;
-				answered = true;
-			})
-			.finally(() => {
-				answering = false;
-			});
+		try {
+			result = await answerQuestion(question.id, input, question.quizId);
+		} finally {
+			answering = false;
+		}
 	};
 </script>
 
@@ -33,25 +29,25 @@
 		<div class="d-flex flex-column border-lg-start pt-4 h-100 input">
 			<slot name="input" />
 
-			<div class="d-flex justify-content-end">
-				{#if result === 1}
+			<div class="d-flex justify-content-end mt-2">
+				{#if result?.result === 1}
 					<h3 class="m-0 me-auto">
 						<span class="badge bg-success"><i class="bi bi-check" /></span>
 					</h3>
-				{:else if result > 0 && result < 1}
+				{:else if result?.result > 0 && result?.result < 1}
 					<h3 class="m-0 me-auto">
 						<span class="badge bg-warning"><i class="bi bi-check" /></span>
 					</h3>
 				{:else if result != null}
 					<h3 class="m-0 me-auto"><span class="badge bg-danger"><i class="bi bi-x" /></span></h3>
 				{/if}
-				{#if answered}
+				{#if result != null}
 					<slot name="extra" />
 				{:else}
 					<button
 						type="button"
 						class="btn btn-primary"
-						disabled={isEmpty(input) || answered || answering}
+						disabled={isEmpty(input) || !!result || answering}
 						on:click={onSubmit}
 					>
 						{#if answering}

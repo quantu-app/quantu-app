@@ -32,27 +32,29 @@ export async function getQuestion(id: number) {
 	return question;
 }
 
-export async function getQuestions(organizationId?: number, quizId?: number) {
-	if (quizId) {
-		const cachedQuestions = Object.values(get(questionsWritable).byQuizId[quizId] || {});
-		if (cachedQuestions.length) {
-			if (organizationId) {
-				return cachedQuestions.filter((question) => question.organizationId === organizationId);
-			} else {
+export async function getQuestions(organizationId?: number, quizId?: number, force = false) {
+	if (!force) {
+		if (quizId) {
+			const cachedQuestions = Object.values(get(questionsWritable).byQuizId[quizId] || {});
+			if (cachedQuestions.length) {
+				if (organizationId) {
+					return cachedQuestions.filter((question) => question.organizationId === organizationId);
+				} else {
+					return cachedQuestions;
+				}
+			}
+		} else if (organizationId) {
+			const cachedQuestions = Object.values(
+				get(questionsWritable).byOrganizationId[organizationId] || {}
+			);
+			if (cachedQuestions.length) {
 				return cachedQuestions;
 			}
-		}
-	} else if (organizationId) {
-		const cachedQuestions = Object.values(
-			get(questionsWritable).byOrganizationId[organizationId] || {}
-		);
-		if (cachedQuestions.length) {
-			return cachedQuestions;
-		}
-	} else {
-		const cachedQuestions = Object.values(get(questionsWritable).byId || {});
-		if (cachedQuestions.length) {
-			return cachedQuestions;
+		} else {
+			const cachedQuestions = Object.values(get(questionsWritable).byId || {});
+			if (cachedQuestions.length) {
+				return cachedQuestions;
+			}
 		}
 	}
 	const questions = await load(
@@ -97,10 +99,6 @@ export async function removeQuestionsFromQuiz(quizId: number, questionIds: numbe
 
 		return state;
 	});
-}
-
-export async function answerQuestion(id: number, input: QuestionAnswer['input']) {
-	return await load(QuestionService.quantuAppWebControllerQuestionAnswer(id, { input }));
 }
 
 function addToState(state: IQuestionsStore, question: Question): IQuestionsStore {

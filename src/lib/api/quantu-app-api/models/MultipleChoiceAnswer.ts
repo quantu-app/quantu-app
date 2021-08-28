@@ -5,4 +5,4 @@
 /**
  * Multiple choice answer
  */
-export type MultipleChoiceAnswer = (Array<string> | string);
+export type MultipleChoiceAnswer = Array<string>;

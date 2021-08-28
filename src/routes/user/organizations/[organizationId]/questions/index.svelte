@@ -31,7 +31,7 @@
 	$: questions = Object.values($organizationQuestions.byOrganizationId[organizationId] || {});
 
 	if (browser) {
-		getQuestions(organizationId);
+		getQuestions(organizationId, undefined, true);
 	}
 </script>
 

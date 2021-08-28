@@ -5,9 +5,47 @@ import type { Question } from '../models/Question';
 import type { QuestionAnswer } from '../models/QuestionAnswer';
 import type { QuestionList } from '../models/QuestionList';
 import type { QuestionResult } from '../models/QuestionResult';
+import type { QuestionResultList } from '../models/QuestionResultList';
 import { request as __request } from '../core/request';
 
 export class QuestionService {
+
+    /**
+     * List Quiz Question's Results
+     * Returns organization's questions
+     * @param quizId Quiz Id
+     * @returns QuestionResultList Quiz Question Results
+     * @throws ApiError
+     */
+    public static async quantuAppWebControllerQuestionResultIndex(
+        quizId?: number,
+    ): Promise<QuestionResultList> {
+        const result = await __request({
+            method: 'GET',
+            path: `/question-results`,
+            query: {
+                'quizId': quizId,
+            },
+        });
+        return result.body;
+    }
+
+    /**
+     * Get a Question's Result
+     * Returns question's result
+     * @param id Question Id
+     * @returns QuestionResult Organization/Quiz Question
+     * @throws ApiError
+     */
+    public static async quantuAppWebControllerQuestionResultShow(
+        id: number,
+    ): Promise<QuestionResult> {
+        const result = await __request({
+            method: 'GET',
+            path: `/question-results/${id}`,
+        });
+        return result.body;
+    }
 
     /**
      * List Questions

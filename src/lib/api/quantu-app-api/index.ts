@@ -27,6 +27,7 @@ export { QuestionPrivate } from './models/QuestionPrivate';
 export type { QuestionPrompt } from './models/QuestionPrompt';
 export type { QuestionPromptPrivate } from './models/QuestionPromptPrivate';
 export { QuestionResult } from './models/QuestionResult';
+export type { QuestionResultList } from './models/QuestionResultList';
 export type { QuestionUpdate } from './models/QuestionUpdate';
 export type { Quiz } from './models/Quiz';
 export type { QuizCreate } from './models/QuizCreate';

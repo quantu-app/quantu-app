@@ -1,41 +1,42 @@
 <script lang="ts">
-	import type { Question, QuestionMultipleChoice } from '$lib/api/quantu-app-api';
-	import RichViewer from '$lib/RichViewer.svelte';
+	import type {
+		Question,
+		QuestionMultipleChoice,
+		QuestionMultipleChoicePrivate,
+		QuestionResult
+	} from '$lib/api/quantu-app-api';
 	import Prompt from './Prompt.svelte';
+	import MultipleChoiceContent from './MultipleChoiceContent.svelte';
+	import MultipleChoiceInput from './MultipleChoiceInput.svelte';
 
 	export let question: Question;
-	export let answered: boolean;
-	export let result: number;
+	export let seed: number = undefined;
+	export let result: QuestionResult = undefined;
+	export let input: string[] = [];
 
-	let checked: Record<string, boolean> = {};
-
+	let correct: Record<string, true>;
 	$: prompt = question.prompt as QuestionMultipleChoice;
-	$: input = Object.keys(checked).filter((key) => checked[key]);
+	$: if (result) {
+		const resultPrompt = result.prompt as QuestionMultipleChoicePrivate;
+
+		correct = Object.entries(resultPrompt.choices).reduce((correct, [key, choice]) => {
+			if (choice.correct) {
+				correct[key] = true;
+			}
+			return correct;
+		}, {});
+	}
 </script>
 
-<Prompt {question} bind:answered bind:input bind:result>
-	<RichViewer slot="content" content={prompt.question} />
-	<ul slot="input" class="list-group list-group-flush">
-		{#each Object.entries(prompt.choices) as [key, choice], index}
-			<li class="list-group-item">
-				<div class="d-flex">
-					<div class="flex-shink-0">
-						<input
-							class="form-check-input me-2"
-							type="checkbox"
-							value=""
-							bind:checked={checked[key]}
-						/>
-						<span class="badge bg-primary py-2 px-3">
-							{(index + 10).toString(36).toUpperCase()}
-						</span>
-					</div>
-					<div class="flex-grow-1">
-						<RichViewer content={choice.content} />
-					</div>
-				</div>
-			</li>
-		{/each}
-	</ul>
+<Prompt {question} {input} bind:result>
+	<MultipleChoiceContent slot="content" {prompt} />
+	<MultipleChoiceInput
+		slot="input"
+		disabled={result != null}
+		{correct}
+		{seed}
+		{prompt}
+		bind:input
+	/>
 	<slot slot="extra" name="extra" />
 </Prompt>

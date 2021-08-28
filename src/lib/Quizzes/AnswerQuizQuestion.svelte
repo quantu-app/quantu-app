@@ -7,16 +7,6 @@
 	export let questionCount: number;
 	export let seed: number;
 	export let index: number;
-
-	let answered: boolean;
-	let result: number;
-	let prevIndex: number;
-
-	$: if (prevIndex !== index) {
-		prevIndex = index;
-		answered = undefined;
-		result = undefined;
-	}
 </script>
 
 <div class="container mb-2 h-100">
@@ -27,11 +17,10 @@
 		{/if}
 	</h2>
 	<hr class="mb-0" />
-	<QuestionComponent {question} bind:answered bind:result>
+	<QuestionComponent {question} {seed}>
 		<a
 			slot="extra"
 			type="button"
-			disabled={!answered}
 			class="btn btn-primary"
 			href={index >= questionCount - 1
 				? `/quizzes/${quiz.id}/review?seed=${seed}&questionCount=${questionCount}`

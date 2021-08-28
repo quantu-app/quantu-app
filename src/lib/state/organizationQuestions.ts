@@ -49,19 +49,21 @@ export async function getQuestion(organizationId: number, id: number) {
 	return question;
 }
 
-export async function getQuestions(organizationId: number, quizId?: number) {
-	if (quizId) {
-		const cachedQuestions = Object.values(get(organizationQuestions).byQuizId[quizId] || {});
-		if (cachedQuestions.length) {
-			return cachedQuestions.filter((question) => question.organizationId === organizationId);
+export async function getQuestions(organizationId: number, quizId?: number, force = false) {
+	if (!force) {
+		if (quizId) {
+			const cachedQuestions = Object.values(get(organizationQuestions).byQuizId[quizId] || {});
+			if (cachedQuestions.length) {
+				return cachedQuestions.filter((question) => question.organizationId === organizationId);
+			}
 		}
-	}
-	if (organizationId) {
-		const cachedQuestions = Object.values(
-			get(organizationQuestions).byOrganizationId[organizationId] || {}
-		);
-		if (cachedQuestions.length) {
-			return cachedQuestions;
+		if (organizationId) {
+			const cachedQuestions = Object.values(
+				get(organizationQuestions).byOrganizationId[organizationId] || {}
+			);
+			if (cachedQuestions.length) {
+				return cachedQuestions;
+			}
 		}
 	}
 	const questions = await load(

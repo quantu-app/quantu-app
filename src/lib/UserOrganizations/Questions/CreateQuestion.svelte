@@ -11,7 +11,7 @@
 
 	let question: QuestionCreate = {
 		quizId,
-		type: 'flash_card' as QuestionCreate.type.FLASH_CARD,
+		type: 'multiple_choice' as QuestionCreate.type.MULTIPLE_CHOICE,
 		prompt: {} as unknown as QuestionPromptPrivate,
 		tags: []
 	};

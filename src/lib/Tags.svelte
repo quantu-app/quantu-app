@@ -35,17 +35,17 @@
 
 <div class="d-flex flex-wrap">
 	{#each tags as tag}
-		<button type="button" class="btn btn-primary me-2">
+		<button type="button" class="btn btn-primary me-2 mt-2">
 			{tag}
 			<span class="badge bg-danger" on:click={createOnDelete(tag)}><i class="bi bi-x" /></span>
 		</button>
 	{/each}
-	<div class="d-inline">
+	<div class="d-inline mt-2">
 		<div class="input-group">
 			<input
 				{id}
 				type="text"
-				class="form-control"
+				class="form-control border-0"
 				placeholder="Enter a tag"
 				bind:value={tag}
 				on:keypress={onKeyPress}
@@ -62,3 +62,11 @@
 		</div>
 	</div>
 </div>
+
+<style lang="scss">
+	input:focus {
+		outline-width: 0 !important;
+		outline: none !important;
+		box-shadow: none !important;
+	}
+</style>

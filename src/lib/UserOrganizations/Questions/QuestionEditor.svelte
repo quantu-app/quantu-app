@@ -18,7 +18,7 @@
 			bind:value={question.name}
 		/>
 	</div>
-	<div class="col-md">
+	<!-- <div class="col-md">
 		<label for="question-type" class="form-label">Question Type</label>
 		<select
 			id="question-type"
@@ -29,7 +29,7 @@
 			<option value="multiple_choice">Multiple Choice</option>
 			<option value="flash_card">Flash Card</option>
 		</select>
-	</div>
+	</div> -->
 </div>
 <div class="mt-2">
 	<label for="question-tags" class="form-label">Question Tags</label>

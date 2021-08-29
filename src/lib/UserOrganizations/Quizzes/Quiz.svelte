@@ -56,7 +56,7 @@
 					/>
 				</div>
 				<div class="col-md">
-					<label for="quiz-tags" class="form-label">Quiz Tags</label>
+					<label for="quiz-tags" class="form-label mb-0">Quiz Tags</label>
 					<Tags id="quiz-tags" bind:tags={quiz.tags} on:change={onTagsChange} />
 				</div>
 			</form>

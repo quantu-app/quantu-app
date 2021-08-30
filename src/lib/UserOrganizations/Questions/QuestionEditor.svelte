@@ -1,10 +1,19 @@
 <script lang="ts">
-	import type { QuestionPrivate } from '$lib/api/quantu-app-api';
+	import type {
+		QuestionPrivate,
+		QuestionFlashCard,
+		QuestionMultipleChoice
+	} from '$lib/api/quantu-app-api';
 	import Tags from '$lib/Tags.svelte';
 	import FlashCardEditor from './FlashCardEditor.svelte';
 	import MultipleChoiceEditor from './MultipleChoiceEditor.svelte';
 
 	export let question: Partial<QuestionPrivate>;
+
+	$: name = question.name;
+	$: tags = question.tags;
+	$: promptFlashCard = question.prompt as QuestionFlashCard;
+	$: promptMultipleChoice = question.prompt as QuestionMultipleChoice;
 </script>
 
 <div class="row">
@@ -15,7 +24,7 @@
 			type="text"
 			class="form-control"
 			placeholder="Question Name"
-			bind:value={question.name}
+			bind:value={name}
 		/>
 	</div>
 	<!-- <div class="col-md">
@@ -33,11 +42,11 @@
 </div>
 <div class="mt-2">
 	<label for="question-tags" class="form-label">Question Tags</label>
-	<Tags id="question-tags" bind:tags={question.tags} />
+	<Tags id="question-tags" bind:tags />
 </div>
 
 {#if question.type === 'flash_card'}
-	<FlashCardEditor bind:prompt={question.prompt} />
+	<FlashCardEditor bind:prompt={promptFlashCard} />
 {:else if question.type === 'multiple_choice'}
-	<MultipleChoiceEditor bind:prompt={question.prompt} />
+	<MultipleChoiceEditor bind:prompt={promptMultipleChoice} />
 {/if}

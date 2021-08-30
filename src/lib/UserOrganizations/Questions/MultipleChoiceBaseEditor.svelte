@@ -90,7 +90,6 @@
 	{#each Object.entries(prompt.choices) as [key, choice], index}
 		<li class="list-group-item ">
 			<div class="d-flex">
-				<span class="badge bg-primary py-2 px-3"> {(index + 10).toString(36).toUpperCase()} </span>
 				<div class="form-check ms-4">
 					<input
 						class="form-check-input"

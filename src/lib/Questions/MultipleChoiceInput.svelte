@@ -12,6 +12,15 @@
 	$: choices = XorShiftRng.fromSeed(seed).shuffle(Object.entries(prompt.choices));
 
 	let checked: Record<string, boolean> = {};
+	$: createOnChange = (key: string) => {
+		return function onChange() {
+			if (prompt.singleAnswer) {
+				checked = { [key]: true };
+			} else {
+				checked[key] = !checked[key];
+			}
+		};
+	};
 	$: if (disabled) {
 		checked = input.reduce((checked, key) => {
 			checked[key] = true;
@@ -23,24 +32,22 @@
 </script>
 
 <ul class="list-group list-group-flush">
-	{#each choices as [key, choice], index}
+	{#each choices as [key, choice]}
 		<li
 			class="list-group-item"
 			class:list-group-item-success={correct && correct[key]}
 			class:list-group-item-danger={correct && !correct[key] && checked[key]}
 		>
 			<div class="d-flex">
-				<div class="flex-shink-0">
+				<div class="flex-shink-0 flex-row">
 					<input
 						class="form-check-input me-2"
 						type="checkbox"
 						{disabled}
-						value=""
-						bind:checked={checked[key]}
+						value={checked[key] + ''}
+						checked={!!checked[key]}
+						on:change={createOnChange(key)}
 					/>
-					<span class="badge bg-primary py-2 px-3">
-						{(index + 10).toString(36).toUpperCase()}
-					</span>
 				</div>
 				<div class="flex-grow-1">
 					<RichViewer content={choice.content} />

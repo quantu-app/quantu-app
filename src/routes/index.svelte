@@ -1,6 +1,31 @@
+<script context="module" lang="ts">
+	import type { LoadInput, Page } from '@sveltejs/kit';
+
+	export function load(input: LoadInput) {
+		const redirectPathString = input.page.query.get('redirectPath'),
+			redirectPath = redirectPathString ? decodeURIComponent(redirectPathString) : undefined;
+
+		return {
+			props: {
+				redirectPath
+			}
+		};
+	}
+</script>
+
 <script lang="ts">
 	import AppLayout from '$lib/AppLayout.svelte';
-	import { currentUser } from '$lib/state/user';
+	import { currentUser, redirectPathWritable } from '$lib/state/user';
+	import { onMount } from 'svelte';
+
+	export let redirectPath: string;
+
+	onMount(() => {
+		if (redirectPath) {
+			redirectPathWritable.set(redirectPath);
+		}
+		return () => redirectPathWritable.set(undefined);
+	});
 </script>
 
 <svelte:head>

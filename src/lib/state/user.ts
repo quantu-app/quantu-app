@@ -7,9 +7,10 @@ import type { Socket } from 'phoenix';
 import { load } from './loading';
 import { session } from '$app/stores';
 import Cookies from 'js-cookie';
+import { goto } from '$app/navigation';
 
 const socketWritable = writable<Socket>();
-
+export const redirectPathWritable = writable<string>();
 export const currentUser: Readable<User> = derived(session, (user) => user);
 export const signedIn = derived(currentUser, (currentUser) => !!currentUser);
 
@@ -70,11 +71,19 @@ export async function signInWithToken(token: string) {
 }
 
 async function signInUser(currentUser: User) {
+	const redirectPath = get(redirectPathWritable),
+		tasks: Promise<unknown>[] = [];
+
 	OpenAPI.TOKEN = currentUser.token;
 	Cookies.set('token', currentUser.token);
 	session.set(currentUser);
-	await setUserSocket(currentUser.token);
+	if (redirectPath) {
+		redirectPathWritable.set(undefined);
+		tasks.push(goto(redirectPath));
+	}
+	tasks.push(setUserSocket(currentUser.token));
 	userEmitter.emit('signIn', currentUser);
+	await Promise.all(tasks);
 }
 
 async function setUserSocket(token: string) {

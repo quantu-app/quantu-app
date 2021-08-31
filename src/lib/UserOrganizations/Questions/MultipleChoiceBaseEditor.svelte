@@ -28,6 +28,7 @@
 
 	export let prompt: QuestionMultipleChoicePrivate;
 
+	$: choices = Object.entries(prompt.choices || {});
 	let quillEditors: { [key: string]: Quill } = {};
 
 	$: createOnQuill = (key: string, getter: () => Op[]) => {
@@ -87,7 +88,7 @@
 </div>
 
 <ul class="list-group list-group-flush">
-	{#each Object.entries(prompt.choices) as [key, choice], index}
+	{#each choices as [key, choice]}
 		<li class="list-group-item ">
 			<div class="d-flex">
 				<div class="form-check ms-4">

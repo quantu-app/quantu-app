@@ -21,4 +21,5 @@ export type QuestionMultipleChoice = {
      * question content
      */
     question: Array<any>;
+    singleAnswer?: boolean;
 }

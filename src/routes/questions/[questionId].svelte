@@ -30,7 +30,6 @@
 	export let questionId: number;
 
 	$: question = $questions.byId[questionId];
-	let answered: boolean = false;
 
 	if (browser) {
 		getQuestion(questionId);
@@ -42,11 +41,13 @@
 </svelte:head>
 
 <AppLayout>
-	{#if question}
-		<Question {question} bind:answered>
-			<a slot="extra" type="button" disabled={!answered} class="btn btn-primary" href="/questions">
-				Return to questions
-			</a>
-		</Question>
-	{/if}
+	<div class="container h-100">
+		{#if question}
+			<Question {question}>
+				<a slot="extra" type="button" class="btn btn-primary" href="/questions">
+					Return to questions
+				</a>
+			</Question>
+		{/if}
+	</div>
 </AppLayout>

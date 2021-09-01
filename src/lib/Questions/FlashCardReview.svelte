@@ -6,6 +6,7 @@
 	} from '$lib/api/quantu-app-api';
 	import FlashCardInput from './FlashCardInput.svelte';
 	import FlashCardContent from './FlashCardContent.svelte';
+	import Review from './Review.svelte';
 
 	export let result: QuestionResult;
 
@@ -13,5 +14,8 @@
 	$: input = result.answer.input as FlashCardAnswer;
 </script>
 
-<FlashCardContent shown {prompt} />
-<FlashCardInput shown disabled={true} {input} />
+<Review bind:result>
+	<FlashCardContent slot="content" shown {prompt} />
+	<FlashCardInput slot="input" shown disabled={true} {input} />
+	<slot slot="extra" name="extra" />
+</Review>

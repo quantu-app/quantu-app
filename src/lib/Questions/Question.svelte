@@ -6,9 +6,16 @@
 	export let question: Question;
 	export let seed: number = undefined;
 	export let result: QuestionResult = undefined;
+
+	let prevQuesion: Question;
+
+	$: if (prevQuesion !== question) {
+		prevQuesion = question;
+		result = undefined;
+	}
 </script>
 
-<div class="container h-100">
+{#key question.id}
 	{#if question.type == 'flash_card'}
 		<FlashCard {question} bind:result>
 			<slot slot="extra" name="extra" />
@@ -18,4 +25,4 @@
 			<slot slot="extra" name="extra" />
 		</MultipleChoice>
 	{/if}
-</div>
+{/key}

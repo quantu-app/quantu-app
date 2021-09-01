@@ -45,8 +45,10 @@
 	<Tags id="question-tags" bind:tags />
 </div>
 
-{#if question.type === 'flash_card'}
-	<FlashCardEditor bind:prompt={promptFlashCard} />
-{:else if question.type === 'multiple_choice'}
-	<MultipleChoiceEditor bind:prompt={promptMultipleChoice} />
-{/if}
+{#key question.id}
+	{#if question.type === 'flash_card'}
+		<FlashCardEditor bind:prompt={promptFlashCard} />
+	{:else if question.type === 'multiple_choice'}
+		<MultipleChoiceEditor bind:prompt={promptMultipleChoice} />
+	{/if}
+{/key}

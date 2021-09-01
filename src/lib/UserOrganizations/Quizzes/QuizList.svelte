@@ -24,7 +24,7 @@
 </script>
 
 <div class="list-group list-group-flush">
-	{#each quizzes as quiz}
+	{#each quizzes as quiz (quiz.id)}
 		<QuizListItem {quiz} onDelete={createOnDelete(quiz)} />
 	{/each}
 </div>

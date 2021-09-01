@@ -46,7 +46,7 @@
 </script>
 
 <div class="list-group list-group-flush">
-	{#each questions.sort(sortQuestion) as question}
+	{#each questions.sort(sortQuestion) as question (question.id)}
 		<QuestionListItem
 			{question}
 			onUpdate={createOnUpdate(question)}

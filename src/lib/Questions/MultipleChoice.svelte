@@ -19,7 +19,7 @@
 	$: if (result) {
 		const resultPrompt = result.prompt as QuestionMultipleChoicePrivate;
 
-		correct = Object.entries(resultPrompt.choices).reduce((correct, [key, choice]) => {
+		correct = Object.entries(resultPrompt.choices || {}).reduce((correct, [key, choice]) => {
 			if (choice.correct) {
 				correct[key] = true;
 			}

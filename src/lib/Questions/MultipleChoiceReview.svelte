@@ -6,8 +6,10 @@
 	} from '$lib/api/quantu-app-api';
 	import MultipleChoiceInput from './MultipleChoiceInput.svelte';
 	import MultipleChoiceContent from './MultipleChoiceContent.svelte';
+	import Review from './Review.svelte';
 
 	export let result: QuestionResult;
+	export let seed: number = undefined;
 
 	$: prompt = result.prompt as QuestionMultipleChoicePrivate;
 	$: input = result.answer.input as MultipleChoiceAnswer;
@@ -19,5 +21,8 @@
 	}, {});
 </script>
 
-<MultipleChoiceContent {prompt} />
-<MultipleChoiceInput disabled={true} {correct} seed={undefined} {prompt} {input} />
+<Review bind:result>
+	<MultipleChoiceContent slot="content" {prompt} />
+	<MultipleChoiceInput slot="input" disabled={true} {correct} {seed} {prompt} {input} />
+	<slot slot="extra" name="extra" />
+</Review>

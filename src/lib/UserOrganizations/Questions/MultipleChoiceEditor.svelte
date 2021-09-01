@@ -57,17 +57,19 @@
 
 	$: createOnDelete = (key: string) => {
 		return function onDelete() {
-			const choices = prompt.choices;
+			const choices = prompt.choices || {};
 			delete choices[key];
 			prompt.choices = choices;
 		};
 	};
 
 	$: onCreateChoice = () => {
-		prompt.choices[randomString()] = {
+		const choices = prompt.choices || {};
+		choices[randomString()] = {
 			correct: false,
 			content: []
 		};
+		prompt.choices = choices;
 	};
 </script>
 
@@ -88,8 +90,8 @@
 </div>
 
 <ul class="list-group list-group-flush">
-	{#each choices as [key, choice]}
-		<li class="list-group-item ">
+	{#each choices as [key, choice] (key)}
+		<li class="list-group-item">
 			<div class="d-flex">
 				<div class="form-check ms-4">
 					<input

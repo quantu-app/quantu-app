@@ -1,14 +1,18 @@
 <script lang="ts">
 	import type { Quiz } from '$lib/api/quantu-app-api';
 
-	export let quizToDelete: Quiz;
-	export let onDeleteQuiz: () => void;
+	export let quiz: Quiz;
+	export let onDeleteQuiz: () => Promise<void>;
 
-	let deleteQuizText = '';
+	let deletingQuiz = false;
 
-	function internalOnDeleteQuiz() {
-		deleteQuizText = '';
-		onDeleteQuiz();
+	async function internalOnDeleteQuiz() {
+		deletingQuiz = true;
+		try {
+			await onDeleteQuiz();
+		} finally {
+			deletingQuiz = false;
+		}
 	}
 </script>
 
@@ -23,28 +27,22 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<h5 id="delete-quiz-label" class="modal-title">
-					Delete {quizToDelete?.name}
+					Delete {quiz?.name}
 				</h5>
 				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" />
-			</div>
-			<div class="modal-body">
-				<div class="input-group">
-					<input
-						type="text"
-						class="form-control"
-						placeholder="Type delete to permanently remove."
-						bind:value={deleteQuizText}
-					/>
-				</div>
 			</div>
 			<div class="modal-footer">
 				<button
 					type="button"
 					on:click={internalOnDeleteQuiz}
-					disabled={deleteQuizText.trim().toLowerCase() !== 'delete'}
 					data-bs-dismiss="modal"
-					class="btn btn-danger text-white">Delete</button
+					class="btn btn-danger text-white"
 				>
+					{#if deletingQuiz}
+						<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" />
+					{/if}
+					Delete
+				</button>
 				<button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
 			</div>
 		</div>

@@ -15,9 +15,9 @@
 		};
 	}
 
-	function onDeleteQuiz() {
+	async function onDeleteQuiz() {
 		if (quizToDelete) {
-			deleteQuiz(organizationId, quizToDelete.id);
+			await deleteQuiz(organizationId, quizToDelete.id);
 			quizToDelete = undefined;
 		}
 	}
@@ -29,4 +29,4 @@
 	{/each}
 </div>
 
-<DeleteQuiz {quizToDelete} {onDeleteQuiz} />
+<DeleteQuiz quiz={quizToDelete} {onDeleteQuiz} />

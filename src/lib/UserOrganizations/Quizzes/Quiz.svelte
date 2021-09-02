@@ -13,6 +13,7 @@
 <script lang="ts">
 	import type { Quiz, Question } from '$lib/api/quantu-app-api';
 	import Search from '$lib/Search.svelte';
+	import { debounce } from "@aicacia/debounce";
 	import { updateQuiz } from '$lib/state/organizationQuizzes';
 	import CreateQuestion from '$lib/UserOrganizations/Questions/CreateQuestion.svelte';
 	import QuestionList from '$lib/UserOrganizations/Questions/QuestionList.svelte';
@@ -36,6 +37,8 @@
 		});
 	}
 
+	const debouncedOnTagsChange = debounce(onTagsChange, 1000);
+
 	$: filter = (question: Question) =>
 		$state.questionNameFilter ? fuzzyEquals($state.questionNameFilter, question.name) : true;
 </script>
@@ -57,7 +60,7 @@
 				</div>
 				<div class="col-md">
 					<label for="quiz-tags" class="form-label mb-0">Quiz Tags</label>
-					<Tags id="quiz-tags" bind:tags={quiz.tags} on:change={onTagsChange} />
+					<Tags id="quiz-tags" bind:tags={quiz.tags} on:change={debouncedOnTagsChange} />
 				</div>
 			</form>
 		</div>

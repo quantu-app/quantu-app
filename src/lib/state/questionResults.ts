@@ -69,6 +69,12 @@ export async function answerQuestion(id: number, input: QuestionAnswer['input'],
 	return questionResult;
 }
 
+export async function explainQuestion(id: number, quizId?: number) {
+	const questionResult = await load(QuestionService.quantuAppWebControllerQuestionExplain(id));
+	questionResultsWritable.update((state) => addToState(state, questionResult, quizId));
+	return questionResult;
+}
+
 function addToState(
 	state: IQuestionResultsStore,
 	questionResult: QuestionResult,

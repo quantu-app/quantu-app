@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { Question, QuestionAnswer, QuestionResult } from '$lib/api/quantu-app-api';
-	import { answerQuestion } from '$lib/state/questionResults';
+	import { answerQuestion, explainQuestion } from '$lib/state/questionResults';
 	import { isEmpty } from '$lib/utils';
 
 	export let question: Question;
@@ -8,6 +8,15 @@
 	export let result: QuestionResult = undefined;
 
 	let answering = false;
+	let explaining = false;
+	$: onExplain = async () => {
+		explaining = true;
+		try {
+			result = await explainQuestion(question.id, question.quizId);
+		} finally {
+			explaining = false;
+		}
+	};
 	$: onSubmit = async () => {
 		answering = true;
 		try {
@@ -45,8 +54,19 @@
 				{:else}
 					<button
 						type="button"
+						class="btn btn-secondary"
+						disabled={explaining || answering}
+						on:click={onExplain}
+					>
+						{#if explaining}
+							<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" />
+						{/if}
+						Explain
+					</button>
+					<button
+						type="button"
 						class="btn btn-primary"
-						disabled={isEmpty(input) || !!result || answering}
+						disabled={isEmpty(input) || !!result || answering || explaining}
 						on:click={onSubmit}
 					>
 						{#if answering}

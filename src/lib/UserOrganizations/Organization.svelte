@@ -1,6 +1,7 @@
 <script lang="ts">
 	import type { Organization } from '$lib/api/quantu-app-api';
 	import { updateOrganization } from '$lib/state/userOrganizations';
+	import { debounce } from "@aicacia/debounce";
 	import Tags from '$lib/Tags.svelte';
 
 	export let organization: Organization;
@@ -22,6 +23,8 @@
 			tags: organization.tags
 		});
 	}
+
+	const debouncedOnTagsChange = debounce(onTagsChange, 1000);
 </script>
 
 <div class="container mt-2">
@@ -50,7 +53,7 @@
 		</div>
 		<div class="mb-2">
 			<label for="organization-tags" class="form-label">Organization Tags</label>
-			<Tags id="organization-tags" bind:tags={organization.tags} on:change={onTagsChange} />
+			<Tags id="organization-tags" bind:tags={organization.tags} on:change={debouncedOnTagsChange} />
 		</div>
 	</form>
 

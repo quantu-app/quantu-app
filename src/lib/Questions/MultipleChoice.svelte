@@ -29,7 +29,7 @@
 </script>
 
 <Prompt {question} {input} bind:result>
-	<MultipleChoiceContent slot="content" {prompt} />
+	<MultipleChoiceContent slot="content" {prompt} explanation={result?.prompt.explanation} />
 	<MultipleChoiceInput
 		slot="input"
 		disabled={result != null}

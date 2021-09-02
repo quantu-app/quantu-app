@@ -107,4 +107,21 @@ export class QuestionService {
         return result.body;
     }
 
+    /**
+     * Explain a Question
+     * Returns Question result with explanation
+     * @param id Question Id
+     * @returns QuestionResult Question Answer result
+     * @throws ApiError
+     */
+    public static async quantuAppWebControllerQuestionExplain(
+        id: number,
+    ): Promise<QuestionResult> {
+        const result = await __request({
+            method: 'POST',
+            path: `/questions/${id}/explain`,
+        });
+        return result.body;
+    }
+
 }

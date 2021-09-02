@@ -65,7 +65,7 @@
 	},
 	"dependencies": {
 		"@aicacia/debounce": "^0.1.12",
-		"@aicacia/quill-rich-editor": "git+https://github.com/aicacia/ts-quill-rich-editor.git#0f6fb86d5f5f356e81e7965e44825e71b195c78e",
+		"@aicacia/quill-rich-editor": "git+https://github.com/aicacia/ts-quill-rich-editor.git#d85e0afc1c657d1abe066bbe789af8e9f0fcbe41",
 		"@aicacia/rand": "^0.2.6",
 		"@aicacia/string-fuzzy_equals": "^0.1.4",
 		"@sveltejs/kit": "next",

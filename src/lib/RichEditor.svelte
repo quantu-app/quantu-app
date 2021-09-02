@@ -1,6 +1,6 @@
 <script lang="ts" context="module">
 	import 'quill/dist/quill.core.css';
-	import '@aicacia/quill-rich-editor/lib/index.css';
+	import '@aicacia/quill-rich-editor/styles/index.css';
 </script>
 
 <script lang="ts">

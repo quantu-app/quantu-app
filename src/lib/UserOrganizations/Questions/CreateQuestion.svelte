@@ -1,3 +1,13 @@
+<script lang="ts" context="module">
+	function emptyQuestion(quizId: number | null) {
+		return {
+			quizId,
+			type: 'multiple_choice' as QuestionCreate.type.MULTIPLE_CHOICE,
+			prompt: {} as unknown as QuestionPromptPrivate,
+			tags: []
+		}
+	};
+</script>
 <script lang="ts">
 	import type { QuestionCreate, QuestionPromptPrivate } from '$lib/api/quantu-app-api';
 	import { createQuestion } from '$lib/state/organizationQuestions';
@@ -7,14 +17,10 @@
 	export let quizId: number | null;
 
 	let prevQuizId: number;
+	let editorKey = Math.random();
 	let creatingQuestion = false;
 
-	let question: QuestionCreate = {
-		quizId,
-		type: 'multiple_choice' as QuestionCreate.type.MULTIPLE_CHOICE,
-		prompt: {} as unknown as QuestionPromptPrivate,
-		tags: []
-	};
+	let question: QuestionCreate = emptyQuestion(quizId)
 
 	$: if (prevQuizId !== quizId) {
 		prevQuizId = quizId;
@@ -26,10 +32,13 @@
 		try {
 			await createQuestion(organizationId, question);
 			delete question.name;
-			question.prompt = {} as unknown as QuestionPromptPrivate;
-			question.tags = [];
+			question = {
+				...question,
+				...emptyQuestion(quizId),
+			}
 		} finally {
 			creatingQuestion = false;
+			editorKey = Math.random();
 		}
 		window.bootstrap.Modal.getInstance('#create-question').hide();
 	}
@@ -47,7 +56,6 @@
 	class="modal fade"
 	id="create-question"
 	tabindex="-1"
-	data-bs-keyboard="false"
 	aria-labelledby="create-question-label"
 	aria-hidden="true"
 >
@@ -58,7 +66,9 @@
 				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" />
 			</div>
 			<div class="modal-body">
-				<QuestionEditor bind:question />
+				{#key editorKey}
+					<QuestionEditor bind:question />
+				{/key}
 			</div>
 			<div class="modal-footer">
 				<button

@@ -103,7 +103,6 @@
 	class="modal fade"
 	id="update-questions-in-quiz"
 	tabindex="-1"
-	data-bs-keyboard="false"
 	aria-labelledby="update-questions-in-quiz-label"
 	aria-hidden="true"
 >

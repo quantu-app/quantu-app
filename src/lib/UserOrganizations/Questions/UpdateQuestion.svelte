@@ -15,7 +15,6 @@
 	class="modal fade"
 	id="update-question"
 	tabindex="-1"
-	data-bs-keyboard="false"
 	aria-labelledby="update-question-label"
 	aria-hidden="true"
 >
@@ -27,7 +26,9 @@
 			</div>
 			<div class="modal-body">
 				{#if question}
-					<QuestionEditor bind:question />
+					{#key question.id}
+						<QuestionEditor bind:question />
+					{/key}
 				{/if}
 			</div>
 			<div class="modal-footer">

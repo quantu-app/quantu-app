@@ -3,6 +3,7 @@
 	import { userOrganizations } from '$lib/state/userOrganizations';
 
 	export let organizationId: number;
+	export let breadcrumbs: { href: string; title: string }[] = [];
 
 	let organization = $userOrganizations.byId[organizationId];
 </script>
@@ -30,6 +31,7 @@
 			title: 'Questions'
 		}
 	]}
+	{breadcrumbs}
 >
 	<slot />
 </Layout>

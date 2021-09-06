@@ -9,7 +9,7 @@
 			organizationId = parseInt(input.page.params.organizationId);
 
 		if (!browser && isValidStatus(response)) {
-			await getQuestions(organizationId);
+			await Promise.all([getQuestions(organizationId), getOrganization(organizationId)]);
 		}
 
 		return {
@@ -25,12 +25,15 @@
 	import { getQuestions, organizationQuestions } from '$lib/state/organizationQuestions';
 	import OrganizationLayout from '$lib/UserOrganizations/OrganizationLayout.svelte';
 	import Questions from '$lib/UserOrganizations/Questions/Questions.svelte';
+	import { getOrganization, userOrganizations } from '$lib/state/userOrganizations';
 
 	export let organizationId: number;
 
+	$: organization = $userOrganizations.byId[organizationId];
 	$: questions = Object.values($organizationQuestions.byOrganizationId[organizationId] || {});
 
 	if (browser) {
+		getOrganization(organizationId);
 		getQuestions(organizationId, undefined, true);
 	}
 </script>
@@ -39,6 +42,23 @@
 	<title>Questions</title>
 </svelte:head>
 
-<OrganizationLayout {organizationId}>
+<OrganizationLayout
+	{organizationId}
+	breadcrumbs={[
+		{ href: '/', title: 'Home' },
+		{
+			href: `/user/organizations`,
+			title: 'My Organizations'
+		},
+		{
+			href: `/user/organizations/${organizationId}`,
+			title: organization?.name || 'Organization'
+		},
+		{
+			href: `/user/organizations/${organizationId}/questions`,
+			title: 'Questions'
+		}
+	]}
+>
 	<Questions {organizationId} {questions} />
 </OrganizationLayout>

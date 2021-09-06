@@ -29,6 +29,14 @@
 	<title>Organizations</title>
 </svelte:head>
 
-<AppLayout>
+<AppLayout
+	breadcrumbs={[
+		{ href: '/', title: 'Home' },
+		{
+			href: `/user/organizations`,
+			title: 'My Organizations'
+		}
+	]}
+>
 	<Organizations {organizations} />
 </AppLayout>

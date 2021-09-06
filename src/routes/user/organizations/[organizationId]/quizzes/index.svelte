@@ -9,7 +9,7 @@
 			organizationId = parseInt(input.page.params.organizationId);
 
 		if (!browser && isValidStatus(response)) {
-			await getQuizzes(organizationId);
+			await Promise.all([getQuizzes(organizationId), getOrganization(organizationId)]);
 		}
 
 		return {
@@ -25,12 +25,15 @@
 	import { getQuizzes, organizationQuizzes } from '$lib/state/organizationQuizzes';
 	import OrganizationLayout from '$lib/UserOrganizations/OrganizationLayout.svelte';
 	import Quizzes from '$lib/UserOrganizations/Quizzes/Quizzes.svelte';
+	import { getOrganization, userOrganizations } from '$lib/state/userOrganizations';
 
 	export let organizationId: number;
 
+	$: organization = $userOrganizations.byId[organizationId];
 	$: quizzes = Object.values($organizationQuizzes.byOrganizationId[organizationId] || {});
 
 	if (browser) {
+		getOrganization(organizationId);
 		getQuizzes(organizationId);
 	}
 </script>
@@ -39,6 +42,23 @@
 	<title>Quizzes</title>
 </svelte:head>
 
-<OrganizationLayout {organizationId}>
+<OrganizationLayout
+	{organizationId}
+	breadcrumbs={[
+		{ href: '/', title: 'Home' },
+		{
+			href: `/user/organizations`,
+			title: 'My Organizations'
+		},
+		{
+			href: `/user/organizations/${organizationId}`,
+			title: organization?.name || 'Organization'
+		},
+		{
+			href: `/user/organizations/${organizationId}/quizzes`,
+			title: 'Quizzes'
+		}
+	]}
+>
 	<Quizzes {organizationId} {quizzes} />
 </OrganizationLayout>

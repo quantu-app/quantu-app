@@ -42,7 +42,19 @@
 	<title>Quiz</title>
 </svelte:head>
 
-<AppLayout>
+<AppLayout
+	breadcrumbs={[
+		{ href: '/', title: 'Home' },
+		{
+			href: `/quizzes`,
+			title: 'Quizzes'
+		},
+		{
+			href: `/quizzes/${quizId}`,
+			title: quiz?.name
+		}
+	]}
+>
 	{#if quiz}
 		<Quiz {quiz} questions={questionList} />
 	{/if}

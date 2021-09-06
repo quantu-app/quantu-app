@@ -42,6 +42,14 @@
 	<title>Questions</title>
 </svelte:head>
 
-<AppLayout>
+<AppLayout
+	breadcrumbs={[
+		{ href: '/', title: 'Home' },
+		{
+			href: `/questions`,
+			title: 'Questions'
+		}
+	]}
+>
 	<Questions questions={questionList} />
 </AppLayout>

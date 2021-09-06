@@ -35,7 +35,20 @@
 	<title>{organization?.name}</title>
 </svelte:head>
 
-<OrganizationLayout {organizationId}>
+<OrganizationLayout
+	{organizationId}
+	breadcrumbs={[
+		{ href: '/', title: 'Home' },
+		{
+			href: `/user/organizations`,
+			title: 'My Organizations'
+		},
+		{
+			href: `/user/organizations/${organizationId}`,
+			title: organization?.name || 'Organization'
+		}
+	]}
+>
 	{#if organization}
 		<Organization {organization} />
 	{/if}

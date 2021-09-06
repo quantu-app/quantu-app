@@ -7,9 +7,9 @@
 <Layout
 	navItems={[
 		{
-			href: `/user/organizations`,
-			icon: 'command',
-			title: 'My Organizations'
+			href: `/`,
+			icon: 'house',
+			title: 'Home'
 		},
 		{
 			href: `/quizzes`,

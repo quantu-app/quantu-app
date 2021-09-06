@@ -4,6 +4,7 @@
 	import { loading } from '$lib/state/loading';
 	import SignInUpModal from '$lib/SignInUpModal.svelte';
 	import { page } from '$app/stores';
+	import UserDropdown from './UserDropdown.svelte';
 
 	export let navItems: { href: string; icon: string; title: string }[] = [];
 	export let breadcrumbs: { href: string; title: string }[] = [];
@@ -42,6 +43,9 @@
 				</nav>
 			</div>
 			<slot />
+		</div>
+		<div>
+			<UserDropdown />
 		</div>
 	</div>
 	<Notifications />

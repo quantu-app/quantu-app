@@ -11,6 +11,11 @@
 <Layout
 	navItems={[
 		{
+			href: `/`,
+			icon: 'house',
+			title: 'Home'
+		},
+		{
 			href: `/user/organizations`,
 			icon: 'command',
 			title: 'My Organizations'

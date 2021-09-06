@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { page } from '$app/stores';
-	import UserDropdown from './UserDropdown.svelte';
 
 	export let navItems: Array<{ href: string; icon: string; title: string }>;
 </script>
@@ -53,9 +52,6 @@
 				</li>
 			{/each}
 		</ul>
-		<div class="border-top d-flex justify-content-end">
-			<UserDropdown />
-		</div>
 	</div>
 </div>
 

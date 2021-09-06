@@ -3,10 +3,10 @@
 </script>
 
 {#if $currentUser}
-	<div class="dropdown dropup">
+	<div class="dropdown dropdown">
 		<button
 			id="user-dropdown"
-			class="d-flex align-items-center justify-content-center p-3 btn btn-link dropdown-toggle"
+			class="btn btn-primary position-absolute dropdown-toggle"
 			type="button"
 			data-bs-toggle="dropdown"
 			aria-expanded="false"
@@ -36,8 +36,15 @@
 		type="button"
 		data-bs-toggle="modal"
 		data-bs-target="#sign-in-up-modal"
-		class="d-flex align-items-center justify-content-center p-3 btn btn-link"
+		class="btn btn-primary position-absolute"
 	>
 		<i class="bi bi-box-arrow-in-right" />
 	</button>
 {/if}
+
+<style lang="scss">
+	button {
+		top: 0.5rem;
+		right: 0.5rem;
+	}
+</style>

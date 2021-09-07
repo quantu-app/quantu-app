@@ -41,7 +41,7 @@
 	$: quiz = $quizzes.byId[quizId];
 	$: questionResultList = rng
 		.shuffle(Object.values($questionResults.byQuizId[quizId] || {}))
-		.slice(0, questionCount);
+		.slice(0, questionCount || Object.values($questionResults.byQuizId[quizId] || {}).length);
 
 	if (browser) {
 		getQuiz(quizId);

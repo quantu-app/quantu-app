@@ -11,6 +11,9 @@
 		<h4>
 			<a aria-label="Edit" href={`/quizzes/${quiz.id}`}>{quiz.name}</a>
 		</h4>
+		<div>
+			<a type="button" class="btn btn-secondary me-2" href={`/quizzes/${quiz.id}/review`}>Review</a>
+		</div>
 	</div>
 	<div class="d-flex justify-content-between align-items-start">
 		<div class="d-inline">

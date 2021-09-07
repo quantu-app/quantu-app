@@ -18,6 +18,11 @@
 			>
 			<h6 class="d-inline">- {titleCase(question.type.replace('_', ' '))}</h6>
 		</h4>
+		<div>
+			<a type="button" class="btn btn-secondary me-2" href={`/questions/${question.id}/review`}
+				>Review</a
+			>
+		</div>
 	</div>
 	<div class="d-flex justify-content-between align-items-start">
 		<div class="d-inline">

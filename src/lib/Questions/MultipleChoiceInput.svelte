@@ -22,7 +22,7 @@
 		};
 	};
 	$: if (disabled) {
-		checked = input.reduce((checked, key) => {
+		checked = (Array.isArray(input) ? input : []).reduce((checked, key) => {
 			checked[key] = true;
 			return checked;
 		}, {} as Record<string, boolean>);

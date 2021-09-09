@@ -58,7 +58,28 @@
 				{question}
 				onUpdate={createOnUpdate(question)}
 				onDelete={createOnDelete(question)}
-			/>
+			>
+				<li>
+					<button
+						type="button"
+						class="dropdown-item justify-content-between"
+						data-bs-toggle="modal"
+						data-bs-target="#update-question"
+						aria-label="Update"
+						on:click={createOnUpdate(question)}>Update</button
+					>
+				</li>
+				<li>
+					<button
+						type="button"
+						class="dropdown-item justify-content-between"
+						data-bs-toggle="modal"
+						data-bs-target="#delete-question"
+						aria-label="Delete"
+						on:click={createOnDelete(question)}>Delete</button
+					>
+				</li>
+			</slot>
 		</QuestionListItem>
 	{/each}
 </div>

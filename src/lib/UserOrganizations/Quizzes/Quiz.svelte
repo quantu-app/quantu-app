@@ -13,13 +13,14 @@
 <script lang="ts">
 	import type { Quiz, Question } from '$lib/api/quantu-app-api';
 	import Search from '$lib/Search.svelte';
-	import { debounce } from "@aicacia/debounce";
+	import { debounce } from '@aicacia/debounce';
 	import { updateQuiz } from '$lib/state/organizationQuizzes';
 	import CreateQuestion from '$lib/UserOrganizations/Questions/CreateQuestion.svelte';
 	import QuestionList from '$lib/UserOrganizations/Questions/QuestionList.svelte';
 	import QuestionsInQuiz from '$lib/UserOrganizations/Quizzes/QuestionsInQuiz.svelte';
 	import { fuzzyEquals } from '@aicacia/string-fuzzy_equals';
 	import Tags from '$lib/Tags.svelte';
+	import { removeQuestionsFromQuiz } from '$lib/state/organizationQuestions';
 
 	export let organizationId: number;
 	export let quiz: Quiz;
@@ -35,6 +36,12 @@
 		updateQuiz(organizationId, quiz.id, {
 			tags: quiz.tags
 		});
+	}
+
+	function createOnRemove(question: Question) {
+		return async function onRemove() {
+			await removeQuestionsFromQuiz(organizationId, quiz.id, [question.id]);
+		};
 	}
 
 	const debouncedOnTagsChange = debounce(onTagsChange, 1000);
@@ -78,5 +85,26 @@
 	<Search bind:filter={$state.questionNameFilter} />
 </div>
 <div class="container">
-	<QuestionList {organizationId} questions={questions.filter(filter)} />
+	<QuestionList {organizationId} questions={questions.filter(filter)}>
+		<svelte:fragment slot="dropdown" let:question let:onUpdate>
+			<li>
+				<button
+					type="button"
+					class="dropdown-item justify-content-between"
+					data-bs-toggle="modal"
+					data-bs-target="#update-question"
+					aria-label="Update"
+					on:click={onUpdate}>Update</button
+				>
+			</li>
+			<li slot="dropdown" let:question>
+				<button
+					type="button"
+					class="dropdown-item justify-content-between"
+					aria-label="Remove"
+					on:click={createOnRemove(question)}>Remove</button
+				>
+			</li>
+		</svelte:fragment>
+	</QuestionList>
 </div>

@@ -38,26 +38,28 @@
 				class="dropdown-menu dropdown-menu-end"
 				aria-labelledby={`question-dropdown-${question.id}`}
 			>
-				<li>
-					<button
-						type="button"
-						class="dropdown-item justify-content-between"
-						data-bs-toggle="modal"
-						data-bs-target="#update-question"
-						aria-label="Update"
-						on:click={onUpdate}>Update</button
-					>
-				</li>
-				<li>
-					<button
-						type="button"
-						class="dropdown-item justify-content-between"
-						data-bs-toggle="modal"
-						data-bs-target="#delete-question"
-						aria-label="Delete"
-						on:click={onDelete}>Delete</button
-					>
-				</li>
+				<slot name="dropdown" {question} {onUpdate} {onDelete}>
+					<li>
+						<button
+							type="button"
+							class="dropdown-item justify-content-between"
+							data-bs-toggle="modal"
+							data-bs-target="#update-question"
+							aria-label="Update"
+							on:click={onUpdate}>Update</button
+						>
+					</li>
+					<li>
+						<button
+							type="button"
+							class="dropdown-item justify-content-between"
+							data-bs-toggle="modal"
+							data-bs-target="#delete-question"
+							aria-label="Delete"
+							on:click={onDelete}>Delete</button
+						>
+					</li>
+				</slot>
 			</ul>
 		</div>
 	</div>

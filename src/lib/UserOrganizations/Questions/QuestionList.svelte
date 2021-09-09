@@ -51,7 +51,15 @@
 			{question}
 			onUpdate={createOnUpdate(question)}
 			onDelete={createOnDelete(question)}
-		/>
+		>
+			<slot
+				slot="dropdown"
+				name="dropdown"
+				{question}
+				onUpdate={createOnUpdate(question)}
+				onDelete={createOnDelete(question)}
+			/>
+		</QuestionListItem>
 	{/each}
 </div>
 

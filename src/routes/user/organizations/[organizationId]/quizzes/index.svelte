@@ -34,7 +34,7 @@
 
 	if (browser) {
 		getOrganization(organizationId);
-		getQuizzes(organizationId);
+		getQuizzes(organizationId, true);
 	}
 </script>
 

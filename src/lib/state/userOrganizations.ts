@@ -26,10 +26,12 @@ export async function getOrganization(id: number) {
 	return organization;
 }
 
-export async function getOrganizations() {
-	const cachedQuizzes = Object.values(get(userOrganizations).byId);
-	if (cachedQuizzes.length) {
-		return cachedQuizzes;
+export async function getOrganizations(force = false) {
+	if (!force) {
+		const cachedQuizzes = Object.values(get(userOrganizations).byId);
+		if (cachedQuizzes.length) {
+			return cachedQuizzes;
+		}
 	}
 	const organizations = await load(UserService.quantuAppWebControllerUserOrganizationIndex());
 	userOrganizationsWritable.set(organizations.reduce(addToState, { byId: {} }));

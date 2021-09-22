@@ -55,7 +55,7 @@
 
 	if (browser) {
 		getQuiz(quizId);
-		getQuestions(undefined, quizId);
+		getQuestions(undefined, quizId, true);
 	}
 </script>
 

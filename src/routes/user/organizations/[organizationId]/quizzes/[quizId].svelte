@@ -11,9 +11,9 @@
 
 		if (!browser && isValidStatus(response)) {
 			await Promise.all([
+				getOrganization(organizationId),
 				getQuiz(organizationId, quizId),
-				getQuestions(organizationId, quizId),
-				getOrganization(organizationId)
+				getQuestions(organizationId, quizId)
 			]);
 		}
 
@@ -44,7 +44,7 @@
 	if (browser) {
 		getOrganization(organizationId);
 		getQuiz(organizationId, quizId);
-		getQuestions(organizationId, quizId);
+		getQuestions(organizationId, quizId, true);
 	}
 </script>
 

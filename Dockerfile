@@ -1,7 +1,7 @@
 FROM node:14-alpine as builder
 
 RUN apk add --no-cache python3 g++ make zlib-dev
-RUN npm install -g npm@7.21.1
+RUN npm install -g npm@7.24.0
 
 WORKDIR /app
 
@@ -23,7 +23,7 @@ RUN NODE_ENV=production npm run web.build
 FROM node:14-alpine
 
 RUN apk add --no-cache python3 g++ make
-RUN npm install -g npm@7.21.1
+RUN npm install -g npm@7.24.0
 
 WORKDIR /app
 

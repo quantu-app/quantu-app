@@ -50,7 +50,7 @@
 	);
 
 	if ($currentUser) {
-		getQuestions(organizationId);
+		getQuestions(organizationId, undefined, true);
 	}
 
 	let addingQuestion = false;

@@ -30,18 +30,20 @@ export async function getQuiz(id: number) {
 	return quiz;
 }
 
-export async function getQuizzes(organizationId?: number) {
-	if (organizationId) {
-		const cachedQuizzes = Object.values(
-			get(quizzesWritable).byOrganizationId[organizationId] || {}
-		);
-		if (cachedQuizzes.length) {
-			return cachedQuizzes;
-		}
-	} else {
-		const cachedQuizzes = Object.values(get(quizzesWritable).byId || {});
-		if (cachedQuizzes.length) {
-			return cachedQuizzes;
+export async function getQuizzes(organizationId?: number, force = true) {
+	if (!force) {
+		if (organizationId) {
+			const cachedQuizzes = Object.values(
+				get(quizzesWritable).byOrganizationId[organizationId] || {}
+			);
+			if (cachedQuizzes.length) {
+				return cachedQuizzes;
+			}
+		} else {
+			const cachedQuizzes = Object.values(get(quizzesWritable).byId || {});
+			if (cachedQuizzes.length) {
+				return cachedQuizzes;
+			}
 		}
 	}
 	const quizzes = await load(QuizService.quantuAppWebControllerQuizIndex(organizationId));

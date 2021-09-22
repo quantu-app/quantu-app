@@ -21,7 +21,7 @@
 	$: organizations = Object.values($userOrganizations.byId);
 
 	if (browser) {
-		getOrganizations();
+		getOrganizations(true);
 	}
 </script>
 

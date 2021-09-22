@@ -32,13 +32,15 @@ export async function getQuiz(organizationId: number, id: number) {
 	return quiz;
 }
 
-export async function getQuizzes(organizationId: number) {
-	if (organizationId) {
-		const cachedQuizzes = Object.values(
-			get(organizationQuizzesWritable).byOrganizationId[organizationId] || {}
-		);
-		if (cachedQuizzes.length) {
-			return cachedQuizzes;
+export async function getQuizzes(organizationId: number, force = false) {
+	if (!force) {
+		if (organizationId) {
+			const cachedQuizzes = Object.values(
+				get(organizationQuizzesWritable).byOrganizationId[organizationId] || {}
+			);
+			if (cachedQuizzes.length) {
+				return cachedQuizzes;
+			}
 		}
 	}
 	const quizzes = await load(UserService.quantuAppWebControllerUserQuizIndex(organizationId));

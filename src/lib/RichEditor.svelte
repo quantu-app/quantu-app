@@ -1,6 +1,6 @@
 <script lang="ts" context="module">
 	import 'quill/dist/quill.core.css';
-	import '@aicacia/quill-rich-editor/styles/index.css';
+	import '$lib/editor/index.scss';
 </script>
 
 <script lang="ts">
@@ -53,7 +53,7 @@
 	}
 
 	onMount(() => {
-		import('@aicacia/quill-rich-editor').then(({ createQuill }) => {
+		import('$lib/editor').then(({ createQuill }) => {
 			quill = createQuill(element, placeholder);
 
 			quill.on('text-change', onTextChange);

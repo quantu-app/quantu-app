@@ -44,6 +44,7 @@
 		"@types/js-cookie": "^2.2.7",
 		"@types/katex": "^0.11.1",
 		"@types/phoenix": "^1.5.2",
+		"@types/quill": "2.0.4",
 		"@types/uuid": "^8.3.1",
 		"@typescript-eslint/eslint-plugin": "^4.31.2",
 		"@typescript-eslint/parser": "^4.31.2",
@@ -66,7 +67,6 @@
 	},
 	"dependencies": {
 		"@aicacia/debounce": "^0.1.12",
-		"@aicacia/quill-rich-editor": "git+https://github.com/aicacia/ts-quill-rich-editor.git#ea404061be63488829e5b16afea5da4d3f3307c5",
 		"@aicacia/rand": "^0.2.6",
 		"@aicacia/string-fuzzy_equals": "^0.1.4",
 		"@sveltejs/kit": "next",
@@ -75,7 +75,9 @@
 		"fast-equals": "^2.0.3",
 		"js-cookie": "^3.0.1",
 		"localforage": "^1.10.0",
+		"long-press-event": "^2.4.4",
 		"phoenix": "^1.5.12",
+		"quill": "2.0.0-dev.4",
 		"svelte": "^3.42.6",
 		"title-case": "^3.0.3",
 		"uuid": "^8.3.2"

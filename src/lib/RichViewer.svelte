@@ -1,11 +1,11 @@
 <script lang="ts" context="module">
 	import 'quill/dist/quill.core.css';
-	import '@aicacia/quill-rich-editor/styles/index.css';
+	import '$lib/editor/index.scss';
 </script>
 
 <script lang="ts">
 	import type Op from 'quill-delta/dist/Op';
-	import type { renderOps } from '@aicacia/quill-rich-editor';
+	import type { renderOps } from '$lib/editor';
 	import { onMount } from 'svelte';
 
 	export let content: Op[];
@@ -20,7 +20,7 @@
 	}
 
 	onMount(() => {
-		import('@aicacia/quill-rich-editor').then(({ renderOps }) => {
+		import('$lib/editor').then(({ renderOps }) => {
 			renderOpsFn = renderOps;
 			renderOps(element, content);
 		});

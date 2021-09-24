@@ -39,9 +39,10 @@
 
 	$: rng = XorShiftRng.fromSeed(seed);
 	$: quiz = $quizzes.byId[quizId];
+	$: allQuestionResults = Object.values($questionResults.byQuizId[quizId] || {});
 	$: questionResultList = rng
-		.shuffle(Object.values($questionResults.byQuizId[quizId] || {}))
-		.slice(0, questionCount || Object.values($questionResults.byQuizId[quizId] || {}).length);
+		.shuffle(allQuestionResults)
+		.slice(0, questionCount || allQuestionResults.length);
 
 	if (browser) {
 		getQuiz(quizId);

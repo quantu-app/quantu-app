@@ -1,10 +1,12 @@
 <script lang="ts">
 	import type { QuestionFlashCardPrivate } from '$lib/api/quantu-app-api';
 	import RichEditor from '$lib/RichEditor.svelte';
+	import RichViewer from '$lib/RichViewer.svelte';
 	import type Quill from 'quill';
 	import type Delta from 'quill-delta';
 
 	export let prompt: QuestionFlashCardPrivate;
+	export let disabled = false;
 
 	let prevPrompt: QuestionFlashCardPrivate;
 	let frontQuill: Quill;
@@ -39,12 +41,20 @@
 
 <div class="mt-4">
 	<label for="front" class="form-label">Front</label>
-	<RichEditor onQuill={onFrontQuill} on:textchange={onFrontChange} />
+	{#if disabled}
+		<RichViewer content={prompt.front} />
+	{:else}
+		<RichEditor onQuill={onFrontQuill} on:textchange={onFrontChange} />
+	{/if}
 </div>
 
 <hr />
 
 <div>
 	<label for="back" class="form-label">Back</label>
-	<RichEditor onQuill={onBackQuill} on:textchange={onBackChange} />
+	{#if disabled}
+		<RichViewer content={prompt.back} />
+	{:else}
+		<RichEditor onQuill={onBackQuill} on:textchange={onBackChange} />
+	{/if}
 </div>

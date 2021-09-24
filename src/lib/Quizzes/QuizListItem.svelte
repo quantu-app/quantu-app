@@ -12,6 +12,7 @@
 			<a aria-label="Edit" href={`/quizzes/${quiz.id}`}>{quiz.name}</a>
 		</h4>
 		<div>
+			<a type="button" class="btn btn-primary me-2" href={`/quizzes/${quiz.id}`}>Start</a>
 			<a type="button" class="btn btn-secondary me-2" href={`/quizzes/${quiz.id}/review`}>Review</a>
 		</div>
 	</div>

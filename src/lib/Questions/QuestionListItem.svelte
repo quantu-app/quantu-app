@@ -19,6 +19,7 @@
 			<h6 class="d-inline">- {titleCase(question.type.replace('_', ' '))}</h6>
 		</h4>
 		<div>
+			<a type="button" class="btn btn-primary me-2" href={`/questions/${question.id}`}>Answer</a>
 			<a type="button" class="btn btn-secondary me-2" href={`/questions/${question.id}/review`}
 				>Review</a
 			>

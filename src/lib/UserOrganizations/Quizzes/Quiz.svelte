@@ -86,7 +86,7 @@
 </div>
 <div class="container">
 	<QuestionList {organizationId} questions={questions.filter(filter)}>
-		<svelte:fragment slot="dropdown" let:question let:onUpdate>
+		<svelte:fragment slot="dropdown" let:question let:onUpdate let:onDelete>
 			<li>
 				<button
 					type="button"
@@ -103,6 +103,14 @@
 					class="dropdown-item justify-content-between"
 					aria-label="Remove"
 					on:click={createOnRemove(question)}>Remove</button
+				>
+				<button
+					type="button"
+					class="dropdown-item justify-content-between"
+					data-bs-toggle="modal"
+					data-bs-target="#delete-question"
+					aria-label="Delete"
+					on:click={onDelete}>Delete</button
 				>
 			</li>
 		</svelte:fragment>

@@ -115,15 +115,13 @@
 				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" />
 			</div>
 			<div class="modal-body">
-				<ul class="list-group list-group-flush">
+				<div class="accordion accordion-flush" id="question-quiz-list">
 					{#each Object.values(selected) as question}
-						<li class="list-group-item">
-							<AddQuestionToQuizItem {question} onClick={onUnselect}
-								><i class="bi bi-dash" /></AddQuestionToQuizItem
-							>
-						</li>
+						<AddQuestionToQuizItem {question} onClick={onUnselect}
+							><i class="bi bi-dash" /></AddQuestionToQuizItem
+						>
 					{/each}
-				</ul>
+				</div>
 				<hr />
 				<Search bind:filter={$state.questionNameFilter} />
 				<ul class="list-group list-group-flush">

@@ -5,6 +5,7 @@
 	import MultipleChoiceEditor from './MultipleChoiceEditor.svelte';
 
 	export let question: Partial<QuestionPrivate>;
+	export let disabled = false;
 </script>
 
 <div class="row">
@@ -15,6 +16,7 @@
 			type="text"
 			class="form-control"
 			placeholder="Question Name"
+			{disabled}
 			bind:value={question.name}
 		/>
 	</div>
@@ -33,11 +35,11 @@
 </div>
 <div class="mt-2">
 	<label for="question-tags" class="form-label">Question Tags</label>
-	<Tags id="question-tags" bind:tags={question.tags} />
+	<Tags id="question-tags" {disabled} bind:tags={question.tags} />
 </div>
 
 {#if question.type === 'flash_card'}
-	<FlashCardEditor bind:prompt={question.prompt} />
+	<FlashCardEditor {disabled} bind:prompt={question.prompt} />
 {:else if question.type === 'multiple_choice'}
-	<MultipleChoiceEditor bind:prompt={question.prompt} />
+	<MultipleChoiceEditor {disabled} bind:prompt={question.prompt} />
 {/if}

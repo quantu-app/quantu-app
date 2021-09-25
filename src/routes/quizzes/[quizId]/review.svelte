@@ -29,7 +29,7 @@
 	import { questionResults } from '$lib/state/questionResults';
 	import { getQuiz, quizzes } from '$lib/state/quizzes';
 	import AppLayout from '$lib/AppLayout.svelte';
-	import ReviewQuizQuestion from '$lib/Quizzes/ReviewQuizQuestion.svelte';
+	import ReviewQuizQuestions from '$lib/Quizzes/ReviewQuizQuestions.svelte';
 	import { XorShiftRng } from '@aicacia/rand';
 	import { getQuestionResults } from '$lib/state/questionResults';
 
@@ -68,6 +68,6 @@
 	]}
 >
 	{#if quiz}
-		<ReviewQuizQuestion {quiz} questionResults={questionResultList} />
+		<ReviewQuizQuestions {quiz} questionResults={questionResultList} />
 	{/if}
 </AppLayout>

@@ -6,13 +6,15 @@ import type bootstrap from 'bootstrap';
 import type HLJSApi from 'highlight.js';
 import type katex from 'katex';
 
-interface ImportMetaEnv {
-	VITE_API_URL: string;
-	VITE_WS_URL: string;
-}
+declare global {
+	interface ImportMetaEnv {
+		VITE_API_URL: string;
+		VITE_WS_URL: string;
+	}
 
-interface Window {
-	katex: katex;
-	hljs: HLJSApi;
-	bootstrap: bootstrap;
+	interface Window {
+		katex: katex;
+		hljs: HLJSApi;
+		bootstrap: bootstrap;
+	}
 }

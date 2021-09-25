@@ -5,6 +5,7 @@
 	import SignInUpModal from '$lib/SignInUpModal.svelte';
 	import { page } from '$app/stores';
 	import UserDropdown from './UserDropdown.svelte';
+	import { currentUser } from './state/user';
 
 	export let navItems: { href: string; icon: string; title: string }[] = [];
 	export let breadcrumbs: { href: string; title: string }[] = [];
@@ -21,7 +22,9 @@
 		style="width: 100%; height: 4px"
 	/>
 	<div class="d-flex flex-row h-100">
-		<Sidebar {navItems} />
+		{#if $currentUser}
+			<Sidebar {navItems} />
+		{/if}
 		<div class="d-flex flex-column h-100 flex-grow-1 content">
 			<div class="container">
 				<nav aria-label="breadcrumb">

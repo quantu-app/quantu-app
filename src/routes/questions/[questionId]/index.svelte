@@ -56,7 +56,7 @@
 	<div class="container h-100">
 		{#if question}
 			<Question {question}>
-				<a slot="extra" type="button" class="btn btn-primary" href="/questions">
+				<a slot="extra" role="button" class="btn btn-primary" href="/questions">
 					Return to questions
 				</a>
 			</Question>

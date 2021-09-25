@@ -13,14 +13,14 @@
 			{#if question.index != null}
 				<span class="badge bg-primary">{question.index + 1}</span>
 			{/if}
-			<a type="button" class="btn btn-link" href={`/questions/${question.id}`}
+			<a role="button" class="btn btn-link" href={`/questions/${question.id}`}
 				>{question.name || 'No Name'}</a
 			>
 			<h6 class="d-inline">- {titleCase(question.type.replace('_', ' '))}</h6>
 		</h4>
 		<div>
-			<a type="button" class="btn btn-primary me-2" href={`/questions/${question.id}`}>Answer</a>
-			<a type="button" class="btn btn-secondary me-2" href={`/questions/${question.id}/review`}
+			<a role="button" class="btn btn-primary me-2" href={`/questions/${question.id}`}>Answer</a>
+			<a role="button" class="btn btn-secondary me-2" href={`/questions/${question.id}/review`}
 				>Review</a
 			>
 		</div>

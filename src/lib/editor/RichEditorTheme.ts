@@ -28,7 +28,7 @@ const TOOLBAR_CONFIG = [
 	['clean']
 ];
 
-const BUBBLE_DEFAULTS = BubbleTheme.DEFAULTS as any;
+const BUBBLE_DEFAULTS = BubbleTheme.DEFAULTS;
 export class RichEditorTheme extends BubbleTheme {
 	static DEFAULTS = {
 		...BUBBLE_DEFAULTS,

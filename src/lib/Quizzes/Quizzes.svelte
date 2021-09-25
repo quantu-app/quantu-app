@@ -20,6 +20,7 @@
 
 	$: filter = (quiz: Quiz) =>
 		$state.quizNameFilter ? fuzzyEquals($state.quizNameFilter, quiz.name) : true;
+	$: sort = (a: Quiz, b: Quiz) => (new Date(a.insertedAt) < new Date(b.insertedAt) ? 1 : -1);
 </script>
 
 <div class="container mb-2">
@@ -27,5 +28,5 @@
 </div>
 
 <div class="container">
-	<QuizList quizzes={quizzes.filter(filter)} />
+	<QuizList quizzes={quizzes.filter(filter).sort(sort)} />
 </div>

@@ -15,15 +15,17 @@
 		</button>
 		<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="user-dropdown">
 			<li><span class="dropdown-item disabled">{$currentUser.username}</span></li>
-			<li>
-				<a
-					type="button"
-					class="dropdown-item"
-					aria-label="My Organizations"
-					href="/user/organizations">My Organizations</a
-				>
-			</li>
-			<li><hr class="dropdown-divider" /></li>
+			{#if $currentUser.creator}
+				<li>
+					<a
+						role="button"
+						class="dropdown-item"
+						aria-label="My Organizations"
+						href="/user/organizations">My Organizations</a
+					>
+				</li>
+				<li><hr class="dropdown-divider" /></li>
+			{/if}
 			<li>
 				<button type="button" class="dropdown-item" aria-label="Sign out" on:click={signOut}
 					>Sign out</button

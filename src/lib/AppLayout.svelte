@@ -10,16 +10,6 @@
 			href: `/`,
 			icon: 'house',
 			title: 'Home'
-		},
-		{
-			href: `/quizzes`,
-			icon: 'question',
-			title: 'Quizzes'
-		},
-		{
-			href: `/questions`,
-			icon: 'list',
-			title: 'Questions'
 		}
 	]}
 	{breadcrumbs}

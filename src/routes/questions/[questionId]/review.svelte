@@ -63,7 +63,7 @@
 	<div class="container h-100">
 		{#if questionResult}
 			<ReviewQuestion result={questionResult}>
-				<a slot="extra" type="button" class="btn btn-primary" href={`/questions/${question?.id}`}>
+				<a slot="extra" role="button" class="btn btn-primary" href={`/questions/${question?.id}`}>
 					Return to {question?.name}
 				</a>
 			</ReviewQuestion>

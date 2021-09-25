@@ -101,7 +101,7 @@ export class RichEditorTooltip extends Tooltip {
 			{ capture: true }
 		);
 		this.textarea.addEventListener('input', () => {
-			(window as any).katex.render(this.textarea.value, this.katex, {
+			window.katex.render(this.textarea.value, this.katex, {
 				throwOnError: false,
 				errorColor: '#f00'
 			});

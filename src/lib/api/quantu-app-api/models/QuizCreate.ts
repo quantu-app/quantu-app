@@ -15,6 +15,10 @@ export type QuizCreate = {
      */
     name: string;
     /**
+     * Quiz published status
+     */
+    published?: boolean | null;
+    /**
      * Quiz tags
      */
     tags?: Array<string> | null;

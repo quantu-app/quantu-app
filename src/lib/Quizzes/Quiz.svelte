@@ -45,9 +45,9 @@
 		</div>
 	</div>
 	<div class="d-flex justify-content-end mt-2">
-		<a type="button" class="btn btn-secondary me-2" href={`/quizzes/${quiz.id}/review`}>Review</a>
+		<a role="button" class="btn btn-secondary me-2" href={`/quizzes/${quiz.id}/review`}>Review</a>
 		<a
-			type="button"
+			role="button"
 			class="btn btn-primary"
 			href={`/quizzes/${quiz.id}/answer?index=0&seed=${quizConfig.seed}&questionCount=${quizConfig.questionCount}`}
 			>Start</a

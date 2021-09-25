@@ -27,6 +27,10 @@ export type Quiz = {
      */
     organizationId: number;
     /**
+     * Quiz published status
+     */
+    published: boolean | null;
+    /**
      * Quiz tags
      */
     tags: Array<string>;

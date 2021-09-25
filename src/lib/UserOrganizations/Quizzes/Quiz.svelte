@@ -38,6 +38,19 @@
 		});
 	}
 
+	function onDescriptionChange() {
+		updateQuiz(organizationId, quiz.id, {
+			description: quiz.description
+		});
+	}
+
+	function onPublishedChange(e: Event) {
+		quiz.published = !quiz.published;
+		updateQuiz(organizationId, quiz.id, {
+			published: quiz.published
+		});
+	}
+
 	function createOnRemove(question: Question) {
 		return async function onRemove() {
 			await removeQuestionsFromQuiz(organizationId, quiz.id, [question.id]);
@@ -73,11 +86,44 @@
 		</div>
 		<div class="col-md">
 			<div class="d-flex mt-2 justify-content-end">
+				<input
+					type="radio"
+					class="btn-check"
+					name="quiz-published-status"
+					id="quiz-published-status"
+					autocomplete="off"
+					checked={quiz.published}
+					on:click={onPublishedChange}
+				/>
+				<label class="btn btn-outline-primary" for="quiz-published-status">Publish</label>
+
+				<input
+					type="radio"
+					class="btn-check"
+					name="quiz-published-status"
+					id="quiz-unpublished-status"
+					autocomplete="off"
+					checked={!quiz.published}
+					on:click={onPublishedChange}
+				/>
+				<label class="btn btn-outline-danger" for="quiz-unpublished-status">Unpublish</label>
+			</div>
+			<div class="d-flex mt-2 justify-content-end">
 				<QuestionsInQuiz {organizationId} {quiz} />
 				<div class="p-1" />
 				<CreateQuestion {organizationId} quizId={quiz.id} />
 			</div>
 		</div>
+	</div>
+	<div class="mt-2">
+		<label for="quiz-description">Description</label>
+		<textarea
+			class="form-control"
+			placeholder="Quiz Description"
+			id="quiz-description"
+			bind:value={quiz.description}
+			on:change={onDescriptionChange}
+		/>
 	</div>
 </div>
 

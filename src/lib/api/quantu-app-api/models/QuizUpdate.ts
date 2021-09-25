@@ -15,6 +15,10 @@ export type QuizUpdate = {
      */
     name?: string | null;
     /**
+     * Quiz published status
+     */
+    published?: boolean | null;
+    /**
      * Quiz tags
      */
     tags?: Array<string> | null;

@@ -8,6 +8,10 @@ import type { Email } from './Email';
  * A private user
  */
 export type User = {
+    /**
+     * User creator status
+     */
+    creator?: boolean | null;
     email?: Email;
     emails: Array<Email>;
     /**

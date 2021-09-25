@@ -20,7 +20,7 @@
 	<QuestionComponent {question} {seed}>
 		<a
 			slot="extra"
-			type="button"
+			role="button"
 			class="btn btn-primary"
 			href={index >= questionCount - 1
 				? `/quizzes/${quiz.id}/review?seed=${seed}&questionCount=${questionCount}`

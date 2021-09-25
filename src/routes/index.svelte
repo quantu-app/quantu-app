@@ -1,15 +1,22 @@
 <script context="module" lang="ts">
 	import type { LoadInput } from '@sveltejs/kit';
 
-	export function load({ page }: LoadInput) {
+	export function load({ page, session }: LoadInput) {
 		const redirectPathString = page.query.get('redirectPath'),
 			redirectPath = redirectPathString ? decodeURIComponent(redirectPathString) : undefined;
 
-		return {
-			props: {
-				redirectPath
-			}
-		};
+		if (session) {
+			return {
+				status: 302,
+				redirect: '/quizzes'
+			};
+		} else {
+			return {
+				props: {
+					redirectPath
+				}
+			};
+		}
 	}
 </script>
 
@@ -18,10 +25,11 @@
 	import { currentUser, redirectPathWritable } from '$lib/state/user';
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
+	import { browser } from '$app/env';
 
 	export let redirectPath: string;
 
-	$: if ($currentUser) {
+	$: if (browser && $currentUser) {
 		goto('/quizzes');
 	}
 

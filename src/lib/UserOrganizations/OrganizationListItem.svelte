@@ -54,13 +54,5 @@
 			Last updated {updatedAt.toLocaleTimeString()}
 			{updatedAt.toLocaleDateString()}
 		</div>
-		{#if innerWidth >= 768}
-			<div class="flex-grow-1" />
-			<div class="d-inline" style="margin-right:60px;">
-				<p class="mb-0">
-					{organization.url}
-				</p>
-			</div>
-		{/if}
 	</div>
 </div>

@@ -78,7 +78,7 @@
 		"long-press-event": "^2.4.4",
 		"phoenix": "^1.5.12",
 		"quill": "2.0.0-dev.4",
-		"svelte": "^3.42.6",
+		"svelte": "^3.43.0",
 		"title-case": "^3.0.3",
 		"uuid": "^8.3.2"
 	}

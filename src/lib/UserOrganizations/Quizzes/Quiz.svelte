@@ -86,32 +86,23 @@
 		</div>
 		<div class="col-md">
 			<div class="d-flex mt-2 justify-content-end">
-				<input
-					type="radio"
-					class="btn-check"
-					name="quiz-published-status"
-					id="quiz-published-status"
-					autocomplete="off"
-					checked={quiz.published}
-					on:click={onPublishedChange}
-				/>
-				<label class="btn btn-outline-primary" for="quiz-published-status">Publish</label>
-
-				<input
-					type="radio"
-					class="btn-check"
-					name="quiz-published-status"
-					id="quiz-unpublished-status"
-					autocomplete="off"
-					checked={!quiz.published}
-					on:click={onPublishedChange}
-				/>
-				<label class="btn btn-outline-danger" for="quiz-unpublished-status">Unpublish</label>
-			</div>
-			<div class="d-flex mt-2 justify-content-end">
 				<QuestionsInQuiz {organizationId} {quiz} />
 				<div class="p-1" />
 				<CreateQuestion {organizationId} quizId={quiz.id} />
+				<div class="p-1" />
+				<button
+					type="button"
+					class="btn"
+					class:btn-primary={quiz.published}
+					class:btn-outline-primary={!quiz.published}
+					on:click={onPublishedChange}
+				>
+					{#if quiz.published}
+						<i class="bi bi-eye" />
+					{:else}
+						<i class="bi bi-eye-slash" />
+					{/if}
+				</button>
 			</div>
 		</div>
 	</div>

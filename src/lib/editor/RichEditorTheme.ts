@@ -1,9 +1,12 @@
 import Quill from 'quill';
 import type { QuillOptionsStatic } from 'quill';
 import type BubbleThemeClass from 'quill/themes/snow';
+import type ThemeClass from 'quill/core/theme';
 import { RichEditorTooltip } from './RichEditorTooltip';
+import type { BaseTooltip } from 'quill/themes/base';
 
 const BubbleTheme: typeof BubbleThemeClass = Quill.import('themes/snow');
+const Theme: typeof ThemeClass = Quill.import('core/theme');
 const icons = Quill.import('ui/icons');
 
 const TOOLBAR_CONFIG = [
@@ -29,7 +32,7 @@ const TOOLBAR_CONFIG = [
 ];
 
 const BUBBLE_DEFAULTS = BubbleTheme.DEFAULTS;
-export class RichEditorTheme extends BubbleTheme {
+export class RichEditorTheme extends Theme {
 	static DEFAULTS = {
 		...BUBBLE_DEFAULTS,
 		modules: {
@@ -55,6 +58,9 @@ export class RichEditorTheme extends BubbleTheme {
 			}
 		}
 	};
+	public tooltip: RichEditorTooltip;
+	public buildButtons: typeof BubbleTheme.prototype.buildButtons;
+	public buildPickers: typeof BubbleTheme.prototype.buildPickers;
 
 	constructor(quill: Quill, options: QuillOptionsStatic) {
 		if (
@@ -78,5 +84,10 @@ export class RichEditorTheme extends BubbleTheme {
 		this.buildPickers(toolbar.container.querySelectorAll('select'), icons);
 	}
 }
+
+RichEditorTheme.prototype.init = BubbleTheme.prototype.init;
+RichEditorTheme.prototype.addModule = BubbleTheme.prototype.addModule;
+RichEditorTheme.prototype.buildButtons = BubbleTheme.prototype.buildButtons;
+RichEditorTheme.prototype.buildPickers = BubbleTheme.prototype.buildPickers;
 
 Quill.register('themes/rich-editor', RichEditorTheme, true);

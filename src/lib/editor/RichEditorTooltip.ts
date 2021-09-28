@@ -1,7 +1,7 @@
 import Quill from 'quill';
 import 'long-press-event';
-import type RegistryModule from 'parchment/src/registry';
-import type { Blot } from 'parchment';
+import type * as RegistryModule from 'parchment/src/registry';
+import type { Blot } from 'parchment/src/blot/abstract/blot';
 import type { BoundsStatic, Sources } from 'quill';
 import type { RangeStatic } from 'quill';
 import type TooltipClass from 'quill/ui/tooltip';
@@ -29,7 +29,7 @@ export class RichEditorTooltip extends Tooltip {
 	protected katex: HTMLDivElement;
 	protected range: RangeStatic | undefined;
 
-	constructor(quill: Quill, bounds?: HTMLElement) {
+	constructor(quill: Quill, bounds?: HTMLElement | string) {
 		super(quill, bounds || (quill as any).container);
 		this.textbox = this.root.querySelector('input[type="text"]') as HTMLInputElement;
 		this.textarea = this.root.querySelector('textarea') as HTMLTextAreaElement;
@@ -39,35 +39,25 @@ export class RichEditorTooltip extends Tooltip {
 
 	listen() {
 		const container = (this.quill as any).container as HTMLElement,
-			root = this.quill.root;
+			root = this.quill.root,
+			document = root.ownerDocument;
 
-		if (typeof MutationObserver === 'function') {
-			const onClick = (event: Event) => {
-					if (
-						!container.contains(event.target as Node) &&
-						!this.root.classList.contains('ql-hidden')
-					) {
-						this.hide();
-						event.preventDefault();
-						event.stopPropagation();
-					}
-				},
-				document = container.ownerDocument;
-
-			document.addEventListener('click', onClick);
-
-			const observer = new MutationObserver((mutations) => {
-				for (const mutation of mutations) {
-					for (const removedNode of Array.from(mutation.removedNodes)) {
-						if (removedNode === container) {
-							document.removeEventListener('click', onClick);
-							observer.disconnect();
-						}
-					}
-				}
-			});
-			observer.observe(container.parentElement, { childList: true });
-		}
+		const onClick = (event: Event) => {
+			if (!document.body.contains(this.quill.root)) {
+				document.body.removeEventListener('click', onClick);
+				return;
+			}
+			if (
+				!container.contains(event.target as Node) &&
+				!this.root.classList.contains('ql-hidden') &&
+				!this.root.hasAttribute('data-mode')
+			) {
+				this.hide();
+				event.preventDefault();
+				event.stopPropagation();
+			}
+		};
+		document.body.addEventListener('click', onClick);
 
 		root.setAttribute('data-long-press-delay', '500');
 		root.addEventListener('long-press', (event) => {
@@ -204,6 +194,12 @@ export class RichEditorTooltip extends Tooltip {
 	}
 
 	hide() {
+		let error;
+		try {
+			throw new Error('hide');
+		} catch (e) {
+			error = e;
+		}
 		this.root.classList.remove('ql-editing');
 		this.root.classList.add('ql-hidden');
 		this.root.removeAttribute('data-mode');

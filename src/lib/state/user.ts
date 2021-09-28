@@ -75,7 +75,7 @@ async function signInUser(currentUser: User) {
 		tasks: Promise<unknown>[] = [];
 
 	OpenAPI.TOKEN = currentUser.token;
-	Cookies.set('token', currentUser.token);
+	Cookies.set('token', currentUser.token, { expires: 30 });
 	session.set(currentUser);
 	if (redirectPath) {
 		redirectPathWritable.set(undefined);

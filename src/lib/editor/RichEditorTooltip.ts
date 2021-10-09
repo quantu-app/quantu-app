@@ -194,12 +194,6 @@ export class RichEditorTooltip extends Tooltip {
 	}
 
 	hide() {
-		let error;
-		try {
-			throw new Error('hide');
-		} catch (e) {
-			error = e;
-		}
 		this.root.classList.remove('ql-editing');
 		this.root.classList.add('ql-hidden');
 		this.root.removeAttribute('data-mode');

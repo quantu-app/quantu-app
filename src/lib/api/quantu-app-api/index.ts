@@ -4,6 +4,11 @@
 export { ApiError } from './core/ApiError';
 export { OpenAPI } from './core/OpenAPI';
 
+export type { Asset } from './models/Asset';
+export type { AssetCreate } from './models/AssetCreate';
+export type { AssetFile } from './models/AssetFile';
+export type { AssetList } from './models/AssetList';
+export type { AssetUpdate } from './models/AssetUpdate';
 export type { Email } from './models/Email';
 export type { EmailCreate } from './models/EmailCreate';
 export type { FlashCardAnswer } from './models/FlashCardAnswer';
@@ -39,6 +44,7 @@ export type { SignUpUsernamePassword } from './models/SignUpUsernamePassword';
 export type { User } from './models/User';
 export type { UsernameUpdate } from './models/UsernameUpdate';
 
+export { AssetService } from './services/AssetService';
 export { AuthService } from './services/AuthService';
 export { OrganizationService } from './services/OrganizationService';
 export { QuestionService } from './services/QuestionService';

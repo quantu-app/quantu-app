@@ -31,12 +31,14 @@ jobs:
       - run: npm i --only=production
       - run: npm i pkg -D
       - run: npm run desktop.build
+      - id: tag
+        run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
       - uses: tauri-apps/tauri-action@v0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tagName: 'v$GITHUB_SHA'
-          releaseName: 'Quant[U] v$GITHUB_SHA'
+          tagName: '${{ steps.tag.outputs.sha_short }}'
+          releaseName: 'Quant[U] ${{ steps.tag.outputs.sha_short }}'
           body: See the assets to download this version and install.
           draft: false
           prerelease: false

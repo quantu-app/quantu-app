@@ -26,6 +26,7 @@
 	import OrganizationLayout from '$lib/UserOrganizations/OrganizationLayout.svelte';
 	import Questions from '$lib/UserOrganizations/Questions/Questions.svelte';
 	import { getOrganization, userOrganizations } from '$lib/state/userOrganizations';
+	import { setOrganizationIdAssets } from '$lib/state/selectedAssets';
 
 	export let organizationId: number;
 
@@ -35,6 +36,7 @@
 	if (browser) {
 		getOrganization(organizationId);
 		getQuestions(organizationId, undefined, true);
+		setOrganizationIdAssets(organizationId);
 	}
 </script>
 

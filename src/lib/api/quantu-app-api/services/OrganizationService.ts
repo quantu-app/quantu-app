@@ -8,18 +8,18 @@ import { request as __request } from '../core/request';
 export class OrganizationService {
 
     /**
-     * Get a Organization by url
-     * Returns an organization by url
-     * @param url Organization's url
+     * Get a Organization
+     * Returns an organization
+     * @param id Organization Id
      * @returns Organization User Organization
      * @throws ApiError
      */
-    public static async quantuAppWebControllerOrganizationShowByUrl(
-        url: string,
+    public static async quantuAppWebControllerOrganizationShow(
+        id: number,
     ): Promise<Organization> {
         const result = await __request({
             method: 'GET',
-            path: `/organization/${url}`,
+            path: `/organizations/${id}`,
         });
         return result.body;
     }
@@ -45,18 +45,18 @@ export class OrganizationService {
     }
 
     /**
-     * Get a Organization
-     * Returns an organization
-     * @param id Organization Id
+     * Get a Organization by url
+     * Returns an organization by url
+     * @param url Organization's url
      * @returns Organization User Organization
      * @throws ApiError
      */
-    public static async quantuAppWebControllerOrganizationShow(
-        id: number,
+    public static async quantuAppWebControllerOrganizationShowByUrl(
+        url: string,
     ): Promise<Organization> {
         const result = await __request({
             method: 'GET',
-            path: `/organizations/${id}`,
+            path: `/organization/${url}`,
         });
         return result.body;
     }

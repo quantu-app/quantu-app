@@ -9,6 +9,23 @@ import { request as __request } from '../core/request';
 export class AuthService {
 
     /**
+     * Signs up a user and returns the User with the Bearer Token
+     * @param requestBody Request body to sign up
+     * @returns User Sign up User Response
+     * @throws ApiError
+     */
+    public static async quantuAppWebControllerAuthSignUpSignUp(
+        requestBody: SignUpUsernamePassword,
+    ): Promise<User> {
+        const result = await __request({
+            method: 'POST',
+            path: `/auth/sign-up`,
+            body: requestBody,
+        });
+        return result.body;
+    }
+
+    /**
      * Sign current User out
      * Signs out the current User based on the bearer token
      * @returns void
@@ -37,40 +54,6 @@ export class AuthService {
     }
 
     /**
-     * Signs in user and returns the User with the Bearer Token
-     * @param requestBody Request body to sign in
-     * @returns User Sign in User Response
-     * @throws ApiError
-     */
-    public static async quantuAppWebControllerAuthSignInSignIn(
-        requestBody: SignInUsernameOrEmailAndPassword,
-    ): Promise<User> {
-        const result = await __request({
-            method: 'POST',
-            path: `/auth/sign-in`,
-            body: requestBody,
-        });
-        return result.body;
-    }
-
-    /**
-     * Signs up a user and returns the User with the Bearer Token
-     * @param requestBody Request body to sign up
-     * @returns User Sign up User Response
-     * @throws ApiError
-     */
-    public static async quantuAppWebControllerAuthSignUpSignUp(
-        requestBody: SignUpUsernamePassword,
-    ): Promise<User> {
-        const result = await __request({
-            method: 'POST',
-            path: `/auth/sign-up`,
-            body: requestBody,
-        });
-        return result.body;
-    }
-
-    /**
      * Requests the providers context
      * Returns the providers context
      * @param provider Auth Provider
@@ -83,6 +66,23 @@ export class AuthService {
         const result = await __request({
             method: 'GET',
             path: `/auth/${provider}`,
+        });
+        return result.body;
+    }
+
+    /**
+     * Signs in user and returns the User with the Bearer Token
+     * @param requestBody Request body to sign in
+     * @returns User Sign in User Response
+     * @throws ApiError
+     */
+    public static async quantuAppWebControllerAuthSignInSignIn(
+        requestBody: SignInUsernameOrEmailAndPassword,
+    ): Promise<User> {
+        const result = await __request({
+            method: 'POST',
+            path: `/auth/sign-in`,
+            body: requestBody,
         });
         return result.body;
     }

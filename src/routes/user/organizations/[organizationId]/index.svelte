@@ -25,8 +25,14 @@
 	import { getOrganization, userOrganizations } from '$lib/state/userOrganizations';
 	import Organization from '$lib/UserOrganizations/Organization.svelte';
 	import OrganizationLayout from '$lib/UserOrganizations/OrganizationLayout.svelte';
+	import { setOrganizationIdAssets } from '$lib/state/selectedAssets';
 
 	export let organizationId: number;
+
+	if (browser) {
+		getOrganization(organizationId);
+		setOrganizationIdAssets(organizationId);
+	}
 
 	$: organization = $userOrganizations.byId[organizationId];
 </script>

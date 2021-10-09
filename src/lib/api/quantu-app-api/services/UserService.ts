@@ -1,6 +1,8 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { Asset } from '../models/Asset';
+import type { AssetList } from '../models/AssetList';
 import type { Email } from '../models/Email';
 import type { EmailCreate } from '../models/EmailCreate';
 import type { Organization } from '../models/Organization';
@@ -24,6 +26,160 @@ import { request as __request } from '../core/request';
 export class UserService {
 
     /**
+     * Delete an Email
+     * Delete a non-primary Email
+     * @param id Email Id
+     * @returns void
+     * @throws ApiError
+     */
+    public static async quantuAppWebControllerUserEmailDelete(
+        id: number,
+    ): Promise<void> {
+        const result = await __request({
+            method: 'DELETE',
+            path: `/user/email/${id}`,
+        });
+        return result.body;
+    }
+
+    /**
+     * List Quizzes
+     * Returns organization's quizzes
+     * @param organizationId Organization Id
+     * @returns QuizList Organization Quizzes
+     * @throws ApiError
+     */
+    public static async quantuAppWebControllerUserQuizIndex(
+        organizationId: number,
+    ): Promise<QuizList> {
+        const result = await __request({
+            method: 'GET',
+            path: `/user/organizations/${organizationId}/quizzes`,
+        });
+        return result.body;
+    }
+
+    /**
+     * Create a Quiz
+     * Returns organization's created quiz
+     * @param organizationId Organization Id
+     * @param requestBody Request body to create quiz
+     * @returns Quiz Organization Quiz
+     * @throws ApiError
+     */
+    public static async quantuAppWebControllerUserQuizCreate(
+        organizationId: number,
+        requestBody: QuizCreate,
+    ): Promise<Quiz> {
+        const result = await __request({
+            method: 'POST',
+            path: `/user/organizations/${organizationId}/quizzes`,
+            body: requestBody,
+        });
+        return result.body;
+    }
+
+    /**
+     * Add Quertions to Quiz
+     * Returns nothing
+     * @param id Quiz Id
+     * @param organizationId Organization Id
+     * @param requestBody Request body to add questions to quiz
+     * @returns void
+     * @throws ApiError
+     */
+    public static async quantuAppWebControllerUserQuizAddQuestions(
+        id: number,
+        organizationId: number,
+        requestBody: QuizQuestionIds,
+    ): Promise<void> {
+        const result = await __request({
+            method: 'POST',
+            path: `/user/organizations/${organizationId}/quizzes/${id}/add-questions`,
+            body: requestBody,
+        });
+        return result.body;
+    }
+
+    /**
+     * Reset Password
+     * Resets the User's Password creating a new Token in the process
+     * @param requestBody reset user password
+     * @returns User Confirmed User Email Response
+     * @throws ApiError
+     */
+    public static async quantuAppWebControllerUserPasswordReset(
+        requestBody: PasswordReset,
+    ): Promise<User> {
+        const result = await __request({
+            method: 'PATCH',
+            path: `/user/password/reset`,
+            body: requestBody,
+        });
+        return result.body;
+    }
+
+    /**
+     * Reset Password
+     * Resets the User's Password creating a new Token in the process
+     * @param requestBody reset user password
+     * @returns User Confirmed User Email Response
+     * @throws ApiError
+     */
+    public static async quantuAppWebControllerUserPasswordReset2(
+        requestBody: PasswordReset,
+    ): Promise<User> {
+        const result = await __request({
+            method: 'PUT',
+            path: `/user/password/reset`,
+            body: requestBody,
+        });
+        return result.body;
+    }
+
+    /**
+     * List Assets
+     * Returns organization's assets
+     * @param organizationId Organization Id
+     * @param parentId Parent Id
+     * @returns AssetList Organization Assetzes
+     * @throws ApiError
+     */
+    public static async quantuAppWebControllerUserAssetIndex(
+        organizationId: number,
+        parentId?: number,
+    ): Promise<AssetList> {
+        const result = await __request({
+            method: 'GET',
+            path: `/user/organizations/${organizationId}/assets`,
+            query: {
+                'parentId': parentId,
+            },
+        });
+        return result.body;
+    }
+
+    /**
+     * Create a Asset
+     * Returns organization's created asset
+     * @param organizationId Organization Id
+     * @param requestBody Request body to create asset
+     * @returns Asset Organization Asset
+     * @throws ApiError
+     */
+    public static async quantuAppWebControllerUserAssetCreate(
+        organizationId: number,
+        requestBody: any,
+    ): Promise<Asset> {
+        const result = await __request({
+            method: 'POST',
+            path: `/user/organizations/${organizationId}/assets`,
+            body: requestBody,
+        });
+        return result.body;
+    }
+
+    /**
      * Deactivates the Current User
      * Deactivates the current User's account
      * @returns User PrivateUser
@@ -38,76 +194,183 @@ export class UserService {
     }
 
     /**
-     * Create an Eamil
-     * Create and returns an Email
-     * @param requestBody Create Email Body
-     * @returns Email Create an Email Response
+     * List Questions
+     * Returns organization's questions
+     * @param organizationId Organization Id
+     * @param quizId Quiz Id
+     * @returns QuestionListPrivate Organization/Quiz Questions
      * @throws ApiError
      */
-    public static async quantuAppWebControllerUserEmailCreate(
-        requestBody: EmailCreate,
-    ): Promise<Email> {
+    public static async quantuAppWebControllerUserQuestionIndex(
+        organizationId: number,
+        quizId?: number,
+    ): Promise<QuestionListPrivate> {
+        const result = await __request({
+            method: 'GET',
+            path: `/user/organizations/${organizationId}/questions`,
+            query: {
+                'quizId': quizId,
+            },
+        });
+        return result.body;
+    }
+
+    /**
+     * Create a Question
+     * Returns organization's created question
+     * @param organizationId Organization Id
+     * @param requestBody Request body to create question
+     * @returns QuestionPrivate Organization/Quiz Question
+     * @throws ApiError
+     */
+    public static async quantuAppWebControllerUserQuestionCreate(
+        organizationId: number,
+        requestBody: QuestionCreate,
+    ): Promise<QuestionPrivate> {
         const result = await __request({
             method: 'POST',
-            path: `/user/email`,
+            path: `/user/organizations/${organizationId}/questions`,
             body: requestBody,
         });
         return result.body;
     }
 
     /**
-     * Confirm an Eamil
-     * Confirms an Email and returns the User with the Bearer Token
-     * @param confirmationToken Confirmation Token
-     * @returns User Confirmed User Email Response
-     * @throws ApiError
-     */
-    public static async quantuAppWebControllerUserEmailConfirm(
-        confirmationToken: string,
-    ): Promise<User> {
-        const result = await __request({
-            method: 'PATCH',
-            path: `/user/email/confirm`,
-            query: {
-                'confirmationToken': confirmationToken,
-            },
-        });
-        return result.body;
-    }
-
-    /**
-     * Confirm an Eamil
-     * Confirms an Email and returns the User with the Bearer Token
-     * @param confirmationToken Confirmation Token
-     * @returns User Confirmed User Email Response
-     * @throws ApiError
-     */
-    public static async quantuAppWebControllerUserEmailConfirm2(
-        confirmationToken: string,
-    ): Promise<User> {
-        const result = await __request({
-            method: 'PUT',
-            path: `/user/email/confirm`,
-            query: {
-                'confirmationToken': confirmationToken,
-            },
-        });
-        return result.body;
-    }
-
-    /**
-     * Delete an Email
-     * Delete a non-primary Email
-     * @param id Email Id
+     * Remove Quertions from Quiz
+     * Returns nothing
+     * @param id Quiz Id
+     * @param organizationId Organization Id
+     * @param requestBody Request body to remove questions from quiz
      * @returns void
      * @throws ApiError
      */
-    public static async quantuAppWebControllerUserEmailDelete(
+    public static async quantuAppWebControllerUserQuizRemoveQuestions(
         id: number,
+        organizationId: number,
+        requestBody: QuizQuestionIds,
+    ): Promise<void> {
+        const result = await __request({
+            method: 'POST',
+            path: `/user/organizations/${organizationId}/quizzes/${id}/remove-questions`,
+            body: requestBody,
+        });
+        return result.body;
+    }
+
+    /**
+     * Delete a Quiz
+     * Returns nothing
+     * @param id Quiz Id
+     * @param organizationId Organization Id
+     * @returns void
+     * @throws ApiError
+     */
+    public static async quantuAppWebControllerUserQuizDelete(
+        id: number,
+        organizationId: number,
     ): Promise<void> {
         const result = await __request({
             method: 'DELETE',
-            path: `/user/email/${id}`,
+            path: `/user/organizations/${organizationId}/quizzes/${id}`,
+        });
+        return result.body;
+    }
+
+    /**
+     * Get a Quiz
+     * Returns organization's quiz
+     * @param id Quiz Id
+     * @param organizationId Organization Id
+     * @returns Quiz Organization Quiz
+     * @throws ApiError
+     */
+    public static async quantuAppWebControllerUserQuizShow(
+        id: number,
+        organizationId: number,
+    ): Promise<Quiz> {
+        const result = await __request({
+            method: 'GET',
+            path: `/user/organizations/${organizationId}/quizzes/${id}`,
+        });
+        return result.body;
+    }
+
+    /**
+     * Updates a Quiz
+     * Returns organization's updated quiz
+     * @param id Quiz Id
+     * @param organizationId Organization Id
+     * @param requestBody Request body to update quiz
+     * @returns Quiz Organization Quiz
+     * @throws ApiError
+     */
+    public static async quantuAppWebControllerUserQuizUpdate(
+        id: number,
+        organizationId: number,
+        requestBody: QuizUpdate,
+    ): Promise<Quiz> {
+        const result = await __request({
+            method: 'PATCH',
+            path: `/user/organizations/${organizationId}/quizzes/${id}`,
+            body: requestBody,
+        });
+        return result.body;
+    }
+
+    /**
+     * Updates a Quiz
+     * Returns organization's updated quiz
+     * @param id Quiz Id
+     * @param organizationId Organization Id
+     * @param requestBody Request body to update quiz
+     * @returns Quiz Organization Quiz
+     * @throws ApiError
+     */
+    public static async quantuAppWebControllerUserQuizUpdate2(
+        id: number,
+        organizationId: number,
+        requestBody: QuizUpdate,
+    ): Promise<Quiz> {
+        const result = await __request({
+            method: 'PUT',
+            path: `/user/organizations/${organizationId}/quizzes/${id}`,
+            body: requestBody,
+        });
+        return result.body;
+    }
+
+    /**
+     * Update User's Username
+     * Updates a User's Username
+     * @param requestBody Update User's Username Body
+     * @returns User Update User's Username Response
+     * @throws ApiError
+     */
+    public static async quantuAppWebControllerUserUsernameUpdate(
+        requestBody: UsernameUpdate,
+    ): Promise<User> {
+        const result = await __request({
+            method: 'PATCH',
+            path: `/user/username`,
+            body: requestBody,
+        });
+        return result.body;
+    }
+
+    /**
+     * Update User's Username
+     * Updates a User's Username
+     * @param requestBody Update User's Username Body
+     * @returns User Update User's Username Response
+     * @throws ApiError
+     */
+    public static async quantuAppWebControllerUserUsernameUpdate2(
+        requestBody: UsernameUpdate,
+    ): Promise<User> {
+        const result = await __request({
+            method: 'PUT',
+            path: `/user/username`,
+            body: requestBody,
         });
         return result.body;
     }
@@ -142,6 +405,106 @@ export class UserService {
         const result = await __request({
             method: 'PUT',
             path: `/user/email/${id}/primary`,
+        });
+        return result.body;
+    }
+
+    /**
+     * Create an Eamil
+     * Create and returns an Email
+     * @param requestBody Create Email Body
+     * @returns Email Create an Email Response
+     * @throws ApiError
+     */
+    public static async quantuAppWebControllerUserEmailCreate(
+        requestBody: EmailCreate,
+    ): Promise<Email> {
+        const result = await __request({
+            method: 'POST',
+            path: `/user/email`,
+            body: requestBody,
+        });
+        return result.body;
+    }
+
+    /**
+     * Delete a Question
+     * Returns nothing
+     * @param id Question Id
+     * @param organizationId Organization Id
+     * @returns void
+     * @throws ApiError
+     */
+    public static async quantuAppWebControllerUserQuestionDelete(
+        id: number,
+        organizationId: number,
+    ): Promise<void> {
+        const result = await __request({
+            method: 'DELETE',
+            path: `/user/organizations/${organizationId}/questions/${id}`,
+        });
+        return result.body;
+    }
+
+    /**
+     * Get a Question
+     * Returns organization's question
+     * @param id Question Id
+     * @param organizationId Organization Id
+     * @returns QuestionPrivate Organization/Quiz Question
+     * @throws ApiError
+     */
+    public static async quantuAppWebControllerUserQuestionShow(
+        id: number,
+        organizationId: number,
+    ): Promise<QuestionPrivate> {
+        const result = await __request({
+            method: 'GET',
+            path: `/user/organizations/${organizationId}/questions/${id}`,
+        });
+        return result.body;
+    }
+
+    /**
+     * Updates a Question
+     * Returns organization's updated question
+     * @param id Question Id
+     * @param organizationId Organization Id
+     * @param requestBody Request body to update question
+     * @returns QuestionPrivate Organization/Quiz Question
+     * @throws ApiError
+     */
+    public static async quantuAppWebControllerUserQuestionUpdate(
+        id: number,
+        organizationId: number,
+        requestBody: QuestionUpdate,
+    ): Promise<QuestionPrivate> {
+        const result = await __request({
+            method: 'PATCH',
+            path: `/user/organizations/${organizationId}/questions/${id}`,
+            body: requestBody,
+        });
+        return result.body;
+    }
+
+    /**
+     * Updates a Question
+     * Returns organization's updated question
+     * @param id Question Id
+     * @param organizationId Organization Id
+     * @param requestBody Request body to update question
+     * @returns QuestionPrivate Organization/Quiz Question
+     * @throws ApiError
+     */
+    public static async quantuAppWebControllerUserQuestionUpdate2(
+        id: number,
+        organizationId: number,
+        requestBody: QuestionUpdate,
+    ): Promise<QuestionPrivate> {
+        const result = await __request({
+            method: 'PUT',
+            path: `/user/organizations/${organizationId}/questions/${id}`,
+            body: requestBody,
         });
         return result.body;
     }
@@ -253,359 +616,127 @@ export class UserService {
     }
 
     /**
-     * List Questions
-     * Returns organization's questions
-     * @param organizationId Organization Id
-     * @param quizId Quiz Id
-     * @returns QuestionListPrivate Organization/Quiz Questions
+     * Confirm an Eamil
+     * Confirms an Email and returns the User with the Bearer Token
+     * @param confirmationToken Confirmation Token
+     * @returns User Confirmed User Email Response
      * @throws ApiError
      */
-    public static async quantuAppWebControllerUserQuestionIndex(
-        organizationId: number,
-        quizId?: number,
-    ): Promise<QuestionListPrivate> {
+    public static async quantuAppWebControllerUserEmailConfirm(
+        confirmationToken: string,
+    ): Promise<User> {
         const result = await __request({
-            method: 'GET',
-            path: `/user/organizations/${organizationId}/questions`,
+            method: 'PATCH',
+            path: `/user/email/confirm`,
             query: {
-                'quizId': quizId,
+                'confirmationToken': confirmationToken,
             },
         });
         return result.body;
     }
 
     /**
-     * Create a Question
-     * Returns organization's created question
-     * @param organizationId Organization Id
-     * @param requestBody Request body to create question
-     * @returns QuestionPrivate Organization/Quiz Question
+     * Confirm an Eamil
+     * Confirms an Email and returns the User with the Bearer Token
+     * @param confirmationToken Confirmation Token
+     * @returns User Confirmed User Email Response
      * @throws ApiError
      */
-    public static async quantuAppWebControllerUserQuestionCreate(
-        organizationId: number,
-        requestBody: QuestionCreate,
-    ): Promise<QuestionPrivate> {
+    public static async quantuAppWebControllerUserEmailConfirm2(
+        confirmationToken: string,
+    ): Promise<User> {
         const result = await __request({
-            method: 'POST',
-            path: `/user/organizations/${organizationId}/questions`,
-            body: requestBody,
+            method: 'PUT',
+            path: `/user/email/confirm`,
+            query: {
+                'confirmationToken': confirmationToken,
+            },
         });
         return result.body;
     }
 
     /**
-     * Delete a Question
+     * Delete a Asset
      * Returns nothing
-     * @param id Question Id
+     * @param id Asset Id
      * @param organizationId Organization Id
      * @returns void
      * @throws ApiError
      */
-    public static async quantuAppWebControllerUserQuestionDelete(
+    public static async quantuAppWebControllerUserAssetDelete(
         id: number,
         organizationId: number,
     ): Promise<void> {
         const result = await __request({
             method: 'DELETE',
-            path: `/user/organizations/${organizationId}/questions/${id}`,
+            path: `/user/organizations/${organizationId}/assets/${id}`,
         });
         return result.body;
     }
 
     /**
-     * Get a Question
-     * Returns organization's question
-     * @param id Question Id
+     * Get a Asset
+     * Returns organization's asset
+     * @param id Asset Id
      * @param organizationId Organization Id
-     * @returns QuestionPrivate Organization/Quiz Question
+     * @param parentId Parent Id
+     * @returns Asset Organization Asset
      * @throws ApiError
      */
-    public static async quantuAppWebControllerUserQuestionShow(
+    public static async quantuAppWebControllerUserAssetShow(
         id: number,
         organizationId: number,
-    ): Promise<QuestionPrivate> {
+        parentId?: number,
+    ): Promise<Asset> {
         const result = await __request({
             method: 'GET',
-            path: `/user/organizations/${organizationId}/questions/${id}`,
+            path: `/user/organizations/${organizationId}/assets/${id}`,
+            query: {
+                'parentId': parentId,
+            },
         });
         return result.body;
     }
 
     /**
-     * Updates a Question
-     * Returns organization's updated question
-     * @param id Question Id
+     * Updates a Asset
+     * Returns organization's updated asset
+     * @param id Asset Id
      * @param organizationId Organization Id
-     * @param requestBody Request body to update question
-     * @returns QuestionPrivate Organization/Quiz Question
+     * @param requestBody Request body to update asset
+     * @returns Asset Organization Asset
      * @throws ApiError
      */
-    public static async quantuAppWebControllerUserQuestionUpdate(
+    public static async quantuAppWebControllerUserAssetUpdate(
         id: number,
         organizationId: number,
-        requestBody: QuestionUpdate,
-    ): Promise<QuestionPrivate> {
+        requestBody: any,
+    ): Promise<Asset> {
         const result = await __request({
             method: 'PATCH',
-            path: `/user/organizations/${organizationId}/questions/${id}`,
+            path: `/user/organizations/${organizationId}/assets/${id}`,
             body: requestBody,
         });
         return result.body;
     }
 
     /**
-     * Updates a Question
-     * Returns organization's updated question
-     * @param id Question Id
+     * Updates a Asset
+     * Returns organization's updated asset
+     * @param id Asset Id
      * @param organizationId Organization Id
-     * @param requestBody Request body to update question
-     * @returns QuestionPrivate Organization/Quiz Question
+     * @param requestBody Request body to update asset
+     * @returns Asset Organization Asset
      * @throws ApiError
      */
-    public static async quantuAppWebControllerUserQuestionUpdate2(
+    public static async quantuAppWebControllerUserAssetUpdate2(
         id: number,
         organizationId: number,
-        requestBody: QuestionUpdate,
-    ): Promise<QuestionPrivate> {
+        requestBody: any,
+    ): Promise<Asset> {
         const result = await __request({
             method: 'PUT',
-            path: `/user/organizations/${organizationId}/questions/${id}`,
-            body: requestBody,
-        });
-        return result.body;
-    }
-
-    /**
-     * List Quizzes
-     * Returns organization's quizzes
-     * @param organizationId Organization Id
-     * @returns QuizList Organization Quizzes
-     * @throws ApiError
-     */
-    public static async quantuAppWebControllerUserQuizIndex(
-        organizationId: number,
-    ): Promise<QuizList> {
-        const result = await __request({
-            method: 'GET',
-            path: `/user/organizations/${organizationId}/quizzes`,
-        });
-        return result.body;
-    }
-
-    /**
-     * Create a Quiz
-     * Returns organization's created quiz
-     * @param organizationId Organization Id
-     * @param requestBody Request body to create quiz
-     * @returns Quiz Organization Quiz
-     * @throws ApiError
-     */
-    public static async quantuAppWebControllerUserQuizCreate(
-        organizationId: number,
-        requestBody: QuizCreate,
-    ): Promise<Quiz> {
-        const result = await __request({
-            method: 'POST',
-            path: `/user/organizations/${organizationId}/quizzes`,
-            body: requestBody,
-        });
-        return result.body;
-    }
-
-    /**
-     * Delete a Quiz
-     * Returns nothing
-     * @param id Quiz Id
-     * @param organizationId Organization Id
-     * @returns void
-     * @throws ApiError
-     */
-    public static async quantuAppWebControllerUserQuizDelete(
-        id: number,
-        organizationId: number,
-    ): Promise<void> {
-        const result = await __request({
-            method: 'DELETE',
-            path: `/user/organizations/${organizationId}/quizzes/${id}`,
-        });
-        return result.body;
-    }
-
-    /**
-     * Get a Quiz
-     * Returns organization's quiz
-     * @param id Quiz Id
-     * @param organizationId Organization Id
-     * @returns Quiz Organization Quiz
-     * @throws ApiError
-     */
-    public static async quantuAppWebControllerUserQuizShow(
-        id: number,
-        organizationId: number,
-    ): Promise<Quiz> {
-        const result = await __request({
-            method: 'GET',
-            path: `/user/organizations/${organizationId}/quizzes/${id}`,
-        });
-        return result.body;
-    }
-
-    /**
-     * Updates a Quiz
-     * Returns organization's updated quiz
-     * @param id Quiz Id
-     * @param organizationId Organization Id
-     * @param requestBody Request body to update quiz
-     * @returns Quiz Organization Quiz
-     * @throws ApiError
-     */
-    public static async quantuAppWebControllerUserQuizUpdate(
-        id: number,
-        organizationId: number,
-        requestBody: QuizUpdate,
-    ): Promise<Quiz> {
-        const result = await __request({
-            method: 'PATCH',
-            path: `/user/organizations/${organizationId}/quizzes/${id}`,
-            body: requestBody,
-        });
-        return result.body;
-    }
-
-    /**
-     * Updates a Quiz
-     * Returns organization's updated quiz
-     * @param id Quiz Id
-     * @param organizationId Organization Id
-     * @param requestBody Request body to update quiz
-     * @returns Quiz Organization Quiz
-     * @throws ApiError
-     */
-    public static async quantuAppWebControllerUserQuizUpdate2(
-        id: number,
-        organizationId: number,
-        requestBody: QuizUpdate,
-    ): Promise<Quiz> {
-        const result = await __request({
-            method: 'PUT',
-            path: `/user/organizations/${organizationId}/quizzes/${id}`,
-            body: requestBody,
-        });
-        return result.body;
-    }
-
-    /**
-     * Add Quertions to Quiz
-     * Returns nothing
-     * @param id Quiz Id
-     * @param organizationId Organization Id
-     * @param requestBody Request body to add questions to quiz
-     * @returns void
-     * @throws ApiError
-     */
-    public static async quantuAppWebControllerUserQuizAddQuestions(
-        id: number,
-        organizationId: number,
-        requestBody: QuizQuestionIds,
-    ): Promise<void> {
-        const result = await __request({
-            method: 'POST',
-            path: `/user/organizations/${organizationId}/quizzes/${id}/add-questions`,
-            body: requestBody,
-        });
-        return result.body;
-    }
-
-    /**
-     * Remove Quertions from Quiz
-     * Returns nothing
-     * @param id Quiz Id
-     * @param organizationId Organization Id
-     * @param requestBody Request body to remove questions from quiz
-     * @returns void
-     * @throws ApiError
-     */
-    public static async quantuAppWebControllerUserQuizRemoveQuestions(
-        id: number,
-        organizationId: number,
-        requestBody: QuizQuestionIds,
-    ): Promise<void> {
-        const result = await __request({
-            method: 'POST',
-            path: `/user/organizations/${organizationId}/quizzes/${id}/remove-questions`,
-            body: requestBody,
-        });
-        return result.body;
-    }
-
-    /**
-     * Reset Password
-     * Resets the User's Password creating a new Token in the process
-     * @param requestBody reset user password
-     * @returns User Confirmed User Email Response
-     * @throws ApiError
-     */
-    public static async quantuAppWebControllerUserPasswordReset(
-        requestBody: PasswordReset,
-    ): Promise<User> {
-        const result = await __request({
-            method: 'PATCH',
-            path: `/user/password/reset`,
-            body: requestBody,
-        });
-        return result.body;
-    }
-
-    /**
-     * Reset Password
-     * Resets the User's Password creating a new Token in the process
-     * @param requestBody reset user password
-     * @returns User Confirmed User Email Response
-     * @throws ApiError
-     */
-    public static async quantuAppWebControllerUserPasswordReset2(
-        requestBody: PasswordReset,
-    ): Promise<User> {
-        const result = await __request({
-            method: 'PUT',
-            path: `/user/password/reset`,
-            body: requestBody,
-        });
-        return result.body;
-    }
-
-    /**
-     * Update User's Username
-     * Updates a User's Username
-     * @param requestBody Update User's Username Body
-     * @returns User Update User's Username Response
-     * @throws ApiError
-     */
-    public static async quantuAppWebControllerUserUsernameUpdate(
-        requestBody: UsernameUpdate,
-    ): Promise<User> {
-        const result = await __request({
-            method: 'PATCH',
-            path: `/user/username`,
-            body: requestBody,
-        });
-        return result.body;
-    }
-
-    /**
-     * Update User's Username
-     * Updates a User's Username
-     * @param requestBody Update User's Username Body
-     * @returns User Update User's Username Response
-     * @throws ApiError
-     */
-    public static async quantuAppWebControllerUserUsernameUpdate2(
-        requestBody: UsernameUpdate,
-    ): Promise<User> {
-        const result = await __request({
-            method: 'PUT',
-            path: `/user/username`,
+            path: `/user/organizations/${organizationId}/assets/${id}`,
             body: requestBody,
         });
         return result.body;

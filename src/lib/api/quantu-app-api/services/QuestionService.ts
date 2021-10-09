@@ -11,38 +11,18 @@ import { request as __request } from '../core/request';
 export class QuestionService {
 
     /**
-     * List Quiz Question's Results
-     * Returns organization's questions
-     * @param quizId Quiz Id
-     * @returns QuestionResultList Quiz Question Results
-     * @throws ApiError
-     */
-    public static async quantuAppWebControllerQuestionResultIndex(
-        quizId?: number,
-    ): Promise<QuestionResultList> {
-        const result = await __request({
-            method: 'GET',
-            path: `/question-results`,
-            query: {
-                'quizId': quizId,
-            },
-        });
-        return result.body;
-    }
-
-    /**
-     * Get a Question's Result
-     * Returns question's result
+     * Explain a Question
+     * Returns Question result with explanation
      * @param id Question Id
-     * @returns QuestionResult Organization/Quiz Question
+     * @returns QuestionResult Question Answer result
      * @throws ApiError
      */
-    public static async quantuAppWebControllerQuestionResultShow(
+    public static async quantuAppWebControllerQuestionExplain(
         id: number,
     ): Promise<QuestionResult> {
         const result = await __request({
-            method: 'GET',
-            path: `/question-results/${id}`,
+            method: 'POST',
+            path: `/questions/${id}/explain`,
         });
         return result.body;
     }
@@ -71,18 +51,21 @@ export class QuestionService {
     }
 
     /**
-     * Get a Question
-     * Returns organization's question
-     * @param id Question Id
-     * @returns Question Organization/Quiz Question
+     * List Quiz Question's Results
+     * Returns organization's questions
+     * @param quizId Quiz Id
+     * @returns QuestionResultList Quiz Question Results
      * @throws ApiError
      */
-    public static async quantuAppWebControllerQuestionShow(
-        id: number,
-    ): Promise<Question> {
+    public static async quantuAppWebControllerQuestionResultIndex(
+        quizId?: number,
+    ): Promise<QuestionResultList> {
         const result = await __request({
             method: 'GET',
-            path: `/questions/${id}`,
+            path: `/question-results`,
+            query: {
+                'quizId': quizId,
+            },
         });
         return result.body;
     }
@@ -108,18 +91,35 @@ export class QuestionService {
     }
 
     /**
-     * Explain a Question
-     * Returns Question result with explanation
+     * Get a Question
+     * Returns organization's question
      * @param id Question Id
-     * @returns QuestionResult Question Answer result
+     * @returns Question Organization/Quiz Question
      * @throws ApiError
      */
-    public static async quantuAppWebControllerQuestionExplain(
+    public static async quantuAppWebControllerQuestionShow(
+        id: number,
+    ): Promise<Question> {
+        const result = await __request({
+            method: 'GET',
+            path: `/questions/${id}`,
+        });
+        return result.body;
+    }
+
+    /**
+     * Get a Question's Result
+     * Returns question's result
+     * @param id Question Id
+     * @returns QuestionResult Organization/Quiz Question
+     * @throws ApiError
+     */
+    public static async quantuAppWebControllerQuestionResultShow(
         id: number,
     ): Promise<QuestionResult> {
         const result = await __request({
-            method: 'POST',
-            path: `/questions/${id}/explain`,
+            method: 'GET',
+            path: `/question-results/${id}`,
         });
         return result.body;
     }

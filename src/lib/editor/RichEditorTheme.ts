@@ -3,7 +3,8 @@ import type { QuillOptionsStatic } from 'quill';
 import type BubbleThemeClass from 'quill/themes/snow';
 import type ThemeClass from 'quill/core/theme';
 import { RichEditorTooltip } from './RichEditorTooltip';
-import type { BaseTooltip } from 'quill/themes/base';
+import { get } from 'svelte/store';
+import { selectedAssets } from '$lib/state/selectedAssets';
 
 const BubbleTheme: typeof BubbleThemeClass = Quill.import('themes/snow');
 const Theme: typeof ThemeClass = Quill.import('core/theme');
@@ -53,6 +54,29 @@ export class RichEditorTheme extends Theme {
 						} else {
 							this.quill.format('link', false);
 						}
+					},
+					image() {
+						const element = document.getElementById('assets-modal'),
+							addBtn = document.getElementById('assets-modal-add'),
+							modal = window.bootstrap.Modal.getOrCreateInstance(element),
+							range = this.quill.getSelection();
+
+						const addImage = () => {
+							addBtn.removeEventListener('click', addImage);
+
+							const asset = Array.from(get(selectedAssets))[0];
+
+							if (asset && range != null) {
+								this.quill.insertEmbed(
+									range?.index || 0,
+									'image',
+									`${import.meta.env.VITE_API_URL}/${asset.url}`
+								);
+							}
+						};
+						addBtn.addEventListener('click', addImage);
+
+						modal.show();
 					}
 				}
 			}

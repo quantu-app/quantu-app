@@ -33,6 +33,7 @@
 	import { getOrganization, userOrganizations } from '$lib/state/userOrganizations';
 	import OrganizationLayout from '$lib/UserOrganizations/OrganizationLayout.svelte';
 	import Quiz from '$lib/UserOrganizations/Quizzes/Quiz.svelte';
+	import { setOrganizationIdAssets } from '$lib/state/selectedAssets';
 
 	export let organizationId: number;
 	export let quizId: number;
@@ -45,6 +46,7 @@
 		getOrganization(organizationId);
 		getQuiz(organizationId, quizId);
 		getQuestions(organizationId, quizId, true);
+		setOrganizationIdAssets(organizationId);
 	}
 </script>
 

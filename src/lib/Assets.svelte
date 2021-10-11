@@ -21,7 +21,7 @@
 		prevParentId = parentId;
 		getAssets(organizationId, parentId);
 	}
-	$: assets = Object.values(get(organizationAssets).byParentId[parentId || null] || {});
+	$: assets = Object.values($organizationAssets.byParentId[parentId || null] || {});
 
 	function createOnSelect(asset: Asset) {
 		return function onSelect() {

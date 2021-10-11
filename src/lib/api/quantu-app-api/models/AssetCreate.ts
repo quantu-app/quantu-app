@@ -9,7 +9,7 @@ export type AssetCreate = {
     /**
      * Asset file name
      */
-    name: string;
+    name?: string;
     /**
      * Asset parent id
      */

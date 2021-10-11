@@ -1,6 +1,13 @@
 <script lang="ts">
 	import type { Asset } from '$lib/api/quantu-app-api';
-	import { getAssets, organizationAssets } from '$lib/state/organizationAssets';
+	import {
+		createAsset,
+		deleteAsset,
+		getAssets,
+		organizationAssets
+	} from '$lib/state/organizationAssets';
+	import { onMount } from 'svelte';
+	import { get } from 'svelte/store';
 	import { selectedAssets, toggleSelectedAsset } from './state/selectedAssets';
 
 	export let organizationId: number;
@@ -20,9 +27,57 @@
 			toggleSelectedAsset(asset);
 		};
 	}
+
+	function onDelete() {
+		return Promise.all(
+			Array.from(get(selectedAssets)).map((asset) => {
+				toggleSelectedAsset(asset);
+				return deleteAsset(organizationId, asset.id);
+			})
+		);
+	}
+
+	let fileInput: HTMLInputElement;
+	function onAdd() {
+		fileInput.click();
+	}
+
+	async function onFileInputChange(e: InputEvent) {
+		const files = (e.target as HTMLInputElement).files,
+			tasks: Promise<Asset>[] = [];
+
+		for (let i = 0, il = files.length; i < il; i++) {
+			const file = files[i];
+			tasks.push(
+				createAsset(organizationId, {
+					name: file as any
+				})
+			);
+		}
+
+		await Promise.all(tasks);
+	}
+
+	onMount(() => {
+		fileInput.addEventListener('change', onFileInputChange);
+	});
 </script>
 
 <div class="container-fluid">
+	<div class="d-flex justify-content-end">
+		<div>
+			<button
+				role="button"
+				class="btn btn-danger text-white w-100"
+				class:d-none={$selectedAssets.size === 0}
+				on:click={onDelete}>Delete</button
+			>
+		</div>
+		<div>
+			<button role="button" class="btn btn-primary w-100" on:click={onAdd}>Add</button>
+		</div>
+		<input bind:this={fileInput} type="file" multiple class="d-none" />
+	</div>
 	<div
 		class="row row-cols-1 row-cols-sm-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 row-cols-xxl-10"
 	>

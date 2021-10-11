@@ -5,6 +5,7 @@ import type { Readable } from 'svelte/store';
 import { get, writable } from 'svelte/store';
 import { load } from './loading';
 import { userEmitter } from './user';
+import { request as __request } from '$lib/api/quantu-app-api/core/request';
 
 interface IOrganizationAssetsStore {
 	byId: { [id: number]: Asset };
@@ -76,7 +77,11 @@ export async function getAssets(organizationId: number, parentId?: number, force
 
 export async function createAsset(organizationId: number, params: AssetCreate) {
 	const asset = await load(
-		UserService.quantuAppWebControllerUserAssetCreate(organizationId, params)
+		__request({
+			method: 'POST',
+			path: `/user/organizations/${organizationId}/assets`,
+			formData: params
+		}).then((response) => response.body as Asset)
 	);
 	organizationAssetsWritable.update((state) => addToState(state, asset));
 	return asset;

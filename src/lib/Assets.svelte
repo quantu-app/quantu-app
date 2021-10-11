@@ -8,19 +8,20 @@
 	} from '$lib/state/organizationAssets';
 	import { onMount } from 'svelte';
 	import { get } from 'svelte/store';
+	import { API_URL } from '$lib/constants';
 	import { selectedAssets, toggleSelectedAsset } from './state/selectedAssets';
 
 	export let organizationId: number;
 	export let multiple = false;
 
-	let parentId: number | undefined;
-	let prevParentId: number | undefined = {} as any;
-	$: assets = Object.values($organizationAssets.byParentId[parentId || null] || {});
+	let parentId: number;
+	let prevParentId: number = {} as any;
 
 	$: if (parentId !== prevParentId) {
 		prevParentId = parentId;
 		getAssets(organizationId, parentId);
 	}
+	$: assets = Object.values(get(organizationAssets).byParentId[parentId || null] || {});
 
 	function createOnSelect(asset: Asset) {
 		return function onSelect() {
@@ -76,7 +77,7 @@
 		<div>
 			<button role="button" class="btn btn-primary w-100" on:click={onAdd}>Add</button>
 		</div>
-		<input bind:this={fileInput} type="file" multiple class="d-none" />
+		<input bind:this={fileInput} type="file" {multiple} class="d-none" />
 	</div>
 	<div
 		class="row row-cols-1 row-cols-sm-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 row-cols-xxl-10"
@@ -98,11 +99,7 @@
 						class:border-white={!$selectedAssets.has(asset)}
 						class:border-primary={$selectedAssets.has(asset)}
 					>
-						<img
-							src={`${import.meta.env.VITE_API_URL}/${asset.url}`}
-							alt={asset.name}
-							width="100%"
-						/>
+						<img src={`${API_URL}/${asset.url}`} alt={asset.name} width="100%" />
 						<div class="card-img-overlay">
 							<h5 class="card-title">{asset.name}</h5>
 							<p class="card-text">{asset.type}</p>

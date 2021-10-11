@@ -8,9 +8,9 @@
 	onMount(() => {
 		const modal = document.getElementById('assets-modal');
 
-		const onOpen: EventListenerOrEventListenerObject = () => {
+		function onOpen() {
 			organizationId = $organizationIdAssets;
-		};
+		}
 
 		modal.addEventListener('show.bs.modal', onOpen);
 

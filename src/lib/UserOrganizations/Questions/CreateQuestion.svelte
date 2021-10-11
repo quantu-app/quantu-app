@@ -5,9 +5,10 @@
 			type: 'multiple_choice' as QuestionCreate.type.MULTIPLE_CHOICE,
 			prompt: {} as unknown as QuestionPromptPrivate,
 			tags: []
-		}
-	};
+		};
+	}
 </script>
+
 <script lang="ts">
 	import type { QuestionCreate, QuestionPromptPrivate } from '$lib/api/quantu-app-api';
 	import { createQuestion } from '$lib/state/organizationQuestions';
@@ -20,7 +21,7 @@
 	let editorKey = Math.random();
 	let creatingQuestion = false;
 
-	let question: QuestionCreate = emptyQuestion(quizId)
+	let question: QuestionCreate = emptyQuestion(quizId);
 
 	$: if (prevQuizId !== quizId) {
 		prevQuizId = quizId;
@@ -34,8 +35,8 @@
 			delete question.name;
 			question = {
 				...question,
-				...emptyQuestion(quizId),
-			}
+				...emptyQuestion(quizId)
+			};
 		} finally {
 			creatingQuestion = false;
 			editorKey = Math.random();

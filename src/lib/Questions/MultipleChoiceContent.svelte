@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type Op from 'quill-delta/dist/Op';
+	import type Op from 'quill-delta/dist/Op';
 	import type { QuestionMultipleChoice } from '$lib/api/quantu-app-api';
 	import RichViewer from '$lib/RichViewer.svelte';
 
@@ -9,6 +9,6 @@
 
 <RichViewer content={prompt.question} />
 {#if explanation}
-<hr />
-<RichViewer content={explanation} />
+	<hr />
+	<RichViewer content={explanation} />
 {/if}

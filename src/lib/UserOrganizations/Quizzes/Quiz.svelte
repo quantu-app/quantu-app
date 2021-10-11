@@ -44,7 +44,7 @@
 		});
 	}
 
-	function onPublishedChange(e: Event) {
+	function onPublishedChange() {
 		quiz.published = !quiz.published;
 		updateQuiz(organizationId, quiz.id, {
 			published: quiz.published

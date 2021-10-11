@@ -5,6 +5,7 @@ import type ThemeClass from 'quill/core/theme';
 import { RichEditorTooltip } from './RichEditorTooltip';
 import { get } from 'svelte/store';
 import { selectedAssets } from '$lib/state/selectedAssets';
+import { API_URL } from '$lib/constants';
 
 const BubbleTheme: typeof BubbleThemeClass = Quill.import('themes/snow');
 const Theme: typeof ThemeClass = Quill.import('core/theme');
@@ -67,11 +68,7 @@ export class RichEditorTheme extends Theme {
 							const asset = Array.from(get(selectedAssets))[0];
 
 							if (asset && range != null) {
-								this.quill.insertEmbed(
-									range?.index || 0,
-									'image',
-									`${import.meta.env.VITE_API_URL}/${asset.url}`
-								);
+								this.quill.insertEmbed(range?.index || 0, 'image', `${API_URL}/${asset.url}`);
 							}
 						};
 						addBtn.addEventListener('click', addImage);

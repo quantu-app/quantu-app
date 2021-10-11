@@ -8,6 +8,7 @@ import { load } from './loading';
 import { session } from '$app/stores';
 import Cookies from 'js-cookie';
 import { goto } from '$app/navigation';
+import { WS_URL } from '$lib/constants';
 
 const socketWritable = writable<Socket>();
 export const redirectPathWritable = writable<string>();
@@ -88,7 +89,7 @@ async function signInUser(currentUser: User) {
 
 async function setUserSocket(token: string) {
 	const { Socket } = await import('phoenix');
-	const socket = new Socket(`${import.meta.env.VITE_WS_URL}/socket`, {
+	const socket = new Socket(`${WS_URL}/socket`, {
 		params: { token }
 	});
 	socket.onOpen(() => socketWritable.set(socket));

@@ -1304,6 +1304,19 @@
 				font-weight: bold;
 			}
 		}
+		input.ql-block {
+			bottom: 9px;
+			right: 112px;
+			position: absolute;
+			&:after {
+				content: 'Block';
+				font-size: 1em;
+				font-weight: bold;
+				position: relative;
+				margin-left: 18px;
+				top: -4px;
+			}
+		}
 	}
 }
 .ql-read-only {

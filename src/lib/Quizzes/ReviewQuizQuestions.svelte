@@ -3,6 +3,7 @@
 	import type { Quiz } from '$lib/api/quantu-app-api';
 	import FlashCardReview from '$lib/Questions/FlashCardReview.svelte';
 	import MultipleChoiceReview from '$lib/Questions/MultipleChoiceReview.svelte';
+	import { toPercent } from '$lib/utils';
 
 	export let quiz: Quiz;
 	export let questionResults: QuestionResult[] = [];
@@ -24,7 +25,7 @@
 			<a role="button" class="btn btn-primary" href={`/quizzes/${quiz.id}`}>Take</a>
 		</div>
 	{:else}
-		<h3>Percent {percent * 100}%</h3>
+		<h3>Percent {toPercent(percent)}</h3>
 		<ul class="list-group list-group-flush">
 			{#each questionResults as questionResult}
 				<li class="list-group-item">

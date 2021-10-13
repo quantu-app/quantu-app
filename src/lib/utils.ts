@@ -57,3 +57,13 @@ export function nowOffset(date: Date) {
 		return `${(diff / MS_IN_YEAR) | 0} year(s) ago`;
 	}
 }
+
+export function toPercent(value: number): string {
+	const percent = value * 100;
+
+	if (percent % 1 === 0) {
+		return `${percent}%`;
+	} else {
+		return `${percent.toFixed(2)}%`;
+	}
+}

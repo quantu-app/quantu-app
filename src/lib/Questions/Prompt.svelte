@@ -6,6 +6,7 @@
 	export let question: Question;
 	export let input: QuestionAnswer['input'];
 	export let result: QuestionResult = undefined;
+	export let showExplanation = false;
 
 	let answering = false;
 	let explaining = false;
@@ -13,6 +14,7 @@
 		explaining = true;
 		try {
 			result = await explainQuestion(question.id, question.quizId);
+			showExplanation = true;
 		} finally {
 			explaining = false;
 		}
@@ -50,6 +52,16 @@
 					<h3 class="m-0 me-auto"><span class="badge bg-danger"><i class="bi bi-x" /></span></h3>
 				{/if}
 				{#if result != null}
+					{#if !showExplanation}
+						<button
+							type="button"
+							class="btn btn-secondary"
+							disabled={showExplanation}
+							on:click={() => (showExplanation = true)}
+						>
+							Explain
+						</button>
+					{/if}
 					<slot name="extra" />
 				{:else}
 					<button

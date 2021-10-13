@@ -15,15 +15,23 @@ export function renderQuill(node: HTMLElement, quill: Quill) {
 }
 
 export function renderOps(node: HTMLElement, ops: Op[]) {
-	const document = node.ownerDocument,
-		tmp = document.createElement('div');
-
-	tmp.style.display = 'none';
-	document.body.appendChild(tmp);
+	const tmp = getOrCreateTmpNode(node.ownerDocument);
 
 	const quill = createQuill(tmp);
 	quill.setContents({ ops } as Delta);
 
 	renderQuill(node, quill);
-	document.body.removeChild(tmp);
+	tmp.innerHTML = '';
+}
+
+const TMP_NODE_ID = 'quill-render-tmp-node';
+function getOrCreateTmpNode(document: Document) {
+	let tmp = document.getElementById(TMP_NODE_ID);
+	if (!tmp) {
+		tmp = document.createElement('div');
+		tmp.id = TMP_NODE_ID;
+		tmp.style.display = 'none';
+		document.body.appendChild(tmp);
+	}
+	return tmp;
 }

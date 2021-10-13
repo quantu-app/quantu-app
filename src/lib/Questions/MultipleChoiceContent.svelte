@@ -4,11 +4,12 @@
 	import RichViewer from '$lib/RichViewer.svelte';
 
 	export let prompt: QuestionMultipleChoice;
+	export let showExplanation = false;
 	export let explanation: Op[] = undefined;
 </script>
 
 <RichViewer content={prompt.question} />
-{#if explanation}
+{#if explanation && showExplanation}
 	<hr />
 	<RichViewer content={explanation} />
 {/if}

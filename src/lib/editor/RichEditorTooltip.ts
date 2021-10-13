@@ -5,11 +5,12 @@ import type { Blot } from 'parchment/src/blot/abstract/blot';
 import type { BoundsStatic, Sources } from 'quill';
 import type { RangeStatic } from 'quill';
 import type TooltipClass from 'quill/ui/tooltip';
+import type { IFormulaValue } from './formula';
+import { Formula } from './formula';
 
 const Parchment = Quill.import('parchment');
 const Registry: typeof RegistryModule = Parchment.Registry;
 const LinkBlot = Quill.import('formats/link');
-const FormulaBlot = Quill.import('formats/formula');
 const Tooltip: typeof TooltipClass = Quill.import('ui/tooltip');
 
 export class RichEditorTooltip extends Tooltip {
@@ -21,12 +22,14 @@ export class RichEditorTooltip extends Tooltip {
 		'<div class="ql-katex"></div>',
 		'<a class="ql-close"></a>',
 		'<a class="ql-save"></a>',
+		'<input type="checkbox" class="ql-block" />',
 		'</div>'
 	].join('');
 
 	protected textbox: HTMLInputElement;
 	protected textarea: HTMLTextAreaElement;
 	protected katex: HTMLDivElement;
+	protected block: HTMLInputElement;
 	protected range: RangeStatic | undefined;
 
 	constructor(quill: Quill, bounds?: HTMLElement | string) {
@@ -34,6 +37,7 @@ export class RichEditorTooltip extends Tooltip {
 		this.textbox = this.root.querySelector('input[type="text"]') as HTMLInputElement;
 		this.textarea = this.root.querySelector('textarea') as HTMLTextAreaElement;
 		this.katex = this.root.querySelector('div.ql-katex') as HTMLDivElement;
+		this.block = this.root.querySelector('input.ql-block') as HTMLInputElement;
 		this.listen();
 	}
 
@@ -77,12 +81,12 @@ export class RichEditorTooltip extends Tooltip {
 				const blot = Registry.find(event.target as HTMLElement, true);
 
 				if (blot) {
-					if (blot instanceof FormulaBlot) {
+					if (blot instanceof Formula) {
 						this.range = {
 							index: blot.offset(this.quill.scroll as Blot),
 							length: blot.length()
 						};
-						this.edit('formula', FormulaBlot.value(blot.domNode));
+						this.edit('formula', Formula.value(blot.domNode as HTMLSpanElement));
 						event.preventDefault();
 						event.stopPropagation();
 					}
@@ -90,12 +94,15 @@ export class RichEditorTooltip extends Tooltip {
 			},
 			{ capture: true }
 		);
-		this.textarea.addEventListener('input', () => {
+		const onKatexInput = () => {
 			window.katex.render(this.textarea.value, this.katex, {
+				displayMode: this.block.checked,
 				throwOnError: false,
 				errorColor: '#f00'
 			});
-		});
+		};
+		this.textarea.addEventListener('input', onKatexInput);
+		this.block.addEventListener('change', onKatexInput);
 		this.textbox.addEventListener('keydown', (event) => {
 			if (event.key === 'Enter') {
 				this.save();
@@ -203,15 +210,17 @@ export class RichEditorTooltip extends Tooltip {
 		this.show();
 	}
 
-	edit(mode: string, preview?: string) {
+	edit(mode: string, preview?: IFormulaValue | string) {
 		this.root.classList.remove('ql-hidden');
 		this.root.classList.add('ql-editing');
 		if (preview != null) {
-			if (mode === 'formula') {
-				this.textarea.value = preview;
+			if (mode === 'formula' && typeof preview === 'object') {
+				this.block.value = (!!preview.block).toString();
+				this.block.checked = !!preview.block;
+				this.textarea.value = preview.expr;
 				this.textbox.value = '';
 			} else {
-				this.textbox.value = preview;
+				this.textbox.value = preview as string;
 				this.textarea.value = '';
 			}
 		}
@@ -261,9 +270,11 @@ export class RichEditorTooltip extends Tooltip {
 				const range = this.quill.getSelection(true);
 				if (range != null) {
 					const index = range.index + range.length;
-					this.quill.insertEmbed(index, mode, value, 'user');
 					if (mode === 'formula') {
+						this.quill.insertEmbed(index, mode, { expr: value, block: this.block.checked }, 'user');
 						this.quill.insertText(index + 1, ' ', 'user');
+					} else {
+						this.quill.insertEmbed(index, mode, value, 'user');
 					}
 					this.quill.setSelection(index + 2, 0, 'user');
 				}

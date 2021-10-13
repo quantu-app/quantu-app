@@ -22,7 +22,7 @@
 </script>
 
 <Review bind:result>
-	<MultipleChoiceContent slot="content" {prompt} explanation={prompt.explanation} />
+	<MultipleChoiceContent slot="content" {prompt} showExplanation explanation={prompt.explanation} />
 	<MultipleChoiceInput slot="input" disabled={true} {correct} {seed} {prompt} {input} />
 	<slot slot="extra" name="extra" />
 </Review>

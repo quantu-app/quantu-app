@@ -14,6 +14,7 @@
 	export let result: QuestionResult = undefined;
 	export let input: string[] = [];
 
+	let showExplanation = false;
 	let correct: Record<string, true>;
 	$: prompt = question.prompt as QuestionMultipleChoice;
 	$: if (result) {
@@ -28,8 +29,13 @@
 	}
 </script>
 
-<Prompt {question} {input} bind:result>
-	<MultipleChoiceContent slot="content" {prompt} explanation={result?.prompt.explanation} />
+<Prompt {question} {input} bind:showExplanation bind:result>
+	<MultipleChoiceContent
+		slot="content"
+		{prompt}
+		{showExplanation}
+		explanation={result?.prompt.explanation}
+	/>
 	<MultipleChoiceInput
 		slot="input"
 		disabled={result != null}

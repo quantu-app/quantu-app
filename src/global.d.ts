@@ -16,5 +16,6 @@ declare global {
 		katex: katex;
 		hljs: HLJSApi;
 		bootstrap: bootstrap;
+		gtag(type: string, id: string, config?: any): void;
 	}
 }

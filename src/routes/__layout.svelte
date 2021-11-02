@@ -7,6 +7,18 @@
 	OpenAPI.BASE = API_URL;
 </script>
 
-<slot />
+<script>
+	import { page } from '$app/stores';
+	import { browser } from '$app/env';
 
+	$: if (browser) {
+		if (typeof window.gtag !== 'undefined') {
+			window.gtag('config', 'G-8H9MTEL7XT', {
+				page_path: `${$page.path}${$page.query ? '?' + $page.query : ''}`
+			});
+		}
+	}
+</script>
+
+<slot />
 <AssetsModal />

@@ -21,6 +21,7 @@ export class AuthService {
             method: 'POST',
             path: `/auth/sign-up`,
             body: requestBody,
+            mediaType: 'application/json',
         });
         return result.body;
     }
@@ -83,6 +84,7 @@ export class AuthService {
             method: 'POST',
             path: `/auth/sign-in`,
             body: requestBody,
+            mediaType: 'application/json',
         });
         return result.body;
     }

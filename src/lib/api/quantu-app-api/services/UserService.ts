@@ -2,7 +2,9 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { Asset } from '../models/Asset';
+import type { AssetCreate } from '../models/AssetCreate';
 import type { AssetList } from '../models/AssetList';
+import type { AssetUpdate } from '../models/AssetUpdate';
 import type { Email } from '../models/Email';
 import type { EmailCreate } from '../models/EmailCreate';
 import type { Organization } from '../models/Organization';
@@ -75,6 +77,7 @@ export class UserService {
             method: 'POST',
             path: `/user/organizations/${organizationId}/quizzes`,
             body: requestBody,
+            mediaType: 'application/json',
         });
         return result.body;
     }
@@ -97,6 +100,7 @@ export class UserService {
             method: 'POST',
             path: `/user/organizations/${organizationId}/quizzes/${id}/add-questions`,
             body: requestBody,
+            mediaType: 'application/json',
         });
         return result.body;
     }
@@ -115,6 +119,7 @@ export class UserService {
             method: 'PATCH',
             path: `/user/password/reset`,
             body: requestBody,
+            mediaType: 'application/json',
         });
         return result.body;
     }
@@ -133,6 +138,7 @@ export class UserService {
             method: 'PUT',
             path: `/user/password/reset`,
             body: requestBody,
+            mediaType: 'application/json',
         });
         return result.body;
     }
@@ -169,7 +175,7 @@ export class UserService {
      */
     public static async quantuAppWebControllerUserAssetCreate(
         organizationId: number,
-        requestBody: any,
+        requestBody: AssetCreate,
     ): Promise<Asset> {
         const result = await __request({
             method: 'POST',
@@ -231,6 +237,7 @@ export class UserService {
             method: 'POST',
             path: `/user/organizations/${organizationId}/questions`,
             body: requestBody,
+            mediaType: 'application/json',
         });
         return result.body;
     }
@@ -253,6 +260,7 @@ export class UserService {
             method: 'POST',
             path: `/user/organizations/${organizationId}/quizzes/${id}/remove-questions`,
             body: requestBody,
+            mediaType: 'application/json',
         });
         return result.body;
     }
@@ -313,6 +321,7 @@ export class UserService {
             method: 'PATCH',
             path: `/user/organizations/${organizationId}/quizzes/${id}`,
             body: requestBody,
+            mediaType: 'application/json',
         });
         return result.body;
     }
@@ -335,6 +344,7 @@ export class UserService {
             method: 'PUT',
             path: `/user/organizations/${organizationId}/quizzes/${id}`,
             body: requestBody,
+            mediaType: 'application/json',
         });
         return result.body;
     }
@@ -353,6 +363,7 @@ export class UserService {
             method: 'PATCH',
             path: `/user/username`,
             body: requestBody,
+            mediaType: 'application/json',
         });
         return result.body;
     }
@@ -371,6 +382,7 @@ export class UserService {
             method: 'PUT',
             path: `/user/username`,
             body: requestBody,
+            mediaType: 'application/json',
         });
         return result.body;
     }
@@ -423,6 +435,7 @@ export class UserService {
             method: 'POST',
             path: `/user/email`,
             body: requestBody,
+            mediaType: 'application/json',
         });
         return result.body;
     }
@@ -483,6 +496,7 @@ export class UserService {
             method: 'PATCH',
             path: `/user/organizations/${organizationId}/questions/${id}`,
             body: requestBody,
+            mediaType: 'application/json',
         });
         return result.body;
     }
@@ -505,6 +519,7 @@ export class UserService {
             method: 'PUT',
             path: `/user/organizations/${organizationId}/questions/${id}`,
             body: requestBody,
+            mediaType: 'application/json',
         });
         return result.body;
     }
@@ -537,6 +552,7 @@ export class UserService {
             method: 'POST',
             path: `/user/organizations`,
             body: requestBody,
+            mediaType: 'application/json',
         });
         return result.body;
     }
@@ -591,6 +607,7 @@ export class UserService {
             method: 'PATCH',
             path: `/user/organizations/${id}`,
             body: requestBody,
+            mediaType: 'application/json',
         });
         return result.body;
     }
@@ -611,6 +628,7 @@ export class UserService {
             method: 'PUT',
             path: `/user/organizations/${id}`,
             body: requestBody,
+            mediaType: 'application/json',
         });
         return result.body;
     }
@@ -710,7 +728,7 @@ export class UserService {
     public static async quantuAppWebControllerUserAssetUpdate(
         id: number,
         organizationId: number,
-        requestBody: any,
+        requestBody: AssetUpdate,
     ): Promise<Asset> {
         const result = await __request({
             method: 'PATCH',
@@ -732,7 +750,7 @@ export class UserService {
     public static async quantuAppWebControllerUserAssetUpdate2(
         id: number,
         organizationId: number,
-        requestBody: any,
+        requestBody: AssetUpdate,
     ): Promise<Asset> {
         const result = await __request({
             method: 'PUT',

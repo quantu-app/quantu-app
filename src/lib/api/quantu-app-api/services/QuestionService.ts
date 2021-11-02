@@ -86,6 +86,7 @@ export class QuestionService {
             method: 'POST',
             path: `/questions/${id}/answer`,
             body: requestBody,
+            mediaType: 'application/json',
         });
         return result.body;
     }

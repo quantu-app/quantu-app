@@ -22,6 +22,14 @@ function isBlob(value: any): value is Blob {
     return value instanceof Blob;
 }
 
+function base64(str: string): string {
+    try {
+        return btoa(str);
+    } catch (err) {
+        return Buffer.from(str).toString('base64');
+    }
+}
+
 function getQueryString(params: Record<string, any>): string {
     const qs: string[] = [];
     Object.keys(params).forEach(key => {
@@ -43,9 +51,8 @@ function getQueryString(params: Record<string, any>): string {
 }
 
 function getUrl(options: ApiRequestOptions): string {
-    const path = options.path.replace(/[:]/g, '_');
+    const path = OpenAPI.ENCODE_PATH ? OpenAPI.ENCODE_PATH(options.path) : options.path;
     const url = `${OpenAPI.BASE}${path}`;
-
     if (options.query) {
         return `${url}${getQueryString(options.query)}`;
     }
@@ -76,25 +83,34 @@ async function getHeaders(options: ApiRequestOptions): Promise<Headers> {
     const token = await resolve(options, OpenAPI.TOKEN);
     const username = await resolve(options, OpenAPI.USERNAME);
     const password = await resolve(options, OpenAPI.PASSWORD);
-    const defaultHeaders = await resolve(options, OpenAPI.HEADERS);
+    const additionalHeaders = await resolve(options, OpenAPI.HEADERS);
 
-    const headers = new Headers({
+    const defaultHeaders = Object.entries({
         Accept: 'application/json',
-        ...defaultHeaders,
+        ...additionalHeaders,
         ...options.headers,
-    });
+    })
+        .filter(([key, value]) => isDefined(value))
+        .reduce((headers, [key, value]) => ({
+            ...headers,
+            [key]: value,
+        }), {});
+
+    const headers = new Headers(defaultHeaders);
 
     if (isStringWithValue(token)) {
         headers.append('Authorization', `Bearer ${token}`);
     }
 
     if (isStringWithValue(username) && isStringWithValue(password)) {
-        const credentials = btoa(`${username}:${password}`);
+        const credentials = base64(`${username}:${password}`);
         headers.append('Authorization', `Basic ${credentials}`);
     }
 
     if (options.body) {
-        if (isBlob(options.body)) {
+        if (options.mediaType) {
+            headers.append('Content-Type', options.mediaType);
+        } else if (isBlob(options.body)) {
             headers.append('Content-Type', options.body.type || 'application/octet-stream');
         } else if (isString(options.body)) {
             headers.append('Content-Type', 'text/plain');
@@ -110,7 +126,9 @@ function getRequestBody(options: ApiRequestOptions): BodyInit | undefined {
         return getFormData(options.formData);
     }
     if (options.body) {
-        if (isString(options.body) || isBlob(options.body)) {
+        if (options.mediaType?.includes('/json')) {
+            return JSON.stringify(options.body)
+        } else if (isString(options.body) || isBlob(options.body)) {
             return options.body;
         } else {
             return JSON.stringify(options.body);
@@ -142,18 +160,20 @@ function getResponseHeader(response: Response, responseHeader?: string): string 
 }
 
 async function getResponseBody(response: Response): Promise<any> {
-    try {
-        const contentType = response.headers.get('Content-Type');
-        if (contentType) {
-            const isJSON = contentType.toLowerCase().startsWith('application/json');
-            if (isJSON) {
-                return await response.json();
-            } else {
-                return await response.text();
+    if (response.status !== 204) {
+        try {
+            const contentType = response.headers.get('Content-Type');
+            if (contentType) {
+                const isJSON = contentType.toLowerCase().startsWith('application/json');
+                if (isJSON) {
+                    return await response.json();
+                } else {
+                    return await response.text();
+                }
             }
+        } catch (error) {
+            console.error(error);
         }
-    } catch (error) {
-        console.error(error);
     }
     return null;
 }

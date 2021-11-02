@@ -14,6 +14,7 @@ type Config = {
     USERNAME?: string | Resolver<string>;
     PASSWORD?: string | Resolver<string>;
     HEADERS?: Headers | Resolver<Headers>;
+    ENCODE_PATH?: (path: string) => string;
 }
 
 export const OpenAPI: Config = {
@@ -24,4 +25,5 @@ export const OpenAPI: Config = {
     USERNAME: undefined,
     PASSWORD: undefined,
     HEADERS: undefined,
+    ENCODE_PATH: undefined,
 };

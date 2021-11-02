@@ -63,7 +63,7 @@ export class RichEditorTooltip extends Tooltip {
 		};
 		document.body.addEventListener('click', onClick);
 
-		root.setAttribute('data-long-press-delay', '500');
+		root.setAttribute('data-long-press-delay', '300');
 		root.addEventListener('long-press', (event) => {
 			if (this.root.classList.contains('ql-editing')) {
 				return;
@@ -137,7 +137,7 @@ export class RichEditorTooltip extends Tooltip {
 			this.save();
 		});
 		this.root.querySelector('.ql-close')?.addEventListener('click', () => {
-			this.cancel();
+			this.hide();
 		});
 		this.quill.on('scroll-optimize' as any, () => {
 			setTimeout(() => {
@@ -148,6 +148,17 @@ export class RichEditorTooltip extends Tooltip {
 				}
 			}, 1);
 		});
+		this.quill.keyboard.addBinding(
+			{ key: 'm', ctrlKey: true } as any,
+			{ collapsed: true },
+			(range) => {
+				this.range = {
+					index: range.index,
+					length: range.length
+				};
+				this.edit('formula');
+			}
+		);
 	}
 
 	openAt(range: RangeStatic) {
@@ -197,6 +208,10 @@ export class RichEditorTooltip extends Tooltip {
 		if (this.textbox) this.textbox.value = '';
 		if (this.textarea) this.textarea.value = '';
 		if (this.katex) this.katex.innerHTML = '';
+		if (this.block) {
+			this.block.value = 'false';
+			this.block.checked = false;
+		}
 		this.root.removeAttribute('data-mode');
 	}
 

@@ -24,7 +24,9 @@ export class Formula extends Embed {
 				errorColor: '#f00'
 			});
 			node.setAttribute('data-value', value.expr);
-			node.setAttribute('data-block', (!!value.block).toString());
+			if (value.block) {
+				node.setAttribute('data-block', 'true');
+			}
 		}
 		return node;
 	}
@@ -38,7 +40,7 @@ export class Formula extends Embed {
 
 	html() {
 		const { formula } = this.value() as { formula: IFormulaValue };
-		return `<span data-value="${formula.expr}" data-block="${!!formula.block}">${
+		return `<span data-value="${formula.expr}" ${formula.block ? 'data-block="true"' : ''}">${
 			formula.expr
 		}</span>`;
 	}

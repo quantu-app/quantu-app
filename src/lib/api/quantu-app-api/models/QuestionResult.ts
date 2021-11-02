@@ -45,6 +45,7 @@ export namespace QuestionResult {
     export enum type {
         FLASH_CARD = 'flash_card',
         MULTIPLE_CHOICE = 'multiple_choice',
+        INPUT = 'input',
     }
 
 

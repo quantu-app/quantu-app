@@ -5,7 +5,8 @@ import type {
 	QuestionFlashCardPrivate,
 	QuestionMultipleChoicePrivate,
 	QuestionPromptPrivate,
-	QuestionUpdate
+	QuestionUpdate,
+	QuestionInputPrivate
 } from '$lib/api/quantu-app-api';
 import { UserService } from '$lib/api/quantu-app-api';
 import type { Readable } from 'svelte/store';
@@ -215,6 +216,14 @@ function cleanQuestionPrompt(type: string, prompt: QuestionPromptPrivate): Quest
 			question: multipleChoice.question,
 			explanation: multipleChoice.explanation,
 			choices: multipleChoice.choices
+		};
+	} else if (type === 'input') {
+		const answerChoice = prompt as QuestionInputPrivate;
+		return {
+			question: answerChoice.question,
+			explanation: answerChoice.explanation,
+			type: answerChoice.type,
+			answers: answerChoice.answers
 		};
 	}
 }

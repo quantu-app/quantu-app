@@ -1,11 +1,13 @@
 <script lang="ts">
 	import type {
 		QuestionFlashCardPrivate,
+		QuestionInputPrivate,
 		QuestionMultipleChoicePrivate,
 		QuestionPrivate
 	} from '$lib/api/quantu-app-api';
 	import Tags from '$lib/Tags.svelte';
 	import FlashCardEditor from './FlashCardEditor.svelte';
+	import InputEditor from './InputEditor.svelte';
 	import MultipleChoiceEditor from './MultipleChoiceEditor.svelte';
 
 	export let question: Partial<QuestionPrivate>;
@@ -13,6 +15,7 @@
 
 	$: promptFlashCard = question.prompt as QuestionFlashCardPrivate;
 	$: promptMultipleChoice = question.prompt as QuestionMultipleChoicePrivate;
+	$: promptInput = question.prompt as QuestionInputPrivate;
 </script>
 
 <div class="row">
@@ -27,7 +30,7 @@
 			bind:value={question.name}
 		/>
 	</div>
-	<!-- <div class="col-md">
+	<div class="col-md">
 		<label for="question-type" class="form-label">Question Type</label>
 		<select
 			id="question-type"
@@ -36,9 +39,10 @@
 			aria-label="Question Type"
 		>
 			<option value="multiple_choice">Multiple Choice</option>
-			<option value="flash_card">Flash Card</option>
+			<!-- <option value="flash_card">Flash Card</option> -->
+			<option value="input">Input</option>
 		</select>
-	</div> -->
+	</div>
 </div>
 <div class="mt-2">
 	<label for="question-tags" class="form-label">Question Tags</label>
@@ -49,4 +53,6 @@
 	<FlashCardEditor {disabled} bind:prompt={promptFlashCard} />
 {:else if question.type === 'multiple_choice'}
 	<MultipleChoiceEditor {disabled} bind:prompt={promptMultipleChoice} />
+{:else if question.type === 'input'}
+	<InputEditor {disabled} bind:prompt={promptInput} />
 {/if}

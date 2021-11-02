@@ -3,9 +3,10 @@
 /* eslint-disable */
 
 import type { QuestionFlashCard } from './QuestionFlashCard';
+import type { QuestionInput } from './QuestionInput';
 import type { QuestionMultipleChoice } from './QuestionMultipleChoice';
 
 /**
  * Question prompt
  */
-export type QuestionPrompt = (QuestionMultipleChoice | QuestionFlashCard);
+export type QuestionPrompt = (QuestionMultipleChoice | QuestionFlashCard | QuestionInput);

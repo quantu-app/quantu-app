@@ -1,6 +1,7 @@
 <script lang="ts">
 	import type { Question, QuestionResult } from '$lib/api/quantu-app-api';
 	import FlashCard from './FlashCard.svelte';
+	import Input from './Input.svelte';
 	import MultipleChoice from './MultipleChoice.svelte';
 
 	export let question: Question;
@@ -24,5 +25,9 @@
 		<MultipleChoice {question} {seed} bind:result>
 			<slot slot="extra" name="extra" />
 		</MultipleChoice>
+	{:else if question.type == 'input'}
+		<Input {question} {seed} bind:result>
+			<slot slot="extra" name="extra" />
+		</Input>
 	{/if}
 {/key}

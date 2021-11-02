@@ -3,6 +3,7 @@
 /* eslint-disable */
 
 import type { FlashCardAnswer } from './FlashCardAnswer';
+import type { InputAnswer } from './InputAnswer';
 import type { MultipleChoiceAnswer } from './MultipleChoiceAnswer';
 
 /**
@@ -12,5 +13,5 @@ export type QuestionAnswer = {
     /**
      * Question Answer input
      */
-    input?: (FlashCardAnswer | MultipleChoiceAnswer);
+    input?: (FlashCardAnswer | MultipleChoiceAnswer | InputAnswer);
 }

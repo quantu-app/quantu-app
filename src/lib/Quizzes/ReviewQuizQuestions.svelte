@@ -2,6 +2,7 @@
 	import type { QuestionResult } from '$lib/api/quantu-app-api';
 	import type { Quiz } from '$lib/api/quantu-app-api';
 	import FlashCardReview from '$lib/Questions/FlashCardReview.svelte';
+	import InputReview from '$lib/Questions/InputReview.svelte';
 	import MultipleChoiceReview from '$lib/Questions/MultipleChoiceReview.svelte';
 	import { toPercent } from '$lib/utils';
 
@@ -33,6 +34,8 @@
 						<MultipleChoiceReview result={questionResult} />
 					{:else if questionResult.type === 'flash_card'}
 						<FlashCardReview result={questionResult} />
+					{:else if questionResult.type === 'input'}
+						<InputReview result={questionResult} />
 					{/if}
 				</li>
 			{/each}

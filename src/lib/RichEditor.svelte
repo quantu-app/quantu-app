@@ -66,6 +66,6 @@
 	});
 </script>
 
-<div>
+<div class="border">
 	<div bind:this={element} on:keydown|capture={onKeyDown} />
 </div>

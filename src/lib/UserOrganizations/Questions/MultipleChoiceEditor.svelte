@@ -101,9 +101,9 @@
 
 <ul class="list-group list-group-flush">
 	{#each choices as [key, choice] (key)}
-		<li class="list-group-item">
+		<li class="list-group-item px-0 pt-1">
 			<div class="d-flex">
-				<div class="form-check ms-4">
+				<div class="form-check">
 					<input
 						class="form-check-input"
 						type="checkbox"

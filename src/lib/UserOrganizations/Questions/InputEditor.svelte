@@ -88,7 +88,7 @@
 
 <ul class="list-group list-group-flush">
 	{#each answers as _answer, index (index)}
-		<li class="list-group-item">
+		<li class="list-group-item px-0 pt-1">
 			<div class="d-flex">
 				{#if !disabled}
 					<button class="ms-auto btn btn-sm btn-danger" on:click={createOnDelete(index)}

@@ -24,49 +24,49 @@
 			>
 			<h6 class="d-inline">- {titleCase(question.type.replace('_', ' '))}</h6>
 		</h4>
-		<div class="dropdown">
-			<button
-				id={`question-dropdown-${question.id}`}
-				class="btn btn-ghost dropdown-toggle"
-				type="button"
-				data-bs-toggle="dropdown"
-				aria-expanded="false"
-			>
-				<i class="bi bi-three-dots-vertical" />
-			</button>
-			<ul
-				class="dropdown-menu dropdown-menu-end"
-				aria-labelledby={`question-dropdown-${question.id}`}
-			>
-				<slot name="dropdown" {question} {onUpdate} {onDelete}>
-					<li>
-						<button
-							type="button"
-							class="dropdown-item justify-content-between"
-							data-bs-toggle="modal"
-							data-bs-target="#update-question"
-							aria-label="Update"
-							on:click={onUpdate}>Update</button
-						>
-					</li>
-					<li>
-						<button
-							type="button"
-							class="dropdown-item justify-content-between"
-							data-bs-toggle="modal"
-							data-bs-target="#delete-question"
-							aria-label="Delete"
-							on:click={onDelete}>Delete</button
-						>
-					</li>
-				</slot>
-			</ul>
-		</div>
-	</div>
-	<div class="d-flex justify-content-between align-items-start">
-		<div class="d-inline">
-			Last updated {updatedAt.toLocaleTimeString()}
-			{updatedAt.toLocaleDateString()}
+		<div class="d-flex">
+			<div class="d-inline mt-2">
+				Last updated {updatedAt.toLocaleTimeString()}
+				{updatedAt.toLocaleDateString()}
+			</div>
+			<div class="dropdown">
+				<button
+					id={`question-dropdown-${question.id}`}
+					class="btn btn-ghost dropdown-toggle"
+					type="button"
+					data-bs-toggle="dropdown"
+					aria-expanded="false"
+				>
+					<i class="bi bi-three-dots-vertical" />
+				</button>
+				<ul
+					class="dropdown-menu dropdown-menu-end"
+					aria-labelledby={`question-dropdown-${question.id}`}
+				>
+					<slot name="dropdown" {question} {onUpdate} {onDelete}>
+						<li>
+							<button
+								type="button"
+								class="dropdown-item justify-content-between"
+								data-bs-toggle="modal"
+								data-bs-target="#update-question"
+								aria-label="Update"
+								on:click={onUpdate}>Update</button
+							>
+						</li>
+						<li>
+							<button
+								type="button"
+								class="dropdown-item justify-content-between"
+								data-bs-toggle="modal"
+								data-bs-target="#delete-question"
+								aria-label="Delete"
+								on:click={onDelete}>Delete</button
+							>
+						</li>
+					</slot>
+				</ul>
+			</div>
 		</div>
 	</div>
 </div>

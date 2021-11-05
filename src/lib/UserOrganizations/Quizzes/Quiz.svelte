@@ -11,7 +11,7 @@
 </script>
 
 <script lang="ts">
-	import type { Quiz, Question } from '$lib/api/quantu-app-api';
+	import type { Quiz, QuestionPrivate } from '$lib/api/quantu-app-api';
 	import Search from '$lib/Search.svelte';
 	import { debounce } from '@aicacia/debounce';
 	import { updateQuiz } from '$lib/state/organizationQuizzes';
@@ -24,7 +24,7 @@
 
 	export let organizationId: number;
 	export let quiz: Quiz;
-	export let questions: Question[];
+	export let questions: QuestionPrivate[];
 
 	function onNameChange() {
 		updateQuiz(organizationId, quiz.id, {
@@ -51,7 +51,7 @@
 		});
 	}
 
-	function createOnRemove(question: Question) {
+	function createOnRemove(question: QuestionPrivate) {
 		return async function onRemove() {
 			await removeQuestionsFromQuiz(organizationId, quiz.id, [question.id]);
 		};
@@ -59,7 +59,7 @@
 
 	const debouncedOnTagsChange = debounce(onTagsChange, 1000);
 
-	$: filter = (question: Question) =>
+	$: filter = (question: QuestionPrivate) =>
 		$state.questionNameFilter ? fuzzyEquals($state.questionNameFilter, question.name) : true;
 </script>
 

@@ -26,7 +26,7 @@
 			<slot slot="extra" name="extra" />
 		</MultipleChoice>
 	{:else if question.type == 'input'}
-		<Input {question} {seed} bind:result>
+		<Input {question} bind:result>
 			<slot slot="extra" name="extra" />
 		</Input>
 	{/if}

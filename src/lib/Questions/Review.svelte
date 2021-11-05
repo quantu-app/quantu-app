@@ -1,9 +1,3 @@
-<script lang="ts">
-	import type { QuestionResult } from '$lib/api/quantu-app-api';
-
-	export let result: QuestionResult;
-</script>
-
 <div class="row h-100">
 	<div class="col-md-8">
 		<div class="d-flex flex-column h-100 pt-4">

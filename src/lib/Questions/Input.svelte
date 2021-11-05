@@ -11,9 +11,8 @@
 	import InputInput from './InputInput.svelte';
 
 	export let question: Question;
-	export let seed: number = undefined;
 	export let result: QuestionResult = undefined;
-	export let input: string;
+	export let input = '';
 
 	let showExplanation = false;
 	$: prompt = question.prompt as QuestionInput;
@@ -23,6 +22,6 @@
 
 <Prompt {question} {input} bind:showExplanation bind:result>
 	<InputContent slot="content" {prompt} {showExplanation} explanation={resultPrompt?.explanation} />
-	<InputInput slot="input" disabled={result != null} {correct} {prompt} bind:input />
+	<InputInput slot="input" disabled={result != null} {correct} bind:input />
 	<slot slot="extra" name="extra" />
 </Prompt>

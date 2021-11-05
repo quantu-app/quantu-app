@@ -39,7 +39,9 @@
 
 	$: rng = XorShiftRng.fromSeed(seed);
 	$: quiz = $quizzes.byId[quizId];
-	$: allQuestionResults = Object.values($questionResults.byQuizId[quizId] || {});
+	$: allQuestionResults = Object.values($questionResults.byQuizId[quizId] || {}).sort((a, b) =>
+		a.updatedAt.localeCompare(b.updatedAt)
+	);
 	$: questionResultList = rng
 		.shuffle(allQuestionResults)
 		.slice(0, questionCount || allQuestionResults.length);

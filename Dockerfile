@@ -1,9 +1,11 @@
-FROM node:14-alpine as builder
+FROM node:14-alpine as node-builder
 
 RUN apk add --no-cache python3 g++ make zlib-dev
-RUN npm install -g npm@7.24.0
+RUN npm install -g npm@8.1.3
 
 WORKDIR /app
+
+FROM node-builder as builder
 
 COPY package*.json ./
 RUN npm install
@@ -20,12 +22,7 @@ RUN echo "VITE_API_URL=$VITE_API_URL" >> .env && \
 
 RUN NODE_ENV=production npm run web.build
 
-FROM node:14-alpine
-
-RUN apk add --no-cache python3 g++ make
-RUN npm install -g npm@7.24.0
-
-WORKDIR /app
+FROM node-builder
 
 COPY --from=builder /app/package*.json ./
 RUN NODE_ENV=production npm install

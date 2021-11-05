@@ -11,6 +11,7 @@
 	<input
 		type="text"
 		class="form-control"
+		class:is-valid={correct === true}
 		class:is-invalid={correct === false}
 		placeholder="Type answer"
 		{disabled}

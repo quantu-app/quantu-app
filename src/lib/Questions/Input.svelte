@@ -13,12 +13,12 @@
 	export let question: Question;
 	export let seed: number = undefined;
 	export let result: QuestionResult = undefined;
-	export let input: string[] = [];
+	export let input: string;
 
 	let showExplanation = false;
 	$: prompt = question.prompt as QuestionInput;
 	$: resultPrompt = result?.prompt as QuestionInput | undefined;
-	$: correct = result ? result.result === 1 : undefined;
+	$: correct = result ? result.result >= 0.5 : undefined;
 </script>
 
 <Prompt {question} {input} bind:showExplanation bind:result>

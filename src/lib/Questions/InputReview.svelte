@@ -8,11 +8,10 @@
 
 	$: prompt = result.prompt as QuestionInputPrivate;
 	$: input = result.answer.input as InputAnswer;
-	$: answers = prompt.answers;
 </script>
 
 <Review bind:result>
 	<InputContent slot="content" {prompt} showExplanation explanation={prompt.explanation} />
-	<InputInput slot="input" disabled={true} correct={answers.includes(input)} {prompt} {input} />
+	<InputInput slot="input" disabled={true} correct={result.result >= 0.5} {prompt} {input} />
 	<slot slot="extra" name="extra" />
 </Review>

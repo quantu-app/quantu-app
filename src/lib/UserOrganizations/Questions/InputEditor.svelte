@@ -49,8 +49,6 @@
 		answers.push('');
 		prompt.answers = answers;
 	};
-
-	$: console.log(prompt);
 </script>
 
 <div class="col-md">

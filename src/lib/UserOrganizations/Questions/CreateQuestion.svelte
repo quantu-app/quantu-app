@@ -31,7 +31,6 @@
 	async function onCreateQuestion() {
 		creatingQuestion = true;
 		try {
-			console.log(question);
 			await createQuestion(organizationId, question);
 			delete question.name;
 			question = {

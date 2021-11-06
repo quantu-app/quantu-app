@@ -21,8 +21,9 @@ import type { QuizCreate } from '../models/QuizCreate';
 import type { QuizList } from '../models/QuizList';
 import type { QuizQuestionIds } from '../models/QuizQuestionIds';
 import type { QuizUpdate } from '../models/QuizUpdate';
-import type { User } from '../models/User';
 import type { UsernameUpdate } from '../models/UsernameUpdate';
+import type { UserPrivate } from '../models/UserPrivate';
+import type { UserPublic } from '../models/UserPublic';
 import { request as __request } from '../core/request';
 
 export class UserService {
@@ -109,12 +110,12 @@ export class UserService {
      * Reset Password
      * Resets the User's Password creating a new Token in the process
      * @param requestBody reset user password
-     * @returns User Confirmed User Email Response
+     * @returns UserPrivate Confirmed User Email Response
      * @throws ApiError
      */
     public static async quantuAppWebControllerUserPasswordReset(
         requestBody: PasswordReset,
-    ): Promise<User> {
+    ): Promise<UserPrivate> {
         const result = await __request({
             method: 'PATCH',
             path: `/user/password/reset`,
@@ -128,12 +129,12 @@ export class UserService {
      * Reset Password
      * Resets the User's Password creating a new Token in the process
      * @param requestBody reset user password
-     * @returns User Confirmed User Email Response
+     * @returns UserPrivate Confirmed User Email Response
      * @throws ApiError
      */
     public static async quantuAppWebControllerUserPasswordReset2(
         requestBody: PasswordReset,
-    ): Promise<User> {
+    ): Promise<UserPrivate> {
         const result = await __request({
             method: 'PUT',
             path: `/user/password/reset`,
@@ -186,12 +187,29 @@ export class UserService {
     }
 
     /**
-     * Deactivates the Current User
-     * Deactivates the current User's account
-     * @returns User PrivateUser
+     * Gets a User by id
+     * Returns the user by id
+     * @param id User Id
+     * @returns UserPublic Current User Response
      * @throws ApiError
      */
-    public static async quantuAppWebControllerUserDeactivateDeactivate(): Promise<User> {
+    public static async quantuAppWebControllerUserShow(
+        id: string,
+    ): Promise<UserPublic> {
+        const result = await __request({
+            method: 'GET',
+            path: `/users/${id}`,
+        });
+        return result.body;
+    }
+
+    /**
+     * Deactivates the Current User
+     * Deactivates the current User's account
+     * @returns UserPrivate PrivateUser
+     * @throws ApiError
+     */
+    public static async quantuAppWebControllerUserDeactivateDeactivate(): Promise<UserPrivate> {
         const result = await __request({
             method: 'DELETE',
             path: `/user/deactivate`,
@@ -353,12 +371,12 @@ export class UserService {
      * Update User's Username
      * Updates a User's Username
      * @param requestBody Update User's Username Body
-     * @returns User Update User's Username Response
+     * @returns UserPrivate Update User's Username Response
      * @throws ApiError
      */
     public static async quantuAppWebControllerUserUsernameUpdate(
         requestBody: UsernameUpdate,
-    ): Promise<User> {
+    ): Promise<UserPrivate> {
         const result = await __request({
             method: 'PATCH',
             path: `/user/username`,
@@ -372,12 +390,12 @@ export class UserService {
      * Update User's Username
      * Updates a User's Username
      * @param requestBody Update User's Username Body
-     * @returns User Update User's Username Response
+     * @returns UserPrivate Update User's Username Response
      * @throws ApiError
      */
     public static async quantuAppWebControllerUserUsernameUpdate2(
         requestBody: UsernameUpdate,
-    ): Promise<User> {
+    ): Promise<UserPrivate> {
         const result = await __request({
             method: 'PUT',
             path: `/user/username`,
@@ -637,12 +655,12 @@ export class UserService {
      * Confirm an Eamil
      * Confirms an Email and returns the User with the Bearer Token
      * @param confirmationToken Confirmation Token
-     * @returns User Confirmed User Email Response
+     * @returns UserPrivate Confirmed User Email Response
      * @throws ApiError
      */
     public static async quantuAppWebControllerUserEmailConfirm(
         confirmationToken: string,
-    ): Promise<User> {
+    ): Promise<UserPrivate> {
         const result = await __request({
             method: 'PATCH',
             path: `/user/email/confirm`,
@@ -657,12 +675,12 @@ export class UserService {
      * Confirm an Eamil
      * Confirms an Email and returns the User with the Bearer Token
      * @param confirmationToken Confirmation Token
-     * @returns User Confirmed User Email Response
+     * @returns UserPrivate Confirmed User Email Response
      * @throws ApiError
      */
     public static async quantuAppWebControllerUserEmailConfirm2(
         confirmationToken: string,
-    ): Promise<User> {
+    ): Promise<UserPrivate> {
         const result = await __request({
             method: 'PUT',
             path: `/user/email/confirm`,

@@ -8,6 +8,7 @@
 			seed = parseInt(input.page.query.get('seed')),
 			questionCount = parseInt(input.page.query.get('questionCount')),
 			index = parseInt(input.page.query.get('index')),
+			playId = input.page.params.playId,
 			quizId = parseInt(input.page.params.quizId);
 
 		if (index >= questionCount) {
@@ -20,6 +21,7 @@
 		return {
 			...response,
 			props: {
+				playId,
 				quizId,
 				questionCount,
 				index,
@@ -37,6 +39,7 @@
 	import { XorShiftRng } from '@aicacia/rand';
 
 	export let quizId: number;
+	export let playId: string;
 	export let questionCount: number;
 	export let seed: number;
 	export let index: number;

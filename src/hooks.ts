@@ -1,4 +1,4 @@
-import type { User } from './lib/api/quantu-app-api';
+import type { UserPrivate } from './lib/api/quantu-app-api';
 import { AuthService, OpenAPI } from './lib/api/quantu-app-api';
 import type { MaybePromise } from '@sveltejs/kit/types/helper';
 import type { ServerRequest, ServerResponse } from '@sveltejs/kit/types/hooks';
@@ -24,7 +24,7 @@ export function handle({
 	return resolve(request);
 }
 
-export function getSession(request: ServerRequest<Locals>): MaybePromise<User | null> {
+export function getSession(request: ServerRequest<Locals>): MaybePromise<UserPrivate | null> {
 	if (request.locals.token) {
 		OpenAPI.TOKEN = request.locals.token;
 		return AuthService.quantuAppWebControllerAuthCurrent().catch(() => {

@@ -3,7 +3,7 @@
 /* eslint-disable */
 import type { SignInUsernameOrEmailAndPassword } from '../models/SignInUsernameOrEmailAndPassword';
 import type { SignUpUsernamePassword } from '../models/SignUpUsernamePassword';
-import type { User } from '../models/User';
+import type { UserPrivate } from '../models/UserPrivate';
 import { request as __request } from '../core/request';
 
 export class AuthService {
@@ -11,12 +11,12 @@ export class AuthService {
     /**
      * Signs up a user and returns the User with the Bearer Token
      * @param requestBody Request body to sign up
-     * @returns User Sign up User Response
+     * @returns UserPrivate Sign up User Response
      * @throws ApiError
      */
     public static async quantuAppWebControllerAuthSignUpSignUp(
         requestBody: SignUpUsernamePassword,
-    ): Promise<User> {
+    ): Promise<UserPrivate> {
         const result = await __request({
             method: 'POST',
             path: `/auth/sign-up`,
@@ -43,10 +43,10 @@ export class AuthService {
     /**
      * Gets the Current User
      * Returns the current user based on the bearer token
-     * @returns User Current User Response
+     * @returns UserPrivate Current User Response
      * @throws ApiError
      */
-    public static async quantuAppWebControllerAuthCurrent(): Promise<User> {
+    public static async quantuAppWebControllerAuthCurrent(): Promise<UserPrivate> {
         const result = await __request({
             method: 'GET',
             path: `/auth`,
@@ -74,12 +74,12 @@ export class AuthService {
     /**
      * Signs in user and returns the User with the Bearer Token
      * @param requestBody Request body to sign in
-     * @returns User Sign in User Response
+     * @returns UserPrivate Sign in User Response
      * @throws ApiError
      */
     public static async quantuAppWebControllerAuthSignInSignIn(
         requestBody: SignInUsernameOrEmailAndPassword,
-    ): Promise<User> {
+    ): Promise<UserPrivate> {
         const result = await __request({
             method: 'POST',
             path: `/auth/sign-in`,
@@ -93,12 +93,12 @@ export class AuthService {
      * Signs in the Current User
      * Returns the current user
      * @param provider Auth Provider
-     * @returns User User Response
+     * @returns UserPrivate User Response
      * @throws ApiError
      */
     public static async quantuAppWebControllerAuthCallback(
         provider: string,
-    ): Promise<User> {
+    ): Promise<UserPrivate> {
         const result = await __request({
             method: 'GET',
             path: `/auth/${provider}/callback`,

@@ -12,9 +12,6 @@
 <div class="container mb-2 h-100">
 	<h2>
 		{quiz.name}
-		{#if question.name}
-			<h4 class="d-inline">- {question.name}</h4>
-		{/if}
 	</h2>
 	<hr class="mb-0" />
 	<QuestionComponent {question} {seed}>

@@ -7,7 +7,7 @@ import type { Email } from './Email';
 /**
  * A private user
  */
-export type User = {
+export type UserPrivate = {
     /**
      * User creator status
      */

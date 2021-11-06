@@ -5,6 +5,7 @@
 import type bootstrap from 'bootstrap';
 import type HLJSApi from 'highlight.js';
 import type katex from 'katex';
+import type SimplePeer from 'simple-peer';
 
 declare global {
 	interface ImportMetaEnv {
@@ -16,6 +17,7 @@ declare global {
 		katex: katex;
 		hljs: HLJSApi;
 		bootstrap: bootstrap;
+		SimplePeer: SimplePeer.SimplePeer;
 		gtag(type: string, id: string, config?: any): void;
 	}
 }

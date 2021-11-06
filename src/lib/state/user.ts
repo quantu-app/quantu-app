@@ -1,4 +1,4 @@
-import type { User } from '$lib/api/quantu-app-api';
+import type { UserPrivate } from '$lib/api/quantu-app-api';
 import { AuthService, OpenAPI } from '$lib/api/quantu-app-api';
 import type { Readable } from 'svelte/store';
 import { get, writable, derived } from 'svelte/store';
@@ -11,20 +11,22 @@ import { goto } from '$app/navigation';
 import { WS_URL } from '$lib/constants';
 
 const socketWritable = writable<Socket>();
+
 export const redirectPathWritable = writable<string>();
-export const currentUser: Readable<User> = derived(session, (user) => user);
+export const currentUser: Readable<UserPrivate> = derived(session, (user) => user);
 export const signedIn = derived(currentUser, (currentUser) => !!currentUser);
+export const socket = derived(socketWritable, (socket) => socket);
 
 export const userEmitter = new EventEmitter<{
-	signIn: (user: User) => void;
+	signIn: (user: UserPrivate) => void;
 	signOut: () => void;
 }>();
 
-export function getSocket() {
+export function getSocket(): Socket | undefined {
 	return get(socketWritable);
 }
 
-export function getCurrentUser(): User {
+export function getCurrentUser(): UserPrivate {
 	return get(currentUser);
 }
 
@@ -71,7 +73,7 @@ export async function signInWithToken(token: string) {
 	}
 }
 
-async function signInUser(currentUser: User) {
+async function signInUser(currentUser: UserPrivate) {
 	const redirectPath = get(redirectPathWritable),
 		tasks: Promise<unknown>[] = [];
 
@@ -82,17 +84,23 @@ async function signInUser(currentUser: User) {
 		redirectPathWritable.set(undefined);
 		tasks.push(goto(redirectPath));
 	}
-	tasks.push(setUserSocket(currentUser.token));
+	tasks.push(setUserSocket(currentUser.id, currentUser.token));
 	userEmitter.emit('signIn', currentUser);
 	await Promise.all(tasks);
 }
 
-async function setUserSocket(token: string) {
+export async function setUserSocket(id: string, token: string) {
+	if (getSocket()) {
+		return;
+	}
 	const { Socket } = await import('phoenix');
 	const socket = new Socket(`${WS_URL}/socket`, {
 		params: { token }
 	});
-	socket.onOpen(() => socketWritable.set(socket));
+
+	socket.onOpen(() => {
+		socketWritable.set(socket);
+	});
 	socket.connect();
 }
 

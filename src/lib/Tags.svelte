@@ -3,35 +3,49 @@
 
 	export let id: string;
 	export let tags: string[];
+	export let loading = false;
 	export let disabled = false;
 
 	const dispatch = createEventDispatcher<{ change: string[] }>();
 
+	let input: HTMLInputElement;
 	let tag: string;
 
-	function onAddTag() {
+	$: onAddTag = () => {
+		if (loading) {
+			return;
+		}
 		if (tag && !tags.includes(tag)) {
 			tags.push(tag);
 			tag = '';
 			dispatch('change', tags);
 			tags = tags;
+			input?.select();
 		}
-	}
-	function onKeyPress(e: KeyboardEvent) {
+	};
+	$: onKeyPress = (e: KeyboardEvent) => {
+		if (loading) {
+			return;
+		}
 		if (e.key === 'Enter') {
 			onAddTag();
 		}
-	}
-	function createOnDelete(tag: string) {
+	};
+	$: createOnDelete = (tag: string) => {
 		return function onDelete() {
+			if (loading) {
+				return;
+			}
 			const index = tags.indexOf(tag);
 			if (index !== -1) {
 				tags.splice(index, 1);
 				dispatch('change', tags);
 				tags = tags;
+				tag = '';
+				input?.select();
 			}
 		};
-	}
+	};
 </script>
 
 <div class="d-flex flex-wrap">
@@ -51,16 +65,20 @@
 					type="text"
 					class="form-control border-0"
 					placeholder="Enter a tag"
+					bind:this={input}
 					bind:value={tag}
 					on:keypress={onKeyPress}
 				/>
 				<button
 					type="submit"
-					disabled={!tag}
+					disabled={!tag || loading}
 					class="btn btn-primary"
 					aria-label="Add Tag"
 					on:click={onAddTag}
 				>
+					{#if loading}
+						<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" />
+					{/if}
 					<i class="bi bi-plus" />
 				</button>
 			</div>

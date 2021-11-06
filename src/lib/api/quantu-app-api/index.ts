@@ -44,8 +44,9 @@ export type { QuizQuestionIds } from './models/QuizQuestionIds';
 export type { QuizUpdate } from './models/QuizUpdate';
 export type { SignInUsernameOrEmailAndPassword } from './models/SignInUsernameOrEmailAndPassword';
 export type { SignUpUsernamePassword } from './models/SignUpUsernamePassword';
-export type { User } from './models/User';
 export type { UsernameUpdate } from './models/UsernameUpdate';
+export type { UserPrivate } from './models/UserPrivate';
+export type { UserPublic } from './models/UserPublic';
 
 export { AssetService } from './services/AssetService';
 export { AuthService } from './services/AuthService';

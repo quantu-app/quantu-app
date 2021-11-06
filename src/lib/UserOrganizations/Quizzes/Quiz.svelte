@@ -32,9 +32,13 @@
 		});
 	}
 
+	let updatingTags = false;
 	function onTagsChange() {
+		updatingTags = true;
 		updateQuiz(organizationId, quiz.id, {
 			tags: quiz.tags
+		}).finally(() => {
+			updatingTags = false;
 		});
 	}
 
@@ -44,10 +48,14 @@
 		});
 	}
 
+	let updatingPublished = false;
 	function onPublishedChange() {
+		updatingPublished = true;
 		quiz.published = !quiz.published;
 		updateQuiz(organizationId, quiz.id, {
 			published: quiz.published
+		}).finally(() => {
+			updatingPublished = false;
 		});
 	}
 
@@ -57,7 +65,7 @@
 		};
 	}
 
-	const debouncedOnTagsChange = debounce(onTagsChange, 1000);
+	const debouncedOnTagsChange = debounce(onTagsChange, 3000);
 
 	$: filter = (question: QuestionPrivate) =>
 		$state.questionNameFilter ? fuzzyEquals($state.questionNameFilter, question.name) : true;
@@ -80,7 +88,12 @@
 				</div>
 				<div class="col-md">
 					<label for="quiz-tags" class="form-label mb-0">Quiz Tags</label>
-					<Tags id="quiz-tags" bind:tags={quiz.tags} on:change={debouncedOnTagsChange} />
+					<Tags
+						id="quiz-tags"
+						bind:tags={quiz.tags}
+						loading={updatingTags}
+						on:change={debouncedOnTagsChange}
+					/>
 				</div>
 			</form>
 		</div>
@@ -95,6 +108,7 @@
 					class="btn"
 					class:btn-primary={quiz.published}
 					class:btn-outline-primary={!quiz.published}
+					disabled={updatingPublished}
 					on:click={onPublishedChange}
 				>
 					{#if quiz.published}

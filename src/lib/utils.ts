@@ -1,3 +1,7 @@
+import { random } from '@aicacia/rand';
+import { range } from '@aicacia/core';
+import type { Channel } from 'phoenix';
+
 function checkPrototypeProperty(obj: Record<string, unknown>) {
 	for (const key in obj) {
 		if (!Object.prototype.hasOwnProperty.call(obj, key)) {
@@ -66,4 +70,27 @@ export function toPercent(value: number): string {
 	} else {
 		return `${percent.toFixed(2)}%`;
 	}
+}
+
+export function randomString(length = 6): string {
+	return range(0, length)
+		.iter()
+		.map(() =>
+			random() < 0.25
+				? Math.floor(1 + random() * 9)
+				: String.fromCharCode(97 + Math.floor(random() * 26))
+		)
+		.join('')
+		.toUpperCase();
+}
+
+export function channelPush(
+	channel: Channel,
+	event: string,
+	payload: any,
+	timeout?: number
+): Promise<void> {
+	return new Promise((resolve, reject) =>
+		channel.push(event, payload, timeout).receive('ok', resolve).receive('error', reject)
+	);
 }

@@ -1,5 +1,5 @@
 import { random } from '@aicacia/rand';
-import { range } from '@aicacia/core';
+import { range } from '@aicacia/range';
 import type { Channel } from 'phoenix';
 
 function checkPrototypeProperty(obj: Record<string, unknown>) {

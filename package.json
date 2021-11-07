@@ -67,11 +67,11 @@
 		"vite": "^2.6.13"
 	},
 	"dependencies": {
-		"@aicacia/core": "^0.2.13",
+		"@aicacia/range": "^0.1.0",
 		"@aicacia/debounce": "^0.1.12",
 		"@aicacia/graph": "github:aicacia/ts-graph#b699452faec26454b11671f6ccca948c5b7816a7",
 		"@aicacia/mesh": "github:aicacia/ts-mesh#0bb2ab394fd404e631f3a3db6d02a1088ff923c3",
-		"@aicacia/rand": "^0.2.7",
+		"@aicacia/rand": "^0.2.8",
 		"@aicacia/string-fuzzy_equals": "^0.1.4",
 		"@sveltejs/kit": "next",
 		"cookie": "^0.4.1",

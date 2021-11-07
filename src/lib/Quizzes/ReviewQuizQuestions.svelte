@@ -14,7 +14,7 @@
 		questionResults.length;
 </script>
 
-<div class="container mb-2">
+<div class="container">
 	<h2>{quiz.name}</h2>
 	{#each quiz.tags as tag}
 		<span class="badge bg-primary me-2">{tag}</span>

@@ -35,8 +35,9 @@
 	import { getQuestions, questions } from '$lib/state/questions';
 	import { getQuiz, quizzes } from '$lib/state/quizzes';
 	import AppLayout from '$lib/AppLayout.svelte';
-	import AnswerQuizQuestion from '$lib/Quizzes/AnswerQuizQuestion.svelte';
+	import PlayAnswerQuizQuestion from '$lib/Quizzes/PlayAnswerQuizQuestion.svelte';
 	import { XorShiftRng } from '@aicacia/rand';
+	import { sortById } from '$lib/utils';
 
 	export let quizId: number;
 	export let playId: string;
@@ -47,11 +48,7 @@
 	$: rng = XorShiftRng.fromSeed(seed);
 	$: quiz = $quizzes.byId[quizId];
 	$: questionList = rng
-		.shuffle(
-			Object.values($questions.byQuizId[quizId] || {}).sort((a, b) =>
-				a.updatedAt.localeCompare(b.updatedAt)
-			)
-		)
+		.shuffle(Object.values($questions.byQuizId[quizId] || {}).sort(sortById))
 		.slice(0, questionCount);
 	$: question = questionList[index];
 
@@ -67,6 +64,14 @@
 
 <AppLayout>
 	{#if quiz && question}
-		<AnswerQuizQuestion {quiz} {question} {questionCount} {seed} {index} />
+		<PlayAnswerQuizQuestion
+			{playId}
+			{quiz}
+			{question}
+			{questionCount}
+			{questionList}
+			{seed}
+			{index}
+		/>
 	{/if}
 </AppLayout>

@@ -55,7 +55,7 @@
 			title: quiz?.name
 		},
 		{
-			href: `/quizzes/${quizId}/play/${playId}`,
+			href: `/quizzes/${quizId}/play/${playId}?seed=${seed}&questionCount=${questionCount}`,
 			title: `Play ${playId}`
 		}
 	]}

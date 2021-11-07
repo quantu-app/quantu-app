@@ -13,28 +13,32 @@ export type QuestionResult = {
     /**
      * Id
      */
-    id?: number;
+    id: number;
     /**
      * Creation timestamp
      */
-    insertedAt?: string;
-    prompt?: QuestionPromptPrivate;
+    insertedAt: string;
+    prompt: QuestionPromptPrivate;
     /**
-     * Question Id
+     * Question results Id
      */
-    questionId?: number;
+    questionId: number;
     /**
      * Question Answer result
      */
-    result?: number;
+    result: number;
     /**
      * Question type
      */
-    type?: QuestionResult.type;
+    type: QuestionResult.type;
     /**
      * Update timestamp
      */
-    updatedAt?: string;
+    updatedAt: string;
+    /**
+     * Question results user Id
+     */
+    userId: string;
 }
 
 export namespace QuestionResult {

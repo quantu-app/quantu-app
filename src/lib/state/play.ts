@@ -6,6 +6,7 @@ export type IUser = {
 	id: string;
 	username: string;
 	ready: boolean;
+	results: { [questionId: string]: boolean };
 };
 
 export type IUsers = {
@@ -25,22 +26,9 @@ export type IState = {
 	rooms: IPlays;
 };
 
-export const graph = new Graph<IState>();
+export const playGraph = new Graph<IState>();
 
 let mesh: Mesh;
-
-graph
-	.on('set', (path, json) => {
-		mesh.broadcast({
-			path,
-			json
-		});
-	})
-	.on('get', (path) => {
-		mesh.broadcast({
-			path
-		});
-	});
 
 if (browser) {
 	const peer = new Peer(window.SimplePeer, {
@@ -50,9 +38,9 @@ if (browser) {
 	mesh = new Mesh(peer);
 	mesh.on('data', (data) => {
 		if ('json' in data) {
-			graph.merge(data.path, data.json);
+			playGraph.merge(data.path, data.json);
 		} else {
-			const node = graph.getNodeAtPath(data.path);
+			const node = playGraph.getNodeAtPath(data.path);
 
 			if (node) {
 				mesh.broadcast({
@@ -62,4 +50,17 @@ if (browser) {
 			}
 		}
 	});
+
+	playGraph
+		.on('set', (path, json) => {
+			mesh.broadcast({
+				path,
+				json
+			});
+		})
+		.on('get', (path) => {
+			mesh.broadcast({
+				path
+			});
+		});
 }

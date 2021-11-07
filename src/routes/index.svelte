@@ -29,7 +29,7 @@
 
 	export let redirectPath: string;
 
-	$: if (browser && $currentUser) {
+	$: if (browser && $currentUser && !redirectPath) {
 		goto('/quizzes');
 	}
 

@@ -17,9 +17,8 @@
 	let showExplanation = false;
 	let correct: Record<string, true>;
 	$: prompt = question.prompt as QuestionMultipleChoice;
-	$: if (result) {
-		const resultPrompt = result.prompt as QuestionMultipleChoicePrivate;
-
+	$: resultPrompt = result?.prompt as QuestionMultipleChoicePrivate;
+	$: if (resultPrompt) {
 		correct = Object.entries(resultPrompt.choices || {}).reduce((correct, [key, choice]) => {
 			if (choice.correct) {
 				correct[key] = true;
@@ -34,7 +33,7 @@
 		slot="content"
 		{prompt}
 		{showExplanation}
-		explanation={result?.prompt.explanation}
+		explanation={resultPrompt?.explanation}
 	/>
 	<MultipleChoiceInput
 		slot="input"

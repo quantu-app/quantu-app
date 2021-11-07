@@ -1,11 +1,45 @@
+<script lang="ts" context="module">
+	function onShare() {
+		if (navigator && navigator.share) {
+			navigator
+				.share({
+					title: document.title,
+					text: 'Join my Game!',
+					url: location.href
+				})
+				.then(() =>
+					addNotification({ description: 'Successful shared!', type: NotificationType.Success })
+				)
+				.catch((err) =>
+					addNotification({ description: err.message, type: NotificationType.Danger })
+				);
+		} else if (navigator && navigator.clipboard) {
+			navigator.clipboard
+				.writeText(location.href)
+				.then(() =>
+					addNotification({ description: 'Successful Copied!', type: NotificationType.Success })
+				);
+		} else if ('execCommand' in document) {
+			const element = document.createElement('input');
+			element.style.display = 'none';
+			element.textContent = location.href;
+			document.body.appendChild(element);
+			element.select();
+			document.execCommand('copy');
+			document.body.removeChild(element);
+		}
+	}
+</script>
+
 <script lang="ts">
 	import type { Quiz } from '$lib/api/quantu-app-api';
 	import { Ref } from '@aicacia/graph';
 	import { currentUser } from '$lib/state/user';
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
-	import { graph, IUser, IUsers } from '$lib/state/play';
+	import { playGraph, IUser, IUsers } from '$lib/state/play';
 	import { browser } from '$app/env';
+	import { addNotification, NotificationType } from '$lib/state/notifications';
 
 	export let quiz: Quiz;
 	export let playId: string;
@@ -13,7 +47,7 @@
 	export let questionCount: number;
 
 	$: currentUserId = $currentUser?.id;
-	$: roomRef = graph.get('rooms').get(playId);
+	$: roomRef = playGraph.get('rooms').get(playId);
 	$: userRef = roomRef.get('users').get(currentUserId);
 	let users: IUsers = {};
 	$: userList = Array.from(Object.entries(users)) as [id: string, user: IUser][];
@@ -36,7 +70,8 @@
 		userRef.set({
 			id: currentUserId,
 			username: $currentUser.username,
-			ready: false
+			ready: false,
+			results: {}
 		});
 	}
 
@@ -77,7 +112,17 @@
 </script>
 
 <div class="container mb-2">
-	<h2>{quiz.name}</h2>
+	<div class="d-flex flex-row justify-content-between">
+		<div>
+			<h2>
+				{quiz.name} -
+				<h5 class="d-inline">Question(s) {questionCount}</h5>
+			</h2>
+		</div>
+		<div>
+			<button class="btn btn-primary" on:click={onShare}>Share</button>
+		</div>
+	</div>
 	{#each quiz.tags as tag}
 		<span class="badge bg-primary me-2">{tag}</span>
 	{/each}
@@ -93,7 +138,7 @@
 						<li class="list-group-item">
 							<div class="d-flex justify-content-between">
 								{user.username}
-								<span class="badge bg-primary">
+								<span class="badge" class:bg-success={user.ready} class:bg-danger={!user.ready}>
 									{user.ready ? 'Ready' : 'Not Ready'}
 								</span>
 							</div>
@@ -111,9 +156,7 @@
 				on:click={onReady}>{user?.ready ? 'Not Ready' : 'Ready'}</button
 			>
 			{#if ready && userList.length > 1}
-				<button role="button" class="btn btn-primary" disabled on:click={onStart}
-					>Work in Progress</button
-				>
+				<button role="button" class="btn btn-primary" on:click={onStart}>Start</button>
 			{/if}
 		</div>
 	</div>

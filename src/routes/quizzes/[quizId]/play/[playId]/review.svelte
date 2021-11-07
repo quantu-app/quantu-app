@@ -8,6 +8,7 @@
 		const response = authGuard(input),
 			seed = parseInt(input.page.query.get('seed')),
 			questionCount = parseInt(input.page.query.get('questionCount')),
+			playId = input.page.params.playId,
 			quizId = parseInt(input.page.params.quizId);
 
 		if (!browser && isValidStatus(response)) {
@@ -17,6 +18,7 @@
 		return {
 			...response,
 			props: {
+				playId,
 				quizId,
 				questionCount,
 				seed
@@ -29,11 +31,12 @@
 	import { questionResults } from '$lib/state/questionResults';
 	import { getQuiz, quizzes } from '$lib/state/quizzes';
 	import AppLayout from '$lib/AppLayout.svelte';
-	import ReviewQuizQuestions from '$lib/Quizzes/ReviewQuizQuestions.svelte';
+	import PlayReviewQuizQuestions from '$lib/Quizzes/PlayReviewQuizQuestions.svelte';
 	import { XorShiftRng } from '@aicacia/rand';
 	import { getQuestionResults } from '$lib/state/questionResults';
 
 	export let quizId: number;
+	export let playId: string;
 	export let questionCount: number;
 	export let seed: number;
 
@@ -66,10 +69,14 @@
 		{
 			href: `/quizzes/${quizId}`,
 			title: quiz?.name
+		},
+		{
+			href: `/quizzes/${quizId}/play/${playId}/review?seed=${seed}&questionCount=${questionCount}`,
+			title: `Play ${playId}`
 		}
 	]}
 >
 	{#if quiz}
-		<ReviewQuizQuestions {quiz} questionResults={questionResultList} />
+		<PlayReviewQuizQuestions {quiz} {playId} questionResults={questionResultList} />
 	{/if}
 </AppLayout>

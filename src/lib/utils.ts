@@ -72,6 +72,10 @@ export function toPercent(value: number): string {
 	}
 }
 
+export function sortById(a: { id: number }, b: { id: number }) {
+	return a.id - b.id;
+}
+
 export function randomString(length = 6): string {
 	return range(0, length)
 		.iter()

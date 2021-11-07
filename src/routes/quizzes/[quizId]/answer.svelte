@@ -35,6 +35,7 @@
 	import AppLayout from '$lib/AppLayout.svelte';
 	import AnswerQuizQuestion from '$lib/Quizzes/AnswerQuizQuestion.svelte';
 	import { XorShiftRng } from '@aicacia/rand';
+	import { sortById } from '$lib/utils';
 
 	export let quizId: number;
 	export let questionCount: number;
@@ -44,11 +45,7 @@
 	$: rng = XorShiftRng.fromSeed(seed);
 	$: quiz = $quizzes.byId[quizId];
 	$: questionList = rng
-		.shuffle(
-			Object.values($questions.byQuizId[quizId] || {}).sort((a, b) =>
-				a.updatedAt.localeCompare(b.updatedAt)
-			)
-		)
+		.shuffle(Object.values($questions.byQuizId[quizId] || {}).sort(sortById))
 		.slice(0, questionCount);
 	$: question = questionList[index];
 

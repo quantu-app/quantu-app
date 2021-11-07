@@ -63,7 +63,7 @@
 				role="button"
 				class="btn btn-primary"
 				href={`/quizzes/${quiz.id}/answer?index=0&seed=${quizConfig.seed}&questionCount=${quizConfig.questionCount}`}
-				>Pratice</a
+				>Practice</a
 			>
 		</div>
 	</div>

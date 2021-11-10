@@ -4,7 +4,7 @@
 	import FlashCardReview from '$lib/Questions/FlashCardReview.svelte';
 	import InputReview from '$lib/Questions/InputReview.svelte';
 	import MultipleChoiceReview from '$lib/Questions/MultipleChoiceReview.svelte';
-	import { IUser, IUsers, playGraph } from '$lib/state/play';
+	import { IQuestionResults, IResults, IUser, IUsers, playGraph } from '$lib/state/play';
 	import { currentUser } from '$lib/state/user';
 	import { toPercent } from '$lib/utils';
 	import { Ref } from '@aicacia/graph';
@@ -20,6 +20,7 @@
 	$: userRef = roomRef.get('users').get(currentUserId);
 	let users: IUsers = {};
 	$: userList = Array.from(Object.entries(users)) as [id: string, user: IUser][];
+	let results: IResults = {};
 
 	let prevUserId: string;
 	$: if (prevUserId !== currentUserId && currentUserId) {
@@ -30,13 +31,12 @@
 		userRef.set({
 			id: currentUserId,
 			username: $currentUser.username,
-			ready: true,
-			results: {}
+			ready: true
 		});
 	}
 
 	$: getResults = (user: IUser) =>
-		questionResults.map((result) => (user?.results ? user.results[result.questionId] : undefined));
+		questionResults.map((result) => (results[user.id] || {})[result.questionId]);
 
 	$: percent =
 		questionResults.reduce((count, questionResult) => count + questionResult.result, 0) /
@@ -45,20 +45,20 @@
 	onMount(() => {
 		const removeListenerCallbacks = [
 			roomRef.get('users').on(async (state) => {
-				users = (
-					await Promise.all(
-						Object.values(state).map((user) => {
-							if (user instanceof Ref) {
-								return user.then<IUser>();
-							} else {
-								return user as unknown as IUser;
-							}
-						})
-					)
-				).reduce((acc, user) => {
+				users = (await Promise.all(Object.values(state))).reduce((acc, user) => {
 					acc[user.id] = user;
 					return acc;
 				}, {} as IUsers);
+			}),
+			roomRef.get('results').on(async (state) => {
+				results = (
+					await Promise.all(
+						Object.entries(state).map(async ([userId, results]) => [userId, await results])
+					)
+				).reduce((acc, [userId, results]) => {
+					acc[userId as string] = results as IQuestionResults;
+					return acc;
+				}, {} as IResults);
 			})
 		];
 

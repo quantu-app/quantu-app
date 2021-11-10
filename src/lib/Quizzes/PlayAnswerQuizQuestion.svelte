@@ -1,9 +1,15 @@
 <script lang="ts">
 	import type { Quiz, Question, QuestionResult } from '$lib/api/quantu-app-api';
 	import QuestionComponent from '$lib/Questions/Question.svelte';
-	import { playGraph, IUser, IUsers } from '$lib/state/play';
+	import {
+		playGraph,
+		IUser,
+		IUsers,
+		IResults,
+		IQuestionResults,
+		QuestionState
+	} from '$lib/state/play';
 	import { currentUser } from '$lib/state/user';
-	import { Ref } from '@aicacia/graph';
 	import { onMount } from 'svelte';
 	import QuizState from './QuizState.svelte';
 
@@ -20,6 +26,8 @@
 	$: userRef = roomRef.get('users').get(currentUserId);
 	let users: IUsers = {};
 	$: userList = Array.from(Object.entries(users)) as [id: string, user: IUser][];
+	$: userResultsRef = roomRef.get('results').get(currentUserId);
+	let results: IResults = {};
 
 	let prevUserId: string;
 	$: if (prevUserId !== currentUserId && currentUserId) {
@@ -30,39 +38,38 @@
 		userRef.set({
 			id: currentUserId,
 			username: $currentUser.username,
-			ready: true,
-			results: {}
+			ready: true
 		});
+		userResultsRef.get(question.id.toString()).set(QuestionState.Current);
 	}
 
 	let result: QuestionResult = undefined;
 	$: if (result !== undefined && result.questionId) {
-		userRef
-			.get('results')
+		userResultsRef
 			.get(result.questionId.toString())
-			.set(result.result >= 0.5);
+			.set(result.result >= 0.5 ? QuestionState.Correct : QuestionState.Incorrect);
 	}
 
 	$: getResults = (user: IUser) =>
-		questionList.map((question) => (user?.results ? user.results[question.id] : undefined));
+		questionList.map((question) => (results[user.id] || {})[question.id]);
 
 	onMount(() => {
 		const removeListenerCallbacks = [
 			roomRef.get('users').on(async (state) => {
-				users = (
-					await Promise.all(
-						Object.values(state).map((user) => {
-							if (user instanceof Ref) {
-								return user.then<IUser>();
-							} else {
-								return user as unknown as IUser;
-							}
-						})
-					)
-				).reduce((acc, user) => {
+				users = (await Promise.all(Object.values(state))).reduce((acc, user) => {
 					acc[user.id] = user;
 					return acc;
 				}, {} as IUsers);
+			}),
+			roomRef.get('results').on(async (state) => {
+				results = (
+					await Promise.all(
+						Object.entries(state).map(async ([userId, results]) => [userId, await results])
+					)
+				).reduce((acc, [userId, results]) => {
+					acc[userId as string] = results as IQuestionResults;
+					return acc;
+				}, {} as IResults);
 			})
 		];
 

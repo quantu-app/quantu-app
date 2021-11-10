@@ -10,9 +10,12 @@
 	"engines": {
 		"node": "14"
 	},
+	"main": "build/index.js",
 	"bin": "build/index.js",
 	"pkg": {
-		"assets": "build/assets/**/*!(*.js|*.map|*.src)"
+		"assets": [
+			"build/assets/**/*"
+		]
 	},
 	"scripts": {
 		"tauri": "tauri",
@@ -55,7 +58,7 @@
 		"eslint-plugin-svelte3": "^3.2.1",
 		"katex": "^0.13.18",
 		"openapi-typescript-codegen": "^0.10.0",
-		"pkg": "^5.3.3",
+		"pkg": "^5.4.1",
 		"prettier": "^2.4.1",
 		"prettier-plugin-svelte": "^2.4.0",
 		"quill-delta": "^4.2.2",

@@ -14,12 +14,12 @@ export type QuestionMultipleChoicePrivate = {
             /**
              * choice content
              */
-            content: Array<any>,
+            content: Array<any>;
             /**
              * is this choice correct?
              */
-            correct?: boolean,
-        },
+            correct?: boolean;
+        };
     };
     /**
      * question explanation

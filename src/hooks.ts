@@ -3,6 +3,7 @@ import { AuthService, OpenAPI } from './lib/api/quantu-app-api';
 import type { MaybePromise } from '@sveltejs/kit/types/helper';
 import type { ServerRequest, ServerResponse } from '@sveltejs/kit/types/hooks';
 import cookie from 'cookie';
+import '$lib/AbortController';
 
 export interface Locals {
 	token?: string;
@@ -27,7 +28,8 @@ export function handle({
 export function getSession(request: ServerRequest<Locals>): MaybePromise<UserPrivate | null> {
 	if (request.locals.token) {
 		OpenAPI.TOKEN = request.locals.token;
-		return AuthService.quantuAppWebControllerAuthCurrent().catch(() => {
+		return AuthService.quantuAppWebControllerAuthCurrent().catch((error) => {
+			console.error(error);
 			request.locals.token = undefined;
 			OpenAPI.TOKEN = undefined;
 			return null;

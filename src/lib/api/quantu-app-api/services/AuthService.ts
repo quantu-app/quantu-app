@@ -4,6 +4,7 @@
 import type { SignInUsernameOrEmailAndPassword } from '../models/SignInUsernameOrEmailAndPassword';
 import type { SignUpUsernamePassword } from '../models/SignUpUsernamePassword';
 import type { UserPrivate } from '../models/UserPrivate';
+import type { CancelablePromise } from '../core/CancelablePromise';
 import { request as __request } from '../core/request';
 
 export class AuthService {
@@ -14,16 +15,15 @@ export class AuthService {
      * @returns UserPrivate Sign up User Response
      * @throws ApiError
      */
-    public static async quantuAppWebControllerAuthSignUpSignUp(
+    public static quantuAppWebControllerAuthSignUpSignUp(
         requestBody: SignUpUsernamePassword,
-    ): Promise<UserPrivate> {
-        const result = await __request({
+    ): CancelablePromise<UserPrivate> {
+        return __request({
             method: 'POST',
             path: `/auth/sign-up`,
             body: requestBody,
             mediaType: 'application/json',
         });
-        return result.body;
     }
 
     /**
@@ -32,12 +32,11 @@ export class AuthService {
      * @returns void
      * @throws ApiError
      */
-    public static async quantuAppWebControllerAuthDelete(): Promise<void> {
-        const result = await __request({
+    public static quantuAppWebControllerAuthDelete(): CancelablePromise<void> {
+        return __request({
             method: 'DELETE',
             path: `/auth`,
         });
-        return result.body;
     }
 
     /**
@@ -46,12 +45,11 @@ export class AuthService {
      * @returns UserPrivate Current User Response
      * @throws ApiError
      */
-    public static async quantuAppWebControllerAuthCurrent(): Promise<UserPrivate> {
-        const result = await __request({
+    public static quantuAppWebControllerAuthCurrent(): CancelablePromise<UserPrivate> {
+        return __request({
             method: 'GET',
             path: `/auth`,
         });
-        return result.body;
     }
 
     /**
@@ -61,14 +59,13 @@ export class AuthService {
      * @returns void
      * @throws ApiError
      */
-    public static async quantuAppWebControllerAuthRequest(
+    public static quantuAppWebControllerAuthRequest(
         provider: string,
-    ): Promise<void> {
-        const result = await __request({
+    ): CancelablePromise<void> {
+        return __request({
             method: 'GET',
             path: `/auth/${provider}`,
         });
-        return result.body;
     }
 
     /**
@@ -77,16 +74,15 @@ export class AuthService {
      * @returns UserPrivate Sign in User Response
      * @throws ApiError
      */
-    public static async quantuAppWebControllerAuthSignInSignIn(
+    public static quantuAppWebControllerAuthSignInSignIn(
         requestBody: SignInUsernameOrEmailAndPassword,
-    ): Promise<UserPrivate> {
-        const result = await __request({
+    ): CancelablePromise<UserPrivate> {
+        return __request({
             method: 'POST',
             path: `/auth/sign-in`,
             body: requestBody,
             mediaType: 'application/json',
         });
-        return result.body;
     }
 
     /**
@@ -96,14 +92,13 @@ export class AuthService {
      * @returns UserPrivate User Response
      * @throws ApiError
      */
-    public static async quantuAppWebControllerAuthCallback(
+    public static quantuAppWebControllerAuthCallback(
         provider: string,
-    ): Promise<UserPrivate> {
-        const result = await __request({
+    ): CancelablePromise<UserPrivate> {
+        return __request({
             method: 'GET',
             path: `/auth/${provider}/callback`,
         });
-        return result.body;
     }
 
 }

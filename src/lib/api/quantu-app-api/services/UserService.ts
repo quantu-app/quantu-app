@@ -24,6 +24,7 @@ import type { QuizUpdate } from '../models/QuizUpdate';
 import type { UsernameUpdate } from '../models/UsernameUpdate';
 import type { UserPrivate } from '../models/UserPrivate';
 import type { UserPublic } from '../models/UserPublic';
+import type { CancelablePromise } from '../core/CancelablePromise';
 import { request as __request } from '../core/request';
 
 export class UserService {
@@ -35,14 +36,13 @@ export class UserService {
      * @returns void
      * @throws ApiError
      */
-    public static async quantuAppWebControllerUserEmailDelete(
+    public static quantuAppWebControllerUserEmailDelete(
         id: number,
-    ): Promise<void> {
-        const result = await __request({
+    ): CancelablePromise<void> {
+        return __request({
             method: 'DELETE',
             path: `/user/email/${id}`,
         });
-        return result.body;
     }
 
     /**
@@ -52,14 +52,13 @@ export class UserService {
      * @returns QuizList Organization Quizzes
      * @throws ApiError
      */
-    public static async quantuAppWebControllerUserQuizIndex(
+    public static quantuAppWebControllerUserQuizIndex(
         organizationId: number,
-    ): Promise<QuizList> {
-        const result = await __request({
+    ): CancelablePromise<QuizList> {
+        return __request({
             method: 'GET',
             path: `/user/organizations/${organizationId}/quizzes`,
         });
-        return result.body;
     }
 
     /**
@@ -70,17 +69,16 @@ export class UserService {
      * @returns Quiz Organization Quiz
      * @throws ApiError
      */
-    public static async quantuAppWebControllerUserQuizCreate(
+    public static quantuAppWebControllerUserQuizCreate(
         organizationId: number,
         requestBody: QuizCreate,
-    ): Promise<Quiz> {
-        const result = await __request({
+    ): CancelablePromise<Quiz> {
+        return __request({
             method: 'POST',
             path: `/user/organizations/${organizationId}/quizzes`,
             body: requestBody,
             mediaType: 'application/json',
         });
-        return result.body;
     }
 
     /**
@@ -92,18 +90,17 @@ export class UserService {
      * @returns void
      * @throws ApiError
      */
-    public static async quantuAppWebControllerUserQuizAddQuestions(
+    public static quantuAppWebControllerUserQuizAddQuestions(
         id: number,
         organizationId: number,
         requestBody: QuizQuestionIds,
-    ): Promise<void> {
-        const result = await __request({
+    ): CancelablePromise<void> {
+        return __request({
             method: 'POST',
             path: `/user/organizations/${organizationId}/quizzes/${id}/add-questions`,
             body: requestBody,
             mediaType: 'application/json',
         });
-        return result.body;
     }
 
     /**
@@ -113,16 +110,15 @@ export class UserService {
      * @returns UserPrivate Confirmed User Email Response
      * @throws ApiError
      */
-    public static async quantuAppWebControllerUserPasswordReset(
+    public static quantuAppWebControllerUserPasswordReset(
         requestBody: PasswordReset,
-    ): Promise<UserPrivate> {
-        const result = await __request({
+    ): CancelablePromise<UserPrivate> {
+        return __request({
             method: 'PATCH',
             path: `/user/password/reset`,
             body: requestBody,
             mediaType: 'application/json',
         });
-        return result.body;
     }
 
     /**
@@ -132,16 +128,15 @@ export class UserService {
      * @returns UserPrivate Confirmed User Email Response
      * @throws ApiError
      */
-    public static async quantuAppWebControllerUserPasswordReset2(
+    public static quantuAppWebControllerUserPasswordReset2(
         requestBody: PasswordReset,
-    ): Promise<UserPrivate> {
-        const result = await __request({
+    ): CancelablePromise<UserPrivate> {
+        return __request({
             method: 'PUT',
             path: `/user/password/reset`,
             body: requestBody,
             mediaType: 'application/json',
         });
-        return result.body;
     }
 
     /**
@@ -152,38 +147,37 @@ export class UserService {
      * @returns AssetList Organization Assetzes
      * @throws ApiError
      */
-    public static async quantuAppWebControllerUserAssetIndex(
+    public static quantuAppWebControllerUserAssetIndex(
         organizationId: number,
         parentId?: number,
-    ): Promise<AssetList> {
-        const result = await __request({
+    ): CancelablePromise<AssetList> {
+        return __request({
             method: 'GET',
             path: `/user/organizations/${organizationId}/assets`,
             query: {
                 'parentId': parentId,
             },
         });
-        return result.body;
     }
 
     /**
      * Create a Asset
      * Returns organization's created asset
      * @param organizationId Organization Id
-     * @param requestBody Request body to create asset
+     * @param formData Request body to create asset
      * @returns Asset Organization Asset
      * @throws ApiError
      */
-    public static async quantuAppWebControllerUserAssetCreate(
+    public static quantuAppWebControllerUserAssetCreate(
         organizationId: number,
-        requestBody: AssetCreate,
-    ): Promise<Asset> {
-        const result = await __request({
+        formData: AssetCreate,
+    ): CancelablePromise<Asset> {
+        return __request({
             method: 'POST',
             path: `/user/organizations/${organizationId}/assets`,
-            body: requestBody,
+            formData: formData,
+            mediaType: 'multipart/form-data',
         });
-        return result.body;
     }
 
     /**
@@ -193,14 +187,13 @@ export class UserService {
      * @returns UserPublic Current User Response
      * @throws ApiError
      */
-    public static async quantuAppWebControllerUserShow(
+    public static quantuAppWebControllerUserShow(
         id: string,
-    ): Promise<UserPublic> {
-        const result = await __request({
+    ): CancelablePromise<UserPublic> {
+        return __request({
             method: 'GET',
             path: `/users/${id}`,
         });
-        return result.body;
     }
 
     /**
@@ -209,12 +202,11 @@ export class UserService {
      * @returns UserPrivate PrivateUser
      * @throws ApiError
      */
-    public static async quantuAppWebControllerUserDeactivateDeactivate(): Promise<UserPrivate> {
-        const result = await __request({
+    public static quantuAppWebControllerUserDeactivateDeactivate(): CancelablePromise<UserPrivate> {
+        return __request({
             method: 'DELETE',
             path: `/user/deactivate`,
         });
-        return result.body;
     }
 
     /**
@@ -225,18 +217,17 @@ export class UserService {
      * @returns QuestionListPrivate Organization/Quiz Questions
      * @throws ApiError
      */
-    public static async quantuAppWebControllerUserQuestionIndex(
+    public static quantuAppWebControllerUserQuestionIndex(
         organizationId: number,
         quizId?: number,
-    ): Promise<QuestionListPrivate> {
-        const result = await __request({
+    ): CancelablePromise<QuestionListPrivate> {
+        return __request({
             method: 'GET',
             path: `/user/organizations/${organizationId}/questions`,
             query: {
                 'quizId': quizId,
             },
         });
-        return result.body;
     }
 
     /**
@@ -247,17 +238,16 @@ export class UserService {
      * @returns QuestionPrivate Organization/Quiz Question
      * @throws ApiError
      */
-    public static async quantuAppWebControllerUserQuestionCreate(
+    public static quantuAppWebControllerUserQuestionCreate(
         organizationId: number,
         requestBody: QuestionCreate,
-    ): Promise<QuestionPrivate> {
-        const result = await __request({
+    ): CancelablePromise<QuestionPrivate> {
+        return __request({
             method: 'POST',
             path: `/user/organizations/${organizationId}/questions`,
             body: requestBody,
             mediaType: 'application/json',
         });
-        return result.body;
     }
 
     /**
@@ -269,18 +259,17 @@ export class UserService {
      * @returns void
      * @throws ApiError
      */
-    public static async quantuAppWebControllerUserQuizRemoveQuestions(
+    public static quantuAppWebControllerUserQuizRemoveQuestions(
         id: number,
         organizationId: number,
         requestBody: QuizQuestionIds,
-    ): Promise<void> {
-        const result = await __request({
+    ): CancelablePromise<void> {
+        return __request({
             method: 'POST',
             path: `/user/organizations/${organizationId}/quizzes/${id}/remove-questions`,
             body: requestBody,
             mediaType: 'application/json',
         });
-        return result.body;
     }
 
     /**
@@ -291,15 +280,14 @@ export class UserService {
      * @returns void
      * @throws ApiError
      */
-    public static async quantuAppWebControllerUserQuizDelete(
+    public static quantuAppWebControllerUserQuizDelete(
         id: number,
         organizationId: number,
-    ): Promise<void> {
-        const result = await __request({
+    ): CancelablePromise<void> {
+        return __request({
             method: 'DELETE',
             path: `/user/organizations/${organizationId}/quizzes/${id}`,
         });
-        return result.body;
     }
 
     /**
@@ -310,15 +298,14 @@ export class UserService {
      * @returns Quiz Organization Quiz
      * @throws ApiError
      */
-    public static async quantuAppWebControllerUserQuizShow(
+    public static quantuAppWebControllerUserQuizShow(
         id: number,
         organizationId: number,
-    ): Promise<Quiz> {
-        const result = await __request({
+    ): CancelablePromise<Quiz> {
+        return __request({
             method: 'GET',
             path: `/user/organizations/${organizationId}/quizzes/${id}`,
         });
-        return result.body;
     }
 
     /**
@@ -330,18 +317,17 @@ export class UserService {
      * @returns Quiz Organization Quiz
      * @throws ApiError
      */
-    public static async quantuAppWebControllerUserQuizUpdate(
+    public static quantuAppWebControllerUserQuizUpdate(
         id: number,
         organizationId: number,
         requestBody: QuizUpdate,
-    ): Promise<Quiz> {
-        const result = await __request({
+    ): CancelablePromise<Quiz> {
+        return __request({
             method: 'PATCH',
             path: `/user/organizations/${organizationId}/quizzes/${id}`,
             body: requestBody,
             mediaType: 'application/json',
         });
-        return result.body;
     }
 
     /**
@@ -353,18 +339,17 @@ export class UserService {
      * @returns Quiz Organization Quiz
      * @throws ApiError
      */
-    public static async quantuAppWebControllerUserQuizUpdate2(
+    public static quantuAppWebControllerUserQuizUpdate2(
         id: number,
         organizationId: number,
         requestBody: QuizUpdate,
-    ): Promise<Quiz> {
-        const result = await __request({
+    ): CancelablePromise<Quiz> {
+        return __request({
             method: 'PUT',
             path: `/user/organizations/${organizationId}/quizzes/${id}`,
             body: requestBody,
             mediaType: 'application/json',
         });
-        return result.body;
     }
 
     /**
@@ -374,16 +359,15 @@ export class UserService {
      * @returns UserPrivate Update User's Username Response
      * @throws ApiError
      */
-    public static async quantuAppWebControllerUserUsernameUpdate(
+    public static quantuAppWebControllerUserUsernameUpdate(
         requestBody: UsernameUpdate,
-    ): Promise<UserPrivate> {
-        const result = await __request({
+    ): CancelablePromise<UserPrivate> {
+        return __request({
             method: 'PATCH',
             path: `/user/username`,
             body: requestBody,
             mediaType: 'application/json',
         });
-        return result.body;
     }
 
     /**
@@ -393,16 +377,15 @@ export class UserService {
      * @returns UserPrivate Update User's Username Response
      * @throws ApiError
      */
-    public static async quantuAppWebControllerUserUsernameUpdate2(
+    public static quantuAppWebControllerUserUsernameUpdate2(
         requestBody: UsernameUpdate,
-    ): Promise<UserPrivate> {
-        const result = await __request({
+    ): CancelablePromise<UserPrivate> {
+        return __request({
             method: 'PUT',
             path: `/user/username`,
             body: requestBody,
             mediaType: 'application/json',
         });
-        return result.body;
     }
 
     /**
@@ -412,14 +395,13 @@ export class UserService {
      * @returns Email Set Primary Email Response
      * @throws ApiError
      */
-    public static async quantuAppWebControllerUserEmailSetPrimary(
+    public static quantuAppWebControllerUserEmailSetPrimary(
         id: number,
-    ): Promise<Email> {
-        const result = await __request({
+    ): CancelablePromise<Email> {
+        return __request({
             method: 'PATCH',
             path: `/user/email/${id}/primary`,
         });
-        return result.body;
     }
 
     /**
@@ -429,14 +411,13 @@ export class UserService {
      * @returns Email Set Primary Email Response
      * @throws ApiError
      */
-    public static async quantuAppWebControllerUserEmailSetPrimary2(
+    public static quantuAppWebControllerUserEmailSetPrimary2(
         id: number,
-    ): Promise<Email> {
-        const result = await __request({
+    ): CancelablePromise<Email> {
+        return __request({
             method: 'PUT',
             path: `/user/email/${id}/primary`,
         });
-        return result.body;
     }
 
     /**
@@ -446,16 +427,15 @@ export class UserService {
      * @returns Email Create an Email Response
      * @throws ApiError
      */
-    public static async quantuAppWebControllerUserEmailCreate(
+    public static quantuAppWebControllerUserEmailCreate(
         requestBody: EmailCreate,
-    ): Promise<Email> {
-        const result = await __request({
+    ): CancelablePromise<Email> {
+        return __request({
             method: 'POST',
             path: `/user/email`,
             body: requestBody,
             mediaType: 'application/json',
         });
-        return result.body;
     }
 
     /**
@@ -466,15 +446,14 @@ export class UserService {
      * @returns void
      * @throws ApiError
      */
-    public static async quantuAppWebControllerUserQuestionDelete(
+    public static quantuAppWebControllerUserQuestionDelete(
         id: number,
         organizationId: number,
-    ): Promise<void> {
-        const result = await __request({
+    ): CancelablePromise<void> {
+        return __request({
             method: 'DELETE',
             path: `/user/organizations/${organizationId}/questions/${id}`,
         });
-        return result.body;
     }
 
     /**
@@ -485,15 +464,14 @@ export class UserService {
      * @returns QuestionPrivate Organization/Quiz Question
      * @throws ApiError
      */
-    public static async quantuAppWebControllerUserQuestionShow(
+    public static quantuAppWebControllerUserQuestionShow(
         id: number,
         organizationId: number,
-    ): Promise<QuestionPrivate> {
-        const result = await __request({
+    ): CancelablePromise<QuestionPrivate> {
+        return __request({
             method: 'GET',
             path: `/user/organizations/${organizationId}/questions/${id}`,
         });
-        return result.body;
     }
 
     /**
@@ -505,18 +483,17 @@ export class UserService {
      * @returns QuestionPrivate Organization/Quiz Question
      * @throws ApiError
      */
-    public static async quantuAppWebControllerUserQuestionUpdate(
+    public static quantuAppWebControllerUserQuestionUpdate(
         id: number,
         organizationId: number,
         requestBody: QuestionUpdate,
-    ): Promise<QuestionPrivate> {
-        const result = await __request({
+    ): CancelablePromise<QuestionPrivate> {
+        return __request({
             method: 'PATCH',
             path: `/user/organizations/${organizationId}/questions/${id}`,
             body: requestBody,
             mediaType: 'application/json',
         });
-        return result.body;
     }
 
     /**
@@ -528,18 +505,17 @@ export class UserService {
      * @returns QuestionPrivate Organization/Quiz Question
      * @throws ApiError
      */
-    public static async quantuAppWebControllerUserQuestionUpdate2(
+    public static quantuAppWebControllerUserQuestionUpdate2(
         id: number,
         organizationId: number,
         requestBody: QuestionUpdate,
-    ): Promise<QuestionPrivate> {
-        const result = await __request({
+    ): CancelablePromise<QuestionPrivate> {
+        return __request({
             method: 'PUT',
             path: `/user/organizations/${organizationId}/questions/${id}`,
             body: requestBody,
             mediaType: 'application/json',
         });
-        return result.body;
     }
 
     /**
@@ -548,12 +524,11 @@ export class UserService {
      * @returns OrganizationList User Organizations
      * @throws ApiError
      */
-    public static async quantuAppWebControllerUserOrganizationIndex(): Promise<OrganizationList> {
-        const result = await __request({
+    public static quantuAppWebControllerUserOrganizationIndex(): CancelablePromise<OrganizationList> {
+        return __request({
             method: 'GET',
             path: `/user/organizations`,
         });
-        return result.body;
     }
 
     /**
@@ -563,16 +538,15 @@ export class UserService {
      * @returns Organization User Organization
      * @throws ApiError
      */
-    public static async quantuAppWebControllerUserOrganizationCreate(
+    public static quantuAppWebControllerUserOrganizationCreate(
         requestBody: OrganizationCreate,
-    ): Promise<Organization> {
-        const result = await __request({
+    ): CancelablePromise<Organization> {
+        return __request({
             method: 'POST',
             path: `/user/organizations`,
             body: requestBody,
             mediaType: 'application/json',
         });
-        return result.body;
     }
 
     /**
@@ -582,14 +556,13 @@ export class UserService {
      * @returns void
      * @throws ApiError
      */
-    public static async quantuAppWebControllerUserOrganizationDelete(
+    public static quantuAppWebControllerUserOrganizationDelete(
         id: number,
-    ): Promise<void> {
-        const result = await __request({
+    ): CancelablePromise<void> {
+        return __request({
             method: 'DELETE',
             path: `/user/organizations/${id}`,
         });
-        return result.body;
     }
 
     /**
@@ -599,14 +572,13 @@ export class UserService {
      * @returns Organization User Organization
      * @throws ApiError
      */
-    public static async quantuAppWebControllerUserOrganizationShow(
+    public static quantuAppWebControllerUserOrganizationShow(
         id: number,
-    ): Promise<Organization> {
-        const result = await __request({
+    ): CancelablePromise<Organization> {
+        return __request({
             method: 'GET',
             path: `/user/organizations/${id}`,
         });
-        return result.body;
     }
 
     /**
@@ -617,17 +589,16 @@ export class UserService {
      * @returns Organization User Organization
      * @throws ApiError
      */
-    public static async quantuAppWebControllerUserOrganizationUpdate(
+    public static quantuAppWebControllerUserOrganizationUpdate(
         id: number,
         requestBody: OrganizationUpdate,
-    ): Promise<Organization> {
-        const result = await __request({
+    ): CancelablePromise<Organization> {
+        return __request({
             method: 'PATCH',
             path: `/user/organizations/${id}`,
             body: requestBody,
             mediaType: 'application/json',
         });
-        return result.body;
     }
 
     /**
@@ -638,17 +609,16 @@ export class UserService {
      * @returns Organization User Organization
      * @throws ApiError
      */
-    public static async quantuAppWebControllerUserOrganizationUpdate2(
+    public static quantuAppWebControllerUserOrganizationUpdate2(
         id: number,
         requestBody: OrganizationUpdate,
-    ): Promise<Organization> {
-        const result = await __request({
+    ): CancelablePromise<Organization> {
+        return __request({
             method: 'PUT',
             path: `/user/organizations/${id}`,
             body: requestBody,
             mediaType: 'application/json',
         });
-        return result.body;
     }
 
     /**
@@ -658,17 +628,16 @@ export class UserService {
      * @returns UserPrivate Confirmed User Email Response
      * @throws ApiError
      */
-    public static async quantuAppWebControllerUserEmailConfirm(
+    public static quantuAppWebControllerUserEmailConfirm(
         confirmationToken: string,
-    ): Promise<UserPrivate> {
-        const result = await __request({
+    ): CancelablePromise<UserPrivate> {
+        return __request({
             method: 'PATCH',
             path: `/user/email/confirm`,
             query: {
                 'confirmationToken': confirmationToken,
             },
         });
-        return result.body;
     }
 
     /**
@@ -678,17 +647,16 @@ export class UserService {
      * @returns UserPrivate Confirmed User Email Response
      * @throws ApiError
      */
-    public static async quantuAppWebControllerUserEmailConfirm2(
+    public static quantuAppWebControllerUserEmailConfirm2(
         confirmationToken: string,
-    ): Promise<UserPrivate> {
-        const result = await __request({
+    ): CancelablePromise<UserPrivate> {
+        return __request({
             method: 'PUT',
             path: `/user/email/confirm`,
             query: {
                 'confirmationToken': confirmationToken,
             },
         });
-        return result.body;
     }
 
     /**
@@ -699,15 +667,14 @@ export class UserService {
      * @returns void
      * @throws ApiError
      */
-    public static async quantuAppWebControllerUserAssetDelete(
+    public static quantuAppWebControllerUserAssetDelete(
         id: number,
         organizationId: number,
-    ): Promise<void> {
-        const result = await __request({
+    ): CancelablePromise<void> {
+        return __request({
             method: 'DELETE',
             path: `/user/organizations/${organizationId}/assets/${id}`,
         });
-        return result.body;
     }
 
     /**
@@ -719,19 +686,18 @@ export class UserService {
      * @returns Asset Organization Asset
      * @throws ApiError
      */
-    public static async quantuAppWebControllerUserAssetShow(
+    public static quantuAppWebControllerUserAssetShow(
         id: number,
         organizationId: number,
         parentId?: number,
-    ): Promise<Asset> {
-        const result = await __request({
+    ): CancelablePromise<Asset> {
+        return __request({
             method: 'GET',
             path: `/user/organizations/${organizationId}/assets/${id}`,
             query: {
                 'parentId': parentId,
             },
         });
-        return result.body;
     }
 
     /**
@@ -739,21 +705,21 @@ export class UserService {
      * Returns organization's updated asset
      * @param id Asset Id
      * @param organizationId Organization Id
-     * @param requestBody Request body to update asset
+     * @param formData Request body to update asset
      * @returns Asset Organization Asset
      * @throws ApiError
      */
-    public static async quantuAppWebControllerUserAssetUpdate(
+    public static quantuAppWebControllerUserAssetUpdate(
         id: number,
         organizationId: number,
-        requestBody: AssetUpdate,
-    ): Promise<Asset> {
-        const result = await __request({
+        formData: AssetUpdate,
+    ): CancelablePromise<Asset> {
+        return __request({
             method: 'PATCH',
             path: `/user/organizations/${organizationId}/assets/${id}`,
-            body: requestBody,
+            formData: formData,
+            mediaType: 'multipart/form-data',
         });
-        return result.body;
     }
 
     /**
@@ -761,21 +727,21 @@ export class UserService {
      * Returns organization's updated asset
      * @param id Asset Id
      * @param organizationId Organization Id
-     * @param requestBody Request body to update asset
+     * @param formData Request body to update asset
      * @returns Asset Organization Asset
      * @throws ApiError
      */
-    public static async quantuAppWebControllerUserAssetUpdate2(
+    public static quantuAppWebControllerUserAssetUpdate2(
         id: number,
         organizationId: number,
-        requestBody: AssetUpdate,
-    ): Promise<Asset> {
-        const result = await __request({
+        formData: AssetUpdate,
+    ): CancelablePromise<Asset> {
+        return __request({
             method: 'PUT',
             path: `/user/organizations/${organizationId}/assets/${id}`,
-            body: requestBody,
+            formData: formData,
+            mediaType: 'multipart/form-data',
         });
-        return result.body;
     }
 
 }

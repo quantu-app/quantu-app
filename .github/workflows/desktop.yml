@@ -9,7 +9,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        platform: [macos-latest, ubuntu-latest, windows-latest]
+        platform: [macos-latest, ubuntu-latest] # windows-latest
 
     runs-on: ${{ matrix.platform }}
     steps:
@@ -27,9 +27,9 @@ jobs:
       - run: node scripts/replaceSsh.cjs
       - run: npm ci
       - run: npm run web.build
-      - run: rm -r node_modules
-      - run: npm i --only=production
-      - run: npm i pkg -D
+      - run: npm run desktop.prebuild
+      - run: rm -rf node_modules
+      - run: npm i pkg@5.4.1 -g
       - run: npm run desktop.build
       - id: tag
         run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"

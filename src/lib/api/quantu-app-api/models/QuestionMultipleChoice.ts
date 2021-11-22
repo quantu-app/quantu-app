@@ -14,8 +14,8 @@ export type QuestionMultipleChoice = {
             /**
              * choice content
              */
-            content: Array<any>,
-        },
+            content: Array<any>;
+        };
     };
     /**
      * question content

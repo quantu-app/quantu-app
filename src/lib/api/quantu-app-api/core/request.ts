@@ -4,6 +4,8 @@
 import { ApiError } from './ApiError';
 import type { ApiRequestOptions } from './ApiRequestOptions';
 import type { ApiResult } from './ApiResult';
+import { CancelablePromise } from './CancelablePromise';
+import type { OnCancel } from './CancelablePromise';
 import { OpenAPI } from './OpenAPI';
 
 function isDefined<T>(value: T | null | undefined): value is Exclude<T, null | undefined> {
@@ -32,6 +34,7 @@ function base64(str: string): string {
 
 function getQueryString(params: Record<string, any>): string {
     const qs: string[] = [];
+
     Object.keys(params).forEach(key => {
         const value = params[key];
         if (isDefined(value)) {
@@ -44,9 +47,11 @@ function getQueryString(params: Record<string, any>): string {
             }
         }
     });
+
     if (qs.length > 0) {
         return `?${qs.join('&')}`;
     }
+
     return '';
 }
 
@@ -56,18 +61,27 @@ function getUrl(options: ApiRequestOptions): string {
     if (options.query) {
         return `${url}${getQueryString(options.query)}`;
     }
+
     return url;
 }
 
-function getFormData(params: Record<string, any>): FormData {
-    const formData = new FormData();
-    Object.keys(params).forEach(key => {
-        const value = params[key];
-        if (isDefined(value)) {
-            formData.append(key, value);
-        }
-    });
-    return formData;
+function getFormData(options: ApiRequestOptions): FormData | undefined {
+    if (options.formData) {
+        const formData = new FormData();
+
+        Object.entries(options.formData)
+            .filter(([_, value]) => isDefined(value))
+            .forEach(([key, value]) => {
+                if (isString(value) || isBlob(value)) {
+                    formData.append(key, value);
+                } else {
+                    formData.append(key, JSON.stringify(value));
+                }
+            });
+
+        return formData;
+    }
+    return;
 }
 
 type Resolver<T> = (options: ApiRequestOptions) => Promise<T>;
@@ -90,11 +104,11 @@ async function getHeaders(options: ApiRequestOptions): Promise<Headers> {
         ...additionalHeaders,
         ...options.headers,
     })
-        .filter(([key, value]) => isDefined(value))
+        .filter(([_, value]) => isDefined(value))
         .reduce((headers, [key, value]) => ({
             ...headers,
-            [key]: value,
-        }), {});
+            [key]: String(value),
+        }), {} as Record<string, string>);
 
     const headers = new Headers(defaultHeaders);
 
@@ -118,13 +132,11 @@ async function getHeaders(options: ApiRequestOptions): Promise<Headers> {
             headers.append('Content-Type', 'application/json');
         }
     }
+
     return headers;
 }
 
 function getRequestBody(options: ApiRequestOptions): BodyInit | undefined {
-    if (options.formData) {
-        return getFormData(options.formData);
-    }
     if (options.body) {
         if (options.mediaType?.includes('/json')) {
             return JSON.stringify(options.body)
@@ -134,29 +146,43 @@ function getRequestBody(options: ApiRequestOptions): BodyInit | undefined {
             return JSON.stringify(options.body);
         }
     }
-    return undefined;
+    return;
 }
 
-async function sendRequest(options: ApiRequestOptions, url: string): Promise<Response> {
+async function sendRequest(
+    options: ApiRequestOptions,
+    url: string,
+    formData: FormData | undefined,
+    body: BodyInit | undefined,
+    headers: Headers,
+    onCancel: OnCancel
+): Promise<Response> {
+    const controller = new AbortController();
+
     const request: RequestInit = {
+        headers,
+        body: body || formData,
         method: options.method,
-        headers: await getHeaders(options),
-        body: getRequestBody(options),
+        signal: controller.signal,
     };
+
     if (OpenAPI.WITH_CREDENTIALS) {
-        request.credentials = 'include';
+        request.credentials = OpenAPI.CREDENTIALS;
     }
+
+    onCancel(() => controller.abort());
+
     return await fetch(url, request);
 }
 
-function getResponseHeader(response: Response, responseHeader?: string): string | null {
+function getResponseHeader(response: Response, responseHeader?: string): string | undefined {
     if (responseHeader) {
         const content = response.headers.get(responseHeader);
         if (isString(content)) {
             return content;
         }
     }
-    return null;
+    return;
 }
 
 async function getResponseBody(response: Response): Promise<any> {
@@ -175,7 +201,7 @@ async function getResponseBody(response: Response): Promise<any> {
             console.error(error);
         }
     }
-    return null;
+    return;
 }
 
 function catchErrors(options: ApiRequestOptions, result: ApiResult): void {
@@ -203,23 +229,36 @@ function catchErrors(options: ApiRequestOptions, result: ApiResult): void {
 /**
  * Request using fetch client
  * @param options The request options from the the service
- * @returns ApiResult
+ * @returns CancelablePromise<T>
  * @throws ApiError
  */
-export async function request(options: ApiRequestOptions): Promise<ApiResult> {
-    const url = getUrl(options);
-    const response = await sendRequest(options, url);
-    const responseBody = await getResponseBody(response);
-    const responseHeader = getResponseHeader(response, options.responseHeader);
+export function request<T>(options: ApiRequestOptions): CancelablePromise<T> {
+    return new CancelablePromise(async (resolve, reject, onCancel) => {
+        try {
+            const url = getUrl(options);
+            const formData = getFormData(options);
+            const body = getRequestBody(options);
+            const headers = await getHeaders(options);
 
-    const result: ApiResult = {
-        url,
-        ok: response.ok,
-        status: response.status,
-        statusText: response.statusText,
-        body: responseHeader || responseBody,
-    };
+            if (!onCancel.isCancelled) {
+                const response = await sendRequest(options, url, formData, body, headers, onCancel);
+                const responseBody = await getResponseBody(response);
+                const responseHeader = getResponseHeader(response, options.responseHeader);
 
-    catchErrors(options, result);
-    return result;
+                const result: ApiResult = {
+                    url,
+                    ok: response.ok,
+                    status: response.status,
+                    statusText: response.statusText,
+                    body: responseHeader || responseBody,
+                };
+
+                catchErrors(options, result);
+
+                resolve(result.body);
+            }
+        } catch (error) {
+            reject(error);
+        }
+    });
 }

@@ -10,6 +10,7 @@ type Config = {
     BASE: string;
     VERSION: string;
     WITH_CREDENTIALS: boolean;
+    CREDENTIALS: 'include' | 'omit' | 'same-origin';
     TOKEN?: string | Resolver<string>;
     USERNAME?: string | Resolver<string>;
     PASSWORD?: string | Resolver<string>;
@@ -21,6 +22,7 @@ export const OpenAPI: Config = {
     BASE: 'http://localhost:4000',
     VERSION: '0.1.0',
     WITH_CREDENTIALS: false,
+    CREDENTIALS: 'include',
     TOKEN: undefined,
     USERNAME: undefined,
     PASSWORD: undefined,

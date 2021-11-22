@@ -2,6 +2,7 @@
 /* tslint:disable */
 /* eslint-disable */
 export { ApiError } from './core/ApiError';
+export { CancelablePromise } from './core/CancelablePromise';
 export { OpenAPI } from './core/OpenAPI';
 
 export type { Asset } from './models/Asset';
@@ -53,5 +54,6 @@ export { AuthService } from './services/AuthService';
 export { OrganizationService } from './services/OrganizationService';
 export { QuestionService } from './services/QuestionService';
 export { QuizService } from './services/QuizService';
+export { ResultService } from './services/ResultService';
 export { UserService } from './services/UserService';
 export { UtilService } from './services/UtilService';

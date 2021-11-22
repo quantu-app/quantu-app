@@ -9,7 +9,7 @@ export type AssetUpdate = {
     /**
      * Asset file name
      */
-    name?: string;
+    name?: Blob;
     /**
      * Asset parent id
      */

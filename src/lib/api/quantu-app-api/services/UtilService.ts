@@ -2,6 +2,7 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { HealthCheck } from '../models/HealthCheck';
+import type { CancelablePromise } from '../core/CancelablePromise';
 import { request as __request } from '../core/request';
 
 export class UtilService {
@@ -12,12 +13,11 @@ export class UtilService {
      * @returns HealthCheck Health Check Response
      * @throws ApiError
      */
-    public static async quantuAppWebControllerHealthCheckHealth(): Promise<HealthCheck> {
-        const result = await __request({
+    public static quantuAppWebControllerHealthCheckHealth(): CancelablePromise<HealthCheck> {
+        return __request({
             method: 'GET',
             path: `/health`,
         });
-        return result.body;
     }
 
     /**
@@ -26,12 +26,11 @@ export class UtilService {
      * @returns HealthCheck Health Check Response
      * @throws ApiError
      */
-    public static async quantuAppWebControllerHealthCheckHealth2(): Promise<HealthCheck> {
-        const result = await __request({
+    public static quantuAppWebControllerHealthCheckHealth2(): CancelablePromise<HealthCheck> {
+        return __request({
             method: 'HEAD',
             path: `/health`,
         });
-        return result.body;
     }
 
 }

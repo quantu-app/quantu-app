@@ -1,7 +1,7 @@
-import { EventEmitter } from 'eventemitter3';
+import ee3 from 'eventemitter3';
 
 export class AbortSignal {
-	eventEmitter = new EventEmitter();
+	eventEmitter = new ee3.EventEmitter();
 	onabort = null;
 	aborted = false;
 

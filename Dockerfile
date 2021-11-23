@@ -1,7 +1,7 @@
 FROM node:14-alpine as node-builder
 
 RUN apk add --no-cache python3 g++ make zlib-dev
-RUN npm install -g npm@8.1.3
+RUN npm install -g npm@8.1.4
 
 WORKDIR /app
 
@@ -16,9 +16,10 @@ ENV VITE_API_URL=$VITE_API_URL
 ARG VITE_WS_URL=wss://api.quantu.app
 ENV VITE_WS_URL=$VITE_WS_URL
 
-COPY . .
 RUN echo "VITE_API_URL=$VITE_API_URL" >> .env && \
   echo "VITE_WS_URL=$VITE_WS_URL" >> .env
+
+COPY . .
 
 RUN NODE_ENV=production npm run web.build
 

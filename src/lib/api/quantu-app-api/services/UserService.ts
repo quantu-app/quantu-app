@@ -5,8 +5,16 @@ import type { Asset } from '../models/Asset';
 import type { AssetCreate } from '../models/AssetCreate';
 import type { AssetList } from '../models/AssetList';
 import type { AssetUpdate } from '../models/AssetUpdate';
+import type { Course } from '../models/Course';
+import type { CourseCreate } from '../models/CourseCreate';
+import type { CourseList } from '../models/CourseList';
+import type { CourseUpdate } from '../models/CourseUpdate';
 import type { Email } from '../models/Email';
 import type { EmailCreate } from '../models/EmailCreate';
+import type { Lesson } from '../models/Lesson';
+import type { LessonCreate } from '../models/LessonCreate';
+import type { LessonList } from '../models/LessonList';
+import type { LessonUpdate } from '../models/LessonUpdate';
 import type { Organization } from '../models/Organization';
 import type { OrganizationCreate } from '../models/OrganizationCreate';
 import type { OrganizationList } from '../models/OrganizationList';
@@ -21,6 +29,10 @@ import type { QuizCreate } from '../models/QuizCreate';
 import type { QuizList } from '../models/QuizList';
 import type { QuizQuestionIds } from '../models/QuizQuestionIds';
 import type { QuizUpdate } from '../models/QuizUpdate';
+import type { Unit } from '../models/Unit';
+import type { UnitCreate } from '../models/UnitCreate';
+import type { UnitList } from '../models/UnitList';
+import type { UnitUpdate } from '../models/UnitUpdate';
 import type { UsernameUpdate } from '../models/UsernameUpdate';
 import type { UserPrivate } from '../models/UserPrivate';
 import type { UserPublic } from '../models/UserPublic';
@@ -49,15 +61,20 @@ export class UserService {
      * List Quizzes
      * Returns organization's quizzes
      * @param organizationId Organization Id
+     * @param unitId Quiz Unit Id
      * @returns QuizList Organization Quizzes
      * @throws ApiError
      */
     public static quantuAppWebControllerUserQuizIndex(
         organizationId: number,
+        unitId?: number,
     ): CancelablePromise<QuizList> {
         return __request({
             method: 'GET',
             path: `/user/organizations/${organizationId}/quizzes`,
+            query: {
+                'unitId': unitId,
+            },
         });
     }
 
@@ -104,6 +121,47 @@ export class UserService {
     }
 
     /**
+     * List Lessons
+     * Returns organization's lessons
+     * @param organizationId Organization Id
+     * @param unitId Lesson Unit Id
+     * @returns LessonList Organization Lessons
+     * @throws ApiError
+     */
+    public static quantuAppWebControllerUserLessonIndex(
+        organizationId: number,
+        unitId?: number,
+    ): CancelablePromise<LessonList> {
+        return __request({
+            method: 'GET',
+            path: `/user/organizations/${organizationId}/lessons`,
+            query: {
+                'unitId': unitId,
+            },
+        });
+    }
+
+    /**
+     * Create a Lesson
+     * Returns organization's created lesson
+     * @param organizationId Organization Id
+     * @param requestBody Request body to create lesson
+     * @returns Lesson Organization Lesson
+     * @throws ApiError
+     */
+    public static quantuAppWebControllerUserLessonCreate(
+        organizationId: number,
+        requestBody: LessonCreate,
+    ): CancelablePromise<Lesson> {
+        return __request({
+            method: 'POST',
+            path: `/user/organizations/${organizationId}/lessons`,
+            body: requestBody,
+            mediaType: 'application/json',
+        });
+    }
+
+    /**
      * Reset Password
      * Resets the User's Password creating a new Token in the process
      * @param requestBody reset user password
@@ -134,6 +192,42 @@ export class UserService {
         return __request({
             method: 'PUT',
             path: `/user/password/reset`,
+            body: requestBody,
+            mediaType: 'application/json',
+        });
+    }
+
+    /**
+     * List Courses
+     * Returns organization's courses
+     * @param organizationId Organization Id
+     * @returns CourseList Organization Courses
+     * @throws ApiError
+     */
+    public static quantuAppWebControllerUserCourseIndex(
+        organizationId: number,
+    ): CancelablePromise<CourseList> {
+        return __request({
+            method: 'GET',
+            path: `/user/organizations/${organizationId}/courses`,
+        });
+    }
+
+    /**
+     * Create a Course
+     * Returns organization's created course
+     * @param organizationId Organization Id
+     * @param requestBody Request body to create course
+     * @returns Course Organization Course
+     * @throws ApiError
+     */
+    public static quantuAppWebControllerUserCourseCreate(
+        organizationId: number,
+        requestBody: CourseCreate,
+    ): CancelablePromise<Course> {
+        return __request({
+            method: 'POST',
+            path: `/user/organizations/${organizationId}/courses`,
             body: requestBody,
             mediaType: 'application/json',
         });
@@ -267,6 +361,86 @@ export class UserService {
         return __request({
             method: 'POST',
             path: `/user/organizations/${organizationId}/quizzes/${id}/remove-questions`,
+            body: requestBody,
+            mediaType: 'application/json',
+        });
+    }
+
+    /**
+     * Delete a Course
+     * Returns nothing
+     * @param id Course Id
+     * @param organizationId Organization Id
+     * @returns void
+     * @throws ApiError
+     */
+    public static quantuAppWebControllerUserCourseDelete(
+        id: number,
+        organizationId: number,
+    ): CancelablePromise<void> {
+        return __request({
+            method: 'DELETE',
+            path: `/user/organizations/${organizationId}/courses/${id}`,
+        });
+    }
+
+    /**
+     * Get a Course
+     * Returns organization's course
+     * @param id Course Id
+     * @param organizationId Organization Id
+     * @returns Course Organization Course
+     * @throws ApiError
+     */
+    public static quantuAppWebControllerUserCourseShow(
+        id: number,
+        organizationId: number,
+    ): CancelablePromise<Course> {
+        return __request({
+            method: 'GET',
+            path: `/user/organizations/${organizationId}/courses/${id}`,
+        });
+    }
+
+    /**
+     * Updates a Course
+     * Returns organization's updated course
+     * @param id Course Id
+     * @param organizationId Organization Id
+     * @param requestBody Request body to update course
+     * @returns Course Organization Course
+     * @throws ApiError
+     */
+    public static quantuAppWebControllerUserCourseUpdate(
+        id: number,
+        organizationId: number,
+        requestBody: CourseUpdate,
+    ): CancelablePromise<Course> {
+        return __request({
+            method: 'PATCH',
+            path: `/user/organizations/${organizationId}/courses/${id}`,
+            body: requestBody,
+            mediaType: 'application/json',
+        });
+    }
+
+    /**
+     * Updates a Course
+     * Returns organization's updated course
+     * @param id Course Id
+     * @param organizationId Organization Id
+     * @param requestBody Request body to update course
+     * @returns Course Organization Course
+     * @throws ApiError
+     */
+    public static quantuAppWebControllerUserCourseUpdate2(
+        id: number,
+        organizationId: number,
+        requestBody: CourseUpdate,
+    ): CancelablePromise<Course> {
+        return __request({
+            method: 'PUT',
+            path: `/user/organizations/${organizationId}/courses/${id}`,
             body: requestBody,
             mediaType: 'application/json',
         });
@@ -421,6 +595,86 @@ export class UserService {
     }
 
     /**
+     * Delete a Unit
+     * Returns nothing
+     * @param id Unit Id
+     * @param organizationId Organization Id
+     * @returns void
+     * @throws ApiError
+     */
+    public static quantuAppWebControllerUserUnitDelete(
+        id: number,
+        organizationId: number,
+    ): CancelablePromise<void> {
+        return __request({
+            method: 'DELETE',
+            path: `/user/organizations/${organizationId}/units/${id}`,
+        });
+    }
+
+    /**
+     * Get a Unit
+     * Returns organization's unit
+     * @param id Unit Id
+     * @param organizationId Organization Id
+     * @returns Unit Organization Unit
+     * @throws ApiError
+     */
+    public static quantuAppWebControllerUserUnitShow(
+        id: number,
+        organizationId: number,
+    ): CancelablePromise<Unit> {
+        return __request({
+            method: 'GET',
+            path: `/user/organizations/${organizationId}/units/${id}`,
+        });
+    }
+
+    /**
+     * Updates a Unit
+     * Returns organization's updated unit
+     * @param id Unit Id
+     * @param organizationId Organization Id
+     * @param requestBody Request body to update unit
+     * @returns Unit Organization Unit
+     * @throws ApiError
+     */
+    public static quantuAppWebControllerUserUnitUpdate(
+        id: number,
+        organizationId: number,
+        requestBody: UnitUpdate,
+    ): CancelablePromise<Unit> {
+        return __request({
+            method: 'PATCH',
+            path: `/user/organizations/${organizationId}/units/${id}`,
+            body: requestBody,
+            mediaType: 'application/json',
+        });
+    }
+
+    /**
+     * Updates a Unit
+     * Returns organization's updated unit
+     * @param id Unit Id
+     * @param organizationId Organization Id
+     * @param requestBody Request body to update unit
+     * @returns Unit Organization Unit
+     * @throws ApiError
+     */
+    public static quantuAppWebControllerUserUnitUpdate2(
+        id: number,
+        organizationId: number,
+        requestBody: UnitUpdate,
+    ): CancelablePromise<Unit> {
+        return __request({
+            method: 'PUT',
+            path: `/user/organizations/${organizationId}/units/${id}`,
+            body: requestBody,
+            mediaType: 'application/json',
+        });
+    }
+
+    /**
      * Create an Eamil
      * Create and returns an Email
      * @param requestBody Create Email Body
@@ -433,6 +687,47 @@ export class UserService {
         return __request({
             method: 'POST',
             path: `/user/email`,
+            body: requestBody,
+            mediaType: 'application/json',
+        });
+    }
+
+    /**
+     * List Units
+     * Returns organization's units
+     * @param organizationId Organization Id
+     * @param courseId Unit Course Id
+     * @returns UnitList Organization Units
+     * @throws ApiError
+     */
+    public static quantuAppWebControllerUserUnitIndex(
+        organizationId: number,
+        courseId?: number,
+    ): CancelablePromise<UnitList> {
+        return __request({
+            method: 'GET',
+            path: `/user/organizations/${organizationId}/units`,
+            query: {
+                'courseId': courseId,
+            },
+        });
+    }
+
+    /**
+     * Create a Unit
+     * Returns organization's created unit
+     * @param organizationId Organization Id
+     * @param requestBody Request body to create unit
+     * @returns Unit Organization Unit
+     * @throws ApiError
+     */
+    public static quantuAppWebControllerUserUnitCreate(
+        organizationId: number,
+        requestBody: UnitCreate,
+    ): CancelablePromise<Unit> {
+        return __request({
+            method: 'POST',
+            path: `/user/organizations/${organizationId}/units`,
             body: requestBody,
             mediaType: 'application/json',
         });
@@ -656,6 +951,86 @@ export class UserService {
             query: {
                 'confirmationToken': confirmationToken,
             },
+        });
+    }
+
+    /**
+     * Delete a Lesson
+     * Returns nothing
+     * @param id Lesson Id
+     * @param organizationId Organization Id
+     * @returns void
+     * @throws ApiError
+     */
+    public static quantuAppWebControllerUserLessonDelete(
+        id: number,
+        organizationId: number,
+    ): CancelablePromise<void> {
+        return __request({
+            method: 'DELETE',
+            path: `/user/organizations/${organizationId}/lessons/${id}`,
+        });
+    }
+
+    /**
+     * Get a Lesson
+     * Returns organization's lesson
+     * @param id Lesson Id
+     * @param organizationId Organization Id
+     * @returns Lesson Organization Lesson
+     * @throws ApiError
+     */
+    public static quantuAppWebControllerUserLessonShow(
+        id: number,
+        organizationId: number,
+    ): CancelablePromise<Lesson> {
+        return __request({
+            method: 'GET',
+            path: `/user/organizations/${organizationId}/lessons/${id}`,
+        });
+    }
+
+    /**
+     * Updates a Lesson
+     * Returns organization's updated lesson
+     * @param id Lesson Id
+     * @param organizationId Organization Id
+     * @param requestBody Request body to update lesson
+     * @returns Lesson Organization Lesson
+     * @throws ApiError
+     */
+    public static quantuAppWebControllerUserLessonUpdate(
+        id: number,
+        organizationId: number,
+        requestBody: LessonUpdate,
+    ): CancelablePromise<Lesson> {
+        return __request({
+            method: 'PATCH',
+            path: `/user/organizations/${organizationId}/lessons/${id}`,
+            body: requestBody,
+            mediaType: 'application/json',
+        });
+    }
+
+    /**
+     * Updates a Lesson
+     * Returns organization's updated lesson
+     * @param id Lesson Id
+     * @param organizationId Organization Id
+     * @param requestBody Request body to update lesson
+     * @returns Lesson Organization Lesson
+     * @throws ApiError
+     */
+    public static quantuAppWebControllerUserLessonUpdate2(
+        id: number,
+        organizationId: number,
+        requestBody: LessonUpdate,
+    ): CancelablePromise<Lesson> {
+        return __request({
+            method: 'PUT',
+            path: `/user/organizations/${organizationId}/lessons/${id}`,
+            body: requestBody,
+            mediaType: 'application/json',
         });
     }
 

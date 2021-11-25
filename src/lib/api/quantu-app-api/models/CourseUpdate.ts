@@ -3,31 +3,23 @@
 /* eslint-disable */
 
 /**
- * quiz update
+ * course update
  */
-export type QuizUpdate = {
+export type CourseUpdate = {
     /**
-     * Quiz description
+     * Course description
      */
     description?: string | null;
     /**
-     * Quiz index in unit
-     */
-    index?: number | null;
-    /**
-     * Quiz name
+     * Course name
      */
     name?: string | null;
     /**
-     * Quiz published status
+     * Course published status
      */
     published?: boolean | null;
     /**
-     * Quiz tags
+     * Course tags
      */
     tags?: Array<string> | null;
-    /**
-     * Unit Id
-     */
-    unitId?: number | null;
 }

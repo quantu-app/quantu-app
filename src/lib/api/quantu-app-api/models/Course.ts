@@ -3,11 +3,11 @@
 /* eslint-disable */
 
 /**
- * quiz show
+ * course show
  */
-export type Quiz = {
+export type Course = {
     /**
-     * Quiz description
+     * Course description
      */
     description: string;
     /**
@@ -15,15 +15,11 @@ export type Quiz = {
      */
     id: number;
     /**
-     * Quiz index in unit
-     */
-    index?: number | null;
-    /**
      * Creation timestamp
      */
     insertedAt: string;
     /**
-     * Quiz name
+     * Course name
      */
     name: string;
     /**
@@ -31,17 +27,13 @@ export type Quiz = {
      */
     organizationId: number;
     /**
-     * Quiz published status
+     * Course published status
      */
     published: boolean | null;
     /**
-     * Quiz tags
+     * Course tags
      */
     tags: Array<string>;
-    /**
-     * Unit Id
-     */
-    unitId?: number | null;
     /**
      * Update timestamp
      */

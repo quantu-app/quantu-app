@@ -33,15 +33,20 @@ export class QuizService {
      * List Quizzes
      * Returns organization's quizzes
      * @param organizationId Organization Id
+     * @param unitId Quiz Unit Id
      * @returns QuizList Organization Quizzes
      * @throws ApiError
      */
     public static quantuAppWebControllerUserQuizIndex(
         organizationId: number,
+        unitId?: number,
     ): CancelablePromise<QuizList> {
         return __request({
             method: 'GET',
             path: `/user/organizations/${organizationId}/quizzes`,
+            query: {
+                'unitId': unitId,
+            },
         });
     }
 
@@ -228,17 +233,20 @@ export class QuizService {
      * List Quizzes
      * Returns organization's quizzes
      * @param organizationId Organization Id
+     * @param unitId Unit Id
      * @returns QuizList Organization Quizzes
      * @throws ApiError
      */
     public static quantuAppWebControllerQuizIndex(
         organizationId?: number,
+        unitId?: number,
     ): CancelablePromise<QuizList> {
         return __request({
             method: 'GET',
             path: `/quizzes`,
             query: {
                 'organizationId': organizationId,
+                'unitId': unitId,
             },
         });
     }

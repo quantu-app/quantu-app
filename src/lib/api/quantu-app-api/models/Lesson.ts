@@ -3,11 +3,15 @@
 /* eslint-disable */
 
 /**
- * quiz show
+ * lesson show
  */
-export type Quiz = {
+export type Lesson = {
     /**
-     * Quiz description
+     * Lesson content
+     */
+    content: Array<any>;
+    /**
+     * Lesson description
      */
     description: string;
     /**
@@ -15,7 +19,7 @@ export type Quiz = {
      */
     id: number;
     /**
-     * Quiz index in unit
+     * Lesson index in unit
      */
     index?: number | null;
     /**
@@ -23,7 +27,7 @@ export type Quiz = {
      */
     insertedAt: string;
     /**
-     * Quiz name
+     * Lesson name
      */
     name: string;
     /**
@@ -31,11 +35,11 @@ export type Quiz = {
      */
     organizationId: number;
     /**
-     * Quiz published status
+     * Lesson published status
      */
     published: boolean | null;
     /**
-     * Quiz tags
+     * Lesson tags
      */
     tags: Array<string>;
     /**

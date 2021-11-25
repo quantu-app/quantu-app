@@ -3,27 +3,31 @@
 /* eslint-disable */
 
 /**
- * quiz update
+ * lesson update
  */
-export type QuizUpdate = {
+export type LessonUpdate = {
     /**
-     * Quiz description
+     * Lesson content
+     */
+    content?: Array<any>;
+    /**
+     * Lesson description
      */
     description?: string | null;
     /**
-     * Quiz index in unit
+     * Lesson index in unit
      */
     index?: number | null;
     /**
-     * Quiz name
+     * Lesson name
      */
     name?: string | null;
     /**
-     * Quiz published status
+     * Lesson published status
      */
     published?: boolean | null;
     /**
-     * Quiz tags
+     * Lesson tags
      */
     tags?: Array<string> | null;
     /**

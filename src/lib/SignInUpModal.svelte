@@ -22,10 +22,12 @@
 
 		function onMessage(e: MessageEvent) {
 			const token = e.data;
-			childWindow.close();
-			signInWithToken(token);
-			loading = false;
-			closeModal();
+			if (typeof token === 'string') {
+				childWindow.close();
+				signInWithToken(token);
+				loading = false;
+				closeModal();
+			}
 		}
 
 		window.addEventListener('message', onMessage);

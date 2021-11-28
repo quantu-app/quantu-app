@@ -64,21 +64,35 @@
 	<hr />
 
 	<div class="row">
-		<div class="col">
+		<div class="col m-1">
+			<a
+				role="button"
+				class="btn btn-primary w-100"
+				href={`/user/organizations/${organization.id}/courses`}>Courses</a
+			>
+		</div>
+		<div class="col m-1">
+			<a
+				role="button"
+				class="btn btn-primary w-100"
+				href={`/user/organizations/${organization.id}/units`}>Units</a
+			>
+		</div>
+		<div class="col m-1">
 			<a
 				role="button"
 				class="btn btn-primary w-100"
 				href={`/user/organizations/${organization.id}/quizzes`}>Quizzes</a
 			>
 		</div>
-		<div class="col">
+		<div class="col m-1">
 			<a
 				role="button"
 				class="btn btn-primary w-100"
 				href={`/user/organizations/${organization.id}/questions`}>Questions</a
 			>
 		</div>
-		<div class="col">
+		<div class="col m-1">
 			<a
 				role="button"
 				class="btn btn-primary w-100"

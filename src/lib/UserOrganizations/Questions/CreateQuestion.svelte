@@ -15,6 +15,8 @@
 	import QuestionEditor from './QuestionEditor.svelte';
 
 	export let organizationId: number;
+	export let courseId: number = undefined;
+	export let unitId: number = undefined;
 	export let quizId: number | null;
 
 	let prevQuizId: number;

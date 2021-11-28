@@ -51,7 +51,7 @@
 </script>
 
 <svelte:head>
-	<title>Quiz</title>
+	<title>{quiz?.name || 'Quiz'}</title>
 </svelte:head>
 
 <OrganizationLayout

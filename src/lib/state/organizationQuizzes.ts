@@ -8,6 +8,9 @@ import { userEmitter } from './user';
 
 interface IOrganizationQuizzesStore {
 	byId: { [id: number]: Quiz };
+	byUnitId: {
+		[organizationId: number]: { [id: number]: Quiz };
+	};
 	byOrganizationId: {
 		[organizationId: number]: { [id: number]: Quiz };
 	};
@@ -15,6 +18,7 @@ interface IOrganizationQuizzesStore {
 
 const organizationQuizzesWritable = writable<IOrganizationQuizzesStore>({
 	byId: {},
+	byUnitId: {},
 	byOrganizationId: {}
 });
 
@@ -32,8 +36,14 @@ export async function getQuiz(organizationId: number, id: number) {
 	return quiz;
 }
 
-export async function getQuizzes(organizationId: number, force = false) {
+export async function getQuizzes(organizationId: number, unitId?: number, force = false) {
 	if (!force) {
+		if (unitId) {
+			const cachedLessons = Object.values(get(organizationQuizzes).byUnitId[unitId] || {});
+			if (cachedLessons.length) {
+				return cachedLessons.filter((unit) => unit.organizationId === organizationId);
+			}
+		}
 		if (organizationId) {
 			const cachedQuizzes = Object.values(
 				get(organizationQuizzesWritable).byOrganizationId[organizationId] || {}
@@ -76,6 +86,11 @@ function addToState(state: IOrganizationQuizzesStore, quiz: Quiz): IOrganization
 	const byOrganizationId =
 		state.byOrganizationId[quiz.organizationId] ||
 		(state.byOrganizationId[quiz.organizationId] = {});
+	if (quiz.unitId) {
+		const byUnitId = state.byUnitId[quiz.unitId] || (state.byUnitId[quiz.unitId] = {});
+		byUnitId[quiz.id] = quiz;
+		quiz = { ...quiz, unitId: null, index: null };
+	}
 	byOrganizationId[quiz.id] = quiz;
 	state.byId[quiz.id] = quiz;
 	return state;
@@ -85,6 +100,11 @@ function deleteFromState(state: IOrganizationQuizzesStore, quiz: Quiz): IOrganiz
 	const byOrganizationId =
 		state.byOrganizationId[quiz.organizationId] ||
 		(state.byOrganizationId[quiz.organizationId] = {});
+	for (const quizzes of Object.values(state.byUnitId || {})) {
+		if (quiz.id in quizzes) {
+			delete quizzes[quiz.id];
+		}
+	}
 	delete byOrganizationId[quiz.id];
 	delete state.byId[quiz.id];
 	return state;
@@ -94,6 +114,7 @@ if (browser) {
 	userEmitter.on('signOut', () =>
 		organizationQuizzesWritable.set({
 			byId: {},
+			byUnitId: {},
 			byOrganizationId: {}
 		})
 	);

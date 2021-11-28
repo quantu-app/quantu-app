@@ -18,6 +18,7 @@
 	import Search from '$lib/Search.svelte';
 
 	export let organizationId: number;
+	export let unitId: number = undefined;
 	export let quizzes: Quiz[];
 
 	$: filter = (quiz: Quiz) =>
@@ -25,10 +26,10 @@
 </script>
 
 <div class="container mb-2">
-	<ActionBar {organizationId} />
+	<ActionBar {organizationId} {unitId} />
 	<Search bind:filter={$state.quizNameFilter} />
 </div>
 
 <div class="container">
-	<QuizList {organizationId} quizzes={quizzes.filter(filter)} />
+	<QuizList {organizationId} {unitId} quizzes={quizzes.filter(filter)} />
 </div>

@@ -43,6 +43,10 @@ export type Lesson = {
      */
     tags: Array<string>;
     /**
+     * Lesson type
+     */
+    type?: Lesson.type | null;
+    /**
      * Unit Id
      */
     unitId?: number | null;
@@ -50,4 +54,16 @@ export type Lesson = {
      * Update timestamp
      */
     updatedAt: string;
+}
+
+export namespace Lesson {
+
+    /**
+     * Lesson type
+     */
+    export enum type {
+        LESSON = 'lesson',
+    }
+
+
 }

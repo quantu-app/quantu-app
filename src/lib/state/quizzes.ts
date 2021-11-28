@@ -8,11 +8,13 @@ import { userEmitter } from './user';
 
 interface IQuizzesStore {
 	byId: { [id: number]: Quiz };
+	byUnitId: { [unitId: number]: { [id: number]: Quiz } };
 	byOrganizationId: { [organizationId: number]: { [id: number]: Quiz } };
 }
 
 const quizzesWritable = writable<IQuizzesStore>({
 	byId: {},
+	byUnitId: {},
 	byOrganizationId: {}
 });
 
@@ -30,9 +32,18 @@ export async function getQuiz(id: number) {
 	return quiz;
 }
 
-export async function getQuizzes(organizationId?: number, force = true) {
+export async function getQuizzes(organizationId?: number, unitId?: number, force = true) {
 	if (!force) {
-		if (organizationId) {
+		if (unitId) {
+			const cachedUnits = Object.values(get(quizzesWritable).byUnitId[unitId] || {});
+			if (cachedUnits.length) {
+				if (organizationId) {
+					return cachedUnits.filter((unit) => unit.organizationId === organizationId);
+				} else {
+					return cachedUnits;
+				}
+			}
+		} else if (organizationId) {
 			const cachedQuizzes = Object.values(
 				get(quizzesWritable).byOrganizationId[organizationId] || {}
 			);
@@ -55,6 +66,11 @@ function addToState(state: IQuizzesStore, quiz: Quiz): IQuizzesStore {
 	const byOrganizationId =
 		state.byOrganizationId[quiz.organizationId] ||
 		(state.byOrganizationId[quiz.organizationId] = {});
+	if (quiz.unitId) {
+		const byUnitId = state.byUnitId[quiz.unitId] || (state.byUnitId[quiz.unitId] = {});
+		byUnitId[quiz.id] = quiz;
+		quiz = { ...quiz, unitId: null, index: null };
+	}
 	byOrganizationId[quiz.id] = quiz;
 	state.byId[quiz.id] = quiz;
 	return state;
@@ -64,6 +80,7 @@ if (browser) {
 	userEmitter.on('signOut', () =>
 		quizzesWritable.set({
 			byId: {},
+			byUnitId: {},
 			byOrganizationId: {}
 		})
 	);

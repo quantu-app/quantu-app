@@ -30,6 +30,7 @@ import type { QuizList } from '../models/QuizList';
 import type { QuizQuestionIds } from '../models/QuizQuestionIds';
 import type { QuizUpdate } from '../models/QuizUpdate';
 import type { Unit } from '../models/Unit';
+import type { UnitChildList } from '../models/UnitChildList';
 import type { UnitCreate } from '../models/UnitCreate';
 import type { UnitList } from '../models/UnitList';
 import type { UnitUpdate } from '../models/UnitUpdate';
@@ -363,6 +364,24 @@ export class UserService {
             path: `/user/organizations/${organizationId}/quizzes/${id}/remove-questions`,
             body: requestBody,
             mediaType: 'application/json',
+        });
+    }
+
+    /**
+     * Get a Unit's children
+     * Returns organization's unit's children
+     * @param id Unit Id
+     * @param organizationId Organization Id
+     * @returns UnitChildList Organization Unit
+     * @throws ApiError
+     */
+    public static quantuAppWebControllerUserUnitChildren(
+        id: number,
+        organizationId: number,
+    ): CancelablePromise<UnitChildList> {
+        return __request({
+            method: 'GET',
+            path: `/user/organizations/${organizationId}/units/${id}/children`,
         });
     }
 

@@ -15,8 +15,8 @@
 
 <script lang="ts">
 	import Organizations from '$lib/UserOrganizations/Organizations.svelte';
-	import AppLayout from '$lib/AppLayout.svelte';
 	import { getOrganizations, userOrganizations } from '$lib/state/userOrganizations';
+	import OrganizationLayout from '$lib/UserOrganizations/OrganizationLayout.svelte';
 
 	$: organizations = Object.values($userOrganizations.byId);
 
@@ -29,7 +29,7 @@
 	<title>Organizations</title>
 </svelte:head>
 
-<AppLayout
+<OrganizationLayout
 	breadcrumbs={[
 		{ href: '/', title: 'Home' },
 		{
@@ -39,4 +39,4 @@
 	]}
 >
 	<Organizations {organizations} />
-</AppLayout>
+</OrganizationLayout>

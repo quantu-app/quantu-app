@@ -23,6 +23,8 @@
 	import { removeQuestionsFromQuiz } from '$lib/state/organizationQuestions';
 
 	export let organizationId: number;
+	export let courseId: number = undefined;
+	export let unitId: number = undefined;
 	export let quiz: Quiz;
 	export let questions: QuestionPrivate[];
 
@@ -101,7 +103,7 @@
 			<div class="d-flex mt-2 justify-content-end">
 				<QuestionsInQuiz {organizationId} {quiz} />
 				<div class="p-1" />
-				<CreateQuestion {organizationId} quizId={quiz.id} />
+				<CreateQuestion {organizationId} {courseId} {unitId} quizId={quiz.id} />
 				<div class="p-1" />
 				<button
 					type="button"

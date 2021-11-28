@@ -8,7 +8,7 @@
 	import { currentUser } from './state/user';
 
 	export let navItems: { href: string; icon: string; title: string }[] = [];
-	export let breadcrumbs: { href: string; title: string }[] = [];
+	export let breadcrumbs: { href?: string; title: string }[] = [];
 </script>
 
 <div class="h-100 w-100">
@@ -23,7 +23,9 @@
 	/>
 	<div class="d-flex flex-row h-100">
 		{#if $currentUser}
-			<Sidebar {navItems} />
+			<Sidebar {navItems}>
+				<slot name="sidebar" />
+			</Sidebar>
 		{/if}
 		<div class="d-flex flex-column h-100 flex-grow-1 content">
 			<div class="container">
@@ -31,7 +33,7 @@
 					<ol class="breadcrumb">
 						{#each breadcrumbs as breadcrumb}
 							<li class="breadcrumb-item" class:active={$page.path === breadcrumb.href}>
-								{#if $page.path === breadcrumb.href}
+								{#if $page.path === breadcrumb.href || !breadcrumb.href}
 									{breadcrumb.title}
 								{:else}
 									<a

@@ -27,14 +27,14 @@
 	import Quizzes from '$lib/Quizzes/Quizzes.svelte';
 	import { getQuizzes, quizzes } from '$lib/state/quizzes';
 
-	export let organizationId: number | undefined;
+	export let organizationId: number = undefined;
 
 	$: quizList = Object.values(
 		(organizationId ? $quizzes.byOrganizationId[organizationId] : $quizzes.byId) || {}
 	);
 
 	if (browser) {
-		getQuizzes(organizationId, true);
+		getQuizzes(organizationId, undefined, true);
 	}
 </script>
 

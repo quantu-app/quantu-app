@@ -15,20 +15,20 @@ export class UnitService {
      * List Units
      * Returns organization's units
      * @param organizationId Organization Id
-     * @param unitId Unit Id
+     * @param courseId Unit Id
      * @returns UnitList Organization Units
      * @throws ApiError
      */
     public static quantuAppWebControllerUnitIndex(
         organizationId?: number,
-        unitId?: number,
+        courseId?: number,
     ): CancelablePromise<UnitList> {
         return __request({
             method: 'GET',
             path: `/units`,
             query: {
                 'organizationId': organizationId,
-                'unitId': unitId,
+                'courseId': courseId,
             },
         });
     }
@@ -46,6 +46,24 @@ export class UnitService {
         return __request({
             method: 'GET',
             path: `/units/${id}`,
+        });
+    }
+
+    /**
+     * Get a Unit's children
+     * Returns organization's unit's children
+     * @param id Unit Id
+     * @param organizationId Organization Id
+     * @returns UnitChildList Organization Unit
+     * @throws ApiError
+     */
+    public static quantuAppWebControllerUserUnitChildren(
+        id: number,
+        organizationId: number,
+    ): CancelablePromise<UnitChildList> {
+        return __request({
+            method: 'GET',
+            path: `/user/organizations/${organizationId}/units/${id}/children`,
         });
     }
 

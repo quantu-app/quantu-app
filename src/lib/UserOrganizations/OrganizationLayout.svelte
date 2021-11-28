@@ -1,11 +1,7 @@
 <script lang="ts">
 	import Layout from '$lib/Layout.svelte';
-	import { userOrganizations } from '$lib/state/userOrganizations';
 
-	export let organizationId: number;
-	export let breadcrumbs: { href: string; title: string }[] = [];
-
-	let organization = $userOrganizations.byId[organizationId];
+	export let breadcrumbs: { href?: string; title: string }[] = [];
 </script>
 
 <Layout
@@ -19,24 +15,10 @@
 			href: `/user/organizations`,
 			icon: 'command',
 			title: 'My Organizations'
-		},
-		{
-			href: `/user/organizations/${organizationId}`,
-			icon: 'app',
-			title: organization?.name || 'Organization'
-		},
-		{
-			href: `/user/organizations/${organizationId}/quizzes`,
-			icon: 'question',
-			title: 'Quizzes'
-		},
-		{
-			href: `/user/organizations/${organizationId}/questions`,
-			icon: 'list',
-			title: 'Questions'
 		}
 	]}
 	{breadcrumbs}
 >
+	<slot name="sidebar" slot="sidebar" />
 	<slot />
 </Layout>

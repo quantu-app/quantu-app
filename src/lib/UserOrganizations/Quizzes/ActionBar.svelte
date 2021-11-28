@@ -4,6 +4,7 @@
 	import { createQuiz } from '$lib/state/organizationQuizzes';
 
 	export let organizationId: number;
+	export let unitId: number = undefined;
 
 	let quizCreating = false;
 	let newQuizName = '';
@@ -11,7 +12,7 @@
 	async function onCreateQuiz() {
 		quizCreating = true;
 		try {
-			const quiz = await createQuiz(organizationId, { name: newQuizName });
+			const quiz = await createQuiz(organizationId, { name: newQuizName, unitId });
 			goto(`/user/organizations/${organizationId}/quizzes/${quiz.id}`);
 		} catch (error) {
 			quizCreating = false;

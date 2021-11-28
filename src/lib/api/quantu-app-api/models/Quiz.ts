@@ -39,6 +39,10 @@ export type Quiz = {
      */
     tags: Array<string>;
     /**
+     * Quiz type
+     */
+    type?: Quiz.type | null;
+    /**
      * Unit Id
      */
     unitId?: number | null;
@@ -46,4 +50,16 @@ export type Quiz = {
      * Update timestamp
      */
     updatedAt: string;
+}
+
+export namespace Quiz {
+
+    /**
+     * Quiz type
+     */
+    export enum type {
+        QUIZ = 'quiz',
+    }
+
+
 }

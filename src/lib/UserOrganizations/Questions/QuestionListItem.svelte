@@ -3,6 +3,8 @@
 	import { titleCase } from 'title-case';
 
 	export let question: QuestionPrivate;
+	export let quizId: number = undefined;
+	export let index: number = undefined;
 	export let onUpdate: () => void;
 	export let onDelete: () => void;
 

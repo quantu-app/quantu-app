@@ -9,7 +9,7 @@ export type Quiz = {
     /**
      * Quiz description
      */
-    description: string;
+    description: Array<any>;
     /**
      * Id
      */

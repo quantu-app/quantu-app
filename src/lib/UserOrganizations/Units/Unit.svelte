@@ -19,6 +19,7 @@
 	import Tags from '$lib/Tags.svelte';
 	import CreateChild from './CreateChild.svelte';
 	import ChildList from './ChildList.svelte';
+	import RichEditor from '$lib/RichEditor.svelte';
 
 	export let organizationId: number;
 	export let courseId: number = undefined;
@@ -27,6 +28,7 @@
 
 	function onNameChange() {
 		updateUnit(organizationId, unit.id, {
+			courseId,
 			name: unit.name
 		});
 	}
@@ -35,23 +37,28 @@
 	function onTagsChange() {
 		updatingTags = true;
 		updateUnit(organizationId, unit.id, {
+			courseId,
 			tags: unit.tags
 		}).finally(() => {
 			updatingTags = false;
 		});
 	}
 
-	function onDescriptionChange() {
-		updateUnit(organizationId, unit.id, {
-			description: unit.description
-		});
-	}
+	const debouncedUpdateDescription = debounce(
+		() =>
+			updateUnit(organizationId, unit.id, {
+				courseId,
+				description: unit.description
+			}),
+		3000
+	);
 
 	let updatingPublished = false;
 	function onPublishedChange() {
 		updatingPublished = true;
 		unit.published = !unit.published;
 		updateUnit(organizationId, unit.id, {
+			courseId,
 			published: unit.published
 		}).finally(() => {
 			updatingPublished = false;
@@ -113,13 +120,7 @@
 	</div>
 	<div class="mt-2">
 		<label for="unit-description">Description</label>
-		<textarea
-			class="form-control"
-			placeholder="Unit Description"
-			id="unit-description"
-			bind:value={unit.description}
-			on:change={onDescriptionChange}
-		/>
+		<RichEditor bind:content={unit.description} on:change={debouncedUpdateDescription} />
 	</div>
 </div>
 

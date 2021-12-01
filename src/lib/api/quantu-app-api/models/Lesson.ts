@@ -13,7 +13,7 @@ export type Lesson = {
     /**
      * Lesson description
      */
-    description: string;
+    description: Array<any>;
     /**
      * Id
      */

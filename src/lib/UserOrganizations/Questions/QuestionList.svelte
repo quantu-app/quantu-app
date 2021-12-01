@@ -6,37 +6,44 @@
 	import UpdateQuestion from './UpdateQuestion.svelte';
 
 	export let organizationId: number;
+	export let quizId: number = undefined;
 	export let questions: QuestionPrivate[];
 
-	let questionToUpdate: QuestionPrivate;
-	let questionToDelete: QuestionPrivate;
+	let question: QuestionPrivate;
+	let questionIndex: number;
 
-	function createOnUpdate(question: QuestionPrivate) {
+	function createOnUpdate(q: QuestionPrivate, index: number) {
 		return function onUpdate() {
-			questionToUpdate = question;
+			question = q;
+			questionIndex = index;
 		};
 	}
-	function createOnDelete(question: QuestionPrivate) {
+	function createOnDelete(q: QuestionPrivate, index: number) {
 		return function onDelete() {
-			questionToDelete = question;
+			question = q;
+			questionIndex = index;
 		};
 	}
 
 	async function onUpdateQuestion() {
-		if (questionToUpdate) {
-			await updateQuestion(organizationId, questionToUpdate.id, {
-				name: questionToUpdate.name,
-				type: questionToUpdate.type,
-				prompt: questionToUpdate.prompt,
-				tags: questionToUpdate.tags
+		if (question) {
+			await updateQuestion(organizationId, question.id, {
+				quizId,
+				index: questionIndex,
+				name: question.name,
+				type: question.type,
+				prompt: question.prompt,
+				tags: question.tags
 			});
-			questionToUpdate = undefined;
+			question = undefined;
+			questionIndex = undefined;
 		}
 	}
 	async function onDeleteQuestion() {
-		if (questionToDelete) {
-			await deleteQuestion(organizationId, questionToDelete.id);
-			questionToDelete = undefined;
+		if (question) {
+			await deleteQuestion(organizationId, question.id);
+			question = undefined;
+			questionIndex = undefined;
 		}
 	}
 
@@ -46,18 +53,19 @@
 </script>
 
 <div class="list-group list-group-flush">
-	{#each questions.sort(sortQuestion) as question (question.id)}
+	{#each questions.sort(sortQuestion) as question, index (question.id)}
 		<QuestionListItem
 			{question}
-			onUpdate={createOnUpdate(question)}
-			onDelete={createOnDelete(question)}
+			{index}
+			onUpdate={createOnUpdate(question, index)}
+			onDelete={createOnDelete(question, index)}
 		>
 			<slot
 				slot="dropdown"
 				name="dropdown"
 				{question}
-				onUpdate={createOnUpdate(question)}
-				onDelete={createOnDelete(question)}
+				onUpdate={createOnUpdate(question, index)}
+				onDelete={createOnDelete(question, index)}
 			>
 				<li>
 					<button
@@ -66,7 +74,7 @@
 						data-bs-toggle="modal"
 						data-bs-target="#update-question"
 						aria-label="Update"
-						on:click={createOnUpdate(question)}>Update</button
+						on:click={createOnUpdate(question, index)}>Update</button
 					>
 				</li>
 				<li>
@@ -76,7 +84,7 @@
 						data-bs-toggle="modal"
 						data-bs-target="#delete-question"
 						aria-label="Delete"
-						on:click={createOnDelete(question)}>Delete</button
+						on:click={createOnDelete(question, index)}>Delete</button
 					>
 				</li>
 			</slot>
@@ -84,5 +92,5 @@
 	{/each}
 </div>
 
-<UpdateQuestion question={questionToUpdate} {onUpdateQuestion} />
-<DeleteQuestion question={questionToDelete} {onDeleteQuestion} />
+<UpdateQuestion {question} {onUpdateQuestion} />
+<DeleteQuestion {question} {onDeleteQuestion} />

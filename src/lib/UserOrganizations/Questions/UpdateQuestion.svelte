@@ -2,7 +2,7 @@
 	import type { QuestionPrivate } from '$lib/api/quantu-app-api';
 	import QuestionEditor from './QuestionEditor.svelte';
 
-	export let question: QuestionPrivate;
+	export let question: QuestionPrivate | undefined;
 	export let onUpdateQuestion: () => Promise<void>;
 
 	async function internalUpdateQuestion() {

@@ -19,6 +19,8 @@
 	import { fuzzyEquals } from '@aicacia/string-fuzzy_equals';
 	import Tags from '$lib/Tags.svelte';
 	import CreateUnit from './CreateUnit.svelte';
+	import RichEditor from '$lib/RichEditor.svelte';
+	import type Op from 'quill-delta/dist/Op';
 
 	export let organizationId: number;
 	export let course: Course;
@@ -40,11 +42,13 @@
 		});
 	}
 
-	function onDescriptionChange() {
-		updateCourse(organizationId, course.id, {
-			description: course.description
-		});
-	}
+	const debouncedUpdateDescription = debounce(
+		() =>
+			updateCourse(organizationId, course.id, {
+				description: course.description
+			}),
+		3000
+	);
 
 	let updatingPublished = false;
 	function onPublishedChange() {
@@ -112,13 +116,7 @@
 	</div>
 	<div class="mt-2">
 		<label for="course-description">Description</label>
-		<textarea
-			class="form-control"
-			placeholder="Course Description"
-			id="course-description"
-			bind:value={course.description}
-			on:change={onDescriptionChange}
-		/>
+		<RichEditor bind:content={course.description} on:change={debouncedUpdateDescription} />
 	</div>
 </div>
 

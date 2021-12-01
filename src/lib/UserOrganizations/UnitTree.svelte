@@ -19,7 +19,7 @@
 		{#each children as child, index (child.id + child.type)}
 			<li class="list-group-item">
 				<a href={organizationPath(organizationId, courseId, unit.id, child.id, child.type)}
-					>{index + 1} - {child.type} {child.name}</a
+					>{index + 1} - {child.name}</a
 				>
 			</li>
 		{/each}

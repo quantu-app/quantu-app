@@ -2,19 +2,9 @@
 	function randomString() {
 		return Math.random().toString(36).substr(2);
 	}
-	function createChoiceSetter(choice: { content: Op[] }) {
-		return function setter(ops: Op[]) {
-			choice.content = ops;
-		};
-	}
 	function createChoiceCorrectSetter(choice: { correct?: boolean }) {
 		return function setter(e: Event & { currentTarget: EventTarget & HTMLInputElement }) {
 			choice.correct = !!e.currentTarget.checked;
-		};
-	}
-	function createChoiceGetter(choice: { content: Op[] }) {
-		return function getter() {
-			return choice.content;
 		};
 	}
 </script>
@@ -23,39 +13,11 @@
 	import type { QuestionMultipleChoicePrivate } from '$lib/api/quantu-app-api';
 	import RichEditor from '$lib/RichEditor.svelte';
 	import RichViewer from '$lib/RichViewer.svelte';
-	import type Quill from 'quill';
-	import type Delta from 'quill-delta';
-	import type Op from 'quill-delta/dist/Op';
 
 	export let prompt: QuestionMultipleChoicePrivate;
 	export let disabled = false;
 
 	$: choices = Object.entries(prompt.choices || {});
-	let quillEditors: { [key: string]: Quill } = {};
-
-	$: createOnQuill = (key: string, getter: () => Op[]) => {
-		return function onQuill(quill: Quill) {
-			quillEditors[key] = quill;
-			quill.setContents({ ops: getter() } as Delta, 'api');
-		};
-	};
-
-	$: createOnQuillChange = (key: string, setter: (ops: Op[]) => void) => {
-		return function onChange() {
-			const quill = quillEditors[key];
-
-			if (quill) {
-				setter(quill.getContents().ops);
-			}
-		};
-	};
-
-	$: questionSetter = (ops: Op[]) => {
-		prompt.question = ops;
-	};
-	$: explanationSetter = (ops: Op[]) => {
-		prompt.explanation = ops;
-	};
 
 	$: createOnDelete = (key: string) => {
 		return function onDelete() {
@@ -80,10 +42,7 @@
 	{#if disabled}
 		<RichViewer content={prompt.question} />
 	{:else}
-		<RichEditor
-			onQuill={createOnQuill('question', () => prompt.question)}
-			on:textchange={createOnQuillChange('question', questionSetter)}
-		/>
+		<RichEditor bind:content={prompt.question} />
 	{/if}
 </div>
 
@@ -92,10 +51,7 @@
 	{#if disabled}
 		<RichViewer content={prompt.explanation} />
 	{:else}
-		<RichEditor
-			onQuill={createOnQuill('explanation', () => prompt.explanation)}
-			on:textchange={createOnQuillChange('explanation', explanationSetter)}
-		/>
+		<RichEditor bind:content={prompt.explanation} />
 	{/if}
 </div>
 
@@ -124,10 +80,7 @@
 			{#if disabled}
 				<RichViewer content={choice.content} />
 			{:else}
-				<RichEditor
-					onQuill={createOnQuill(key, createChoiceGetter(choice))}
-					on:textchange={createOnQuillChange(key, createChoiceSetter(choice))}
-				/>
+				<RichEditor bind:content={choice.content} />
 			{/if}
 		</li>
 	{/each}

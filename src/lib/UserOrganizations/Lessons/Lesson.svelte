@@ -1,12 +1,9 @@
 <script lang="ts">
 	import type { Lesson } from '$lib/api/quantu-app-api';
-	import Search from '$lib/Search.svelte';
 	import { debounce } from '@aicacia/debounce';
 	import { updateLesson } from '$lib/state/organizationLessons';
 	import Tags from '$lib/Tags.svelte';
 	import RichEditor from '$lib/RichEditor.svelte';
-	import type Quill from 'quill';
-	import type Delta from 'quill-delta';
 
 	export let organizationId: number;
 	export let courseId: number = undefined;
@@ -15,6 +12,7 @@
 
 	function onNameChange() {
 		updateLesson(organizationId, lesson.id, {
+			unitId,
 			name: lesson.name
 		});
 	}
@@ -23,23 +21,28 @@
 	function onTagsChange() {
 		updatingTags = true;
 		updateLesson(organizationId, lesson.id, {
+			unitId,
 			tags: lesson.tags
 		}).finally(() => {
 			updatingTags = false;
 		});
 	}
 
-	function onDescriptionChange() {
-		updateLesson(organizationId, lesson.id, {
-			description: lesson.description
-		});
-	}
+	const debouncedUpdateDescription = debounce(
+		() =>
+			updateLesson(organizationId, lesson.id, {
+				unitId,
+				description: lesson.description
+			}),
+		3000
+	);
 
 	let updatingPublished = false;
 	function onPublishedChange() {
 		updatingPublished = true;
 		lesson.published = !lesson.published;
 		updateLesson(organizationId, lesson.id, {
+			unitId,
 			published: lesson.published
 		}).finally(() => {
 			updatingPublished = false;
@@ -48,26 +51,14 @@
 
 	const debouncedOnTagsChange = debounce(onTagsChange, 3000);
 
-	let quill: Quill | undefined;
-	function onContent(q: Quill) {
-		quill = q;
-		quill.setContents({ ops: lesson.content } as Delta, 'api');
-	}
-
-	$: onContentChange = () => {
-		if (quill) {
-			lesson.content = quill.getContents().ops;
-			debouncedUpdateContent();
-		}
-	};
-
-	function updateContent() {
-		updateLesson(organizationId, lesson.id, {
-			content: lesson.content
-		});
-	}
-
-	const debouncedUpdateContent = debounce(updateContent, 3000);
+	const debouncedUpdateContent = debounce(
+		() =>
+			updateLesson(organizationId, lesson.id, {
+				unitId,
+				content: lesson.content
+			}),
+		3000
+	);
 </script>
 
 <div class="container mb-2">
@@ -119,17 +110,11 @@
 	</div>
 	<div class="mt-2">
 		<label for="lesson-description">Description</label>
-		<textarea
-			class="form-control"
-			placeholder="Lesson Description"
-			id="lesson-description"
-			bind:value={lesson.description}
-			on:change={onDescriptionChange}
-		/>
+		<RichEditor bind:content={lesson.description} on:change={debouncedUpdateDescription} />
 	</div>
 </div>
 
 <div class="container">
 	<label for="lesson-content" class="form-label mb-0">Content</label>
-	<RichEditor onQuill={onContent} on:textchange={onContentChange} />
+	<RichEditor bind:content={lesson.content} on:change={debouncedUpdateContent} />
 </div>

@@ -21,6 +21,7 @@
 	import { fuzzyEquals } from '@aicacia/string-fuzzy_equals';
 	import Tags from '$lib/Tags.svelte';
 	import { removeQuestionsFromQuiz } from '$lib/state/organizationQuestions';
+	import RichEditor from '$lib/RichEditor.svelte';
 
 	export let organizationId: number;
 	export let courseId: number = undefined;
@@ -38,23 +39,28 @@
 	function onTagsChange() {
 		updatingTags = true;
 		updateQuiz(organizationId, quiz.id, {
+			unitId,
 			tags: quiz.tags
 		}).finally(() => {
 			updatingTags = false;
 		});
 	}
 
-	function onDescriptionChange() {
-		updateQuiz(organizationId, quiz.id, {
-			description: quiz.description
-		});
-	}
+	const debouncedUpdateDescription = debounce(
+		() =>
+			updateQuiz(organizationId, quiz.id, {
+				unitId,
+				description: quiz.description
+			}),
+		3000
+	);
 
 	let updatingPublished = false;
 	function onPublishedChange() {
 		updatingPublished = true;
 		quiz.published = !quiz.published;
 		updateQuiz(organizationId, quiz.id, {
+			unitId,
 			published: quiz.published
 		}).finally(() => {
 			updatingPublished = false;
@@ -124,13 +130,7 @@
 	</div>
 	<div class="mt-2">
 		<label for="quiz-description">Description</label>
-		<textarea
-			class="form-control"
-			placeholder="Quiz Description"
-			id="quiz-description"
-			bind:value={quiz.description}
-			on:change={onDescriptionChange}
-		/>
+		<RichEditor bind:content={quiz.description} on:change={debouncedUpdateDescription} />
 	</div>
 </div>
 
@@ -138,7 +138,7 @@
 	<Search bind:filter={$state.questionNameFilter} />
 </div>
 <div class="container">
-	<QuestionList {organizationId} questions={questions.filter(filter)}>
+	<QuestionList {organizationId} quizId={quiz.id} questions={questions.filter(filter)}>
 		<svelte:fragment slot="dropdown" let:question let:onUpdate let:onDelete>
 			<li>
 				<button

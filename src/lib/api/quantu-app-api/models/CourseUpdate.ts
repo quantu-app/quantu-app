@@ -9,7 +9,7 @@ export type CourseUpdate = {
     /**
      * Course description
      */
-    description?: string | null;
+    description?: Array<any> | null;
     /**
      * Course name
      */

@@ -13,7 +13,7 @@ export type Unit = {
     /**
      * Unit description
      */
-    description: string;
+    description: Array<any>;
     /**
      * Id
      */

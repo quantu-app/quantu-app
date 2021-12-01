@@ -9,7 +9,7 @@ export type Course = {
     /**
      * Course description
      */
-    description: string;
+    description: Array<any>;
     /**
      * Id
      */

@@ -9,7 +9,7 @@ export type CourseCreate = {
     /**
      * Course description
      */
-    description?: string | null;
+    description?: Array<any> | null;
     /**
      * Course name
      */

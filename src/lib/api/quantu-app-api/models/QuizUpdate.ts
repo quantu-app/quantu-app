@@ -9,7 +9,7 @@ export type QuizUpdate = {
     /**
      * Quiz description
      */
-    description?: string | null;
+    description?: Array<any> | null;
     /**
      * Quiz index in unit
      */

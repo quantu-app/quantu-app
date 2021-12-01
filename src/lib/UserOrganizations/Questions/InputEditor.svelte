@@ -3,38 +3,11 @@
 	import RichEditor from '$lib/RichEditor.svelte';
 	import RichViewer from '$lib/RichViewer.svelte';
 	import type Quill from 'quill';
-	import type Delta from 'quill-delta';
-	import type Op from 'quill-delta/dist/Op';
 
 	export let prompt: QuestionInputPrivate;
 	export let disabled = false;
 
 	$: answers = prompt.answers || [];
-	let quillEditors: { [key: string]: Quill } = {};
-
-	$: createOnQuill = (key: string, getter: () => Op[]) => {
-		return function onQuill(quill: Quill) {
-			quillEditors[key] = quill;
-			quill.setContents({ ops: getter() } as Delta, 'api');
-		};
-	};
-
-	$: createOnQuillChange = (key: string, setter: (ops: Op[]) => void) => {
-		return function onChange() {
-			const quill = quillEditors[key];
-
-			if (quill) {
-				setter(quill.getContents().ops);
-			}
-		};
-	};
-
-	$: questionSetter = (ops: Op[]) => {
-		prompt.question = ops;
-	};
-	$: explanationSetter = (ops: Op[]) => {
-		prompt.explanation = ops;
-	};
 
 	$: createOnDelete = (index: number) => {
 		return function onDelete() {
@@ -65,10 +38,7 @@
 	{#if disabled}
 		<RichViewer content={prompt.question} />
 	{:else}
-		<RichEditor
-			onQuill={createOnQuill('question', () => prompt.question)}
-			on:textchange={createOnQuillChange('question', questionSetter)}
-		/>
+		<RichEditor bind:content={prompt.question} />
 	{/if}
 </div>
 
@@ -77,10 +47,7 @@
 	{#if disabled}
 		<RichViewer content={prompt.explanation} />
 	{:else}
-		<RichEditor
-			onQuill={createOnQuill('explanation', () => prompt.explanation)}
-			on:textchange={createOnQuillChange('explanation', explanationSetter)}
-		/>
+		<RichEditor bind:content={prompt.explanation} />
 	{/if}
 </div>
 

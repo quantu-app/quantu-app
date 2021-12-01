@@ -13,7 +13,7 @@ export type LessonUpdate = {
     /**
      * Lesson description
      */
-    description?: string | null;
+    description?: Array<any> | null;
     /**
      * Lesson index in unit
      */

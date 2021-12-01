@@ -13,7 +13,7 @@ export type UnitCreate = {
     /**
      * Unit description
      */
-    description?: string | null;
+    description?: Array<any> | null;
     /**
      * Unit index in unit
      */

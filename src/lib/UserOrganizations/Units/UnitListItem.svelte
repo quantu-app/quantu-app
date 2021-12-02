@@ -5,6 +5,8 @@
 	export let organizationId: number;
 	export let courseId: number = undefined;
 	export let unit: Unit;
+	export let index: number = undefined;
+	export let showIndices = false;
 	export let onDelete: () => void;
 
 	$: updatedAt = new Date(unit.updatedAt || '');
@@ -13,6 +15,9 @@
 <div class="list-group-item">
 	<div class="d-flex w-100 justify-content-between">
 		<h4>
+			{#if index != null && showIndices}
+				<span class="badge bg-primary">{index + 1}</span>
+			{/if}
 			<a aria-label="Edit" href={organizationPath(organizationId, courseId, unit.id)}>{unit.name}</a
 			>
 		</h4>

@@ -6,6 +6,7 @@
 	export let courseId: number = undefined;
 	export let unitId: number;
 	export let child: Quiz | Lesson;
+	export let index: number = undefined;
 	export let onDelete: () => void;
 
 	$: updatedAt = new Date(child.updatedAt || '');
@@ -14,6 +15,9 @@
 <div class="list-group-item">
 	<div class="d-flex w-100 justify-content-between">
 		<h4>
+			{#if index != null}
+				<span class="badge bg-primary">{index + 1}</span>
+			{/if}
 			<a
 				aria-label="Edit"
 				href={organizationPath(organizationId, courseId, unitId, child.id, child.type)}

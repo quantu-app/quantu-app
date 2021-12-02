@@ -47,8 +47,15 @@
 </script>
 
 <div class="list-group list-group-flush">
-	{#each children as child (child.id + child.type)}
-		<ChildListItem {organizationId} {courseId} {unitId} {child} onDelete={createOnDelete(child)} />
+	{#each children as child, index (child.id + child.type)}
+		<ChildListItem
+			{organizationId}
+			{courseId}
+			{index}
+			{unitId}
+			{child}
+			onDelete={createOnDelete(child)}
+		/>
 	{/each}
 </div>
 

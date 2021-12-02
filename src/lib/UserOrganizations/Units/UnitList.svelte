@@ -7,6 +7,7 @@
 	export let organizationId: number;
 	export let courseId: number | undefined;
 	export let units: Unit[];
+	export let showIndices = false;
 
 	let unitToDelete: Unit;
 
@@ -25,8 +26,15 @@
 </script>
 
 <div class="list-group list-group-flush">
-	{#each units as unit (unit.id)}
-		<UnitListItem {organizationId} {courseId} {unit} onDelete={createOnDelete(unit)} />
+	{#each units as unit, index (unit.id)}
+		<UnitListItem
+			{organizationId}
+			{courseId}
+			{unit}
+			{index}
+			{showIndices}
+			onDelete={createOnDelete(unit)}
+		/>
 	{/each}
 </div>
 

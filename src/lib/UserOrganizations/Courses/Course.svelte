@@ -124,7 +124,7 @@
 	<Search bind:filter={$state.unitNameFilter} />
 </div>
 <div class="container">
-	<UnitList {organizationId} courseId={course.id} units={units.filter(filter)}>
+	<UnitList {organizationId} courseId={course.id} units={units.filter(filter)} showIndices>
 		<svelte:fragment slot="dropdown" let:unit let:onUpdate let:onDelete>
 			<li>
 				<button

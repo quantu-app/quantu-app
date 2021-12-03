@@ -28,8 +28,6 @@ jobs:
       - run: npm ci
       - run: npm run web.build
       - run: npm run desktop.prebuild
-      - run: rm -rf node_modules
-      - run: npm i pkg@5.4.1 -g
       - run: npm run desktop.binary
       - id: tag
         run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"

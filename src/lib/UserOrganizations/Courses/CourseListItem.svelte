@@ -1,5 +1,7 @@
 <script lang="ts">
 	import type { Course } from '$lib/api/quantu-app-api';
+	import RichEditor from '$lib/RichEditor.svelte';
+	import RichViewer from '$lib/RichViewer.svelte';
 
 	export let course: Course;
 	export let onDelete: () => void;
@@ -9,17 +11,21 @@
 
 <div class="list-group-item">
 	<div class="d-flex w-100 justify-content-between">
-		<h4>
-			<a
-				aria-label="Edit"
-				href={`/user/organizations/${course.organizationId}/courses/${course.id}`}>{course.name}</a
-			>
-		</h4>
-		<div class="d-flex">
-			<div class="d-inline mt-2">
-				Last updated {updatedAt.toLocaleTimeString()}
-				{updatedAt.toLocaleDateString()}
+		<div class="d-flex flex-column align-items-start">
+			<h4>
+				<a
+					aria-label="Edit"
+					href={`/user/organizations/${course.organizationId}/courses/${course.id}`}
+					>{course.name}</a
+				>
+			</h4>
+			<div>
+				{#each course.tags as tag}
+					<span class="badge bg-primary me-2">{tag}</span>
+				{/each}
 			</div>
+		</div>
+		<div class="d-flex flex-column align-items-end">
 			<div class="dropdown">
 				<button
 					id={`course-dropdown-${course.id}`}
@@ -51,6 +57,10 @@
 						>
 					</li>
 				</ul>
+			</div>
+			<div class="d-inline mt-2">
+				Last updated {updatedAt.toLocaleTimeString()}
+				{updatedAt.toLocaleDateString()}
 			</div>
 		</div>
 	</div>

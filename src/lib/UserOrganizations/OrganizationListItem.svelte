@@ -13,14 +13,17 @@
 
 <div class="list-group-item">
 	<div class="d-flex w-100 justify-content-between">
-		<h4>
-			<a aria-label="Edit" href={`/user/organizations/${organization.id}`}>{organization.name}</a>
-		</h4>
-		<div class="d-flex">
-			<div class="d-inline mt-2">
-				Last updated {updatedAt.toLocaleTimeString()}
-				{updatedAt.toLocaleDateString()}
+		<div class="d-flex flex-column align-items-start">
+			<h4>
+				<a aria-label="Edit" href={`/user/organizations/${organization.id}`}>{organization.name}</a>
+			</h4>
+			<div>
+				{#each organization.tags as tag}
+					<span class="badge bg-primary me-2">{tag}</span>
+				{/each}
 			</div>
+		</div>
+		<div class="d-flex flex-column align-items-end">
 			<div class="dropdown">
 				<button
 					id={`organization-dropdown-${organization.id}`}
@@ -52,6 +55,10 @@
 						>
 					</li>
 				</ul>
+			</div>
+			<div class="d-inline mt-2">
+				Last updated {updatedAt.toLocaleTimeString()}
+				{updatedAt.toLocaleDateString()}
 			</div>
 		</div>
 	</div>

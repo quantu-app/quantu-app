@@ -13,19 +13,21 @@
 <div class="d-flex align-items-stretch border-end">
 	<div id="sidebar" class:active tabindex="-1" style="width: 256px;">
 		<div class="d-flex flex-column h-100 position-relative">
-			<button type="button" class="btn btn-primary" on:click={onToggle}>
-				<i class="bi bi-arrow-left" />
-			</button>
-			<a
-				href="/"
-				title="Quant[U]"
-				data-bs-toggle="tooltip"
-				data-bs-placement="right"
-				data-bs-original-title="Quant[U]"
-				class="d-flex align-items-center ps-3 py-2 text-decoration-none"
-			>
-				<span class="fs-4 logo">Quant[U]</span>
-			</a>
+			<div class="d-flex flex-row justify-content-between">
+				<a
+					href="/"
+					title="Quant[U]"
+					data-bs-toggle="tooltip"
+					data-bs-placement="right"
+					data-bs-original-title="Quant[U]"
+					class="d-flex align-items-center ps-3 py-2 text-decoration-none"
+				>
+					<span class="fs-4 logo">Quant[U]</span>
+				</a>
+				<button type="button" class="btn btn-primary" on:click={onToggle}>
+					<i class="bi bi-arrow-left" />
+				</button>
+			</div>
 			<button
 				type="button"
 				class="sidebar-toggle btn btn-primary position-absolute"

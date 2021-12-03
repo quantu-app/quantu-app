@@ -3,6 +3,7 @@
 	import FlashCard from './FlashCard.svelte';
 	import Input from './Input.svelte';
 	import MultipleChoice from './MultipleChoice.svelte';
+	import MarkAsRead from './MarkAsRead.svelte';
 
 	export let question: Question;
 	export let seed: number = undefined;
@@ -29,5 +30,9 @@
 		<Input {question} bind:result>
 			<slot slot="extra" name="extra" />
 		</Input>
+	{:else if question.type == 'mark_as_read'}
+		<MarkAsRead {question} bind:result>
+			<slot slot="extra" name="extra" />
+		</MarkAsRead>
 	{/if}
 {/key}

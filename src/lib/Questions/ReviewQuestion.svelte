@@ -2,6 +2,7 @@
 	import type { QuestionResult } from '$lib/api/quantu-app-api';
 	import FlashCardReview from './FlashCardReview.svelte';
 	import InputReview from './InputReview.svelte';
+	import MarkAsReadReview from './MarkAsReadReview.svelte';
 	import MultipleChoiceReview from './MultipleChoiceReview.svelte';
 
 	export let result: QuestionResult;
@@ -23,5 +24,9 @@
 		<InputReview bind:result>
 			<slot slot="extra" name="extra" />
 		</InputReview>
+	{:else if result.type == 'mark_as_read'}
+		<MarkAsReadReview bind:result>
+			<slot slot="extra" name="extra" />
+		</MarkAsReadReview>
 	{/if}
 {/key}

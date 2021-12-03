@@ -56,6 +56,7 @@ export namespace Question {
         FLASH_CARD = 'flash_card',
         MULTIPLE_CHOICE = 'multiple_choice',
         INPUT = 'input',
+        MARK_AS_READ = 'mark_as_read',
     }
 
 

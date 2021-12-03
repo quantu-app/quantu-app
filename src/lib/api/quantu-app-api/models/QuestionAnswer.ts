@@ -4,6 +4,7 @@
 
 import type { FlashCardAnswer } from './FlashCardAnswer';
 import type { InputAnswer } from './InputAnswer';
+import type { MarkAsReadAnswer } from './MarkAsReadAnswer';
 import type { MultipleChoiceAnswer } from './MultipleChoiceAnswer';
 
 /**
@@ -13,5 +14,5 @@ export type QuestionAnswer = {
     /**
      * Question Answer input
      */
-    input?: (FlashCardAnswer | MultipleChoiceAnswer | InputAnswer);
+    input?: (FlashCardAnswer | MultipleChoiceAnswer | InputAnswer | MarkAsReadAnswer);
 }

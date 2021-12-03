@@ -14,7 +14,7 @@
 	$: input = result.answer.input as FlashCardAnswer;
 </script>
 
-<Review bind:result>
+<Review>
 	<FlashCardContent slot="content" shown {prompt} />
 	<FlashCardInput slot="input" shown disabled={true} {input} />
 	<slot slot="extra" name="extra" />

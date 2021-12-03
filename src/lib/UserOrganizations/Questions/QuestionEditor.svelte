@@ -9,6 +9,7 @@
 	import FlashCardEditor from './FlashCardEditor.svelte';
 	import InputEditor from './InputEditor.svelte';
 	import MultipleChoiceEditor from './MultipleChoiceEditor.svelte';
+	import MarkAsReadEditor from './MarkAsReadEditor.svelte';
 
 	export let question: Partial<QuestionPrivate>;
 	export let disabled = false;
@@ -41,6 +42,7 @@
 			<option value="multiple_choice">Multiple Choice</option>
 			<!-- <option value="flash_card">Flash Card</option> -->
 			<option value="input">Input</option>
+			<option value="mark_as_read">Mark as Read</option>
 		</select>
 	</div>
 </div>
@@ -55,4 +57,6 @@
 	<MultipleChoiceEditor {disabled} bind:prompt={promptMultipleChoice} />
 {:else if question.type === 'input'}
 	<InputEditor {disabled} bind:prompt={promptInput} />
+{:else if question.type === 'mark_as_read'}
+	<MarkAsReadEditor {disabled} bind:prompt={promptInput} />
 {/if}

@@ -6,7 +6,8 @@ import type {
 	QuestionMultipleChoicePrivate,
 	QuestionPromptPrivate,
 	QuestionUpdate,
-	QuestionInputPrivate
+	QuestionInputPrivate,
+	QuestionMarkAsReadPrivate
 } from '$lib/api/quantu-app-api';
 import { UserService } from '$lib/api/quantu-app-api';
 import type { Readable } from 'svelte/store';
@@ -218,12 +219,17 @@ function cleanQuestionPrompt(type: string, prompt: QuestionPromptPrivate): Quest
 			choices: multipleChoice.choices
 		};
 	} else if (type === 'input') {
-		const answerChoice = prompt as QuestionInputPrivate;
+		const input = prompt as QuestionInputPrivate;
 		return {
-			question: answerChoice.question,
-			explanation: answerChoice.explanation,
-			type: answerChoice.type,
-			answers: answerChoice.answers
+			question: input.question,
+			explanation: input.explanation,
+			type: input.type,
+			answers: input.answers
+		};
+	} else if (type === 'mark_as_read') {
+		const markAsRead = prompt as QuestionMarkAsReadPrivate;
+		return {
+			content: markAsRead.content
 		};
 	}
 }

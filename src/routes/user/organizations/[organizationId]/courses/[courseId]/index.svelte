@@ -35,6 +35,7 @@
 	import { setOrganizationIdAssets } from '$lib/state/selectedAssets';
 	import { getUnits, organizationUnits } from '$lib/state/organizationUnits';
 	import CourseTree from '$lib/UserOrganizations/CourseTree.svelte';
+	import { openSidebar } from '$lib/Sidebar.svelte';
 
 	export let organizationId: number;
 	export let courseId: number;
@@ -48,6 +49,7 @@
 		getCourse(organizationId, courseId);
 		getUnits(organizationId, courseId, true);
 		setOrganizationIdAssets(organizationId);
+		openSidebar();
 	}
 </script>
 

@@ -1,17 +1,27 @@
-<script lang="ts">
-	import { page } from '$app/stores';
+<script lang="ts" context="module">
+	export let active = writable(false);
 
-	export let navItems: Array<{ href: string; icon: string; title: string }>;
-
-	let active = false;
+	export function openSidebar() {
+		active.set(true);
+	}
+	export function closeSidebar() {
+		active.set(false);
+	}
 
 	function onToggle() {
-		active = !active;
+		active.update((current) => !current);
 	}
 </script>
 
+<script lang="ts">
+	import { page } from '$app/stores';
+	import { writable } from 'svelte/store';
+
+	export let navItems: Array<{ href: string; icon: string; title: string }>;
+</script>
+
 <div class="d-flex align-items-stretch border-end">
-	<div id="sidebar" class:active tabindex="-1" style="width: 256px;">
+	<div id="sidebar" class:active={!$active} tabindex="-1" style="width: 256px;">
 		<div class="d-flex flex-column h-100 position-relative">
 			<div class="d-flex flex-row justify-content-between">
 				<a
@@ -31,7 +41,7 @@
 			<button
 				type="button"
 				class="sidebar-toggle btn btn-primary position-absolute"
-				class:d-none={!active}
+				class:d-none={$active}
 				aria-controls="sidebar"
 				on:click={onToggle}
 			>

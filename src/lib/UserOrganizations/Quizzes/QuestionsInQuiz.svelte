@@ -25,7 +25,7 @@
 		addQuestionsToQuiz
 	} from '$lib/state/organizationQuestions';
 	import { currentUser } from '$lib/state/user';
-	import AddQuestionToQuizItem from './QuestionsInQuizItem.svelte';
+	import QuestionsInQuizItem from './QuestionsInQuizItem.svelte';
 	import { fuzzyEquals } from '@aicacia/string-fuzzy_equals';
 
 	export let organizationId: number;
@@ -117,8 +117,8 @@
 			<div class="modal-body">
 				<div class="accordion accordion-flush" id="question-quiz-list">
 					{#each Object.values(selected) as question}
-						<AddQuestionToQuizItem {question} onClick={onUnselect}
-							><i class="bi bi-dash" /></AddQuestionToQuizItem
+						<QuestionsInQuizItem {question} onClick={onUnselect}
+							><i class="bi bi-dash" /></QuestionsInQuizItem
 						>
 					{/each}
 				</div>
@@ -127,8 +127,8 @@
 				<ul class="list-group list-group-flush">
 					{#each filteredUnselected as question}
 						<li class="list-group-item">
-							<AddQuestionToQuizItem {question} onClick={onSelect}
-								><i class="bi bi-plus" /></AddQuestionToQuizItem
+							<QuestionsInQuizItem {question} onClick={onSelect}
+								><i class="bi bi-plus" /></QuestionsInQuizItem
 							>
 						</li>
 					{/each}

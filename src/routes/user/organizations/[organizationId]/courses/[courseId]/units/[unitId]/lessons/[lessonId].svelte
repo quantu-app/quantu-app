@@ -34,8 +34,9 @@
 	import Lesson from '$lib/UserOrganizations/Lessons/Lesson.svelte';
 	import { setOrganizationIdAssets } from '$lib/state/selectedAssets';
 	import { getCourse, organizationCourses } from '$lib/state/organizationCourses';
-	import { getUnits, organizationUnits } from '$lib/state/organizationUnits';
+	import { getUnitChildren, getUnits, organizationUnits } from '$lib/state/organizationUnits';
 	import CourseTree from '$lib/UserOrganizations/CourseTree.svelte';
+	import { openSidebar } from '$lib/Sidebar.svelte';
 
 	export let organizationId: number;
 	export let courseId: number;
@@ -52,8 +53,10 @@
 		getOrganization(organizationId);
 		getCourse(organizationId, courseId);
 		getUnits(organizationId, courseId);
+		getUnitChildren(organizationId, unitId);
 		getLesson(organizationId, lessonId);
 		setOrganizationIdAssets(organizationId);
+		openSidebar();
 	}
 </script>
 

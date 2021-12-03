@@ -19,7 +19,9 @@
 			aria-expanded="true"
 			aria-controls={`question-quiz-${question.id}`}
 		>
-			<button type="button" class="btn btn-primary" on:click={internalOnClick}><slot /></button>
+			<button type="button" class="btn btn-primary" on:click|stopPropagation={internalOnClick}
+				><slot /></button
+			>
 			<span class="m-0 mx-4">{question.name || 'No Name'}</span>
 			<h6 class="m-0 d-inline">- {titleCase(question.type.replace('_', ' '))}</h6>
 		</button>

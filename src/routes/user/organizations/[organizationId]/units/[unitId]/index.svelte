@@ -33,6 +33,8 @@
 	import OrganizationLayout from '$lib/UserOrganizations/OrganizationLayout.svelte';
 	import Unit from '$lib/UserOrganizations/Units/Unit.svelte';
 	import { setOrganizationIdAssets } from '$lib/state/selectedAssets';
+	import { openSidebar } from '$lib/Sidebar.svelte';
+	import UnitTree from '$lib/UserOrganizations/UnitTree.svelte';
 
 	export let organizationId: number;
 	export let unitId: number;
@@ -46,6 +48,7 @@
 		getUnit(organizationId, unitId);
 		getUnitChildren(organizationId, unitId);
 		setOrganizationIdAssets(organizationId);
+		openSidebar();
 	}
 </script>
 
@@ -75,6 +78,11 @@
 		}
 	]}
 >
+	<div slot="sidebar">
+		{#if unit}
+			<UnitTree {organizationId} {unit} {children} />
+		{/if}
+	</div>
 	{#if unit}
 		<Unit {organizationId} {unit} {children} />
 	{/if}

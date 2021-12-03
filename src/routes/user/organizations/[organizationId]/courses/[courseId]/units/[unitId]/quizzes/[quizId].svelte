@@ -37,10 +37,11 @@
 	import Quiz from '$lib/UserOrganizations/Quizzes/Quiz.svelte';
 	import { setOrganizationIdAssets } from '$lib/state/selectedAssets';
 	import { getCourse, organizationCourses } from '$lib/state/organizationCourses';
-	import { getUnits, organizationUnits } from '$lib/state/organizationUnits';
+	import { getUnitChildren, getUnits, organizationUnits } from '$lib/state/organizationUnits';
 	import { getQuiz, organizationQuizzes } from '$lib/state/organizationQuizzes';
 	import { getQuestions, organizationQuestions } from '$lib/state/organizationQuestions';
 	import CourseTree from '$lib/UserOrganizations/CourseTree.svelte';
+	import { openSidebar } from '$lib/Sidebar.svelte';
 
 	export let organizationId: number;
 	export let courseId: number;
@@ -58,9 +59,11 @@
 		getOrganization(organizationId);
 		getCourse(organizationId, courseId);
 		getUnits(organizationId, courseId);
+		getUnitChildren(organizationId, unitId);
 		getQuiz(organizationId, quizId);
 		getQuestions(organizationId, quizId, true);
 		setOrganizationIdAssets(organizationId);
+		openSidebar();
 	}
 </script>
 

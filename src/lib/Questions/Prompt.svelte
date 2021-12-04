@@ -41,7 +41,7 @@
 
 			<div class="d-flex justify-content-end mt-2">
 				{#if result != null}
-					{#if !showExplanation}
+					{#if !showExplanation && question.type !== 'mark_as_read'}
 						<button
 							type="button"
 							class="btn btn-secondary"
@@ -53,17 +53,19 @@
 					{/if}
 					<slot name="extra" />
 				{:else}
-					<button
-						type="button"
-						class="btn btn-secondary"
-						disabled={explaining || answering}
-						on:click={onExplain}
-					>
-						{#if explaining}
-							<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" />
-						{/if}
-						Explain
-					</button>
+					{#if question.type !== 'mark_as_read'}
+						<button
+							type="button"
+							class="btn btn-secondary"
+							disabled={explaining || answering}
+							on:click={onExplain}
+						>
+							{#if explaining}
+								<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" />
+							{/if}
+							Explain
+						</button>
+					{/if}
 					<button
 						type="button"
 						class="btn btn-primary"

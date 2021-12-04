@@ -1,11 +1,5 @@
 <script lang="ts">
-	import type {
-		Question,
-		QuestionInput,
-		QuestionInputPrivate,
-		QuestionResult,
-		InputAnswer
-	} from '$lib/api/quantu-app-api';
+	import type { Question, QuestionInput, QuestionResult } from '$lib/api/quantu-app-api';
 	import Prompt from './Prompt.svelte';
 	import InputContent from './InputContent.svelte';
 	import InputInput from './InputInput.svelte';

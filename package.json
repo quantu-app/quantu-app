@@ -8,7 +8,7 @@
 	},
 	"type": "module",
 	"engines": {
-		"node": "14"
+		"node": ">=15"
 	},
 	"main": "build/server.js",
 	"bin": "build/server.js",
@@ -41,8 +41,6 @@
 		"gen.api": "rm -rf src/lib/api/quantu-app-api && openapi --input http://localhost:4000/swagger.json --output src/lib/api/quantu-app-api"
 	},
 	"devDependencies": {
-		"@rollup/plugin-commonjs": "^21.0.1",
-		"@rollup/plugin-node-resolve": "^13.0.6",
 		"@sveltejs/adapter-node": "next",
 		"@tauri-apps/api": "^1.0.0-beta.8",
 		"@tauri-apps/cli": "^1.0.0-beta.10",
@@ -63,10 +61,11 @@
 		"katex": "^0.15.1",
 		"openapi-typescript-codegen": "^0.12.3",
 		"pkg": "^5.5.1",
-		"prettier": "^2.4.1",
+		"prettier": "^2.5.1",
 		"prettier-plugin-svelte": "^2.5.0",
 		"quill-delta": "^4.2.2",
 		"rollup": "^2.60.1",
+		"rollup-plugin-node-builtins": "^2.1.2",
 		"rollup-plugin-terser": "^7.0.2",
 		"sass": "^1.43.4",
 		"svelte-check": "^2.2.10",

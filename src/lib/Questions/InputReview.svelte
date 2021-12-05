@@ -12,6 +12,13 @@
 
 <Review>
 	<InputContent slot="content" {prompt} showExplanation explanation={prompt.explanation} />
-	<InputInput slot="input" disabled={true} correct={result.result >= 0.5} {prompt} {input} />
+	<InputInput
+		slot="input"
+		disabled={true}
+		correct={result.result >= 0.5}
+		type={prompt.type}
+		{prompt}
+		{input}
+	/>
 	<slot slot="extra" name="extra" />
 </Review>

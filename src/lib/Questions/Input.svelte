@@ -16,6 +16,6 @@
 
 <Prompt {question} {input} bind:showExplanation bind:result>
 	<InputContent slot="content" {prompt} {showExplanation} explanation={resultPrompt?.explanation} />
-	<InputInput slot="input" disabled={result != null} {correct} bind:input />
+	<InputInput slot="input" disabled={result != null} type={prompt.type} {correct} bind:input />
 	<slot slot="extra" name="extra" />
 </Prompt>

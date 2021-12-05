@@ -3,6 +3,7 @@
 	import RichEditor from '$lib/RichEditor.svelte';
 	import RichViewer from '$lib/RichViewer.svelte';
 	import type Quill from 'quill';
+	import InputAnswerEditor from './InputAnswerEditor.svelte';
 
 	export let prompt: QuestionInputPrivate;
 	export let disabled = false;
@@ -61,13 +62,7 @@
 					>
 				{/if}
 			</div>
-			<input
-				type="text"
-				class="mt-2 form-control"
-				placeholder="Type answer"
-				{disabled}
-				bind:value={prompt.answers[index]}
-			/>
+			<InputAnswerEditor bind:type={prompt.type} bind:input={prompt.answers[index]} />
 		</li>
 	{/each}
 </ul>

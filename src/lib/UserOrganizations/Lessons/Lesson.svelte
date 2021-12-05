@@ -8,6 +8,7 @@
 	export let organizationId: number;
 	export let courseId: number = undefined;
 	export let unitId: number = undefined;
+	export let index: number = undefined;
 	export let lesson: Lesson;
 
 	function onNameChange() {

@@ -27,7 +27,6 @@
 	import Courses from '$lib/UserOrganizations/Courses/Courses.svelte';
 	import { getOrganization, userOrganizations } from '$lib/state/userOrganizations';
 	import { setOrganizationIdAssets } from '$lib/state/selectedAssets';
-	import { openSidebar } from '$lib/Sidebar.svelte';
 
 	export let organizationId: number;
 

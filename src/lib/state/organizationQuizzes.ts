@@ -4,6 +4,7 @@ import { UserService } from '$lib/api/quantu-app-api';
 import type { Readable } from 'svelte/store';
 import { get, writable } from 'svelte/store';
 import { load } from './loading';
+import { updateUnitChild } from './organizationUnits';
 import { userEmitter } from './user';
 
 interface IOrganizationQuizzesStore {
@@ -64,6 +65,7 @@ export async function getQuizzes(organizationId: number, unitId?: number, force 
 export async function createQuiz(organizationId: number, params: QuizCreate) {
 	const quiz = await load(UserService.quantuAppWebControllerUserQuizCreate(organizationId, params));
 	organizationQuizzesWritable.update((state) => addToState(state, quiz));
+	updateUnitChild(quiz.unitId, quiz);
 	return quiz;
 }
 
@@ -72,6 +74,7 @@ export async function updateQuiz(organizationId: number, id: number, params: Par
 		UserService.quantuAppWebControllerUserQuizUpdate(id, organizationId, params)
 	);
 	organizationQuizzesWritable.update((state) => addToState(state, quiz));
+	updateUnitChild(quiz.unitId, quiz);
 	return quiz;
 }
 

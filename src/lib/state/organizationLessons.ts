@@ -4,6 +4,7 @@ import { UserService } from '$lib/api/quantu-app-api';
 import type { Readable } from 'svelte/store';
 import { get, writable } from 'svelte/store';
 import { load } from './loading';
+import { updateUnitChild } from './organizationUnits';
 import { userEmitter } from './user';
 
 interface IOrganizationLessonsStore {
@@ -71,6 +72,7 @@ export async function createLesson(organizationId: number, params: LessonCreate)
 		UserService.quantuAppWebControllerUserLessonCreate(organizationId, params)
 	);
 	organizationLessonsWritable.update((state) => addToState(state, lesson));
+	updateUnitChild(lesson.unitId, lesson);
 	return lesson;
 }
 
@@ -79,6 +81,7 @@ export async function updateLesson(organizationId: number, id: number, params: L
 		UserService.quantuAppWebControllerUserLessonUpdate(id, organizationId, params)
 	);
 	organizationLessonsWritable.update((state) => addToState(state, lesson));
+	updateUnitChild(lesson.unitId, lesson);
 	return lesson;
 }
 

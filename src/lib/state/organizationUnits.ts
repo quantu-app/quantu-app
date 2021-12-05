@@ -1,5 +1,12 @@
 import { browser } from '$app/env';
-import type { Unit, UnitChildList, UnitCreate, UnitUpdate } from '$lib/api/quantu-app-api';
+import type {
+	Lesson,
+	Quiz,
+	Unit,
+	UnitChildList,
+	UnitCreate,
+	UnitUpdate
+} from '$lib/api/quantu-app-api';
 import { UserService } from '$lib/api/quantu-app-api';
 import type { Readable } from 'svelte/store';
 import { get, writable } from 'svelte/store';
@@ -47,6 +54,19 @@ export async function getUnitChildren(organizationId: number, id: number) {
 		return state;
 	});
 	return children;
+}
+
+export function updateUnitChild(unitId: number, child: Quiz | Lesson) {
+	if (unitId) {
+		organizationUnitsWritable.update((state) => {
+			const childrenById = state.childrenById[unitId] || (state.childrenById[unitId] = []),
+				index = childrenById.findIndex((child) => child.id === child.id);
+			if (index !== -1) {
+				childrenById[index] = child;
+			}
+			return state;
+		});
+	}
 }
 
 export async function getUnits(organizationId: number, courseId?: number, force = false) {

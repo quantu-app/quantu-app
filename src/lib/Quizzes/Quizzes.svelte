@@ -27,6 +27,4 @@
 	<Search bind:filter={$state.quizNameFilter} />
 </div>
 
-<div class="container">
-	<QuizList quizzes={quizzes.filter(filter).sort(sort)} />
-</div>
+<QuizList quizzes={quizzes.filter(filter).sort(sort)} />

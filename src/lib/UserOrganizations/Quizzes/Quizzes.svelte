@@ -12,12 +12,13 @@
 
 <script lang="ts">
 	import { fuzzyEquals } from '@aicacia/string-fuzzy_equals';
-	import ActionBar from '$lib/UserOrganizations/Quizzes/ActionBar.svelte';
 	import QuizList from './QuizList.svelte';
 	import type { Quiz } from '$lib/api/quantu-app-api';
 	import Search from '$lib/Search.svelte';
+	import CreateQuiz from './CreateQuiz.svelte';
 
 	export let organizationId: number;
+	export let courseId: number = undefined;
 	export let unitId: number = undefined;
 	export let quizzes: Quiz[];
 
@@ -26,10 +27,12 @@
 </script>
 
 <div class="container mb-2">
-	<ActionBar {organizationId} {unitId} />
+	<div class="d-flex justify-content-end">
+		<CreateQuiz {organizationId} {courseId} {unitId} />
+	</div>
 	<Search bind:filter={$state.quizNameFilter} />
 </div>
 
 <div class="container">
-	<QuizList {organizationId} {unitId} quizzes={quizzes.filter(filter)} />
+	<QuizList {organizationId} quizzes={quizzes.filter(filter)} />
 </div>

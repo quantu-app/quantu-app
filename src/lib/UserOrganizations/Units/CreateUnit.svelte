@@ -1,22 +1,22 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import type { Course } from '$lib/api/quantu-app-api';
 	import { addNotification, NotificationType } from '$lib/state/notifications';
 	import { createUnit } from '$lib/state/organizationUnits';
+	import { organizationPath } from '$lib/utils';
 
 	export let organizationId: number;
-	export let course: Course;
+	export let courseId: number = undefined;
 
-	let unitCreating = false;
-	let newUnitName: string;
+	let creating = false;
+	let newName: string;
 
-	$: onCreateUnit = async () => {
-		unitCreating = true;
+	$: onCreate = async () => {
+		creating = true;
 		try {
-			const unit = await createUnit(organizationId, { name: newUnitName, courseId: course.id });
-			goto(`/user/organizations/${organizationId}/courses/${course.id}/units/${unit.id}`);
+			const unit = await createUnit(organizationId, { name: newName, courseId });
+			goto(organizationPath(organizationId, courseId, unit.id));
 		} catch (error) {
-			unitCreating = false;
+			creating = false;
 			Object.entries(error.body.errors).map(([name, message]: [string, string[]]) => {
 				addNotification({
 					type: NotificationType.Danger,
@@ -33,7 +33,7 @@
 	class="btn btn-primary"
 	data-bs-toggle="modal"
 	data-bs-target="#create-unit"
-	aria-label="Create Unit">Create Unit</button
+	aria-label="Create">Create Unit</button
 >
 
 <div
@@ -51,25 +51,25 @@
 			</div>
 			<div class="modal-body">
 				<div class="form-group">
-					<label for="unit-name">Unit Name</label>
+					<label for="unit-name">Name</label>
 					<input
 						type="text"
 						class="form-control"
 						id="unit-name"
-						placeholder="Unit Name"
-						bind:value={newUnitName}
+						placeholder="Name"
+						bind:value={newName}
 					/>
 				</div>
 			</div>
 			<div class="modal-footer">
 				<button
 					type="button"
-					on:click={onCreateUnit}
-					disabled={!newUnitName || unitCreating}
+					on:click={onCreate}
+					disabled={!newName || creating}
 					data-bs-dismiss="modal"
-					class="btn btn-primary"
+					class="btn btn-primary text-white"
 				>
-					{#if unitCreating}
+					{#if creating}
 						<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" />
 					{/if}
 					Create

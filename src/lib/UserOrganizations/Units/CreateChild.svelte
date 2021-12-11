@@ -86,14 +86,16 @@
 					on:click={onCreateChild}
 					disabled={!newChildName || childCreating}
 					data-bs-dismiss="modal"
-					class="btn btn-primary text-white"
+					class="btn btn-primary"
 				>
 					{#if childCreating}
 						<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" />
 					{/if}
 					Create
 				</button>
-				<button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+				<button type="button" class="btn btn-danger text-white" data-bs-dismiss="modal"
+					>Close</button
+				>
 			</div>
 		</div>
 	</div>

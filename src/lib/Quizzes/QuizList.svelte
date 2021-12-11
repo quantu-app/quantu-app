@@ -5,8 +5,10 @@
 	export let quizzes: Quiz[];
 </script>
 
-<div class="list-group list-group-flush">
-	{#each quizzes as quiz}
-		<QuizListItem {quiz} />
-	{/each}
+<div class="container">
+	<div class="row row-cols-1 row-cols-sm-2 row-cols-md-4">
+		{#each quizzes as quiz}
+			<QuizListItem {quiz} />
+		{/each}
+	</div>
 </div>

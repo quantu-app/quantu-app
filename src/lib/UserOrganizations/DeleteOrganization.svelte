@@ -45,7 +45,9 @@
 					data-bs-dismiss="modal"
 					class="btn btn-danger text-white">Delete</button
 				>
-				<button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+				<button type="button" class="btn btn-danger text-white" data-bs-dismiss="modal"
+					>Close</button
+				>
 			</div>
 		</div>
 	</div>

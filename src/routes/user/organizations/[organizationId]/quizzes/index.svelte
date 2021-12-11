@@ -35,7 +35,7 @@
 
 	if (browser) {
 		getOrganization(organizationId);
-		getQuizzes(organizationId, true);
+		getQuizzes(organizationId, undefined, true);
 		setOrganizationIdAssets(organizationId);
 	}
 </script>

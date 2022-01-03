@@ -57,8 +57,10 @@
 			</div>
 		</div>
 		<div class="d-flex justify-content-end mt-2">
-			<a role="button" class="btn btn-secondary me-2" href={`/quizzes/${quiz.id}/review`}>Review</a>
-			<button role="button" class="btn btn-success me-2" on:click={onPlay}>Play</button>
+			<a role="button" class="btn btn-secondary text-white me-2" href={`/quizzes/${quiz.id}/review`}
+				>Review</a
+			>
+			<!-- <button role="button" class="btn btn-success me-2" on:click={onPlay}>Play</button> -->
 			<a
 				role="button"
 				class="btn btn-primary"

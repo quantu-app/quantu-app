@@ -13,6 +13,10 @@ export type QuestionCreate = {
      */
     index?: number | null;
     /**
+     * Is this a challenge question?
+     */
+    isChallenge?: boolean | null;
+    /**
      * Question name
      */
     name?: string | null;
@@ -21,6 +25,10 @@ export type QuestionCreate = {
      * Quiz Id
      */
     quizId?: number | null;
+    /**
+     * When was this question released?
+     */
+    releasedAt?: string | null;
     /**
      * Question tags
      */

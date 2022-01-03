@@ -3,7 +3,7 @@ import { OpenAPI } from '$lib/api/quantu-app-api';
 import type { LoadInput, LoadOutput } from '@sveltejs/kit';
 import type { Rec } from '@sveltejs/kit/types/helper';
 
-export function authGuard({ page, session }: LoadInput<Rec, Rec, UserPrivate>): LoadOutput {
+export function authGuard({ url, session }: LoadInput<Rec, Rec, UserPrivate>): LoadOutput {
 	if (session) {
 		OpenAPI.TOKEN = session.token;
 		return {};
@@ -12,10 +12,10 @@ export function authGuard({ page, session }: LoadInput<Rec, Rec, UserPrivate>): 
 				status: 302,
 				redirect: '/'
 			},
-			redirectQuery = page.query.toString(),
-			redirectPath = page.path + (redirectQuery ? '?' + redirectQuery : '');
+			redirectQuery = url.searchParams.toString(),
+			redirectPath = url.pathname + (redirectQuery ? '?' + redirectQuery : '');
 
-		if (redirectPath && page.path !== '/') {
+		if (redirectPath && url.pathname !== '/') {
 			output.redirect += `?redirectPath=${encodeURIComponent(redirectPath)}`;
 		}
 

@@ -5,10 +5,10 @@
 
 	export async function load(input: LoadInput) {
 		const response = authGuard(input),
-			quizId = parseInt(input.page.params.quizId),
-			playId = input.page.params.playId,
-			seed = parseInt(input.page.query.get('seed')),
-			questionCount = parseInt(input.page.query.get('questionCount'));
+			quizId = parseInt(input.params.quizId),
+			playId = input.url.searchParams.playId,
+			seed = parseInt(input.url.searchParams.get('seed')),
+			questionCount = parseInt(input.url.searchParams.get('questionCount'));
 
 		return {
 			...response,

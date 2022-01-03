@@ -56,7 +56,7 @@
 	<ul class="list-group list-group-flush">
 		<li class="list-group-item pe-0">
 			{#if children.length === 0}
-				<button class="btn btn-secondary" disabled={loading} on:click={onLoad}>
+				<button class="btn btn-secondary text-white" disabled={loading} on:click={onLoad}>
 					{#if loading}
 						<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" />
 					{:else}

@@ -17,7 +17,7 @@
 			<button
 				type="button"
 				disabled={input === 0.5 || (disabled && input === 0.5)}
-				class="btn btn-secondary"
+				class="btn btn-secondary text-white"
 				class:active={input === 0.5}
 				on:click={() => (input = 0.5)}>Somewhat</button
 			>

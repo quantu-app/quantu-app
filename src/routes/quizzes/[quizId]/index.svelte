@@ -6,7 +6,7 @@
 
 	export async function load(input: LoadInput) {
 		const response = authGuard(input),
-			quizId = parseInt(input.page.params.quizId);
+			quizId = parseInt(input.params.quizId);
 
 		if (!browser && isValidStatus(response)) {
 			await Promise.all([getQuiz(quizId), getQuestions(undefined, quizId)]);

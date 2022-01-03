@@ -17,6 +17,7 @@
 	import Organizations from '$lib/UserOrganizations/Organizations.svelte';
 	import { getOrganizations, userOrganizations } from '$lib/state/userOrganizations';
 	import OrganizationLayout from '$lib/UserOrganizations/OrganizationLayout.svelte';
+	import { sortById } from '$lib/utils';
 
 	$: organizations = Object.values($userOrganizations.byId);
 

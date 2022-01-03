@@ -21,6 +21,10 @@ export type QuestionPrivate = {
      */
     insertedAt: string;
     /**
+     * Is this a challenge question?
+     */
+    isChallenge?: boolean;
+    /**
      * Question name
      */
     name: string | null;
@@ -33,6 +37,10 @@ export type QuestionPrivate = {
      * Quiz Id
      */
     quizId?: number | null;
+    /**
+     * When was this question released?
+     */
+    releasedAt?: string;
     /**
      * Question tags
      */

@@ -4,15 +4,6 @@
 	export let breadcrumbs: { href: string; title: string }[] = [];
 </script>
 
-<Layout
-	navItems={[
-		{
-			href: `/`,
-			icon: 'house',
-			title: 'Home'
-		}
-	]}
-	{breadcrumbs}
->
+<Layout {breadcrumbs}>
 	<slot />
 </Layout>

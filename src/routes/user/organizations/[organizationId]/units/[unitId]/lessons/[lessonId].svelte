@@ -6,9 +6,9 @@
 
 	export async function load(input: LoadInput) {
 		const response = authGuard(input),
-			organizationId = parseInt(input.page.params.organizationId),
-			unitId = parseInt(input.page.params.unitId),
-			lessonId = parseInt(input.page.params.lessonId);
+			organizationId = parseInt(input.params.organizationId),
+			unitId = parseInt(input.params.unitId),
+			lessonId = parseInt(input.params.lessonId);
 
 		if (!browser && isValidStatus(response)) {
 			await Promise.all([getOrganization(organizationId), getLesson(organizationId, lessonId)]);

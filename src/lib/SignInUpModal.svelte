@@ -51,21 +51,22 @@
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h5 id="sign-in-up-modal-label" class="modal-title">Sign in/up</h5>
+				<h5 id="sign-in-up-modal-label" class="modal-title">Sign in/up with</h5>
 				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" />
 			</div>
 			<div class="modal-body">
-				<div class="d-flex justify-content-center mb-4">
-					<div class="d-flex">
-						<button
-							type="button"
-							disabled={loading}
-							on:click={() => signInWith('google')}
-							class="btn btn-outline-secondary google"
-							><img class="me-2" src="/google.svg" alt="G" />Sign in with Google</button
-						>
-					</div>
-				</div>
+				<button
+					type="button"
+					disabled={loading}
+					on:click={() => signInWith('google')}
+					class="btn btn-primary google w-100">Google</button
+				>
+				<button
+					type="button"
+					disabled={loading}
+					on:click={() => signInWith('facebook')}
+					class="btn btn-primary facebook mt-1 w-100">Facebook</button
+				>
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-danger text-white" data-bs-dismiss="modal"
@@ -79,9 +80,14 @@
 <style lang="scss">
 	.google {
 		font-family: Roboto, arial, sans-serif;
-		font-weight: 500;
+		font-weight: bold;
 		letter-spacing: 0.21px;
-		color: #212529 !important;
-		background-color: #fff !important;
+		color: #fff !important;
+		background-color: #f00 !important;
+	}
+	.facebook {
+		font-weight: bold;
+		color: #fff !important;
+		background-color: #3578e5 !important;
 	}
 </style>

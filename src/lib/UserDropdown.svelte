@@ -6,7 +6,7 @@
 	<div class="dropdown dropdown">
 		<button
 			id="user-dropdown"
-			class="btn btn-primary position-absolute dropdown-toggle"
+			class="btn btn-light dropdown-toggle user-dropdown"
 			type="button"
 			data-bs-toggle="dropdown"
 			aria-expanded="false"
@@ -38,15 +38,18 @@
 		type="button"
 		data-bs-toggle="modal"
 		data-bs-target="#sign-in-up-modal"
-		class="btn btn-primary position-absolute"
+		class="btn btn-light user-dropdown"
 	>
 		<i class="bi bi-box-arrow-in-right" />
 	</button>
 {/if}
 
 <style lang="scss">
-	button {
-		top: 0.5rem;
-		right: 0.5rem;
+	.user-dropdown {
+		border-radius: 100%;
+		padding: 0.5rem 0.75rem;
+		&::after {
+			display: none !important;
+		}
 	}
 </style>

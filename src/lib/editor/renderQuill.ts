@@ -15,13 +15,19 @@ export function renderQuill(node: HTMLElement, quill: Quill) {
 }
 
 export function renderOps(node: HTMLElement, ops: Op[]) {
-	const tmp = getOrCreateTmpNode(node.ownerDocument);
-
-	const quill = createQuill(tmp);
+	const quill = getOrCreateQuill(node.ownerDocument);
 	quill.setContents({ ops } as Delta);
-
 	renderQuill(node, quill);
-	tmp.innerHTML = '';
+	quill.setContents({ ops: [] } as Delta);
+}
+
+let QUILL: Quill | undefined;
+function getOrCreateQuill(document: Document) {
+	const tmp = getOrCreateTmpNode(document);
+	if (!QUILL) {
+		QUILL = createQuill(tmp);
+	}
+	return QUILL;
 }
 
 const TMP_NODE_ID = 'quill-render-tmp-node';

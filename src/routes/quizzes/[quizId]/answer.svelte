@@ -5,10 +5,10 @@
 
 	export async function load(input: LoadInput) {
 		const response = authGuard(input),
-			seed = parseInt(input.page.query.get('seed')),
-			questionCount = parseInt(input.page.query.get('questionCount')),
-			index = parseInt(input.page.query.get('index')),
-			quizId = parseInt(input.page.params.quizId);
+			seed = parseInt(input.url.searchParams.get('seed')),
+			questionCount = parseInt(input.url.searchParams.get('questionCount')),
+			index = parseInt(input.url.searchParams.get('index')),
+			quizId = parseInt(input.params.quizId);
 
 		if (index >= questionCount) {
 			return {
@@ -42,11 +42,9 @@
 	export let seed: number;
 	export let index: number;
 
-	$: rng = XorShiftRng.fromSeed(seed);
 	$: quiz = $quizzes.byId[quizId];
-	$: questionList = rng
-		.shuffle(Object.values($questions.byQuizId[quizId] || {}).sort(sortById))
-		.slice(0, questionCount);
+	$: allQuestions = Object.values($questions.byQuizId[quizId] || {}).sort(sortById);
+	$: questionList = XorShiftRng.fromSeed(seed).shuffle(allQuestions).slice(0, questionCount);
 	$: question = questionList[index];
 
 	if (browser) {

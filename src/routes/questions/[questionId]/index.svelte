@@ -6,7 +6,7 @@
 
 	export async function load(input: LoadInput) {
 		const response = authGuard(input),
-			questionId = parseInt(input.page.params.questionId);
+			questionId = parseInt(input.params.questionId);
 
 		if (!browser && isValidStatus(response)) {
 			await getQuestion(questionId);

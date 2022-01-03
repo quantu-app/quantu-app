@@ -6,9 +6,9 @@
 
 	export async function load(input: LoadInput) {
 		const response = authGuard(input),
-			seed = parseInt(input.page.query.get('seed')),
-			questionCount = parseInt(input.page.query.get('questionCount')),
-			quizId = parseInt(input.page.params.quizId);
+			seed = parseInt(input.url.searchParams.get('seed')),
+			questionCount = parseInt(input.url.searchParams.get('questionCount')),
+			quizId = parseInt(input.params.quizId);
 
 		if (!browser && isValidStatus(response)) {
 			await Promise.all([getQuiz(quizId), getQuestionResults(quizId)]);
@@ -37,12 +37,11 @@
 	export let questionCount: number;
 	export let seed: number;
 
-	$: rng = XorShiftRng.fromSeed(seed);
 	$: quiz = $quizzes.byId[quizId];
 	$: allQuestionResults = Object.values($questionResults.byQuizId[quizId] || {}).sort(
 		(a, b) => a.questionId - b.questionId
 	);
-	$: questionResultList = rng
+	$: questionResultList = XorShiftRng.fromSeed(seed)
 		.shuffle(allQuestionResults)
 		.slice(0, questionCount || allQuestionResults.length);
 

@@ -6,7 +6,7 @@
 
 	export async function load(input: LoadInput) {
 		const response = authGuard(input),
-			organizationIdString = input.page.query.get('organizationId'),
+			organizationIdString = input.params.organizationId,
 			organizationId = organizationIdString && parseInt(organizationIdString, 10);
 
 		if (!browser && isValidStatus(response)) {
@@ -26,12 +26,13 @@
 	import AppLayout from '$lib/AppLayout.svelte';
 	import Quizzes from '$lib/Quizzes/Quizzes.svelte';
 	import { getQuizzes, quizzes } from '$lib/state/quizzes';
+	import { sortById } from '$lib/utils';
 
 	export let organizationId: number = undefined;
 
 	$: quizList = Object.values(
 		(organizationId ? $quizzes.byOrganizationId[organizationId] : $quizzes.byId) || {}
-	);
+	).sort(sortById);
 
 	if (browser) {
 		getQuizzes(organizationId, undefined, true);

@@ -8,7 +8,7 @@
 	$: insertedAt = new Date(quiz.insertedAt);
 </script>
 
-<div class="col">
+<div class="quiz-list-item col-sm-6 col-md-4 col-lg-3 mb-4">
 	<div class="card">
 		<div class="card-body">
 			<h5 class="card-title">{quiz.name}</h5>
@@ -18,7 +18,11 @@
 					<RichViewer content={quiz.description} />
 				</div>
 			{/if}
-			<a aria-label="Study" href={`/quizzes/${quiz.id}`}>Study</a>
+			<div class="d-flex justify-content-end">
+				<a class="btn btn-primary" role="button" aria-label="Study" href={`/quizzes/${quiz.id}`}
+					>Study</a
+				>
+			</div>
 		</div>
 	</div>
 </div>

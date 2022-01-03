@@ -20,7 +20,7 @@
 		</h4>
 		<div>
 			<a role="button" class="btn btn-primary me-2" href={`/questions/${question.id}`}>Answer</a>
-			<a role="button" class="btn btn-secondary me-2" href={`/questions/${question.id}/review`}
+			<a role="button" class="btn btn-secondary text-white me-2" href={`/questions/${question.id}/review`}
 				>Review</a
 			>
 		</div>

@@ -3,6 +3,7 @@
 		QuestionFlashCardPrivate,
 		QuestionInputPrivate,
 		QuestionMultipleChoicePrivate,
+		QuestionMarkAsReadPrivate,
 		QuestionPrivate
 	} from '$lib/api/quantu-app-api';
 	import Tags from '$lib/Tags.svelte';
@@ -17,6 +18,11 @@
 	$: promptFlashCard = question.prompt as QuestionFlashCardPrivate;
 	$: promptMultipleChoice = question.prompt as QuestionMultipleChoicePrivate;
 	$: promptInput = question.prompt as QuestionInputPrivate;
+	$: promptMarkAsRead = question.prompt as QuestionMarkAsReadPrivate;
+
+	function onIsChallengeChange() {
+		question.isChallenge = !question.isChallenge;
+	}
 </script>
 
 <div class="row">
@@ -40,15 +46,29 @@
 			aria-label="Question Type"
 		>
 			<option value="multiple_choice">Multiple Choice</option>
-			<!-- <option value="flash_card">Flash Card</option> -->
 			<option value="input">Input</option>
 			<option value="mark_as_read">Mark as Read</option>
+			<option value="flash_card">Flash Card</option>
 		</select>
 	</div>
 </div>
-<div class="mt-2">
-	<label for="question-tags" class="form-label">Question Tags</label>
-	<Tags id="question-tags" {disabled} bind:tags={question.tags} />
+<div class="row mt-4">
+	<div class="col-md">
+		<label for="question-tags" class="form-label">Question Tags</label>
+		<Tags id="question-tags" {disabled} bind:tags={question.tags} />
+	</div>
+	<div class="col-md">
+		<div class="form-check">
+			<input
+				class="form-check-input"
+				type="checkbox"
+				id="question-is-challenge"
+				aria-label="Question is Challenge"
+				on:change={onIsChallengeChange}
+			/>
+			<label class="form-check-label" for="question-is-challenge">Is Challenge?</label>
+		</div>
+	</div>
 </div>
 
 {#if question.type === 'flash_card'}
@@ -58,5 +78,5 @@
 {:else if question.type === 'input'}
 	<InputEditor {disabled} bind:prompt={promptInput} />
 {:else if question.type === 'mark_as_read'}
-	<MarkAsReadEditor {disabled} bind:prompt={promptInput} />
+	<MarkAsReadEditor {disabled} bind:prompt={promptMarkAsRead} />
 {/if}

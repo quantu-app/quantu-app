@@ -44,7 +44,7 @@
 					{#if !showExplanation && question.type !== 'mark_as_read'}
 						<button
 							type="button"
-							class="btn btn-secondary"
+							class="btn btn-secondary text-white"
 							disabled={showExplanation}
 							on:click={() => (showExplanation = true)}
 						>
@@ -56,7 +56,7 @@
 					{#if question.type !== 'mark_as_read'}
 						<button
 							type="button"
-							class="btn btn-secondary"
+							class="btn btn-secondary text-white"
 							disabled={explaining || answering}
 							on:click={onExplain}
 						>

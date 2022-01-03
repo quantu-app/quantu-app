@@ -6,7 +6,7 @@
 
 	export async function load(input: LoadInput) {
 		const response = authGuard(input),
-			organizationIdString = input.page.query.get('organizationId'),
+			organizationIdString = input.params.organizationId,
 			organizationId = organizationIdString && parseInt(organizationIdString, 10);
 
 		if (!browser && isValidStatus(response)) {

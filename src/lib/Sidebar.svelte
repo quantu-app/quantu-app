@@ -16,8 +16,6 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import { writable } from 'svelte/store';
-
-	export let navItems: Array<{ href: string; icon: string; title: string }>;
 </script>
 
 <div class="d-flex align-items-stretch border-end">
@@ -47,27 +45,6 @@
 			>
 				<i class="bi bi-list" />
 			</button>
-			<hr class="mt-0" />
-			<slot>
-				<ul class="nav nav-pills flex-column mb-auto">
-					{#each navItems as navItem}
-						<li class="nav-item">
-							<a
-								href={navItem.href}
-								class="nav-link"
-								class:active={navItem.href === $page.path}
-								title={navItem.title}
-								data-bs-toggle="tooltip"
-								data-bs-placement="right"
-								data-bs-original-title={navItem.title}
-							>
-								<i class="bi bi-{navItem.icon}" />
-								{navItem.title}
-							</a>
-						</li>
-					{/each}
-				</ul></slot
-			>
 		</div>
 	</div>
 </div>

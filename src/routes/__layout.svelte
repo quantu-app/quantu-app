@@ -7,19 +7,15 @@
 	OpenAPI.BASE = API_URL;
 </script>
 
-<script>
+<script lang="ts">
 	import { page } from '$app/stores';
 	import { browser } from '$app/env';
-	import { currentUser, setUserSocket, socket } from '$lib/state/user';
 
 	$: if (browser) {
 		if (typeof window.gtag !== 'undefined') {
 			window.gtag('config', 'G-8H9MTEL7XT', {
-				page_path: `${$page.path}${$page.query ? '?' + $page.query : ''}`
+				page_path: `${$page.url.pathname}${$page.url.search ? '?' + $page.url.search : ''}`
 			});
-		}
-		if ($currentUser && !$socket) {
-			setUserSocket($currentUser.id, $currentUser.token);
 		}
 	}
 </script>

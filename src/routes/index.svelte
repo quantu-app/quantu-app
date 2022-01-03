@@ -1,8 +1,8 @@
 <script context="module" lang="ts">
 	import type { LoadInput } from '@sveltejs/kit';
 
-	export function load({ page, session }: LoadInput) {
-		const redirectPathString = page.query.get('redirectPath'),
+	export function load({ url, session }: LoadInput) {
+		const redirectPathString = url.searchParams.get('redirectPath'),
 			redirectPath = redirectPathString ? decodeURIComponent(redirectPathString) : undefined;
 
 		if (session) {
@@ -46,7 +46,7 @@
 </svelte:head>
 
 <AppLayout>
-	<div class="d-flex justify-content-center align-items-center h-100">
+	<div class="d-flex justify-content-center align-items-center">
 		<div class="d-flex flex-column align-items-center">
 			<h1>Quant[U]</h1>
 

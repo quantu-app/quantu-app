@@ -35,7 +35,7 @@ export function load<T>(promise: Promise<T>): Promise<T> {
 						addNotification({
 							type: NotificationType.Danger,
 							heading: name,
-							description: message ? message.join(', ') : ''
+							description: message && message.join ? message.join(', ') : message + ''
 						});
 					});
 				}

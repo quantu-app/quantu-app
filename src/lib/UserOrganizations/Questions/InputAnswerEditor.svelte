@@ -24,7 +24,7 @@
 {#if type === 'latex'}
 	<div class="input-group">
 		<span
-			class="border"
+			class="border py-2"
 			class:border-success={correct === true}
 			class:border-danger={correct === false}
 			bind:this={mathElement}

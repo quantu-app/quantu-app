@@ -1,4 +1,6 @@
-import type { UserPrivate } from '$lib/api/quantu-app-api';
+import { base } from '$app/paths';
+import type { UserPrivate, UserUpdate } from '$lib/api/quantu-app-api';
+import { UserService } from '$lib/api/quantu-app-api';
 import { AuthService, OpenAPI } from '$lib/api/quantu-app-api';
 import type { Readable } from 'svelte/store';
 import { get, writable, derived } from 'svelte/store';
@@ -64,6 +66,15 @@ export async function signInWithToken(token: string) {
 	}
 }
 
+export async function updateUser(updates: UserUpdate) {
+	try {
+		const user = await load(UserService.quantuAppWebControllerUserUpdate(updates));
+		session.set(user);
+	} catch {
+		signOutUser();
+	}
+}
+
 async function signInUser(currentUser: UserPrivate) {
 	const redirectPath = get(redirectPathWritable),
 		tasks: Promise<unknown>[] = [];
@@ -71,9 +82,13 @@ async function signInUser(currentUser: UserPrivate) {
 	OpenAPI.TOKEN = currentUser.token;
 	Cookies.set('token', currentUser.token, { expires: 30 });
 	session.set(currentUser);
-	if (redirectPath) {
-		redirectPathWritable.set(undefined);
-		tasks.push(goto(redirectPath));
+	if (currentUser.active) {
+		if (redirectPath) {
+			redirectPathWritable.set(undefined);
+			tasks.push(goto(redirectPath));
+		}
+	} else {
+		tasks.push(goto(`${base}/user/profile`));
 	}
 	userEmitter.emit('signIn', currentUser);
 	await Promise.all(tasks);

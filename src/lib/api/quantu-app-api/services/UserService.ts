@@ -37,6 +37,7 @@ import type { UnitUpdate } from '../models/UnitUpdate';
 import type { UsernameUpdate } from '../models/UsernameUpdate';
 import type { UserPrivate } from '../models/UserPrivate';
 import type { UserPublic } from '../models/UserPublic';
+import type { UserUpdate } from '../models/UserUpdate';
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { request as __request } from '../core/request';
 
@@ -116,6 +117,42 @@ export class UserService {
         return __request({
             method: 'POST',
             path: `/user/organizations/${organizationId}/quizzes/${id}/add-questions`,
+            body: requestBody,
+            mediaType: 'application/json',
+        });
+    }
+
+    /**
+     * Updates the current User
+     * Returns the user
+     * @param requestBody Request body to update user
+     * @returns UserPrivate Updated User Response
+     * @throws ApiError
+     */
+    public static quantuAppWebControllerUserUpdate(
+        requestBody: UserUpdate,
+    ): CancelablePromise<UserPrivate> {
+        return __request({
+            method: 'PATCH',
+            path: `/user`,
+            body: requestBody,
+            mediaType: 'application/json',
+        });
+    }
+
+    /**
+     * Updates the current User
+     * Returns the user
+     * @param requestBody Request body to update user
+     * @returns UserPrivate Updated User Response
+     * @throws ApiError
+     */
+    public static quantuAppWebControllerUserUpdate2(
+        requestBody: UserUpdate,
+    ): CancelablePromise<UserPrivate> {
+        return __request({
+            method: 'PUT',
+            path: `/user`,
             body: requestBody,
             mediaType: 'application/json',
         });

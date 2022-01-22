@@ -2,7 +2,7 @@
 /* tslint:disable */
 /* eslint-disable */
 export { ApiError } from './core/ApiError';
-export { CancelablePromise } from './core/CancelablePromise';
+export { CancelablePromise, CancelError } from './core/CancelablePromise';
 export { OpenAPI } from './core/OpenAPI';
 
 export type { Asset } from './models/Asset';
@@ -64,6 +64,7 @@ export type { UnitUpdate } from './models/UnitUpdate';
 export type { UsernameUpdate } from './models/UsernameUpdate';
 export type { UserPrivate } from './models/UserPrivate';
 export type { UserPublic } from './models/UserPublic';
+export type { UserUpdate } from './models/UserUpdate';
 
 export { AssetService } from './services/AssetService';
 export { AuthService } from './services/AuthService';

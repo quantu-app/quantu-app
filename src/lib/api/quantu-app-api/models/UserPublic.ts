@@ -7,6 +7,10 @@
  */
 export type UserPublic = {
     /**
+     * User active status
+     */
+    active?: boolean;
+    /**
      * Id
      */
     id: string;

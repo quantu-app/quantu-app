@@ -17,6 +17,11 @@
 			<li><span class="dropdown-item disabled">{$currentUser.username}</span></li>
 			{#if $currentUser.creator}
 				<li>
+					<a role="button" class="dropdown-item" aria-label="Profile" href="/user/profile"
+						>Profile</a
+					>
+				</li>
+				<li>
 					<a
 						role="button"
 						class="dropdown-item"

@@ -21,13 +21,27 @@ function isStringWithValue(value: any): value is string {
 }
 
 function isBlob(value: any): value is Blob {
-    return value instanceof Blob;
+    return (
+        typeof value === 'object' &&
+        typeof value.type === 'string' &&
+        typeof value.stream === 'function' &&
+        typeof value.arrayBuffer === 'function' &&
+        typeof value.constructor === 'function' &&
+        typeof value.constructor.name === 'string' &&
+        /^(Blob|File)$/.test(value.constructor.name) &&
+        /^(Blob|File)$/.test(value[Symbol.toStringTag])
+    );
+}
+
+function isFormData(value: any): value is FormData {
+    return value instanceof FormData;
 }
 
 function base64(str: string): string {
     try {
         return btoa(str);
     } catch (err) {
+        // @ts-ignore
         return Buffer.from(str).toString('base64');
     }
 }
@@ -137,7 +151,7 @@ async function getHeaders(options: ApiRequestOptions): Promise<Headers> {
             headers.append('Content-Type', options.body.type || 'application/octet-stream');
         } else if (isString(options.body)) {
             headers.append('Content-Type', 'text/plain');
-        } else {
+        } else if (!isFormData(options.body)) {
             headers.append('Content-Type', 'application/json');
         }
     }
@@ -149,7 +163,7 @@ function getRequestBody(options: ApiRequestOptions): BodyInit | undefined {
     if (options.body) {
         if (options.mediaType?.includes('/json')) {
             return JSON.stringify(options.body)
-        } else if (isString(options.body) || isBlob(options.body)) {
+        } else if (isString(options.body) || isBlob(options.body) || isFormData(options.body)) {
             return options.body;
         } else {
             return JSON.stringify(options.body);

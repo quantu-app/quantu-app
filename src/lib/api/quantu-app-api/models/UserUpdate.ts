@@ -2,12 +2,10 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import type { Email } from './Email';
-
 /**
- * A private user
+ * A private user update
  */
-export type UserPrivate = {
+export type UserUpdate = {
     /**
      * User active status
      */
@@ -21,35 +19,13 @@ export type UserPrivate = {
      */
     country: string | null;
     /**
-     * User creator status
-     */
-    creator: boolean | null;
-    email?: Email;
-    emails: Array<Email>;
-    /**
      * User first name
      */
     firstName: string | null;
     /**
-     * Id
-     */
-    id: string;
-    /**
-     * Creation timestamp
-     */
-    insertedAt: string;
-    /**
      * User last name
      */
     lastName: string | null;
-    /**
-     * User Token
-     */
-    token: string;
-    /**
-     * Update timestamp
-     */
-    updatedAt: string;
     /**
      * User name
      */

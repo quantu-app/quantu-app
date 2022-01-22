@@ -4,11 +4,12 @@
 	import SignInUpModal from '$lib/SignInUpModal.svelte';
 	import { page } from '$app/stores';
 	import Nav from './Nav.svelte';
+	import Footer from './Footer.svelte';
 
 	export let breadcrumbs: { href?: string; title: string }[] = [];
 </script>
 
-<div class="h-100 w-100">
+<div class="d-flex flex-column min-vh-100">
 	<Nav />
 	<div class="container">
 		<nav aria-label="breadcrumb">
@@ -30,6 +31,9 @@
 		</nav>
 	</div>
 	<slot />
+	<div class="mt-auto">
+		<Footer />
+	</div>
 	<Notifications />
 	<SignInUpModal />
 	<div

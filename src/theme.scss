@@ -1,14 +1,14 @@
 $enable-rounded: false;
 $font-family-base: 'Roboto Mono', monospace;
 
-$primary: #222;
-$secondary: #888;
+$primary: #212120;
+$secondary: #a8a8a8;
 $success: #0a0;
 $danger: #a00;
 $info: #aaa;
 $warning: #a40;
-$light: #fff;
-$dark: #000;
+$light: #f1f1f1;
+$dark: #111;
 
 @import 'bootstrap/scss/bootstrap';
 @import 'bootstrap/scss/functions';

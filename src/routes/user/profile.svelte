@@ -15,12 +15,12 @@
 	import { goto } from '$app/navigation';
 	import { base } from '$app/paths';
 
-	let isNowActive = $currentUser.active;
-	let username = $currentUser.username;
-	let firstName = $currentUser.firstName;
-	let lastName = $currentUser.lastName;
-	let birthday = $currentUser.birthday;
-	let country = $currentUser.country;
+	const isNowActive = $currentUser?.active;
+	let username = $currentUser?.username;
+	let firstName = $currentUser?.firstName;
+	let lastName = $currentUser?.lastName;
+	let birthday = $currentUser?.birthday;
+	let country = $currentUser?.country;
 
 	function onUpdate() {
 		updateUser({
@@ -43,7 +43,7 @@
 
 <AppLayout>
 	<div class="container">
-		{#if !$currentUser.active}
+		{#if !$currentUser?.active}
 			<div class="row">
 				<h1>Welcome to our community</h1>
 				<p>

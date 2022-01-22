@@ -23,6 +23,7 @@
 		"clean": "rm -rf node_modules/.vite .svelte-kit build",
 		"web": "svelte-kit dev --host --open",
 		"web.build": "svelte-kit build",
+		"web.preview": "svelte-kit preview",
 		"desktop": "tauri dev",
 		"desktop.prebuild": "node scripts/prebuild.cjs",
 		"desktop.binary": "node scripts/build.cjs",
@@ -41,7 +42,7 @@
 		"gen.api": "rm -rf src/lib/api/quantu-app-api && openapi --input http://localhost:4000/swagger.json --output src/lib/api/quantu-app-api"
 	},
 	"devDependencies": {
-		"@sveltejs/adapter-node": "next",
+		"@sveltejs/adapter-node": "1.0.0-next.59",
 		"@tauri-apps/api": "^1.0.0-beta.8",
 		"@tauri-apps/cli": "^1.0.0-beta.10",
 		"@types/bootstrap": "^5.1.9",
@@ -80,7 +81,7 @@
 		"@aicacia/rand": "^0.2.9",
 		"@aicacia/range": "^0.1.1",
 		"@aicacia/string-fuzzy_equals": "^0.1.4",
-		"@sveltejs/kit": "1.0.0-next.230",
+		"@sveltejs/kit": "1.0.0-next.215",
 		"cookie": "^0.4.1",
 		"eventemitter3": "^4.0.7",
 		"js-cookie": "^3.0.1",

@@ -1,7 +1,7 @@
 FROM node:16-alpine as node-builder
 
 RUN apk add --no-cache python3 g++ make zlib-dev
-RUN npm install -g npm@8.3.0
+RUN npm install -g npm@8.3.2
 
 WORKDIR /app
 

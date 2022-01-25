@@ -10,7 +10,7 @@
 			organizationId = organizationIdString && parseInt(organizationIdString, 10);
 
 		if (!browser && isValidStatus(response)) {
-			await getQuestions(organizationId);
+			await getQuestions(organizationId, undefined, true);
 		}
 
 		return {
@@ -25,7 +25,7 @@
 <script lang="ts">
 	import { getQuestions, questions } from '$lib/state/questions';
 	import AppLayout from '$lib/AppLayout.svelte';
-	import Questions from '$lib/Questions/Questions.svelte';
+	import Challenges from '$lib/Challenges/Challenges.svelte';
 
 	export let organizationId: number;
 
@@ -34,22 +34,22 @@
 	);
 
 	if (browser) {
-		getQuestions(organizationId, undefined, undefined, true);
+		getQuestions(organizationId, undefined, true, true);
 	}
 </script>
 
 <svelte:head>
-	<title>Questions</title>
+	<title>Challenges</title>
 </svelte:head>
 
 <AppLayout
 	breadcrumbs={[
 		{ href: '/', title: 'Home' },
 		{
-			href: `/questions`,
-			title: 'Questions'
+			href: `/challenges`,
+			title: 'Challenges'
 		}
 	]}
 >
-	<Questions questions={questionList} />
+	<Challenges questions={questionList} />
 </AppLayout>

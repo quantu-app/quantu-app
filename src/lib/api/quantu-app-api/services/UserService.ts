@@ -329,19 +329,6 @@ export class UserService {
     }
 
     /**
-     * Deactivates the Current User
-     * Deactivates the current User's account
-     * @returns UserPrivate PrivateUser
-     * @throws ApiError
-     */
-    public static quantuAppWebControllerUserDeactivateDeactivate(): CancelablePromise<UserPrivate> {
-        return __request({
-            method: 'DELETE',
-            path: `/user/deactivate`,
-        });
-    }
-
-    /**
      * List Questions
      * Returns organization's questions
      * @param organizationId Organization Id

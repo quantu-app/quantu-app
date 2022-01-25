@@ -9,25 +9,25 @@ export type UserUpdate = {
     /**
      * User active status
      */
-    active: boolean;
+    active?: boolean | null;
     /**
      * User birthday
      */
-    birthday: string | null;
+    birthday?: string | null;
     /**
      * User country
      */
-    country: string | null;
+    country?: string | null;
     /**
      * User first name
      */
-    firstName: string | null;
+    firstName?: string | null;
     /**
      * User last name
      */
-    lastName: string | null;
+    lastName?: string | null;
     /**
      * User name
      */
-    username: string;
+    username?: string | null;
 }

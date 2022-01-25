@@ -3,8 +3,8 @@ const runCommand = require('./runCommand.cjs');
 async function main() {
 	await runCommand('rollup', [
 		'build/index.js',
-		'--file',
-		'build/server.js',
+		'--dir',
+		'prebuild',
 		'--format',
 		'cjs',
 		'-p',

@@ -28,12 +28,9 @@
 	async function onUpdateQuestion() {
 		if (question) {
 			await updateQuestion(organizationId, question.id, {
+				...question,
 				quizId,
-				index: questionIndex,
-				name: question.name,
-				type: question.type,
-				prompt: question.prompt,
-				tags: question.tags
+				index: questionIndex
 			});
 			question = undefined;
 			questionIndex = undefined;

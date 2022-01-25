@@ -32,13 +32,22 @@ export async function getQuestion(id: number) {
 	return question;
 }
 
-export async function getQuestions(organizationId?: number, quizId?: number, force = false) {
+export async function getQuestions(
+	organizationId?: number,
+	quizId?: number,
+	isChallenge?: boolean,
+	force = false
+) {
 	if (!force) {
 		if (quizId) {
 			const cachedQuestions = Object.values(get(questionsWritable).byQuizId[quizId] || {});
 			if (cachedQuestions.length) {
 				if (organizationId) {
-					return cachedQuestions.filter((question) => question.organizationId === organizationId);
+					return cachedQuestions.filter(
+						(question) =>
+							question.organizationId === organizationId &&
+							(isChallenge != null ? question.isChallenge === isChallenge : true)
+					);
 				} else {
 					return cachedQuestions;
 				}
@@ -48,17 +57,25 @@ export async function getQuestions(organizationId?: number, quizId?: number, for
 				get(questionsWritable).byOrganizationId[organizationId] || {}
 			);
 			if (cachedQuestions.length) {
-				return cachedQuestions;
+				if (isChallenge != null) {
+					return cachedQuestions.filter((question) => question.isChallenge === isChallenge);
+				} else {
+					return cachedQuestions;
+				}
 			}
 		} else {
 			const cachedQuestions = Object.values(get(questionsWritable).byId || {});
 			if (cachedQuestions.length) {
-				return cachedQuestions;
+				if (isChallenge != null) {
+					return cachedQuestions.filter((question) => question.isChallenge === isChallenge);
+				} else {
+					return cachedQuestions;
+				}
 			}
 		}
 	}
 	const questions = await load(
-		QuestionService.quantuAppWebControllerQuestionIndex(organizationId, quizId)
+		QuestionService.quantuAppWebControllerQuestionIndex(organizationId, quizId, isChallenge)
 	);
 	questionsWritable.update((state) => {
 		state.byOrganizationId[organizationId] = {};

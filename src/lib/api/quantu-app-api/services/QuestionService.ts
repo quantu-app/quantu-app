@@ -36,12 +36,14 @@ export class QuestionService {
      * Returns organization's questions
      * @param organizationId Organization Id
      * @param quizId Quiz Id
+     * @param isChallenge Is challenge
      * @returns QuestionList Organization/Quiz Questions
      * @throws ApiError
      */
     public static quantuAppWebControllerQuestionIndex(
         organizationId?: number,
         quizId?: number,
+        isChallenge?: boolean,
     ): CancelablePromise<QuestionList> {
         return __request({
             method: 'GET',
@@ -49,6 +51,7 @@ export class QuestionService {
             query: {
                 'organizationId': organizationId,
                 'quizId': quizId,
+                'isChallenge': isChallenge,
             },
         });
     }

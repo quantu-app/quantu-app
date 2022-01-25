@@ -1,5 +1,5 @@
 <script lang="ts" context="module">
-	function emptyQuestion(quizId: number | null) {
+	function emptyQuestion(quizId: number | null): QuestionUpdate | QuestionCreate {
 		return {
 			quizId,
 			type: 'multiple_choice' as QuestionCreate.type.MULTIPLE_CHOICE,
@@ -10,7 +10,11 @@
 </script>
 
 <script lang="ts">
-	import type { QuestionCreate, QuestionPromptPrivate } from '$lib/api/quantu-app-api';
+	import type {
+		QuestionCreate,
+		QuestionPromptPrivate,
+		QuestionUpdate
+	} from '$lib/api/quantu-app-api';
 	import { createQuestion } from '$lib/state/organizationQuestions';
 	import QuestionEditor from './QuestionEditor.svelte';
 
@@ -23,7 +27,7 @@
 	let editorKey = Math.random();
 	let creatingQuestion = false;
 
-	let question: QuestionCreate = emptyQuestion(quizId);
+	let question = emptyQuestion(quizId) as QuestionCreate;
 
 	$: if (prevQuizId !== quizId) {
 		prevQuizId = quizId;
@@ -35,10 +39,7 @@
 		try {
 			await createQuestion(organizationId, question);
 			delete question.name;
-			question = {
-				...question,
-				...emptyQuestion(quizId)
-			};
+			question = emptyQuestion(quizId) as QuestionCreate;
 		} finally {
 			creatingQuestion = false;
 			editorKey = Math.random();
@@ -85,7 +86,9 @@
 					{/if}
 					Create
 				</button>
-				<button type="button" class="btn btn-secondary text-white" data-bs-dismiss="modal">Close</button>
+				<button type="button" class="btn btn-secondary text-white" data-bs-dismiss="modal"
+					>Close</button
+				>
 			</div>
 		</div>
 	</div>

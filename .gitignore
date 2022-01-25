@@ -3,6 +3,7 @@ node_modules
 /.svelte-kit
 /.vscode
 /build
+/prebuild
 /functions
 src-tauri/binaries/
 src-tauri/target/

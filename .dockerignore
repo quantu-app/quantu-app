@@ -2,6 +2,7 @@
 node_modules
 /.svelte-kit
 /build
+/prebuild
 /helm
 /scripts
 /src-tauri

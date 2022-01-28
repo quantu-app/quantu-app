@@ -7,7 +7,12 @@
 		<div class="row">
 			<div class="col-md-6">
 				<a class="btn btn-ghost text-white logo" href="/">
-					<span class="btn btn-light q">[Q]</span>
+					<span class="btn btn-light q"
+						><img
+							src="https://raw.githubusercontent.com/quantu-app/design-platform/master/branding/logo/1x/logo-matrix-symmetric.png"
+							alt="[Q]"
+						/></span
+					>
 					<span class="rest">UANTU</span>
 				</a>
 			</div>
@@ -66,12 +71,16 @@
 
 <style lang="scss">
 	.logo .q {
+		line-height: 21px;
 		border-radius: 100%;
-		padding: 0.375rem 0.25rem;
+		padding: 9px;
 	}
 	.logo .rest {
 		vertical-align: sub;
-		margin-left: -6px;
+	}
+	.logo img {
+		width: 21px;
+		height: 21px;
 	}
 
 	ul {

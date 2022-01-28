@@ -24,7 +24,11 @@
 				data-bs-target="#update-question"
 				on:click={onUpdate}>{question.name || 'No Name'}</button
 			>
-			<h6 class="d-inline">- {titleCase(question.type.replace(/\_/gim, ' '))}</h6>
+			<h6 class="d-inline">
+				- {titleCase(question.type.replace(/\_/gim, ' '))}{question.isChallenge
+					? ' - Challenge'
+					: ''}
+			</h6>
 		</h4>
 		<div class="d-flex">
 			<div class="d-inline mt-2">

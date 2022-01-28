@@ -12,7 +12,7 @@
 	let firstName = user.firstName;
 	let lastName = user.lastName;
 	let birthday = user.birthday;
-	let country = user.country;
+	let country = user.country || 'US';
 
 	function onUpdate() {
 		updateUser({
@@ -30,7 +30,7 @@
 </script>
 
 <div class="container">
-	{#if user.active}
+	{#if !user.active}
 		<div class="row">
 			<h1>Welcome to our community</h1>
 			<p>

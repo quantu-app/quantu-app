@@ -3,7 +3,7 @@
 </script>
 
 <footer class="px-4 py-2 bg-dark">
-	<div class="container py-4" style="max-width: 960px">
+	<div class="container py-4">
 		<div class="row">
 			<div class="col-md-6">
 				<a class="btn btn-ghost text-white logo" href="/">

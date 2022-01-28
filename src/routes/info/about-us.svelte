@@ -8,7 +8,7 @@
 </svelte:head>
 
 <AppLayout>
-	<div class="container" style="max-width: 960px;">
+	<div class="container">
 		<div class="row py-4 my-4">
 			<h2>Our Vision</h2>
 

@@ -9,7 +9,7 @@
 </svelte:head>
 
 <AppLayout>
-	<div class="container" style="max-width: 960px;">
+	<div class="container">
 		<div class="row py-4 my-4">
 			<div class="col-md-6 px-4 pb-4">
 				<h1 class="fw-bold">Master Mathematics.</h1>

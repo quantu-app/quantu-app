@@ -33,13 +33,19 @@
 			</div>
 			<div class="col-md-6 px-4 text-center">
 				<img
-					src="https://github.com/quantu-app/design-platform/raw/master/app/resources/homepage/Golden-Ratio-Blocked.png"
+					src="https://github.com/quantu-app/design-platform/raw/master/app/resources/homepage/vitruve-man-davinci.png"
 					alt="Golden Ratio"
 				/>
 			</div>
 		</div>
 		<hr />
 		<div class="row py-4 my-4">
+			<div class="col-md-6 px-4 text-center">
+				<img
+					src="https://github.com/quantu-app/design-platform/raw/master/app/resources/homepage/circle_and_line.png"
+					alt="Circle and Line"
+				/>
+			</div>
 			<div class="col-md-6 px-4">
 				<h3 class="fw-bold">Master concepts through guided and interactive lessons</h3>
 				<p>
@@ -47,21 +53,9 @@
 					own pace. Lessons are hand-crafted to build mastery and intuition.
 				</p>
 			</div>
-			<div class="col-md-6 px-4 text-center">
-				<img
-					src="https://github.com/quantu-app/design-platform/raw/master/app/resources/homepage/circle_and_line.png"
-					alt="Circle and Line"
-				/>
-			</div>
 		</div>
 		<hr />
 		<div class="row py-4 my-4">
-			<div class="col-md-6 px-4 text-center">
-				<img
-					src="https://github.com/quantu-app/design-platform/raw/master/app/resources/homepage/decision_tree.png"
-					alt="Decision Tree"
-				/>
-			</div>
 			<div class="col-md-6 px-4">
 				<h3 class="fw-bold">Your blueprint for building intuition and expertise</h3>
 				<p>
@@ -76,6 +70,12 @@
 					group theory or solve logic puzzles, our learning platform for advanced mathematics is
 					designed with this in mind.
 				</p>
+			</div>
+			<div class="col-md-6 px-4 text-center">
+				<img
+					src="https://github.com/quantu-app/design-platform/raw/master/app/resources/homepage/decision_tree.png"
+					alt="Decision Tree"
+				/>
 			</div>
 		</div>
 	</div>

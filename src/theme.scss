@@ -1,5 +1,15 @@
+@font-face {
+	font-family: 'Computer Modern';
+	src: url('/cmunorm.ttf') format('truetype');
+}
+
+@font-face {
+	font-family: 'Century Old Style';
+	src: url('/Century Old Style Std Regular.otf') format('opentype');
+}
+
 $enable-rounded: false;
-$font-family-base: 'Urbanist', sans-serif;
+$font-family-base: 'Computer Modern';
 
 $primary: #212120;
 $secondary: #a8a8a8;
@@ -30,3 +40,12 @@ $container-max-widths: (
 @import 'bootstrap/scss/images';
 @import 'bootstrap/scss/containers';
 @import 'bootstrap/scss/grid';
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	font-family: 'Century Old Style';
+}

@@ -82,6 +82,7 @@
 		padding: 9px;
 	}
 	.logo .rest {
+		font-family: 'Urbanist', sans-serif;
 		vertical-align: sub;
 	}
 	.logo img {

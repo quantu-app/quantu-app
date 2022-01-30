@@ -49,7 +49,9 @@ export async function getQuestions(
 							(isChallenge != null ? question.isChallenge === isChallenge : true)
 					);
 				} else {
-					return cachedQuestions;
+					return cachedQuestions.filter((question) =>
+						isChallenge != null ? question.isChallenge === isChallenge : true
+					);
 				}
 			}
 		} else if (organizationId) {
@@ -57,20 +59,16 @@ export async function getQuestions(
 				get(questionsWritable).byOrganizationId[organizationId] || {}
 			);
 			if (cachedQuestions.length) {
-				if (isChallenge != null) {
-					return cachedQuestions.filter((question) => question.isChallenge === isChallenge);
-				} else {
-					return cachedQuestions;
-				}
+				return cachedQuestions.filter((question) =>
+					isChallenge != null ? question.isChallenge === isChallenge : true
+				);
 			}
 		} else {
 			const cachedQuestions = Object.values(get(questionsWritable).byId || {});
 			if (cachedQuestions.length) {
-				if (isChallenge != null) {
-					return cachedQuestions.filter((question) => question.isChallenge === isChallenge);
-				} else {
-					return cachedQuestions;
-				}
+				return cachedQuestions.filter((question) =>
+					isChallenge != null ? question.isChallenge === isChallenge : true
+				);
 			}
 		}
 	}

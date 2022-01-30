@@ -9,7 +9,7 @@
 			questionId = parseInt(input.params.questionId);
 
 		if (!browser && isValidStatus(response)) {
-			await Promise.all([getQuestionResult(questionId), getQuestion(questionId)]);
+			await getQuestion(questionId);
 		}
 
 		return {
@@ -22,20 +22,17 @@
 </script>
 
 <script lang="ts">
-	import { getQuestion, questions } from '$lib/state/questions';
-	import { questionResults } from '$lib/state/questionResults';
+	import { questions } from '$lib/state/questions';
 	import AppLayout from '$lib/AppLayout.svelte';
-	import ReviewQuestion from '$lib/Questions/ReviewQuestion.svelte';
-	import { getQuestionResult } from '$lib/state/questionResults';
+	import { getQuestion } from '$lib/state/questions';
+	import Question from '$lib/Questions/Question.svelte';
 
 	export let questionId: number;
 
 	$: question = $questions.byId[questionId];
-	$: questionResult = $questionResults.byId[questionId];
 
 	if (browser) {
 		getQuestion(questionId);
-		getQuestionResult(questionId);
 	}
 </script>
 
@@ -47,26 +44,22 @@
 	breadcrumbs={[
 		{ href: '/', title: 'Home' },
 		{
-			href: `/questions`,
-			title: 'Questions'
+			href: `/challenges`,
+			title: 'Challenges'
 		},
 		{
-			href: `/questions/${questionId}`,
+			href: `/challenges/${questionId}`,
 			title: question?.name
-		},
-		{
-			href: `/questions/${questionId}/review`,
-			title: 'Review'
 		}
 	]}
 >
 	<div class="container d-flex flex-grow-1">
-		{#if questionResult}
-			<ReviewQuestion result={questionResult}>
-				<a slot="extra" role="button" class="btn btn-primary" href={`/questions/${question?.id}`}>
-					Return to {question?.name}
+		{#if question}
+			<Question {question}>
+				<a slot="extra" role="button" class="btn btn-primary" href="/challenges">
+					Return to Challenges
 				</a>
-			</ReviewQuestion>
+			</Question>
 		{/if}
 	</div>
 </AppLayout>

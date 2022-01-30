@@ -53,7 +53,7 @@
 		}
 	]}
 >
-	<div class="container h-100">
+	<div class="container flex-grow-1">
 		{#if question}
 			<Question {question}>
 				<a slot="extra" role="button" class="btn btn-primary" href="/questions">

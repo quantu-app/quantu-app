@@ -47,23 +47,23 @@
 	breadcrumbs={[
 		{ href: '/', title: 'Home' },
 		{
-			href: `/questions`,
+			href: `/challenges`,
 			title: 'Questions'
 		},
 		{
-			href: `/questions/${questionId}`,
+			href: `/challenges/${questionId}`,
 			title: question?.name
 		},
 		{
-			href: `/questions/${questionId}/review`,
+			href: `/challenges/${questionId}/review`,
 			title: 'Review'
 		}
 	]}
 >
-	<div class="container d-flex flex-grow-1">
+	<div class="container flex-grow-1">
 		{#if questionResult}
 			<ReviewQuestion result={questionResult}>
-				<a slot="extra" role="button" class="btn btn-primary" href={`/questions/${question?.id}`}>
+				<a slot="extra" role="button" class="btn btn-primary" href={`/challenges/${question?.id}`}>
 					Return to {question?.name}
 				</a>
 			</ReviewQuestion>

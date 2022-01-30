@@ -21,10 +21,16 @@
 					<div class="col-6 text-white">
 						<h4 class="fw-bold">Product</h4>
 						<ul>
-							<li><a class="link-light" href={`${base}/about-us`}>About us</a></li>
-							<li><a class="link-light" href={`${base}/principles`}>Principles</a></li>
-							<li><a class="link-light" href={`${base}/community`}>Community</a></li>
-							<li><a class="link-light" href={`${base}/roadmap`}>Roadmap</a></li>
+							<li><a class="link-light" href={`${base}/info/about-us`}>About us</a></li>
+							<li><a class="link-light" href={`${base}/info/principles`}>Principles</a></li>
+							<!--<li><a class="link-light" href={`${base}/community`}>Community</a></li>-->
+							<li>
+								<a
+									class="link-light"
+									href="https://trello.com/b/DrtlVKXH/product-roadmap"
+									target="_blank">Roadmap</a
+								>
+							</li>
 						</ul>
 					</div>
 					<div class="col-6 text-white">

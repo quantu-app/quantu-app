@@ -69,7 +69,7 @@
 					based approaches to learning, which anchor the concepts deep into your long-term memory
 					building out your knowledge tree.
 				</p>
-				<h3 class="fw-bold">For everyone young and old alike</h3>
+				<h3 class="fw-bold pt-4">For everyone young and old alike</h3>
 				<p>
 					We believe learning advanced mathemetics can and should be a lifelong, community based,
 					and most importantly, an enjoyable and rewarding experience. Whether you want to learn

@@ -58,7 +58,7 @@
 					role="button"
 					class="btn btn-light social"
 					target="_blank"
-					href="https://github.com/quantu-app"
+					href="https://www.instagram.com/quantu.app/"
 				>
 					<i class="bi bi-instagram" />
 				</a>
@@ -66,7 +66,7 @@
 					role="button"
 					class="btn btn-light social"
 					target="_blank"
-					href="https://github.com/quantu-app"
+					href="https://twitter.com/QuantuApp"
 				>
 					<i class="bi bi-twitter" />
 				</a>

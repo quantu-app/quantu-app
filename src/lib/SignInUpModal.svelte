@@ -61,7 +61,7 @@
 	aria-labelledby="sign-in-up-modal-label"
 	aria-hidden="true"
 >
-	<div class="modal-dialog modal-xl">
+	<div class="modal-dialog modal-lg">
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" />
@@ -72,7 +72,7 @@
 						type="button"
 						disabled={loading}
 						on:click={() => signInWith('google')}
-						class="btn btn-primary google w-100 oauth">Google</button
+						class="btn btn-primary google w-100 oauth mt-0">Google</button
 					>
 					<button
 						type="button"

@@ -8,9 +8,10 @@
 	<Quote author="Lao Tzu">The jounrey of a thousand miles begins with a single step.</Quote>
 </div>
 
-<div class="row p-4">
+<div class="row px-2 py-4">
 	<div class="col-md-8">
 		<img
+			class="sign-in-image"
 			src="https://github.com/quantu-app/design-platform/raw/master/app/resources/sign_up_and_login/1x/Journey-Man.png"
 			alt="Taking the first step"
 		/>
@@ -26,3 +27,9 @@
 		</div>
 	</div>
 </div>
+
+<style>
+	.sign-in-image {
+		border: 1px solid #ccc;
+	}
+</style>

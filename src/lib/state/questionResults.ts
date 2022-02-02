@@ -8,11 +8,13 @@ import { userEmitter } from './user';
 
 interface IQuestionResultsStore {
 	byId: { [id: number]: QuestionResult };
+	byQuestionId: { [id: number]: QuestionResult };
 	byQuizId: { [quizId: number]: { [id: number]: QuestionResult } };
 }
 
 const questionResultsWritable = writable<IQuestionResultsStore>({
 	byId: {},
+	byQuestionId: {},
 	byQuizId: {}
 });
 
@@ -85,6 +87,7 @@ function addToState(
 		byQuizId[questionResult.id] = questionResult;
 	}
 	state.byId[questionResult.id] = questionResult;
+	state.byQuestionId[questionResult.questionId] = questionResult;
 	return state;
 }
 
@@ -92,6 +95,7 @@ if (browser) {
 	userEmitter.on('signOut', () =>
 		questionResultsWritable.set({
 			byId: {},
+			byQuestionId: {},
 			byQuizId: {}
 		})
 	);

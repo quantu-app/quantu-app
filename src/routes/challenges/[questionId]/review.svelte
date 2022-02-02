@@ -31,7 +31,7 @@
 	export let questionId: number;
 
 	$: question = $questions.byId[questionId];
-	$: questionResult = $questionResults.byId[questionId];
+	$: questionResult = $questionResults.byQuestionId[questionId];
 
 	if (browser) {
 		getQuestion(questionId);

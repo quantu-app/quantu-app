@@ -50,7 +50,7 @@ export type Quiz = {
      * Update timestamp
      */
     updatedAt: string;
-}
+};
 
 export namespace Quiz {
 

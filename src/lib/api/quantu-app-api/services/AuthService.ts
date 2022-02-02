@@ -4,7 +4,9 @@
 import type { SignInUsernameOrEmailAndPassword } from '../models/SignInUsernameOrEmailAndPassword';
 import type { SignUpUsernamePassword } from '../models/SignUpUsernamePassword';
 import type { UserPrivate } from '../models/UserPrivate';
+
 import type { CancelablePromise } from '../core/CancelablePromise';
+import { OpenAPI } from '../core/OpenAPI';
 import { request as __request } from '../core/request';
 
 export class AuthService {
@@ -18,9 +20,9 @@ export class AuthService {
     public static quantuAppWebControllerAuthSignUpSignUp(
         requestBody: SignUpUsernamePassword,
     ): CancelablePromise<UserPrivate> {
-        return __request({
+        return __request(OpenAPI, {
             method: 'POST',
-            path: `/auth/sign-up`,
+            url: '/auth/sign-up',
             body: requestBody,
             mediaType: 'application/json',
         });
@@ -33,9 +35,9 @@ export class AuthService {
      * @throws ApiError
      */
     public static quantuAppWebControllerAuthDelete(): CancelablePromise<void> {
-        return __request({
+        return __request(OpenAPI, {
             method: 'DELETE',
-            path: `/auth`,
+            url: '/auth',
         });
     }
 
@@ -46,9 +48,9 @@ export class AuthService {
      * @throws ApiError
      */
     public static quantuAppWebControllerAuthCurrent(): CancelablePromise<UserPrivate> {
-        return __request({
+        return __request(OpenAPI, {
             method: 'GET',
-            path: `/auth`,
+            url: '/auth',
         });
     }
 
@@ -62,9 +64,12 @@ export class AuthService {
     public static quantuAppWebControllerAuthRequest(
         provider: string,
     ): CancelablePromise<void> {
-        return __request({
+        return __request(OpenAPI, {
             method: 'GET',
-            path: `/auth/${provider}`,
+            url: '/auth/{provider}',
+            path: {
+                'provider': provider,
+            },
         });
     }
 
@@ -77,9 +82,9 @@ export class AuthService {
     public static quantuAppWebControllerAuthSignInSignIn(
         requestBody: SignInUsernameOrEmailAndPassword,
     ): CancelablePromise<UserPrivate> {
-        return __request({
+        return __request(OpenAPI, {
             method: 'POST',
-            path: `/auth/sign-in`,
+            url: '/auth/sign-in',
             body: requestBody,
             mediaType: 'application/json',
         });
@@ -95,9 +100,12 @@ export class AuthService {
     public static quantuAppWebControllerAuthCallback(
         provider: string,
     ): CancelablePromise<UserPrivate> {
-        return __request({
+        return __request(OpenAPI, {
             method: 'GET',
-            path: `/auth/${provider}/callback`,
+            url: '/auth/{provider}/callback',
+            path: {
+                'provider': provider,
+            },
         });
     }
 

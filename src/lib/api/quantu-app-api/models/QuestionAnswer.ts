@@ -15,4 +15,4 @@ export type QuestionAnswer = {
      * Question Answer input
      */
     input?: (FlashCardAnswer | MultipleChoiceAnswer | InputAnswer | MarkAsReadAnswer);
-}
+};

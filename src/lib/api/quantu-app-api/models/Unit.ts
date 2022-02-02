@@ -46,4 +46,4 @@ export type Unit = {
      * Update timestamp
      */
     updatedAt: string;
-}
+};

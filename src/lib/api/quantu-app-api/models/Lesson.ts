@@ -54,7 +54,7 @@ export type Lesson = {
      * Update timestamp
      */
     updatedAt: string;
-}
+};
 
 export namespace Lesson {
 

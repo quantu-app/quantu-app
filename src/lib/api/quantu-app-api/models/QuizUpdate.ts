@@ -30,4 +30,4 @@ export type QuizUpdate = {
      * Unit Id
      */
     unitId?: number | null;
-}
+};

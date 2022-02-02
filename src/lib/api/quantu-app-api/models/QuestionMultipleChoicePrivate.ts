@@ -29,4 +29,4 @@ export type QuestionMultipleChoicePrivate = {
      * question content
      */
     question: Array<any>;
-}
+};

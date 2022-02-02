@@ -37,4 +37,4 @@ export type QuestionUpdate = {
      * Question type
      */
     type?: string | null;
-}
+};

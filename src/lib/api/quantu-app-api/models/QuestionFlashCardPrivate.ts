@@ -14,4 +14,4 @@ export type QuestionFlashCardPrivate = {
      * front content
      */
     front: Array<any>;
-}
+};

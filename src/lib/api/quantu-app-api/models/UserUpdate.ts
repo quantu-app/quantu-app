@@ -30,4 +30,4 @@ export type UserUpdate = {
      * User name
      */
     username?: string | null;
-}
+};

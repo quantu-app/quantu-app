@@ -18,4 +18,4 @@ export type SignUpUsernamePassword = {
      * Username
      */
     username: string;
-}
+};

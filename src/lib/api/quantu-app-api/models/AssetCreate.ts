@@ -18,4 +18,4 @@ export type AssetCreate = {
      * Asset type
      */
     type?: string | null;
-}
+};

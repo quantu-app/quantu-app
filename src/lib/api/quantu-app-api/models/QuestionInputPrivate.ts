@@ -9,7 +9,7 @@ export type QuestionInputPrivate = {
     /**
      * answers
      */
-    answers: Array<string>;
+    answers: Array<(string | number)>;
     /**
      * question explanation
      */
@@ -22,7 +22,7 @@ export type QuestionInputPrivate = {
      * question input type
      */
     type: QuestionInputPrivate.type;
-}
+};
 
 export namespace QuestionInputPrivate {
 

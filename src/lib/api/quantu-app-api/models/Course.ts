@@ -38,4 +38,4 @@ export type Course = {
      * Update timestamp
      */
     updatedAt: string;
-}
+};

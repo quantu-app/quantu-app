@@ -10,7 +10,9 @@ import type { QuestionPrivate } from '../models/QuestionPrivate';
 import type { QuestionResult } from '../models/QuestionResult';
 import type { QuestionResultList } from '../models/QuestionResultList';
 import type { QuestionUpdate } from '../models/QuestionUpdate';
+
 import type { CancelablePromise } from '../core/CancelablePromise';
+import { OpenAPI } from '../core/OpenAPI';
 import { request as __request } from '../core/request';
 
 export class QuestionService {
@@ -25,9 +27,12 @@ export class QuestionService {
     public static quantuAppWebControllerQuestionExplain(
         id: number,
     ): CancelablePromise<QuestionResult> {
-        return __request({
+        return __request(OpenAPI, {
             method: 'POST',
-            path: `/questions/${id}/explain`,
+            url: '/questions/{id}/explain',
+            path: {
+                'id': id,
+            },
         });
     }
 
@@ -45,9 +50,9 @@ export class QuestionService {
         quizId?: number,
         isChallenge?: boolean,
     ): CancelablePromise<QuestionList> {
-        return __request({
+        return __request(OpenAPI, {
             method: 'GET',
-            path: `/questions`,
+            url: '/questions',
             query: {
                 'organizationId': organizationId,
                 'quizId': quizId,
@@ -66,9 +71,9 @@ export class QuestionService {
     public static quantuAppWebControllerQuestionResultIndex(
         quizId?: number,
     ): CancelablePromise<QuestionResultList> {
-        return __request({
+        return __request(OpenAPI, {
             method: 'GET',
-            path: `/question-results`,
+            url: '/question-results',
             query: {
                 'quizId': quizId,
             },
@@ -87,9 +92,12 @@ export class QuestionService {
         id: number,
         requestBody: QuestionAnswer,
     ): CancelablePromise<QuestionResult> {
-        return __request({
+        return __request(OpenAPI, {
             method: 'POST',
-            path: `/questions/${id}/answer`,
+            url: '/questions/{id}/answer',
+            path: {
+                'id': id,
+            },
             body: requestBody,
             mediaType: 'application/json',
         });
@@ -107,9 +115,12 @@ export class QuestionService {
         organizationId: number,
         quizId?: number,
     ): CancelablePromise<QuestionListPrivate> {
-        return __request({
+        return __request(OpenAPI, {
             method: 'GET',
-            path: `/user/organizations/${organizationId}/questions`,
+            url: '/user/organizations/{organization_id}/questions',
+            path: {
+                'organization_id': organizationId,
+            },
             query: {
                 'quizId': quizId,
             },
@@ -128,9 +139,12 @@ export class QuestionService {
         organizationId: number,
         requestBody: QuestionCreate,
     ): CancelablePromise<QuestionPrivate> {
-        return __request({
+        return __request(OpenAPI, {
             method: 'POST',
-            path: `/user/organizations/${organizationId}/questions`,
+            url: '/user/organizations/{organization_id}/questions',
+            path: {
+                'organization_id': organizationId,
+            },
             body: requestBody,
             mediaType: 'application/json',
         });
@@ -146,9 +160,12 @@ export class QuestionService {
     public static quantuAppWebControllerQuestionShow(
         id: number,
     ): CancelablePromise<Question> {
-        return __request({
+        return __request(OpenAPI, {
             method: 'GET',
-            path: `/questions/${id}`,
+            url: '/questions/{id}',
+            path: {
+                'id': id,
+            },
         });
     }
 
@@ -162,9 +179,12 @@ export class QuestionService {
     public static quantuAppWebControllerQuestionResultShow(
         id: number,
     ): CancelablePromise<QuestionResult> {
-        return __request({
+        return __request(OpenAPI, {
             method: 'GET',
-            path: `/question-results/${id}`,
+            url: '/question-results/{id}',
+            path: {
+                'id': id,
+            },
         });
     }
 
@@ -180,9 +200,13 @@ export class QuestionService {
         id: number,
         organizationId: number,
     ): CancelablePromise<void> {
-        return __request({
+        return __request(OpenAPI, {
             method: 'DELETE',
-            path: `/user/organizations/${organizationId}/questions/${id}`,
+            url: '/user/organizations/{organization_id}/questions/{id}',
+            path: {
+                'id': id,
+                'organization_id': organizationId,
+            },
         });
     }
 
@@ -198,9 +222,13 @@ export class QuestionService {
         id: number,
         organizationId: number,
     ): CancelablePromise<QuestionPrivate> {
-        return __request({
+        return __request(OpenAPI, {
             method: 'GET',
-            path: `/user/organizations/${organizationId}/questions/${id}`,
+            url: '/user/organizations/{organization_id}/questions/{id}',
+            path: {
+                'id': id,
+                'organization_id': organizationId,
+            },
         });
     }
 
@@ -218,9 +246,13 @@ export class QuestionService {
         organizationId: number,
         requestBody: QuestionUpdate,
     ): CancelablePromise<QuestionPrivate> {
-        return __request({
+        return __request(OpenAPI, {
             method: 'PATCH',
-            path: `/user/organizations/${organizationId}/questions/${id}`,
+            url: '/user/organizations/{organization_id}/questions/{id}',
+            path: {
+                'id': id,
+                'organization_id': organizationId,
+            },
             body: requestBody,
             mediaType: 'application/json',
         });
@@ -240,9 +272,13 @@ export class QuestionService {
         organizationId: number,
         requestBody: QuestionUpdate,
     ): CancelablePromise<QuestionPrivate> {
-        return __request({
+        return __request(OpenAPI, {
             method: 'PUT',
-            path: `/user/organizations/${organizationId}/questions/${id}`,
+            url: '/user/organizations/{organization_id}/questions/{id}',
+            path: {
+                'id': id,
+                'organization_id': organizationId,
+            },
             body: requestBody,
             mediaType: 'application/json',
         });

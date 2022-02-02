@@ -10,4 +10,4 @@ export type QuizQuestionIds = {
      * Question ids
      */
     questions?: Array<number> | null;
-}
+};

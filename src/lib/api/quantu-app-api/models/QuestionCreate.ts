@@ -37,7 +37,7 @@ export type QuestionCreate = {
      * Question type
      */
     type: QuestionCreate.type;
-}
+};
 
 export namespace QuestionCreate {
 

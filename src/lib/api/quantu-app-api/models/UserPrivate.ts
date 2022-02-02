@@ -54,4 +54,4 @@ export type UserPrivate = {
      * User name
      */
     username: string;
-}
+};

@@ -26,4 +26,4 @@ export type UserPublic = {
      * User name
      */
     username: string;
-}
+};

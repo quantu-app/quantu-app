@@ -18,4 +18,4 @@ export type OrganizationUpdate = {
      * Organization url
      */
     url?: string;
-}
+};

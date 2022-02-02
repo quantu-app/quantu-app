@@ -6,7 +6,9 @@ import type { UnitChildList } from '../models/UnitChildList';
 import type { UnitCreate } from '../models/UnitCreate';
 import type { UnitList } from '../models/UnitList';
 import type { UnitUpdate } from '../models/UnitUpdate';
+
 import type { CancelablePromise } from '../core/CancelablePromise';
+import { OpenAPI } from '../core/OpenAPI';
 import { request as __request } from '../core/request';
 
 export class UnitService {
@@ -23,9 +25,9 @@ export class UnitService {
         organizationId?: number,
         courseId?: number,
     ): CancelablePromise<UnitList> {
-        return __request({
+        return __request(OpenAPI, {
             method: 'GET',
-            path: `/units`,
+            url: '/units',
             query: {
                 'organizationId': organizationId,
                 'courseId': courseId,
@@ -43,9 +45,12 @@ export class UnitService {
     public static quantuAppWebControllerUnitShow(
         id: number,
     ): CancelablePromise<Unit> {
-        return __request({
+        return __request(OpenAPI, {
             method: 'GET',
-            path: `/units/${id}`,
+            url: '/units/{id}',
+            path: {
+                'id': id,
+            },
         });
     }
 
@@ -61,9 +66,13 @@ export class UnitService {
         id: number,
         organizationId: number,
     ): CancelablePromise<UnitChildList> {
-        return __request({
+        return __request(OpenAPI, {
             method: 'GET',
-            path: `/user/organizations/${organizationId}/units/${id}/children`,
+            url: '/user/organizations/{organization_id}/units/{id}/children',
+            path: {
+                'id': id,
+                'organization_id': organizationId,
+            },
         });
     }
 
@@ -79,9 +88,13 @@ export class UnitService {
         id: number,
         organizationId: number,
     ): CancelablePromise<void> {
-        return __request({
+        return __request(OpenAPI, {
             method: 'DELETE',
-            path: `/user/organizations/${organizationId}/units/${id}`,
+            url: '/user/organizations/{organization_id}/units/{id}',
+            path: {
+                'id': id,
+                'organization_id': organizationId,
+            },
         });
     }
 
@@ -97,9 +110,13 @@ export class UnitService {
         id: number,
         organizationId: number,
     ): CancelablePromise<Unit> {
-        return __request({
+        return __request(OpenAPI, {
             method: 'GET',
-            path: `/user/organizations/${organizationId}/units/${id}`,
+            url: '/user/organizations/{organization_id}/units/{id}',
+            path: {
+                'id': id,
+                'organization_id': organizationId,
+            },
         });
     }
 
@@ -117,9 +134,13 @@ export class UnitService {
         organizationId: number,
         requestBody: UnitUpdate,
     ): CancelablePromise<Unit> {
-        return __request({
+        return __request(OpenAPI, {
             method: 'PATCH',
-            path: `/user/organizations/${organizationId}/units/${id}`,
+            url: '/user/organizations/{organization_id}/units/{id}',
+            path: {
+                'id': id,
+                'organization_id': organizationId,
+            },
             body: requestBody,
             mediaType: 'application/json',
         });
@@ -139,9 +160,13 @@ export class UnitService {
         organizationId: number,
         requestBody: UnitUpdate,
     ): CancelablePromise<Unit> {
-        return __request({
+        return __request(OpenAPI, {
             method: 'PUT',
-            path: `/user/organizations/${organizationId}/units/${id}`,
+            url: '/user/organizations/{organization_id}/units/{id}',
+            path: {
+                'id': id,
+                'organization_id': organizationId,
+            },
             body: requestBody,
             mediaType: 'application/json',
         });
@@ -159,9 +184,12 @@ export class UnitService {
         organizationId: number,
         courseId?: number,
     ): CancelablePromise<UnitList> {
-        return __request({
+        return __request(OpenAPI, {
             method: 'GET',
-            path: `/user/organizations/${organizationId}/units`,
+            url: '/user/organizations/{organization_id}/units',
+            path: {
+                'organization_id': organizationId,
+            },
             query: {
                 'courseId': courseId,
             },
@@ -180,9 +208,12 @@ export class UnitService {
         organizationId: number,
         requestBody: UnitCreate,
     ): CancelablePromise<Unit> {
-        return __request({
+        return __request(OpenAPI, {
             method: 'POST',
-            path: `/user/organizations/${organizationId}/units`,
+            url: '/user/organizations/{organization_id}/units',
+            path: {
+                'organization_id': organizationId,
+            },
             body: requestBody,
             mediaType: 'application/json',
         });
@@ -198,9 +229,12 @@ export class UnitService {
     public static quantuAppWebControllerUnitChildren(
         id: number,
     ): CancelablePromise<UnitChildList> {
-        return __request({
+        return __request(OpenAPI, {
             method: 'GET',
-            path: `/units/${id}/children`,
+            url: '/units/{id}/children',
+            path: {
+                'id': id,
+            },
         });
     }
 

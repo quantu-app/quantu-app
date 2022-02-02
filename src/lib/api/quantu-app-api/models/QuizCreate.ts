@@ -30,4 +30,4 @@ export type QuizCreate = {
      * Unit Id
      */
     unitId?: number | null;
-}
+};

@@ -22,4 +22,4 @@ export type CourseUpdate = {
      * Course tags
      */
     tags?: Array<string> | null;
-}
+};

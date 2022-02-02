@@ -5,7 +5,9 @@ import type { Lesson } from '../models/Lesson';
 import type { LessonCreate } from '../models/LessonCreate';
 import type { LessonList } from '../models/LessonList';
 import type { LessonUpdate } from '../models/LessonUpdate';
+
 import type { CancelablePromise } from '../core/CancelablePromise';
+import { OpenAPI } from '../core/OpenAPI';
 import { request as __request } from '../core/request';
 
 export class LessonService {
@@ -22,9 +24,12 @@ export class LessonService {
         organizationId: number,
         unitId?: number,
     ): CancelablePromise<LessonList> {
-        return __request({
+        return __request(OpenAPI, {
             method: 'GET',
-            path: `/user/organizations/${organizationId}/lessons`,
+            url: '/user/organizations/{organization_id}/lessons',
+            path: {
+                'organization_id': organizationId,
+            },
             query: {
                 'unitId': unitId,
             },
@@ -43,9 +48,12 @@ export class LessonService {
         organizationId: number,
         requestBody: LessonCreate,
     ): CancelablePromise<Lesson> {
-        return __request({
+        return __request(OpenAPI, {
             method: 'POST',
-            path: `/user/organizations/${organizationId}/lessons`,
+            url: '/user/organizations/{organization_id}/lessons',
+            path: {
+                'organization_id': organizationId,
+            },
             body: requestBody,
             mediaType: 'application/json',
         });
@@ -61,9 +69,12 @@ export class LessonService {
     public static quantuAppWebControllerLessonShow(
         id: number,
     ): CancelablePromise<Lesson> {
-        return __request({
+        return __request(OpenAPI, {
             method: 'GET',
-            path: `/lessons/${id}`,
+            url: '/lessons/{id}',
+            path: {
+                'id': id,
+            },
         });
     }
 
@@ -79,9 +90,9 @@ export class LessonService {
         organizationId?: number,
         unitId?: number,
     ): CancelablePromise<LessonList> {
-        return __request({
+        return __request(OpenAPI, {
             method: 'GET',
-            path: `/lessons`,
+            url: '/lessons',
             query: {
                 'organizationId': organizationId,
                 'unitId': unitId,
@@ -101,9 +112,13 @@ export class LessonService {
         id: number,
         organizationId: number,
     ): CancelablePromise<void> {
-        return __request({
+        return __request(OpenAPI, {
             method: 'DELETE',
-            path: `/user/organizations/${organizationId}/lessons/${id}`,
+            url: '/user/organizations/{organization_id}/lessons/{id}',
+            path: {
+                'id': id,
+                'organization_id': organizationId,
+            },
         });
     }
 
@@ -119,9 +134,13 @@ export class LessonService {
         id: number,
         organizationId: number,
     ): CancelablePromise<Lesson> {
-        return __request({
+        return __request(OpenAPI, {
             method: 'GET',
-            path: `/user/organizations/${organizationId}/lessons/${id}`,
+            url: '/user/organizations/{organization_id}/lessons/{id}',
+            path: {
+                'id': id,
+                'organization_id': organizationId,
+            },
         });
     }
 
@@ -139,9 +158,13 @@ export class LessonService {
         organizationId: number,
         requestBody: LessonUpdate,
     ): CancelablePromise<Lesson> {
-        return __request({
+        return __request(OpenAPI, {
             method: 'PATCH',
-            path: `/user/organizations/${organizationId}/lessons/${id}`,
+            url: '/user/organizations/{organization_id}/lessons/{id}',
+            path: {
+                'id': id,
+                'organization_id': organizationId,
+            },
             body: requestBody,
             mediaType: 'application/json',
         });
@@ -161,9 +184,13 @@ export class LessonService {
         organizationId: number,
         requestBody: LessonUpdate,
     ): CancelablePromise<Lesson> {
-        return __request({
+        return __request(OpenAPI, {
             method: 'PUT',
-            path: `/user/organizations/${organizationId}/lessons/${id}`,
+            url: '/user/organizations/{organization_id}/lessons/{id}',
+            path: {
+                'id': id,
+                'organization_id': organizationId,
+            },
             body: requestBody,
             mediaType: 'application/json',
         });

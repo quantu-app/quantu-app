@@ -10,4 +10,4 @@ export type EmailCreate = {
      * Email address
      */
     email: string;
-}
+};

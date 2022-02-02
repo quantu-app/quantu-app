@@ -30,4 +30,4 @@ export type UnitUpdate = {
      * Unit tags
      */
     tags?: Array<string> | null;
-}
+};

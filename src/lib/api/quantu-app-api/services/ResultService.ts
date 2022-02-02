@@ -3,7 +3,9 @@
 /* eslint-disable */
 import type { QuestionResult } from '../models/QuestionResult';
 import type { QuestionResultList } from '../models/QuestionResultList';
+
 import type { CancelablePromise } from '../core/CancelablePromise';
+import { OpenAPI } from '../core/OpenAPI';
 import { request as __request } from '../core/request';
 
 export class ResultService {
@@ -18,9 +20,9 @@ export class ResultService {
     public static quantuAppWebControllerQuestionResultIndex(
         quizId?: number,
     ): CancelablePromise<QuestionResultList> {
-        return __request({
+        return __request(OpenAPI, {
             method: 'GET',
-            path: `/question-results`,
+            url: '/question-results',
             query: {
                 'quizId': quizId,
             },
@@ -37,9 +39,12 @@ export class ResultService {
     public static quantuAppWebControllerQuestionResultShow(
         id: number,
     ): CancelablePromise<QuestionResult> {
-        return __request({
+        return __request(OpenAPI, {
             method: 'GET',
-            path: `/question-results/${id}`,
+            url: '/question-results/{id}',
+            path: {
+                'id': id,
+            },
         });
     }
 

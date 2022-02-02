@@ -38,4 +38,4 @@ export type Asset = {
      * Asset url
      */
     url: string;
-}
+};

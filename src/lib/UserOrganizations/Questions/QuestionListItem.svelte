@@ -14,8 +14,8 @@
 <div class="list-group-item">
 	<div class="d-flex w-100 justify-content-between">
 		<h4>
-			{#if question.index != null}
-				<span class="badge bg-primary">{question.index + 1}</span>
+			{#if quizId != null && index != null}
+				<span class="badge bg-primary">{index + 1}</span>
 			{/if}
 			<button
 				type="button"

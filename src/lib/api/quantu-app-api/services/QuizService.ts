@@ -8,7 +8,9 @@ import type { QuizCreate } from '../models/QuizCreate';
 import type { QuizList } from '../models/QuizList';
 import type { QuizQuestionIds } from '../models/QuizQuestionIds';
 import type { QuizUpdate } from '../models/QuizUpdate';
+
 import type { CancelablePromise } from '../core/CancelablePromise';
+import { OpenAPI } from '../core/OpenAPI';
 import { request as __request } from '../core/request';
 
 export class QuizService {
@@ -23,9 +25,12 @@ export class QuizService {
     public static quantuAppWebControllerQuizShow(
         id: number,
     ): CancelablePromise<Quiz> {
-        return __request({
+        return __request(OpenAPI, {
             method: 'GET',
-            path: `/quizzes/${id}`,
+            url: '/quizzes/{id}',
+            path: {
+                'id': id,
+            },
         });
     }
 
@@ -41,9 +46,12 @@ export class QuizService {
         organizationId: number,
         unitId?: number,
     ): CancelablePromise<QuizList> {
-        return __request({
+        return __request(OpenAPI, {
             method: 'GET',
-            path: `/user/organizations/${organizationId}/quizzes`,
+            url: '/user/organizations/{organization_id}/quizzes',
+            path: {
+                'organization_id': organizationId,
+            },
             query: {
                 'unitId': unitId,
             },
@@ -62,9 +70,12 @@ export class QuizService {
         organizationId: number,
         requestBody: QuizCreate,
     ): CancelablePromise<Quiz> {
-        return __request({
+        return __request(OpenAPI, {
             method: 'POST',
-            path: `/user/organizations/${organizationId}/quizzes`,
+            url: '/user/organizations/{organization_id}/quizzes',
+            path: {
+                'organization_id': organizationId,
+            },
             body: requestBody,
             mediaType: 'application/json',
         });
@@ -84,9 +95,13 @@ export class QuizService {
         organizationId: number,
         requestBody: QuizQuestionIds,
     ): CancelablePromise<void> {
-        return __request({
+        return __request(OpenAPI, {
             method: 'POST',
-            path: `/user/organizations/${organizationId}/quizzes/${id}/add-questions`,
+            url: '/user/organizations/{organization_id}/quizzes/{id}/add-questions',
+            path: {
+                'id': id,
+                'organization_id': organizationId,
+            },
             body: requestBody,
             mediaType: 'application/json',
         });
@@ -102,9 +117,9 @@ export class QuizService {
     public static quantuAppWebControllerQuestionResultIndex(
         quizId?: number,
     ): CancelablePromise<QuestionResultList> {
-        return __request({
+        return __request(OpenAPI, {
             method: 'GET',
-            path: `/question-results`,
+            url: '/question-results',
             query: {
                 'quizId': quizId,
             },
@@ -125,9 +140,13 @@ export class QuizService {
         organizationId: number,
         requestBody: QuizQuestionIds,
     ): CancelablePromise<void> {
-        return __request({
+        return __request(OpenAPI, {
             method: 'POST',
-            path: `/user/organizations/${organizationId}/quizzes/${id}/remove-questions`,
+            url: '/user/organizations/{organization_id}/quizzes/{id}/remove-questions',
+            path: {
+                'id': id,
+                'organization_id': organizationId,
+            },
             body: requestBody,
             mediaType: 'application/json',
         });
@@ -145,9 +164,13 @@ export class QuizService {
         id: number,
         organizationId: number,
     ): CancelablePromise<void> {
-        return __request({
+        return __request(OpenAPI, {
             method: 'DELETE',
-            path: `/user/organizations/${organizationId}/quizzes/${id}`,
+            url: '/user/organizations/{organization_id}/quizzes/{id}',
+            path: {
+                'id': id,
+                'organization_id': organizationId,
+            },
         });
     }
 
@@ -163,9 +186,13 @@ export class QuizService {
         id: number,
         organizationId: number,
     ): CancelablePromise<Quiz> {
-        return __request({
+        return __request(OpenAPI, {
             method: 'GET',
-            path: `/user/organizations/${organizationId}/quizzes/${id}`,
+            url: '/user/organizations/{organization_id}/quizzes/{id}',
+            path: {
+                'id': id,
+                'organization_id': organizationId,
+            },
         });
     }
 
@@ -183,9 +210,13 @@ export class QuizService {
         organizationId: number,
         requestBody: QuizUpdate,
     ): CancelablePromise<Quiz> {
-        return __request({
+        return __request(OpenAPI, {
             method: 'PATCH',
-            path: `/user/organizations/${organizationId}/quizzes/${id}`,
+            url: '/user/organizations/{organization_id}/quizzes/{id}',
+            path: {
+                'id': id,
+                'organization_id': organizationId,
+            },
             body: requestBody,
             mediaType: 'application/json',
         });
@@ -205,9 +236,13 @@ export class QuizService {
         organizationId: number,
         requestBody: QuizUpdate,
     ): CancelablePromise<Quiz> {
-        return __request({
+        return __request(OpenAPI, {
             method: 'PUT',
-            path: `/user/organizations/${organizationId}/quizzes/${id}`,
+            url: '/user/organizations/{organization_id}/quizzes/{id}',
+            path: {
+                'id': id,
+                'organization_id': organizationId,
+            },
             body: requestBody,
             mediaType: 'application/json',
         });
@@ -223,9 +258,12 @@ export class QuizService {
     public static quantuAppWebControllerQuestionResultShow(
         id: number,
     ): CancelablePromise<QuestionResult> {
-        return __request({
+        return __request(OpenAPI, {
             method: 'GET',
-            path: `/question-results/${id}`,
+            url: '/question-results/{id}',
+            path: {
+                'id': id,
+            },
         });
     }
 
@@ -241,9 +279,9 @@ export class QuizService {
         organizationId?: number,
         unitId?: number,
     ): CancelablePromise<QuizList> {
-        return __request({
+        return __request(OpenAPI, {
             method: 'GET',
-            path: `/quizzes`,
+            url: '/quizzes',
             query: {
                 'organizationId': organizationId,
                 'unitId': unitId,

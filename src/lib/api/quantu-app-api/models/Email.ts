@@ -34,4 +34,4 @@ export type Email = {
      * User Id
      */
     userId: string;
-}
+};

@@ -5,7 +5,9 @@ import type { Course } from '../models/Course';
 import type { CourseCreate } from '../models/CourseCreate';
 import type { CourseList } from '../models/CourseList';
 import type { CourseUpdate } from '../models/CourseUpdate';
+
 import type { CancelablePromise } from '../core/CancelablePromise';
+import { OpenAPI } from '../core/OpenAPI';
 import { request as __request } from '../core/request';
 
 export class CourseService {
@@ -20,9 +22,12 @@ export class CourseService {
     public static quantuAppWebControllerUserCourseIndex(
         organizationId: number,
     ): CancelablePromise<CourseList> {
-        return __request({
+        return __request(OpenAPI, {
             method: 'GET',
-            path: `/user/organizations/${organizationId}/courses`,
+            url: '/user/organizations/{organization_id}/courses',
+            path: {
+                'organization_id': organizationId,
+            },
         });
     }
 
@@ -38,9 +43,12 @@ export class CourseService {
         organizationId: number,
         requestBody: CourseCreate,
     ): CancelablePromise<Course> {
-        return __request({
+        return __request(OpenAPI, {
             method: 'POST',
-            path: `/user/organizations/${organizationId}/courses`,
+            url: '/user/organizations/{organization_id}/courses',
+            path: {
+                'organization_id': organizationId,
+            },
             body: requestBody,
             mediaType: 'application/json',
         });
@@ -58,9 +66,13 @@ export class CourseService {
         id: number,
         organizationId: number,
     ): CancelablePromise<void> {
-        return __request({
+        return __request(OpenAPI, {
             method: 'DELETE',
-            path: `/user/organizations/${organizationId}/courses/${id}`,
+            url: '/user/organizations/{organization_id}/courses/{id}',
+            path: {
+                'id': id,
+                'organization_id': organizationId,
+            },
         });
     }
 
@@ -76,9 +88,13 @@ export class CourseService {
         id: number,
         organizationId: number,
     ): CancelablePromise<Course> {
-        return __request({
+        return __request(OpenAPI, {
             method: 'GET',
-            path: `/user/organizations/${organizationId}/courses/${id}`,
+            url: '/user/organizations/{organization_id}/courses/{id}',
+            path: {
+                'id': id,
+                'organization_id': organizationId,
+            },
         });
     }
 
@@ -96,9 +112,13 @@ export class CourseService {
         organizationId: number,
         requestBody: CourseUpdate,
     ): CancelablePromise<Course> {
-        return __request({
+        return __request(OpenAPI, {
             method: 'PATCH',
-            path: `/user/organizations/${organizationId}/courses/${id}`,
+            url: '/user/organizations/{organization_id}/courses/{id}',
+            path: {
+                'id': id,
+                'organization_id': organizationId,
+            },
             body: requestBody,
             mediaType: 'application/json',
         });
@@ -118,9 +138,13 @@ export class CourseService {
         organizationId: number,
         requestBody: CourseUpdate,
     ): CancelablePromise<Course> {
-        return __request({
+        return __request(OpenAPI, {
             method: 'PUT',
-            path: `/user/organizations/${organizationId}/courses/${id}`,
+            url: '/user/organizations/{organization_id}/courses/{id}',
+            path: {
+                'id': id,
+                'organization_id': organizationId,
+            },
             body: requestBody,
             mediaType: 'application/json',
         });
@@ -136,9 +160,12 @@ export class CourseService {
     public static quantuAppWebControllerCourseShow(
         id: number,
     ): CancelablePromise<Course> {
-        return __request({
+        return __request(OpenAPI, {
             method: 'GET',
-            path: `/courses/${id}`,
+            url: '/courses/{id}',
+            path: {
+                'id': id,
+            },
         });
     }
 
@@ -152,9 +179,9 @@ export class CourseService {
     public static quantuAppWebControllerCourseIndex(
         organizationId?: number,
     ): CancelablePromise<CourseList> {
-        return __request({
+        return __request(OpenAPI, {
             method: 'GET',
-            path: `/courses`,
+            url: '/courses',
             query: {
                 'organizationId': organizationId,
             },

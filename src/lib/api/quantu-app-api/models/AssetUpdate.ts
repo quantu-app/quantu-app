@@ -14,4 +14,4 @@ export type AssetUpdate = {
      * Asset parent id
      */
     parentId?: number | null;
-}
+};

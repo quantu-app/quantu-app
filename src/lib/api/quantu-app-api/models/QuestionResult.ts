@@ -39,7 +39,7 @@ export type QuestionResult = {
      * Question results user Id
      */
     userId: string;
-}
+};
 
 export namespace QuestionResult {
 

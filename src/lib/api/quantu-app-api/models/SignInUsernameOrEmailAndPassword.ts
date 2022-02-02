@@ -14,4 +14,4 @@ export type SignInUsernameOrEmailAndPassword = {
      * Email or Username
      */
     usernameOrEmail: string;
-}
+};

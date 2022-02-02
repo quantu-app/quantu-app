@@ -34,4 +34,4 @@ export type LessonUpdate = {
      * Unit Id
      */
     unitId?: number | null;
-}
+};

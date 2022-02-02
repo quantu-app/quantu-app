@@ -5,7 +5,9 @@ import type { Organization } from '../models/Organization';
 import type { OrganizationCreate } from '../models/OrganizationCreate';
 import type { OrganizationList } from '../models/OrganizationList';
 import type { OrganizationUpdate } from '../models/OrganizationUpdate';
+
 import type { CancelablePromise } from '../core/CancelablePromise';
+import { OpenAPI } from '../core/OpenAPI';
 import { request as __request } from '../core/request';
 
 export class OrganizationService {
@@ -20,9 +22,12 @@ export class OrganizationService {
     public static quantuAppWebControllerOrganizationShow(
         id: number,
     ): CancelablePromise<Organization> {
-        return __request({
+        return __request(OpenAPI, {
             method: 'GET',
-            path: `/organizations/${id}`,
+            url: '/organizations/{id}',
+            path: {
+                'id': id,
+            },
         });
     }
 
@@ -36,9 +41,9 @@ export class OrganizationService {
     public static quantuAppWebControllerOrganizationIndex(
         subscriptions?: boolean,
     ): CancelablePromise<OrganizationList> {
-        return __request({
+        return __request(OpenAPI, {
             method: 'GET',
-            path: `/organizations`,
+            url: '/organizations',
             query: {
                 'subscriptions': subscriptions,
             },
@@ -55,9 +60,12 @@ export class OrganizationService {
     public static quantuAppWebControllerOrganizationShowByUrl(
         url: string,
     ): CancelablePromise<Organization> {
-        return __request({
+        return __request(OpenAPI, {
             method: 'GET',
-            path: `/organization/${url}`,
+            url: '/organization/{url}',
+            path: {
+                'url': url,
+            },
         });
     }
 
@@ -68,9 +76,9 @@ export class OrganizationService {
      * @throws ApiError
      */
     public static quantuAppWebControllerUserOrganizationIndex(): CancelablePromise<OrganizationList> {
-        return __request({
+        return __request(OpenAPI, {
             method: 'GET',
-            path: `/user/organizations`,
+            url: '/user/organizations',
         });
     }
 
@@ -84,9 +92,9 @@ export class OrganizationService {
     public static quantuAppWebControllerUserOrganizationCreate(
         requestBody: OrganizationCreate,
     ): CancelablePromise<Organization> {
-        return __request({
+        return __request(OpenAPI, {
             method: 'POST',
-            path: `/user/organizations`,
+            url: '/user/organizations',
             body: requestBody,
             mediaType: 'application/json',
         });
@@ -102,9 +110,12 @@ export class OrganizationService {
     public static quantuAppWebControllerUserOrganizationDelete(
         id: number,
     ): CancelablePromise<void> {
-        return __request({
+        return __request(OpenAPI, {
             method: 'DELETE',
-            path: `/user/organizations/${id}`,
+            url: '/user/organizations/{id}',
+            path: {
+                'id': id,
+            },
         });
     }
 
@@ -118,9 +129,12 @@ export class OrganizationService {
     public static quantuAppWebControllerUserOrganizationShow(
         id: number,
     ): CancelablePromise<Organization> {
-        return __request({
+        return __request(OpenAPI, {
             method: 'GET',
-            path: `/user/organizations/${id}`,
+            url: '/user/organizations/{id}',
+            path: {
+                'id': id,
+            },
         });
     }
 
@@ -136,9 +150,12 @@ export class OrganizationService {
         id: number,
         requestBody: OrganizationUpdate,
     ): CancelablePromise<Organization> {
-        return __request({
+        return __request(OpenAPI, {
             method: 'PATCH',
-            path: `/user/organizations/${id}`,
+            url: '/user/organizations/{id}',
+            path: {
+                'id': id,
+            },
             body: requestBody,
             mediaType: 'application/json',
         });
@@ -156,9 +173,12 @@ export class OrganizationService {
         id: number,
         requestBody: OrganizationUpdate,
     ): CancelablePromise<Organization> {
-        return __request({
+        return __request(OpenAPI, {
             method: 'PUT',
-            path: `/user/organizations/${id}`,
+            url: '/user/organizations/{id}',
+            path: {
+                'id': id,
+            },
             body: requestBody,
             mediaType: 'application/json',
         });

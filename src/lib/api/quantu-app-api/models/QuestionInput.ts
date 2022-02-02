@@ -18,7 +18,7 @@ export type QuestionInput = {
      * question input type
      */
     type: QuestionInput.type;
-}
+};
 
 export namespace QuestionInput {
 

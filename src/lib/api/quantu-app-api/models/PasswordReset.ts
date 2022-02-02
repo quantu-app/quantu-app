@@ -14,4 +14,4 @@ export type PasswordReset = {
      * password
      */
     password: string;
-}
+};

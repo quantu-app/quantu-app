@@ -34,4 +34,4 @@ export type Organization = {
      * User Id
      */
     userId: string;
-}
+};

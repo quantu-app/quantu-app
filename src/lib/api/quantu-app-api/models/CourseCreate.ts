@@ -22,4 +22,4 @@ export type CourseCreate = {
      * Course tags
      */
     tags?: Array<string> | null;
-}
+};

@@ -6,7 +6,9 @@ import type { AssetCreate } from '../models/AssetCreate';
 import type { AssetFile } from '../models/AssetFile';
 import type { AssetList } from '../models/AssetList';
 import type { AssetUpdate } from '../models/AssetUpdate';
+
 import type { CancelablePromise } from '../core/CancelablePromise';
+import { OpenAPI } from '../core/OpenAPI';
 import { request as __request } from '../core/request';
 
 export class AssetService {
@@ -23,9 +25,12 @@ export class AssetService {
         organizationId: number,
         parentId?: number,
     ): CancelablePromise<AssetList> {
-        return __request({
+        return __request(OpenAPI, {
             method: 'GET',
-            path: `/user/organizations/${organizationId}/assets`,
+            url: '/user/organizations/{organization_id}/assets',
+            path: {
+                'organization_id': organizationId,
+            },
             query: {
                 'parentId': parentId,
             },
@@ -44,9 +49,12 @@ export class AssetService {
         organizationId: number,
         formData: AssetCreate,
     ): CancelablePromise<Asset> {
-        return __request({
+        return __request(OpenAPI, {
             method: 'POST',
-            path: `/user/organizations/${organizationId}/assets`,
+            url: '/user/organizations/{organization_id}/assets',
+            path: {
+                'organization_id': organizationId,
+            },
             formData: formData,
             mediaType: 'multipart/form-data',
         });
@@ -66,9 +74,14 @@ export class AssetService {
         parentId: number,
         organizationId: number,
     ): CancelablePromise<AssetFile> {
-        return __request({
+        return __request(OpenAPI, {
             method: 'GET',
-            path: `/static/assets/${organizationId}/${parentId}/${id}`,
+            url: '/static/assets/{organization_id}/{parent_id}/{id}',
+            path: {
+                'id': id,
+                'parent_id': parentId,
+                'organization_id': organizationId,
+            },
         });
     }
 
@@ -84,9 +97,13 @@ export class AssetService {
         id: number,
         organizationId: number,
     ): CancelablePromise<AssetFile> {
-        return __request({
+        return __request(OpenAPI, {
             method: 'GET',
-            path: `/static/assets/${organizationId}/${id}`,
+            url: '/static/assets/{organization_id}/{id}',
+            path: {
+                'id': id,
+                'organization_id': organizationId,
+            },
         });
     }
 
@@ -102,9 +119,13 @@ export class AssetService {
         id: number,
         organizationId: number,
     ): CancelablePromise<void> {
-        return __request({
+        return __request(OpenAPI, {
             method: 'DELETE',
-            path: `/user/organizations/${organizationId}/assets/${id}`,
+            url: '/user/organizations/{organization_id}/assets/{id}',
+            path: {
+                'id': id,
+                'organization_id': organizationId,
+            },
         });
     }
 
@@ -122,9 +143,13 @@ export class AssetService {
         organizationId: number,
         parentId?: number,
     ): CancelablePromise<Asset> {
-        return __request({
+        return __request(OpenAPI, {
             method: 'GET',
-            path: `/user/organizations/${organizationId}/assets/${id}`,
+            url: '/user/organizations/{organization_id}/assets/{id}',
+            path: {
+                'id': id,
+                'organization_id': organizationId,
+            },
             query: {
                 'parentId': parentId,
             },
@@ -145,9 +170,13 @@ export class AssetService {
         organizationId: number,
         formData: AssetUpdate,
     ): CancelablePromise<Asset> {
-        return __request({
+        return __request(OpenAPI, {
             method: 'PATCH',
-            path: `/user/organizations/${organizationId}/assets/${id}`,
+            url: '/user/organizations/{organization_id}/assets/{id}',
+            path: {
+                'id': id,
+                'organization_id': organizationId,
+            },
             formData: formData,
             mediaType: 'multipart/form-data',
         });
@@ -167,9 +196,13 @@ export class AssetService {
         organizationId: number,
         formData: AssetUpdate,
     ): CancelablePromise<Asset> {
-        return __request({
+        return __request(OpenAPI, {
             method: 'PUT',
-            path: `/user/organizations/${organizationId}/assets/${id}`,
+            url: '/user/organizations/{organization_id}/assets/{id}',
+            path: {
+                'id': id,
+                'organization_id': organizationId,
+            },
             formData: formData,
             mediaType: 'multipart/form-data',
         });

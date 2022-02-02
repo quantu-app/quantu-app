@@ -10,4 +10,4 @@ export type QuestionMarkAsRead = {
      * content
      */
     content: Array<any>;
-}
+};

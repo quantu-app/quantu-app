@@ -2,7 +2,9 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { HealthCheck } from '../models/HealthCheck';
+
 import type { CancelablePromise } from '../core/CancelablePromise';
+import { OpenAPI } from '../core/OpenAPI';
 import { request as __request } from '../core/request';
 
 export class UtilService {
@@ -14,9 +16,9 @@ export class UtilService {
      * @throws ApiError
      */
     public static quantuAppWebControllerHealthCheckHealth(): CancelablePromise<HealthCheck> {
-        return __request({
+        return __request(OpenAPI, {
             method: 'GET',
-            path: `/health`,
+            url: '/health',
         });
     }
 
@@ -27,9 +29,9 @@ export class UtilService {
      * @throws ApiError
      */
     public static quantuAppWebControllerHealthCheckHealth2(): CancelablePromise<HealthCheck> {
-        return __request({
+        return __request(OpenAPI, {
             method: 'HEAD',
-            path: `/health`,
+            url: '/health',
         });
     }
 

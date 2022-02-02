@@ -10,4 +10,4 @@ export type UsernameUpdate = {
      * username
      */
     username: string;
-}
+};

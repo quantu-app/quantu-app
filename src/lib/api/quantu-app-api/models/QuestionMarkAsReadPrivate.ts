@@ -10,4 +10,4 @@ export type QuestionMarkAsReadPrivate = {
      * content
      */
     content: Array<any>;
-}
+};

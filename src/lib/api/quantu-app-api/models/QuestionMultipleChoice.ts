@@ -25,4 +25,4 @@ export type QuestionMultipleChoice = {
      * question singleAnswer
      */
     singleAnswer?: boolean | null;
-}
+};

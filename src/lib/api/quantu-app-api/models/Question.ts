@@ -53,7 +53,7 @@ export type Question = {
      * Update timestamp
      */
     updatedAt: string;
-}
+};
 
 export namespace Question {
 

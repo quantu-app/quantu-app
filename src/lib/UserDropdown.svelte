@@ -15,12 +15,14 @@
 		</button>
 		<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="user-dropdown">
 			<li><span class="dropdown-item disabled">{$currentUser.username}</span></li>
+			<li><hr class="dropdown-divider" /></li>
+			<li>
+				<a role="button" class="dropdown-item" aria-label="Profile" href="/user/profile"
+					>Your Profile</a
+				>
+			</li>
+			<li><hr class="dropdown-divider" /></li>
 			{#if $currentUser.creator}
-				<li>
-					<a role="button" class="dropdown-item" aria-label="Profile" href="/user/profile"
-						>Profile</a
-					>
-				</li>
 				<li>
 					<a
 						role="button"
@@ -29,8 +31,13 @@
 						href="/user/organizations">My Organizations</a
 					>
 				</li>
-				<li><hr class="dropdown-divider" /></li>
 			{/if}
+			<li>
+				<a role="button" class="dropdown-item" aria-label="Profile" href="/user/settings"
+					>Settings</a
+				>
+			</li>
+			<li><hr class="dropdown-divider" /></li>
 			<li>
 				<button type="button" class="dropdown-item" aria-label="Sign out" on:click={signOut}
 					>Sign out</button

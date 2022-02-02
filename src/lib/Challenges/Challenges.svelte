@@ -60,12 +60,14 @@
 		{#if latestQuestion}
 			<div class="row">
 				<h1>Latest Challenge</h1>
+				<hr />
 				<ChallengeList questions={[latestQuestion]} />
 			</div>
 		{/if}
 		{#if previousQuestions.length}
 			<div class="row">
 				<h1>Previous Challenges</h1>
+				<hr />
 				<ChallengeList questions={previousQuestions} />
 			</div>
 		{/if}

@@ -48,7 +48,7 @@
 		{ href: '/', title: 'Home' },
 		{
 			href: `/challenges`,
-			title: 'Questions'
+			title: 'Challenges'
 		},
 		{
 			href: `/challenges/${questionId}`,
@@ -63,8 +63,8 @@
 	<div class="container flex-grow-1">
 		{#if questionResult}
 			<ReviewQuestion result={questionResult}>
-				<a slot="extra" role="button" class="btn btn-primary" href={`/challenges/${question?.id}`}>
-					Return to {question?.name}
+				<a slot="extra" role="button" class="btn btn-primary" href={`/challenges`}>
+					Return to Challenges
 				</a>
 			</ReviewQuestion>
 		{/if}

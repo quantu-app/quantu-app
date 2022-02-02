@@ -88,7 +88,7 @@ async function signInUser(currentUser: UserPrivate) {
 			tasks.push(goto(redirectPath));
 		}
 	} else {
-		tasks.push(goto(`${base}/user/profile`));
+		tasks.push(goto(`${base}/user/welcome`));
 	}
 	userEmitter.emit('signIn', currentUser);
 	await Promise.all(tasks);

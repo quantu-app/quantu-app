@@ -9,8 +9,6 @@
 	export let seed: number = undefined;
 </script>
 
-{result.type}
-
 {#key result.id}
 	{#if result.type == 'flash_card'}
 		<FlashCardReview bind:result>

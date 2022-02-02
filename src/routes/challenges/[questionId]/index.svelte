@@ -56,8 +56,13 @@
 	<div class="container d-flex flex-grow-1">
 		{#if question}
 			<Question {question}>
-				<a slot="extra" role="button" class="btn btn-primary" href="/challenges">
-					Return to Challenges
+				<a
+					slot="extra"
+					role="button"
+					class="btn btn-primary"
+					href={`/challenges/${questionId}/review`}
+				>
+					Review
 				</a>
 			</Question>
 		{/if}

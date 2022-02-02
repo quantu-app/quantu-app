@@ -19,7 +19,7 @@
 	eighteenYearsAgo.setFullYear(eighteenYearsAgo.getFullYear() - 18);
 	$: date = new Date(birthday || '');
 
-	async function onUpdate() {
+	async function onConfirm() {
 		updating = true;
 		try {
 			await updateUser({
@@ -38,11 +38,16 @@
 </script>
 
 <div class="container">
+	<div class="row">
+		<h1>Welcome to our community</h1>
+		<p>
+			We ask the users on our platform to use their real data because we think honesty and
+			transparency fosters more thoughtfulness, kindness, and a better community spirit.
+		</p>
+		<p>Please confirm or adjust the following information to finish activating your profile.</p>
+	</div>
+
 	<form on:submit|preventDefault class="my-4">
-		<div class="row">
-			<h1>Profile Information</h1>
-			<hr />
-		</div>
 		<div class="row my-4">
 			<label for="username">Username</label>
 			<p class="text-black-50 m-0">
@@ -58,11 +63,6 @@
 					bind:value={username}
 				/>
 			</div>
-		</div>
-
-		<div class="row">
-			<h1>Personal Information</h1>
-			<hr />
 		</div>
 		<div class="row my-4">
 			<div class="col-md-6">
@@ -145,7 +145,7 @@
 						date.getTime() >= eighteenYearsAgo.getTime() ||
 						updating}
 					class="btn btn-primary"
-					on:click={onUpdate}>Update</button
+					on:click={onConfirm}>Confirm</button
 				>
 			</div>
 		</div>

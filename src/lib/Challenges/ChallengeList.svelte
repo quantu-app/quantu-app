@@ -5,7 +5,7 @@
 	export let questions: Question[];
 </script>
 
-<div class="list-group list-group-flush">
+<div class="container">
 	{#each questions as question}
 		<ChallengeListItem {question} />
 	{/each}

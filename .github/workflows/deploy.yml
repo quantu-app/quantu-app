@@ -22,7 +22,7 @@ jobs:
       - run: npm ci
       - uses: docker/login-action@v1
         with:
-          registry: docker.pkg.github.com
+          registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
       - run: NODE_ENV=production npm run helm

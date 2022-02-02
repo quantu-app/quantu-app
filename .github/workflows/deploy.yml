@@ -23,6 +23,6 @@ jobs:
       - uses: docker/login-action@v1
         with:
           registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          username: ${{ secrets.USER }}
+          password: ${{ secrets.TOKEN }}
       - run: NODE_ENV=production npm run helm

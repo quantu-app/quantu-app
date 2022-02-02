@@ -13,12 +13,20 @@
 
 	export let question: Question;
 
+	$: date = new Date(question.insertedAt).toLocaleString('default', {
+		weekday: 'long',
+		year: 'numeric',
+		month: 'long',
+		day: 'numeric'
+	});
+
 	const rng = XorShiftRng.fromSeed(question.id);
 	const image = rng.fromArray(IMAGES).unwrap();
 </script>
 
 <div class="row justify-content-center m-4">
-	<div class="col-md-6 border p-4">
+	<h3 class="text-center">{date}</h3>
+	<div class="col-md-8 border p-4">
 		<div class="row">
 			<div class="col-lg-6">
 				<img src={image} alt={question.name || 'No Name'} />
@@ -36,5 +44,6 @@
 				href={`/challenges/${question.id}/review`}>Review</a
 			>
 		</div>
+		<div class="text-muted">{question.tags.join('|')}</div>
 	</div>
 </div>

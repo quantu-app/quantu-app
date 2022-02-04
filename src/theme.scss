@@ -34,6 +34,11 @@ $container-max-widths: (
 
 $btn-border-radius: 0px;
 
+// Webkit button rendering fix.
+a.btn {
+    -webkit-appearance: none;
+}
+
 @import 'bootstrap/scss/bootstrap';
 @import 'bootstrap/scss/functions';
 

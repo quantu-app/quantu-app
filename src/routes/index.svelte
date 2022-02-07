@@ -19,7 +19,9 @@
 					lovers.
 				</p>
 				{#if $currentUser}
-					<a type="button" class="btn btn-primary" href={`${base}/challenges`}>Challenges</a>
+					<a type="button" role="button" class="btn btn-primary" href={`${base}/challenges`}>
+						Challenges
+					</a>
 				{:else}
 					<button
 						type="button"

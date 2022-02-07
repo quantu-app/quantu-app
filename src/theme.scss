@@ -11,7 +11,7 @@
 $enable-rounded: false;
 $font-family-base: 'Computer Modern';
 
-$primary: #212120;
+$primary: #202020;
 $secondary: #a8a8a8;
 $success: #0a0;
 $danger: #a00;
@@ -27,6 +27,17 @@ $container-max-widths: (
 	xl: 768px,
 	xxl: 960px
 );
+
+/** ====================
+= Button Customizations
+======================== **/
+
+$btn-border-radius: 0px;
+
+// Webkit button rendering fix.
+a.btn {
+    -webkit-appearance: none;
+}
 
 @import 'bootstrap/scss/bootstrap';
 @import 'bootstrap/scss/functions';

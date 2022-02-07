@@ -1,6 +1,9 @@
 <script lang="ts">
-	let timezone: string;
-	let displayLanguange: string;
+	import languages from './data/languages';
+	import timezones from './data/timezones';
+
+	let timezone: string = 'EST';
+	let displayLanguange: string = 'en';
 </script>
 
 <div class="container">
@@ -16,13 +19,11 @@
 				This will display dates and times correctly for your learning needs.
 			</p>
 			<div class="input-group">
-				<input
-					type="timezone"
-					class="form-control"
-					id="timezone"
-					placeholder="Timezone"
-					bind:value={timezone}
-				/>
+				<select id="timezone" class="form-select" bind:value={timezone}>
+					{#each timezones as timezone}
+						<option value={timezone.abbr}>{timezone.value}</option>
+					{/each}
+				</select>
 			</div>
 		</div>
 		<div class="row my-4">
@@ -32,13 +33,11 @@
 					This is your real first name, no other user on the system can see this.
 				</p>
 				<div class="input-group">
-					<input
-						type="locale"
-						class="form-control"
-						id="display-languange"
-						placeholder="Display Language"
-						bind:value={displayLanguange}
-					/>
+					<select id="display-languange" class="form-select" bind:value={displayLanguange}>
+						{#each languages as language}
+							<option value={language.code}>{language.nativeName} | {language.name}</option>
+						{/each}
+					</select>
 				</div>
 			</div>
 		</div>

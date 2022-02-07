@@ -102,14 +102,16 @@
 				Your birthday is used to calculate your age and for olympiads, competitions, and awards
 				across the platform
 			</p>
-			<div class="input-group">
+			<div class="input-group has-validation">
 				<input
 					type="date"
 					class="form-control"
+					class:is-invalid={date.getTime() >= eighteenYearsAgo.getTime()}
 					id="birthday"
 					placeholder="Birthday"
 					bind:value={birthday}
 				/>
+				<div class="invalid-feedback">You must be at least 18 years old to use this platform.</div>
 			</div>
 		</div>
 		<div class="row my-4">

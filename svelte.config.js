@@ -15,9 +15,7 @@ const config = {
 			build: {
 				target: 'es2020'
 			}
-		},
-		// hydrate the <div id="app"> element in src/app.html
-		target: '#app'
+		}
 	}
 };
 

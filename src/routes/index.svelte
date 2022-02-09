@@ -15,7 +15,7 @@
 				<h1 class="fw-bold">Master Mathematics.</h1>
 				<p>
 					Learn using the best methods in learning science. Complete, enjoy, and become part of an
-					open math education community for life-long learners, autodidacts, math, and science
+					open education community for life-long learners, autodidacts and math &amp; science
 					lovers.
 				</p>
 				{#if $currentUser}
@@ -35,8 +35,8 @@
 			</div>
 			<div class="col-md-6 px-4 text-center">
 				<img
-					src="https://github.com/quantu-app/design-platform/raw/master/app/resources/homepage/vitruve-man-davinci.png"
-					alt="Golden Ratio"
+					src="https://github.com/quantu-app/design-platform/raw/master/app/resources/homepage/law-of-large-numbers.png"
+					alt="The Law of Large Numbers"
 				/>
 			</div>
 		</div>
@@ -49,7 +49,7 @@
 				/>
 			</div>
 			<div class="col-md-6 px-4">
-				<h3 class="fw-bold">Master concepts through guided and interactive lessons</h3>
+				<h3 class="fw-bold">Learn concepts through guided and interactive lessons</h3>
 				<p>
 					Content creators design and develop lessons so you can learn and master any topic at your
 					own pace. Lessons are hand-crafted to build mastery and intuition.
@@ -67,10 +67,11 @@
 				</p>
 				<h3 class="fw-bold pt-4">For everyone young and old alike</h3>
 				<p>
-					We believe learning advanced mathemetics can and should be a lifelong, community based,
-					and most importantly, an enjoyable and rewarding experience. Whether you want to learn
-					group theory or solve logic puzzles, our learning platform for advanced mathematics is
-					designed with this in mind.
+					We believe learning advanced science &amp; mathemetics can and should be lifelong,
+					community based, and most importantly, an enjoyable and rewarding experience. Whether you
+					want to learn group theory, classical mechanics or just solve logic puzzles and compete
+					with other autodidacts, our educational platform for quantitative learning is designed
+					with you in mind.
 				</p>
 			</div>
 			<div class="col-md-6 px-4 text-center">

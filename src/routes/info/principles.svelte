@@ -10,7 +10,7 @@
 <AppLayout>
 	<div class="container">
 		<div class="row py-4">
-			<div class="col">
+			<div class="col offset-lg-2 col-lg-8">
 				<h2>Our Goals</h2>
 
 				<p>We have a lot of ambitious goals we want to reach, both long-term and short-term.</p>
@@ -32,7 +32,7 @@
 		</div>
 
 		<div class="row py-4">
-			<div class="col">
+			<div class="col offset-lg-2 col-lg-8">
 				<h2>Our Values</h2>
 
 				<p>
@@ -74,7 +74,7 @@
 		</div>
 
 		<div class="row py-4 mb-5">
-			<div class="col">
+			<div class="col offset-lg-2 col-lg-8">
 				<h2>Our Path</h2>
 
 				<p>Our path is more of a process which has two core pillars or subcomponents.</p>

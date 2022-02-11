@@ -21,11 +21,13 @@ $light: #f1f1f1;
 $dark: #111;
 
 $container-max-widths: (
-	sm: 320px,
-	md: 480px,
-	lg: 640px,
-	xl: 768px,
-	xxl: 960px
+	// container widths with bootstrap breakpoints
+	// see: https://getbootstrap.com/docs/5.0/layout/breakpoints/
+	sm: 480px, // <= 576px,
+	md: 640px, // <= 768px
+	lg: 768px, // <= 992px
+	xl: 992px, // <= 1200px
+	xxl: 992px // <= 1400px
 );
 
 /** ====================

@@ -10,7 +10,7 @@
 <AppLayout>
 	<div class="container">
 		<div class="row py-4 my-4">
-			<div class="col">
+			<div class="col offset-lg-2 col-lg-8">
 				<h2>Our Vision</h2>
 
 				<p>

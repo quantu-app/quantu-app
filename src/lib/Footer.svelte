@@ -37,7 +37,9 @@
 						<h4 class="fw-bold">Developers</h4>
 						<ul>
 							<li>
-								<a class="link-light" href="https://github.com/quantu-app">Open Source Projects</a>
+								<a class="link-light" target="_blank" href="https://github.com/quantu-app"
+									>Open Source Projects</a
+								>
 							</li>
 						</ul>
 					</div>

@@ -21,10 +21,10 @@ $light: #f1f1f1;
 $dark: #111;
 
 $container-max-widths: (
-	sm: 320px,
-	md: 480px,
-	lg: 640px,
-	xl: 768px,
+	sm: 480px, // 320,
+	md: 640px,
+	lg: 768px,
+	xl: 960px,
 	xxl: 960px
 );
 

@@ -2,15 +2,11 @@
 	import { base } from '$app/paths';
 	import AppLayout from '$lib/AppLayout.svelte';
 	import { currentUser } from '$lib/state/user';
-
-	import AcceptCookies from '$lib/Compliance/AcceptCookies.svelte';
 </script>
 
 <svelte:head>
 	<title>Home</title>
 </svelte:head>
-
-<AcceptCookies />
 
 <AppLayout>
 	<div class="container">

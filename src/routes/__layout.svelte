@@ -3,6 +3,7 @@
 	import AssetsModal from '$lib/AssetsModal.svelte';
 	import { API_URL } from '$lib/constants';
 	import '../app.scss';
+	import AcceptCookies from '$lib/Compliance/AcceptCookies.svelte';
 
 	OpenAPI.BASE = API_URL;
 </script>
@@ -22,3 +23,5 @@
 
 <slot />
 <AssetsModal />
+
+<AcceptCookies />

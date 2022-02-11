@@ -5,7 +5,7 @@
 </script>
 
 <div>
-	<Quote author="Lao Tzu">The jounrey of a thousand miles begins with a single step.</Quote>
+	<Quote author="Lao Tzu">The journey of a thousand miles begins with a single step.</Quote>
 </div>
 
 <div class="row px-2 py-4">
@@ -20,9 +20,11 @@
 		<slot />
 		<div class="mt-4">
 			<p>
-				By joining, you are agreeing to our <a target="_blank" href={`${base}/terms`}>Terms</a>
+				By joining, you are agreeing to our <a target="_blank" href={`${base}/info/terms-of-use`}
+					>Terms</a
+				>
 				and
-				<a target="_blank" href={`${base}/privacy-policy`}>Privacy Policy</a>
+				<a target="_blank" href={`${base}/info/privacy-policy`}>Privacy Policy</a>
 			</p>
 		</div>
 	</div>

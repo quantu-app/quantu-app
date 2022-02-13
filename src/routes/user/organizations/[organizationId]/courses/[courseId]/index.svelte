@@ -30,12 +30,12 @@
 <script lang="ts">
 	import { getCourse, organizationCourses } from '$lib/state/organizationCourses';
 	import { getOrganization, userOrganizations } from '$lib/state/userOrganizations';
-	import OrganizationLayout from '$lib/UserOrganizations/OrganizationLayout.svelte';
-	import Course from '$lib/UserOrganizations/Courses/Course.svelte';
+	import OrganizationLayout from '$lib/components/UserOrganizations/OrganizationLayout.svelte';
+	import Course from '$lib/components/UserOrganizations/Courses/Course.svelte';
 	import { setOrganizationIdAssets } from '$lib/state/selectedAssets';
 	import { getUnits, organizationUnits } from '$lib/state/organizationUnits';
-	import CourseTree from '$lib/UserOrganizations/CourseTree.svelte';
-	import { openSidebar } from '$lib/Sidebar.svelte';
+	import CourseTree from '$lib/components/UserOrganizations/CourseTree.svelte';
+	import { openSidebar } from '$lib/components/Sidebar.svelte';
 
 	export let organizationId: number;
 	export let courseId: number;

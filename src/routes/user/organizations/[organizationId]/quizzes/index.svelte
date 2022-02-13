@@ -23,8 +23,8 @@
 
 <script lang="ts">
 	import { getQuizzes, organizationQuizzes } from '$lib/state/organizationQuizzes';
-	import OrganizationLayout from '$lib/UserOrganizations/OrganizationLayout.svelte';
-	import Quizzes from '$lib/UserOrganizations/Quizzes/Quizzes.svelte';
+	import OrganizationLayout from '$lib/components/UserOrganizations/OrganizationLayout.svelte';
+	import Quizzes from '$lib/components/UserOrganizations/Quizzes/Quizzes.svelte';
 	import { getOrganization, userOrganizations } from '$lib/state/userOrganizations';
 	import { setOrganizationIdAssets } from '$lib/state/selectedAssets';
 

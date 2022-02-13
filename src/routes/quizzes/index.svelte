@@ -23,8 +23,8 @@
 </script>
 
 <script lang="ts">
-	import AppLayout from '$lib/AppLayout.svelte';
-	import Quizzes from '$lib/Quizzes/Quizzes.svelte';
+	import AppLayout from '$lib/components/AppLayout.svelte';
+	import Quizzes from '$lib/components/Quizzes/Quizzes.svelte';
 	import { getQuizzes, quizzes } from '$lib/state/quizzes';
 	import { sortById } from '$lib/utils';
 

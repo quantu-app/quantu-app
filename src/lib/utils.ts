@@ -1,7 +1,7 @@
 import { random } from '@aicacia/rand';
 import { range } from '@aicacia/range';
 import type { Channel } from 'phoenix';
-import type { Lesson, Quiz } from './api/quantu-app-api';
+import type { Lesson, Quiz } from '$lib/api/quantu-app-api';
 
 function checkPrototypeProperty(obj: Record<string, unknown>) {
 	for (const key in obj) {

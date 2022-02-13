@@ -23,8 +23,8 @@
 
 <script lang="ts">
 	import { getUnits, organizationUnits } from '$lib/state/organizationUnits';
-	import OrganizationLayout from '$lib/UserOrganizations/OrganizationLayout.svelte';
-	import Units from '$lib/UserOrganizations/Units/Units.svelte';
+	import OrganizationLayout from '$lib/components/UserOrganizations/OrganizationLayout.svelte';
+	import Units from '$lib/components/UserOrganizations/Units/Units.svelte';
 	import { getOrganization, userOrganizations } from '$lib/state/userOrganizations';
 	import { setOrganizationIdAssets } from '$lib/state/selectedAssets';
 

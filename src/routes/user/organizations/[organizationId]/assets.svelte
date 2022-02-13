@@ -23,8 +23,8 @@
 
 <script lang="ts">
 	import { getOrganization, userOrganizations } from '$lib/state/userOrganizations';
-	import Assets from '$lib/Assets.svelte';
-	import OrganizationLayout from '$lib/UserOrganizations/OrganizationLayout.svelte';
+	import Assets from '$lib/components/Assets.svelte';
+	import OrganizationLayout from '$lib/components/UserOrganizations/OrganizationLayout.svelte';
 	import { setOrganizationIdAssets } from '$lib/state/selectedAssets';
 
 	export let organizationId: number;

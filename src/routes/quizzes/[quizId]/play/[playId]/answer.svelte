@@ -34,8 +34,8 @@
 <script lang="ts">
 	import { getQuestions, questions } from '$lib/state/questions';
 	import { getQuiz, quizzes } from '$lib/state/quizzes';
-	import AppLayout from '$lib/AppLayout.svelte';
-	import PlayAnswerQuizQuestion from '$lib/Quizzes/PlayAnswerQuizQuestion.svelte';
+	import AppLayout from '$lib/components/AppLayout.svelte';
+	import PlayAnswerQuizQuestion from '$lib/components/Quizzes/PlayAnswerQuizQuestion.svelte';
 	import { XorShiftRng } from '@aicacia/rand';
 	import { sortById } from '$lib/utils';
 

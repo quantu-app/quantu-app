@@ -31,8 +31,8 @@
 
 <script lang="ts">
 	import { getOrganization, userOrganizations } from '$lib/state/userOrganizations';
-	import OrganizationLayout from '$lib/UserOrganizations/OrganizationLayout.svelte';
-	import Quiz from '$lib/UserOrganizations/Quizzes/Quiz.svelte';
+	import OrganizationLayout from '$lib/components/UserOrganizations/OrganizationLayout.svelte';
+	import Quiz from '$lib/components/UserOrganizations/Quizzes/Quiz.svelte';
 	import { setOrganizationIdAssets } from '$lib/state/selectedAssets';
 	import { organizationCourses } from '$lib/state/organizationCourses';
 	import { organizationUnits } from '$lib/state/organizationUnits';

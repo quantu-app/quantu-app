@@ -37,12 +37,12 @@
 		organizationUnits
 	} from '$lib/state/organizationUnits';
 	import { getOrganization, userOrganizations } from '$lib/state/userOrganizations';
-	import OrganizationLayout from '$lib/UserOrganizations/OrganizationLayout.svelte';
-	import Unit from '$lib/UserOrganizations/Units/Unit.svelte';
+	import OrganizationLayout from '$lib/components/UserOrganizations/OrganizationLayout.svelte';
+	import Unit from '$lib/components/UserOrganizations/Units/Unit.svelte';
 	import { setOrganizationIdAssets } from '$lib/state/selectedAssets';
 	import { getCourse, organizationCourses } from '$lib/state/organizationCourses';
-	import CourseTree from '$lib/UserOrganizations/CourseTree.svelte';
-	import { openSidebar } from '$lib/Sidebar.svelte';
+	import CourseTree from '$lib/components/UserOrganizations/CourseTree.svelte';
+	import { openSidebar } from '$lib/components/Sidebar.svelte';
 
 	export let organizationId: number;
 	export let courseId: number;

@@ -30,11 +30,11 @@
 <script lang="ts">
 	import { getUnit, getUnitChildren, organizationUnits } from '$lib/state/organizationUnits';
 	import { getOrganization, userOrganizations } from '$lib/state/userOrganizations';
-	import OrganizationLayout from '$lib/UserOrganizations/OrganizationLayout.svelte';
-	import Unit from '$lib/UserOrganizations/Units/Unit.svelte';
+	import OrganizationLayout from '$lib/components/UserOrganizations/OrganizationLayout.svelte';
+	import Unit from '$lib/components/UserOrganizations/Units/Unit.svelte';
 	import { setOrganizationIdAssets } from '$lib/state/selectedAssets';
-	import { openSidebar } from '$lib/Sidebar.svelte';
-	import UnitTree from '$lib/UserOrganizations/UnitTree.svelte';
+	import { openSidebar } from '$lib/components/Sidebar.svelte';
+	import UnitTree from '$lib/components/UserOrganizations/UnitTree.svelte';
 
 	export let organizationId: number;
 	export let unitId: number;

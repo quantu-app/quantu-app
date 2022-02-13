@@ -21,7 +21,7 @@ RUN echo "VITE_API_URL=$VITE_API_URL" >> .env && \
 
 COPY . .
 
-RUN NODE_ENV=production npm run web.build
+RUN NODE_ENV=production npm run build
 
 FROM node-builder
 

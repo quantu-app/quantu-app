@@ -26,8 +26,8 @@
 <script lang="ts">
 	import { getLesson, organizationLessons } from '$lib/state/organizationLessons';
 	import { getOrganization, userOrganizations } from '$lib/state/userOrganizations';
-	import OrganizationLayout from '$lib/UserOrganizations/OrganizationLayout.svelte';
-	import Lesson from '$lib/UserOrganizations/Lessons/Lesson.svelte';
+	import OrganizationLayout from '$lib/components/UserOrganizations/OrganizationLayout.svelte';
+	import Lesson from '$lib/components/UserOrganizations/Lessons/Lesson.svelte';
 	import { setOrganizationIdAssets } from '$lib/state/selectedAssets';
 
 	export let organizationId: number;

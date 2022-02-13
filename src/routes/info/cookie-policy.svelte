@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { base } from '$app/paths';
-	import AppLayout from '$lib/AppLayout.svelte';
+	import AppLayout from '$lib/components/AppLayout.svelte';
 </script>
 
 <svelte:head>

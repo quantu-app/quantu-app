@@ -23,9 +23,9 @@
 
 <script lang="ts">
 	import { questions } from '$lib/state/questions';
-	import AppLayout from '$lib/AppLayout.svelte';
+	import AppLayout from '$lib/components/AppLayout.svelte';
 	import { getQuestion } from '$lib/state/questions';
-	import Question from '$lib/Questions/Question.svelte';
+	import Question from '$lib/components/Questions/Question.svelte';
 
 	export let questionId: number;
 

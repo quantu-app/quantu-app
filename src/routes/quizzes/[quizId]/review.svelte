@@ -28,8 +28,8 @@
 <script lang="ts">
 	import { questionResults } from '$lib/state/questionResults';
 	import { getQuiz, quizzes } from '$lib/state/quizzes';
-	import AppLayout from '$lib/AppLayout.svelte';
-	import ReviewQuizQuestions from '$lib/Quizzes/ReviewQuizQuestions.svelte';
+	import AppLayout from '$lib/components/AppLayout.svelte';
+	import ReviewQuizQuestions from '$lib/components/Quizzes/ReviewQuizQuestions.svelte';
 	import { XorShiftRng } from '@aicacia/rand';
 	import { getQuestionResults } from '$lib/state/questionResults';
 

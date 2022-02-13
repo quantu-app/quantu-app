@@ -31,8 +31,8 @@
 	import { getQuestions, organizationQuestions } from '$lib/state/organizationQuestions';
 	import { getQuiz, organizationQuizzes } from '$lib/state/organizationQuizzes';
 	import { getOrganization, userOrganizations } from '$lib/state/userOrganizations';
-	import OrganizationLayout from '$lib/UserOrganizations/OrganizationLayout.svelte';
-	import Quiz from '$lib/UserOrganizations/Quizzes/Quiz.svelte';
+	import OrganizationLayout from '$lib/components/UserOrganizations/OrganizationLayout.svelte';
+	import Quiz from '$lib/components/UserOrganizations/Quizzes/Quiz.svelte';
 	import { setOrganizationIdAssets } from '$lib/state/selectedAssets';
 
 	export let organizationId: number;

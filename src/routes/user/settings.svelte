@@ -9,8 +9,8 @@
 </script>
 
 <script lang="ts">
-	import AppLayout from '$lib/AppLayout.svelte';
-	import Settings from '$lib/Settings.svelte';
+	import AppLayout from '$lib/components/AppLayout.svelte';
+	import Settings from '$lib/components/Settings.svelte';
 </script>
 
 <svelte:head>

@@ -33,15 +33,15 @@
 
 <script lang="ts">
 	import { getOrganization, userOrganizations } from '$lib/state/userOrganizations';
-	import OrganizationLayout from '$lib/UserOrganizations/OrganizationLayout.svelte';
-	import Quiz from '$lib/UserOrganizations/Quizzes/Quiz.svelte';
+	import OrganizationLayout from '$lib/components/UserOrganizations/OrganizationLayout.svelte';
+	import Quiz from '$lib/components/UserOrganizations/Quizzes/Quiz.svelte';
 	import { setOrganizationIdAssets } from '$lib/state/selectedAssets';
 	import { getCourse, organizationCourses } from '$lib/state/organizationCourses';
 	import { getUnitChildren, getUnits, organizationUnits } from '$lib/state/organizationUnits';
 	import { getQuiz, organizationQuizzes } from '$lib/state/organizationQuizzes';
 	import { getQuestions, organizationQuestions } from '$lib/state/organizationQuestions';
-	import CourseTree from '$lib/UserOrganizations/CourseTree.svelte';
-	import { openSidebar } from '$lib/Sidebar.svelte';
+	import CourseTree from '$lib/components/UserOrganizations/CourseTree.svelte';
+	import { openSidebar } from '$lib/components/Sidebar.svelte';
 
 	export let organizationId: number;
 	export let courseId: number;

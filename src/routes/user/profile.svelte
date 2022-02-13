@@ -9,9 +9,9 @@
 </script>
 
 <script lang="ts">
-	import AppLayout from '$lib/AppLayout.svelte';
+	import AppLayout from '$lib/components/AppLayout.svelte';
 	import { currentUser } from '$lib/state/user';
-	import Profile from '$lib/Profile.svelte';
+	import Profile from '$lib/components/Profile.svelte';
 </script>
 
 <svelte:head>

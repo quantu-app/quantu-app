@@ -24,8 +24,8 @@
 
 <script lang="ts">
 	import { getQuiz, quizzes } from '$lib/state/quizzes';
-	import AppLayout from '$lib/AppLayout.svelte';
-	import Play from '$lib/Quizzes/Play.svelte';
+	import AppLayout from '$lib/components/AppLayout.svelte';
+	import Play from '$lib/components/Quizzes/Play.svelte';
 
 	export let quizId: number;
 	export let playId: string;

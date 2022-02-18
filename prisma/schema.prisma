@@ -49,3 +49,39 @@ model User {
   createdAt         DateTime       @default(now())
   updatedAt         DateTime       @updatedAt
 }
+
+model Topic {
+  id         String      @id @default(dbgenerated()) @map("_id") @db.ObjectId
+  name       String      @unique
+  url        String      @unique
+  parent     Topic?      @relation("TopicToTopic", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  parentId   String?     @db.ObjectId
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+  topics     Topic[]     @relation("TopicToTopic")
+  challenges Challenge[]
+
+  @@unique([parentId, url])
+}
+
+enum ChallengeType {
+  MULTIPLE_CHOICE
+  INPUT
+  FLASH_CARD
+}
+
+model Challenge {
+  id          String        @id @default(dbgenerated()) @map("_id") @db.ObjectId
+  name        String
+  url         String
+  description Json[]
+  topic       Topic         @relation(fields: [topicId], references: [id])
+  topicId     String        @db.ObjectId
+  type        ChallengeType @default(MULTIPLE_CHOICE)
+  prompt      Json
+  released_at DateTime?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  @@unique([topicId, url])
+}

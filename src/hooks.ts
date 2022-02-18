@@ -5,7 +5,6 @@ import '$lib/AbortController';
 import { run } from '$lib/prisma';
 import type { IJwtString } from '$lib/api/jwt';
 import { decode } from '$lib/api/jwt';
-import { showPrivateUser } from '$lib/api/users/showPrivate';
 
 export function handle({
 	event,
@@ -28,7 +27,18 @@ export function handle({
 export function getSession(request: RequestEvent): MaybePromise<App.Session> {
 	if (request.locals.token) {
 		return decode<{ userId: string }>(request.locals.token)
-			.then((token) => run((client) => showPrivateUser(client, { userId: token.userId })))
+			.then(({ userId }) =>
+				run((client) =>
+					client.user.findUnique({
+						where: {
+							id: userId
+						},
+						include: {
+							emails: true
+						}
+					})
+				)
+			)
 			.then((user) => ({ user }));
 	} else {
 		return null;

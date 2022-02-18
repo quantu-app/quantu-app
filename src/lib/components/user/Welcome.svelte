@@ -27,7 +27,7 @@
 				username,
 				firstName,
 				lastName,
-				birthday,
+				birthday: date,
 				country
 			});
 			await goto(`${base}/challenges`);

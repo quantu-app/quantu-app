@@ -10,7 +10,7 @@
 	let username = user.username;
 	let firstName = user.firstName;
 	let lastName = user.lastName;
-	let birthday = user.birthday;
+	let birthday = user.birthday?.toJSON().slice(0, 10);
 	let country = user.country || 'US';
 	let updating = false;
 
@@ -22,14 +22,14 @@
 	async function onUpdate() {
 		updating = true;
 		try {
-			updateUser({
+			const user = await updateUser({
 				username,
 				firstName,
 				lastName,
-				birthday,
+				birthday: date,
 				country
 			});
-			await goto(`${base}/challenges`);
+			await goto(`${base}/user/profile/${user.username}`);
 		} finally {
 			updating = false;
 		}

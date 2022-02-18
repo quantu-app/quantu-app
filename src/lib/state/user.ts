@@ -55,6 +55,11 @@ export async function updateUser(updateUser: Partial<User>) {
 		method: 'PATCH',
 		body: JSON.stringify(updateUser)
 	});
-	const user = await res.json();
-	session.update((session) => ({ ...session, user }));
+	const body = await res.json();
+	if (res.ok) {
+		session.update((session) => ({ ...session, user: body }));
+		return body;
+	} else {
+		throw body;
+	}
 }

@@ -16,6 +16,7 @@
 	import AppLayout from '$lib/components/AppLayout.svelte';
 	import { currentUser, redirectPathWritable } from '$lib/state/user';
 	import { get } from 'svelte/store';
+	import { base } from '$app/paths';
 
 	export let redirectPath: string = undefined;
 
@@ -39,7 +40,9 @@
 					lovers.
 				</p>
 				{#if $currentUser}
-					<a type="button" role="button" class="btn btn-primary"> Challenges </a>
+					<a type="button" role="button" class="btn btn-primary" href={`${base}/challenges`}
+						>Challenges</a
+					>
 				{:else}
 					<button
 						type="button"

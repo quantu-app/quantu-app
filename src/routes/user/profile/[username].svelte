@@ -14,7 +14,7 @@
 	import AppLayout from '$lib/components/AppLayout.svelte';
 	import { base } from '$app/paths';
 	import type { User } from '@prisma/client';
-	import Profile from '$lib/components/Profile.svelte';
+	import Profile from '$lib/components/user/Profile.svelte';
 	import { onMount } from 'svelte';
 
 	export let username: string;

@@ -11,7 +11,7 @@
 <script lang="ts">
 	import AppLayout from '$lib/components/AppLayout.svelte';
 	import { currentUser } from '$lib/state/user';
-	import EditProfile from '$lib/components/EditProfile.svelte';
+	import EditProfile from '$lib/components/user/EditProfile.svelte';
 </script>
 
 <svelte:head>

@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { base } from '$app/paths';
+
 	import { currentUser, signOut } from '$lib/state/user';
 </script>
 
@@ -17,8 +19,11 @@
 			<li><span class="dropdown-item disabled">{$currentUser.username}</span></li>
 			<li><hr class="dropdown-divider" /></li>
 			<li>
-				<a role="button" class="dropdown-item" aria-label="Profile" href="/user/profile"
-					>Your Profile</a
+				<a
+					role="button"
+					class="dropdown-item"
+					aria-label="Profile"
+					href={`${base}/user/profile/${$currentUser.username}`}>Your Profile</a
 				>
 			</li>
 			<li><hr class="dropdown-divider" /></li>

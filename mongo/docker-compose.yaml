@@ -1,0 +1,21 @@
+version: '3.3'
+
+services:
+  mongodb-primary:
+    network_mode: host
+    image: docker.io/bitnami/mongodb:5.0
+    environment:
+      - MONGODB_PORT_NUMBER=27017
+      - MONGODB_ADVERTISED_PORT_NUMBER=27017
+      - MONGODB_ADVERTISED_HOSTNAME=localhost
+      - MONGODB_REPLICA_SET_MODE=primary
+      - MONGODB_ROOT_PASSWORD=password
+      - MONGODB_REPLICA_SET_KEY=replicasetkey
+    ports:
+      - 27017:27017
+    volumes:
+      - mongodb_master_data:/bitnami/mongodb
+
+volumes:
+  mongodb_master_data:
+    driver: local

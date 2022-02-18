@@ -23,10 +23,14 @@ $dark: #111;
 $container-max-widths: (
 	// container widths with bootstrap breakpoints
 	// see: https://getbootstrap.com/docs/5.0/layout/breakpoints/
-	sm: 480px, // <= 576px,
-	md: 640px, // <= 768px
-	lg: 768px, // <= 992px
-	xl: 992px, // <= 1200px
+	sm: 480px,
+	// <= 576px,
+	md: 640px,
+	// <= 768px
+	lg: 768px,
+	// <= 992px
+	xl: 992px,
+	// <= 1200px
 	xxl: 992px // <= 1400px
 );
 
@@ -34,11 +38,9 @@ $container-max-widths: (
 = Button Customizations
 ======================== **/
 
-$btn-border-radius: 0px;
-
 // Webkit button rendering fix.
 a.btn {
-    -webkit-appearance: none;
+	-webkit-appearance: none;
 }
 
 @import 'bootstrap/scss/bootstrap';

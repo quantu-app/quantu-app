@@ -1,7 +1,27 @@
+<script context="module" lang="ts">
+	import type { LoadInput, LoadOutput } from '@sveltejs/kit';
+
+	export function load(input: LoadInput): LoadOutput {
+		const redirectPath = input.url.searchParams.get('redirectPath');
+
+		return {
+			props: {
+				redirectPath
+			}
+		};
+	}
+</script>
+
 <script lang="ts">
-	import { base } from '$app/paths';
 	import AppLayout from '$lib/components/AppLayout.svelte';
-	import { currentUser } from '$lib/state/user';
+	import { currentUser, redirectPathWritable } from '$lib/state/user';
+	import { get } from 'svelte/store';
+
+	export let redirectPath: string = undefined;
+
+	if (redirectPath && !get(redirectPathWritable)) {
+		redirectPathWritable.set(redirectPath);
+	}
 </script>
 
 <svelte:head>
@@ -19,9 +39,7 @@
 					lovers.
 				</p>
 				{#if $currentUser}
-					<a type="button" role="button" class="btn btn-primary" href={`${base}/challenges`}>
-						Challenges
-					</a>
+					<a type="button" role="button" class="btn btn-primary"> Challenges </a>
 				{:else}
 					<button
 						type="button"

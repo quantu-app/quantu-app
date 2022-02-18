@@ -1,7 +1,5 @@
 import { random } from '@aicacia/rand';
 import { range } from '@aicacia/range';
-import type { Channel } from 'phoenix';
-import type { Lesson, Quiz } from '$lib/api/quantu-app-api';
 
 function checkPrototypeProperty(obj: Record<string, unknown>) {
 	for (const key in obj) {
@@ -87,46 +85,4 @@ export function randomString(length = 6): string {
 		)
 		.join('')
 		.toUpperCase();
-}
-
-export function channelPush(
-	channel: Channel,
-	event: string,
-	payload: any,
-	timeout?: number
-): Promise<void> {
-	return new Promise((resolve, reject) =>
-		channel.push(event, payload, timeout).receive('ok', resolve).receive('error', reject)
-	);
-}
-
-export function childTypePath(type: Lesson['type'] | Quiz['type']): string {
-	switch (type) {
-		case 'quiz':
-			return 'quizzes';
-		case 'lesson':
-			return 'lessons';
-	}
-}
-
-export function organizationPath(
-	organizationId: number,
-	courseId?: number,
-	unitId?: number,
-	childId?: number,
-	childType?: Lesson['type'] | Quiz['type']
-): string {
-	let path = `/user/organizations/${organizationId}`;
-
-	if (courseId) {
-		path += `/courses/${courseId}`;
-	}
-	if (unitId) {
-		path += `/units/${unitId}`;
-	}
-	if (childId && childType) {
-		path += `/${childTypePath(childType)}/${childId}`;
-	}
-
-	return path;
 }

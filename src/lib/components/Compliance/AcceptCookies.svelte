@@ -1,11 +1,12 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
 	import Cookies from 'js-cookie';
+	import { onMount } from 'svelte';
 
-	let hasAcceptedCookies = false;
+	let hasAcceptedCookies = true;
 
 	function browserCookieAccepted() {
 		const value = Cookies.get('qu-ca');
+
 		if (value) {
 			return true;
 		} else {
@@ -13,18 +14,16 @@
 		}
 	}
 
-	const check = () => {
-		if (browserCookieAccepted()) {
-			hasAcceptedCookies = true;
-		}
-	};
+	function check() {
+		hasAcceptedCookies = browserCookieAccepted();
+	}
 
-	function okay() {
+	function accept() {
 		Cookies.set('qu-ca', 'ok', { expires: 365 });
 		check();
 	}
 
-	check();
+	onMount(check);
 </script>
 
 {#if !hasAcceptedCookies}
@@ -42,13 +41,18 @@
 				</div>
 				<div class="col-4">
 					<div class="cookie-actions">
-						<button class="btn btn-primary" on:click={okay}>Okay</button>
-						<a href="/info/cookie-policy/" on:click={okay}>Policy &amp; Preferences</a>
+						<button class="btn btn-primary" on:click={accept}>Okay</button>
+						<a href="/info/cookie-policy/" on:click={accept}>Policy &amp; Preferences</a>
 					</div>
 				</div>
 			</div>
 		</div>
-		<button type="button" class="btn-close btn-accept-cookies" aria-label="Close" on:click={okay} />
+		<button
+			type="button"
+			class="btn-close btn-accept-cookies"
+			aria-label="Close"
+			on:click={accept}
+		/>
 	</div>
 {/if}
 

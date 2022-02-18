@@ -1,9 +1,9 @@
 <script lang="ts">
-	import { updateUser } from '$lib/state/user';
 	import countries from '$lib/data/countries';
 	import { goto } from '$app/navigation';
 	import { base } from '$app/paths';
 	import type { User } from '@prisma/client';
+	import { updateUser } from '$lib/state/user';
 
 	export let user: User;
 
@@ -19,11 +19,10 @@
 	eighteenYearsAgo.setFullYear(eighteenYearsAgo.getFullYear() - 18);
 	$: date = new Date(birthday || '');
 
-	async function onConfirm() {
+	async function onUpdate() {
 		updating = true;
 		try {
-			await updateUser({
-				confirmed: true,
+			updateUser({
 				username,
 				firstName,
 				lastName,
@@ -38,16 +37,11 @@
 </script>
 
 <div class="container">
-	<div class="row">
-		<h1>Welcome to our community</h1>
-		<p>
-			We ask the users on our platform to use their real data because we think honesty and
-			transparency fosters more thoughtfulness, kindness, and a better community spirit.
-		</p>
-		<p>Please confirm or adjust the following information to finish activating your profile.</p>
-	</div>
-
 	<form on:submit|preventDefault class="my-4">
+		<div class="row">
+			<h1>Profile Information</h1>
+			<hr />
+		</div>
 		<div class="row my-4">
 			<label for="username">Username</label>
 			<p class="text-black-50 m-0">
@@ -63,6 +57,11 @@
 					bind:value={username}
 				/>
 			</div>
+		</div>
+
+		<div class="row">
+			<h1>Personal Information</h1>
+			<hr />
 		</div>
 		<div class="row my-4">
 			<div class="col-md-6">
@@ -102,16 +101,14 @@
 				Your birthday is used to calculate your age and for olympiads, competitions, and awards
 				across the platform
 			</p>
-			<div class="input-group has-validation">
+			<div class="input-group">
 				<input
 					type="date"
 					class="form-control"
-					class:is-invalid={date.getTime() >= eighteenYearsAgo.getTime()}
 					id="birthday"
 					placeholder="Birthday"
 					bind:value={birthday}
 				/>
-				<div class="invalid-feedback">You must be at least 18 years old to use this platform.</div>
 			</div>
 		</div>
 		<div class="row my-4">
@@ -147,7 +144,7 @@
 						date.getTime() >= eighteenYearsAgo.getTime() ||
 						updating}
 					class="btn btn-primary"
-					on:click={onConfirm}>Confirm</button
+					on:click={onUpdate}>Update</button
 				>
 			</div>
 		</div>

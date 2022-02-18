@@ -1,11 +1,6 @@
 <script context="module" lang="ts">
-	import { OpenAPI } from '$lib/api/quantu-app-api';
-	import AssetsModal from '$lib/components/AssetsModal.svelte';
-	import { API_URL } from '$lib/constants';
 	import '../app.scss';
 	import AcceptCookies from '$lib/components/Compliance/AcceptCookies.svelte';
-
-	OpenAPI.BASE = API_URL;
 </script>
 
 <script lang="ts">
@@ -22,6 +17,5 @@
 </script>
 
 <slot />
-<AssetsModal />
 
 <AcceptCookies />

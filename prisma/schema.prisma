@@ -1,0 +1,51 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["mongoDb"]
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+// User
+
+model Email {
+  id        String  @id @default(dbgenerated()) @map("_id") @db.ObjectId
+  email     String
+  user      User    @relation(fields: [userId], references: [id])
+  userId    String
+  primary   Boolean @default(false)
+  confirmed Boolean @default(false)
+
+  @@unique([userId, email])
+}
+
+model OldPasswords {
+  id                String @id @default(dbgenerated()) @map("_id") @db.ObjectId
+  encryptedPassword String
+  user              User   @relation(fields: [userId], references: [id])
+  userId            String
+
+  @@unique([userId, encryptedPassword])
+}
+
+model User {
+  id                String         @id @default(dbgenerated()) @map("_id") @db.ObjectId
+  username          String         @unique
+  encryptedPassword String
+  emails            Email[]
+  oldPasswords      OldPasswords[]
+  creator           Boolean        @default(false)
+  active            Boolean        @default(true)
+  confirmed         Boolean        @default(false)
+  firstName         String?
+  lastName          String?
+  birthday          DateTime?
+  country           String?
+  createdAt         DateTime       @default(now())
+  updatedAt         DateTime       @updatedAt
+}

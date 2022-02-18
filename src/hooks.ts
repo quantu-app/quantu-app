@@ -1,41 +1,35 @@
-import type { UserPrivate } from './lib/api/quantu-app-api';
-import { AuthService, OpenAPI } from './lib/api/quantu-app-api';
 import type { MaybePromise } from '@sveltejs/kit/types/helper';
 import type { RequestEvent } from '@sveltejs/kit/types/hooks';
 import cookie from 'cookie';
 import '$lib/AbortController';
-
-export interface Locals {
-	token?: string;
-}
+import { run } from '$lib/prisma';
+import type { IJwtString } from '$lib/api/jwt';
+import { decode } from '$lib/api/jwt';
+import { showPrivateUser } from '$lib/api/users/showPrivate';
 
 export function handle({
 	event,
 	resolve
 }: {
-	event: RequestEvent<Locals>;
-	resolve: (request: RequestEvent<Locals>) => MaybePromise<Response>;
+	event: RequestEvent;
+	resolve: (request: RequestEvent) => MaybePromise<Response>;
 }) {
 	const token = event.request.headers.has('cookie')
 		? cookie.parse(event.request.headers.get('cookie')).token
 		: 'undefined';
 
 	if (token && token !== 'undefined') {
-		event.locals.token = token;
+		event.locals.token = token as IJwtString<{ userId: string }>;
 	}
 
 	return resolve(event);
 }
 
-export function getSession(request: RequestEvent<Locals>): MaybePromise<UserPrivate | null> {
+export function getSession(request: RequestEvent): MaybePromise<App.Session> {
 	if (request.locals.token) {
-		OpenAPI.TOKEN = request.locals.token;
-		return AuthService.quantuAppWebControllerAuthCurrent().catch((error) => {
-			console.error(error);
-			request.locals.token = undefined;
-			OpenAPI.TOKEN = undefined;
-			return null;
-		});
+		return decode<{ userId: string }>(request.locals.token)
+			.then((token) => run((client) => showPrivateUser(client, { userId: token.userId })))
+			.then((user) => ({ user }));
 	} else {
 		return null;
 	}

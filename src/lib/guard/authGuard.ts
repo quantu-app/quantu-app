@@ -1,11 +1,7 @@
-import type { UserPrivate } from '$lib/api/quantu-app-api';
-import { OpenAPI } from '$lib/api/quantu-app-api';
-import type { LoadInput, LoadOutput } from '@sveltejs/kit';
-import type { Rec } from '@sveltejs/kit/types/helper';
+import type { LoadOutput } from '@sveltejs/kit';
 
-export function authGuard({ url, session }: LoadInput<Rec, Rec, UserPrivate>): LoadOutput {
-	if (session) {
-		OpenAPI.TOKEN = session.token;
+export function authGuard({ url, session }): LoadOutput {
+	if (session?.user) {
 		return {};
 	} else {
 		const output = {

@@ -46,20 +46,23 @@ model User {
   lastName          String?
   birthday          DateTime?
   country           String?
+  bio               Json[]
   createdAt         DateTime       @default(now())
   updatedAt         DateTime       @updatedAt
 }
 
 model Topic {
-  id         String      @id @default(dbgenerated()) @map("_id") @db.ObjectId
-  name       String      @unique
-  url        String      @unique
-  parent     Topic?      @relation("TopicToTopic", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  parentId   String?     @db.ObjectId
-  createdAt  DateTime    @default(now())
-  updatedAt  DateTime    @updatedAt
-  topics     Topic[]     @relation("TopicToTopic")
-  challenges Challenge[]
+  id          String      @id @default(dbgenerated()) @map("_id") @db.ObjectId
+  name        String      @unique
+  url         String      @unique
+  imageUrl    String?
+  description Json[]
+  parent      Topic?      @relation("TopicToTopic", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  parentId    String?     @db.ObjectId
+  topics      Topic[]     @relation("TopicToTopic")
+  challenges  Challenge[]
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
 
   @@unique([parentId, url])
 }

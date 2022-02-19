@@ -15,3 +15,16 @@ export async function get(event: RequestEvent) {
 		status: 200
 	}));
 }
+
+export async function post(event: RequestEvent) {
+	const data = await event.request.json();
+
+	return run((client) =>
+		client.topic.create({
+			data
+		})
+	).then((topic) => ({
+		body: topic,
+		status: 201
+	}));
+}

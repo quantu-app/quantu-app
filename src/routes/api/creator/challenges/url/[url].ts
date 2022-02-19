@@ -1,16 +1,16 @@
 import type { RequestEvent } from '@sveltejs/kit';
-import { run } from 'svelte/internal';
+import { run } from '$lib/prisma';
 
 export async function get(event: RequestEvent) {
 	const url = event.params.url;
-	const parentId = event.url.searchParams.get('parentId') || null;
+	const topicId = event.url.searchParams.get('topicId') || null;
 
 	return run((client) =>
-		client.topic.findUnique({
+		client.challenge.findUnique({
 			where: {
-				parentId_url: {
+				topicId_url: {
 					url,
-					parentId
+					topicId
 				}
 			}
 		})

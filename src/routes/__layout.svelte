@@ -1,6 +1,6 @@
 <script context="module" lang="ts">
 	import '../app.scss';
-	import AcceptCookies from '$lib/components/Compliance/AcceptCookies.svelte';
+	import AcceptCookies from '$lib/components/AcceptCookies.svelte';
 </script>
 
 <script lang="ts">

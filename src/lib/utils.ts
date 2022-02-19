@@ -86,3 +86,15 @@ export function randomString(length = 6): string {
 		.join('')
 		.toUpperCase();
 }
+
+export function groupBy<K extends string | symbol | number, T extends Record<K, any>>(
+	array: T[],
+	key: K
+) {
+	return array.reduce((acc, item) => {
+		const value = item[key];
+		const group = acc[value] || (acc[value] = []);
+		group.push(item);
+		return acc;
+	}, {} as Record<string, T[]>);
+}

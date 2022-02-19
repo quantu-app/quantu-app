@@ -29,11 +29,8 @@
 			<li><hr class="dropdown-divider" /></li>
 			{#if $currentUser.creator}
 				<li>
-					<a
-						role="button"
-						class="dropdown-item"
-						aria-label="My Organizations"
-						href="/user/organizations">My Organizations</a
+					<a role="button" class="dropdown-item" aria-label="Creator Studio" href="/creator"
+						>Creator Studio</a
 					>
 				</li>
 			{/if}

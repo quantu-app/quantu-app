@@ -441,7 +441,7 @@
 				<br />
 				<br />
 				<h3 id="contact-us">Contact Us</h3>
-				<p>If you have any questions about this Privacy Policy, You can contact us:</p>
+				<p>If you have any challenges about this Privacy Policy, You can contact us:</p>
 				<ul>
 					<li>By email: contact@quantu.app</li>
 				</ul>

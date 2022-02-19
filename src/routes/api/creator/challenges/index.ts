@@ -18,3 +18,16 @@ export async function get(event: RequestEvent) {
 		status: 200
 	}));
 }
+
+export async function post(event: RequestEvent) {
+	const data = await event.request.json();
+
+	return run((client) =>
+		client.challenge.create({
+			data
+		})
+	).then((challenge) => ({
+		body: challenge,
+		status: 201
+	}));
+}

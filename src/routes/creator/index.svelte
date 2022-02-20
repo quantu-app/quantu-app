@@ -32,7 +32,7 @@
 <AppLayout
 	breadcrumbs={[
 		{
-			title: 'Creator',
+			title: 'Creator Studio',
 			href: '/creator'
 		}
 	]}

@@ -42,18 +42,18 @@
 <AppLayout
 	breadcrumbs={[
 		{
-			title: 'Creator',
+			title: 'Creator Studio',
 			href: '/creator'
 		},
 		{
 			title: 'Topics'
 		},
-		...urls.map((url, index) => {
+		...urls.map((_url, index) => {
 			const path = urls.slice(0, index + 1).join('/');
 
 			return {
 				title: $topicsByPath[path]?.name,
-				href: `/creator/topics/${url}`
+				href: `/creator/topics/${path}`
 			};
 		})
 	]}

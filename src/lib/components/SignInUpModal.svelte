@@ -10,8 +10,20 @@
 	import SignIn from './SignIn.svelte';
 	import SignUp from './SignUp.svelte';
 	import { signInWithToken } from '$lib/state/user';
+	import { onDestroy, onMount } from 'svelte';
+	import { browser } from '$app/env';
 
 	let loading = false;
+	let SignInUpComponent = SignIn;
+
+	function setInitialSignInUpComponent(event) {
+		const btn = event.relatedTarget;
+		if (btn.dataset.signup) {
+			SignInUpComponent = SignUp;
+		} else {
+			SignInUpComponent = SignIn;
+		}
+	}
 
 	function signInWith(provider = 'google') {
 		loading = true;
@@ -44,12 +56,53 @@
 		}, 1000);
 	}
 
-	let SignInUpComponent = SignIn;
 	function toggleSignInUp() {
+		console.log('toggle');
 		if (SignInUpComponent === SignIn) {
 			SignInUpComponent = SignUp;
+			console.log('sign-up');
+			window.location.hash = '#sign-up';
 		} else {
 			SignInUpComponent = SignIn;
+			window.location.hash = '#sign-in';
+		}
+
+		return false;
+	}
+
+	function resetHashTag() {
+		if (browser && window.location.hash) {
+			window.location.hash = '';
+		}
+	}
+
+	onMount(() => {
+		document.addEventListener('show.bs.modal', setInitialSignInUpComponent, false);
+		document.addEventListener('show.bs.modal', toggleSignInUp, false);
+		document.addEventListener('hidden.bs.modal', resetHashTag, false);
+	});
+
+	onDestroy(() => {
+		if (browser) {
+			document.removeEventListener('show.bs.modal', setInitialSignInUpComponent, false);
+			document.removeEventListener('show.bs.modal', toggleSignInUp, false);
+			document.addEventListener('hidden.bs.modal', resetHashTag, false);
+		}
+	});
+
+	if (browser && window.location.hash) {
+		let hashSignInUpHash = false;
+		if (window.location.hash == '#sign-up') {
+			SignInUpComponent = SignUp;
+			hashSignInUpHash = true;
+		}
+		if (window.location.hash == '#sign-in') {
+			SignInUpComponent = SignIn;
+			hashSignInUpHash = true;
+		}
+
+		if (hashSignInUpHash) {
+			jQuery('#sign-in-up-modal').modal('show');
 		}
 	}
 </script>
@@ -60,8 +113,9 @@
 	tabindex="-1"
 	aria-labelledby="sign-in-up-modal-label"
 	aria-hidden="true"
+	role="dialog"
 >
-	<div class="modal-dialog modal-lg">
+	<div class="modal-dialog modal-lg" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" />
@@ -84,13 +138,16 @@
 				<div class="text-center">
 					{#if SignInUpComponent === SignUp}
 						<p>
-							Already have an account? <a href="#" class="link-primary" on:click={toggleSignInUp}
-								>Sign in</a
+							Already have an account? <a
+								href="#sign-in"
+								class="link-primary"
+								on:click={toggleSignInUp}>Sign in</a
 							>
 						</p>
 					{:else}
 						<p>
-							New around here? <a href="#" class="link-primary" on:click={toggleSignInUp}>Sign up</a
+							New around here? <a href="#sign-up" class="link-primary" on:click={toggleSignInUp}
+								>Sign up</a
 							>
 						</p>
 					{/if}

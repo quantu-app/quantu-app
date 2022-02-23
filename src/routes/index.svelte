@@ -27,6 +27,7 @@
 						type="button"
 						data-bs-toggle="modal"
 						data-bs-target="#sign-in-up-modal"
+						data-signup="true"
 						class="btn btn-primary"
 					>
 						Get Started

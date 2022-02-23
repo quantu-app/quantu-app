@@ -15,15 +15,7 @@
 
 	let loading = false;
 	let SignInUpComponent = SignIn;
-
-	function setInitialSignInUpComponent(event) {
-		const btn = event.relatedTarget;
-		if (btn.dataset.signup) {
-			SignInUpComponent = SignUp;
-		} else {
-			SignInUpComponent = SignIn;
-		}
-	}
+	let modalElement: HTMLDivElement;
 
 	function signInWith(provider = 'google') {
 		loading = true;
@@ -56,55 +48,33 @@
 		}, 1000);
 	}
 
-	function toggleSignInUp() {
-		console.log('toggle');
-		if (SignInUpComponent === SignIn) {
+	const toggleSignInUp = () => {
+		SignInUpComponent = SignInUpComponent === SignIn ? SignUp : SignIn;
+	};
+
+	function setSignInUpComponentFromTriggerElement(event) {
+		const btn = event.relatedTarget;
+		console.log(btn);
+		if (btn.dataset.signup) {
 			SignInUpComponent = SignUp;
-			console.log('sign-up');
-			window.location.hash = '#sign-up';
 		} else {
 			SignInUpComponent = SignIn;
-			window.location.hash = '#sign-in';
-		}
-
-		return false;
-	}
-
-	function resetHashTag() {
-		if (browser && window.location.hash) {
-			window.location.hash = '';
 		}
 	}
 
 	onMount(() => {
-		document.addEventListener('show.bs.modal', setInitialSignInUpComponent, false);
-		document.addEventListener('show.bs.modal', toggleSignInUp, false);
-		document.addEventListener('hidden.bs.modal', resetHashTag, false);
+		modalElement.addEventListener('show.bs.modal', setSignInUpComponentFromTriggerElement, false);
 	});
 
 	onDestroy(() => {
 		if (browser) {
-			document.removeEventListener('show.bs.modal', setInitialSignInUpComponent, false);
-			document.removeEventListener('show.bs.modal', toggleSignInUp, false);
-			document.addEventListener('hidden.bs.modal', resetHashTag, false);
+			modalElement.removeEventListener(
+				'show.bs.modal',
+				setSignInUpComponentFromTriggerElement,
+				false
+			);
 		}
 	});
-
-	if (browser && window.location.hash) {
-		let hashSignInUpHash = false;
-		if (window.location.hash == '#sign-up') {
-			SignInUpComponent = SignUp;
-			hashSignInUpHash = true;
-		}
-		if (window.location.hash == '#sign-in') {
-			SignInUpComponent = SignIn;
-			hashSignInUpHash = true;
-		}
-
-		if (hashSignInUpHash) {
-			jQuery('#sign-in-up-modal').modal('show');
-		}
-	}
 </script>
 
 <div
@@ -114,58 +84,73 @@
 	aria-labelledby="sign-in-up-modal-label"
 	aria-hidden="true"
 	role="dialog"
+	bind:this={modalElement}
 >
-	<div class="modal-dialog modal-lg" role="document">
+	<div class="modal-dialog modal-fullscreen" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" />
 			</div>
 			<div class="modal-body">
-				<svelte:component this={SignInUpComponent}>
-					<button
-						type="button"
-						disabled={loading}
-						on:click={() => signInWith('google')}
-						class="btn btn-primary google w-100 oauth mt-0">Google</button
-					>
-					<button
-						type="button"
-						disabled={loading}
-						on:click={() => signInWith('facebook')}
-						class="btn btn-primary facebook w-100 oauth">Facebook</button
-					>
-				</svelte:component>
-				<div class="text-center">
-					{#if SignInUpComponent === SignUp}
-						<p>
-							Already have an account? <a
-								href="#sign-in"
-								class="link-primary"
-								on:click={toggleSignInUp}>Sign in</a
+				<div class="container">
+					<div class="row mb-4 p-4 wrapper">
+						<svelte:component this={SignInUpComponent}>
+							<button
+								type="button"
+								disabled={loading}
+								on:click={() => signInWith('google')}
+								class="btn btn-primary google w-100 oauth mb-4 mt-md-0 mt-4">Google</button
 							>
-						</p>
-					{:else}
-						<p>
-							New around here? <a href="#sign-up" class="link-primary" on:click={toggleSignInUp}
-								>Sign up</a
+							<button
+								type="button"
+								disabled={loading}
+								on:click={() => signInWith('facebook')}
+								class="btn btn-primary facebook w-100 oauth">Facebook</button
 							>
-						</p>
-					{/if}
+						</svelte:component>
+					</div>
+					<div class="row">
+						<div class="text-center">
+							{#if SignInUpComponent === SignUp}
+								<p>
+									Already have an account? <a
+										class="link-primary sign-in-up"
+										on:click={toggleSignInUp}>Sign in</a
+									>
+								</p>
+							{:else}
+								<p>
+									New around here? <a class="link-primary sign-in-up" on:click={toggleSignInUp}
+										>Sign up</a
+									>
+								</p>
+							{/if}
+						</div>
+					</div>
 				</div>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-secondary text-white" data-bs-dismiss="modal"
-					>Close</button
-				>
 			</div>
 		</div>
 	</div>
 </div>
 
 <style lang="scss">
-	.oauth {
-		margin-top: 1rem;
+	#sign-in-up-modal {
+		.wrapper {
+			border: 1px solid #ccc;
+		}
+		.modal-header {
+			border-bottom: none;
+		}
+		.btn-close {
+			margin-left: 0;
+			outline: none;
+			box-shadow: none;
+		}
+		.sign-in-up {
+			cursor: pointer;
+		}
 	}
+
 	.google {
 		font-family: Roboto, arial, sans-serif;
 		font-weight: bold;

@@ -54,7 +54,7 @@
 
 	function setSignInUpComponentFromTriggerElement(event) {
 		const btn = event.relatedTarget;
-		console.log(btn);
+
 		if (btn.dataset.signup) {
 			SignInUpComponent = SignUp;
 		} else {
@@ -136,7 +136,7 @@
 <style lang="scss">
 	#sign-in-up-modal {
 		.wrapper {
-			border: 1px solid #ccc;
+			border: 1px solid #707070;
 		}
 		.modal-header {
 			border-bottom: none;

@@ -26,7 +26,7 @@
 </script>
 
 <svelte:head>
-	<title>Creator</title>
+	<title>Creator Studio</title>
 </svelte:head>
 
 <AppLayout

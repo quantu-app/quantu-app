@@ -1,7 +1,7 @@
 <script lang="ts">
 	import RichEditor from '$lib/components/RichEditor.svelte';
 	import RichViewer from '$lib/components/RichViewer.svelte';
-	import type { FlashCardPrivate } from './types';
+	import type { FlashCardPrivate } from '$lib/components/types';
 
 	export let prompt: FlashCardPrivate;
 	export let disabled = false;

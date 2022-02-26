@@ -2,11 +2,12 @@
 	import DeleteChallenge from './DeleteChallenge.svelte';
 	import ChallengeListItem from './ChallengeListItem.svelte';
 	import UpdateChallenge from './UpdateChallenge.svelte';
-	import type { Challenge } from '@prisma/client';
+	import type { Challenge, Topic } from '@prisma/client';
+	import { deleteChallenge, updateChallenge } from '$lib/state/creator/challenges';
 
-	export let organizationId: number;
-	export let quizId: number = undefined;
-	export let challenges: Challenge[];
+	export let path: string;
+	export let topicId: string = undefined;
+	export let challenges: Array<Challenge & { topic: Topic }>;
 
 	let challenge: Challenge;
 	let challengeIndex: number;
@@ -26,18 +27,14 @@
 
 	async function onUpdateChallenge() {
 		if (challenge) {
-			await updateChallenge(organizationId, challenge.id, {
-				...challenge,
-				quizId,
-				index: challengeIndex
-			});
+			await updateChallenge(challenge.id, challenge);
 			challenge = undefined;
 			challengeIndex = undefined;
 		}
 	}
 	async function onDeleteChallenge() {
 		if (challenge) {
-			await deleteChallenge(organizationId, challenge.id);
+			deleteChallenge(challenge.id);
 			challenge = undefined;
 			challengeIndex = undefined;
 		}
@@ -48,7 +45,8 @@
 	{#each challenges as challenge, index (challenge.id)}
 		<ChallengeListItem
 			{challenge}
-			{index}
+			{path}
+			{topicId}
 			onUpdate={createOnUpdate(challenge, index)}
 			onDelete={createOnDelete(challenge, index)}
 		>

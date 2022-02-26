@@ -1,27 +1,23 @@
-<script lang="ts" context="module">
-	function emptyChallenge(): Partial<Challenge> {
-		return {
-			type: 'multiple_choice' as Challenge['type'],
-			prompt: {}
-		};
-	}
-</script>
-
 <script lang="ts">
+	import { createChallenge } from '$lib/state/creator/challenges';
 	import type { Challenge } from '@prisma/client';
+	import { ChallengeType } from '@prisma/client';
 	import ChallengeEditor from './ChallengeEditor.svelte';
+
+	export let path: string;
+	export let topicId: string = undefined;
 
 	let editorKey = Math.random();
 	let creatingChallenge = false;
 
-	let challenge = emptyChallenge() as Challenge;
+	let challenge: Partial<Challenge> = { type: ChallengeType.MULTIPLE_CHOICE, prompt: {} };
 
 	async function onCreateChallenge() {
 		creatingChallenge = true;
 		try {
-			await createChallenge(organizationId, challenge);
+			await createChallenge({ ...challenge, topicId });
 			delete challenge.name;
-			challenge = emptyChallenge(quizId) as ChallengeCreate;
+			challenge = { type: ChallengeType.MULTIPLE_CHOICE, prompt: {} };
 		} finally {
 			creatingChallenge = false;
 			editorKey = Math.random();

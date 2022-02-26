@@ -8,10 +8,17 @@
 </script>
 
 <script lang="ts">
+	import { base } from '$app/paths';
+
 	import { XorShiftRng } from '@aicacia/rand';
 	import type { Challenge, Topic } from '@prisma/client';
+	import { onMount } from 'svelte';
 	import { titleCase } from 'title-case';
+
 	export let challenge: Challenge & { topic: Topic };
+
+	let topics: Topic[] = [];
+
 	$: date = new Date(challenge.createdAt).toLocaleString('default', {
 		weekday: 'long',
 		year: 'numeric',
@@ -20,6 +27,10 @@
 	});
 	const rng = XorShiftRng.fromSeed(new Date(challenge.createdAt).getTime());
 	const image = rng.fromArray(IMAGES).unwrap();
+
+	onMount(async () => {
+		topics = await fetch(`${base}/api/topics/${challenge.topicId}/path`).then((res) => res.json());
+	});
 </script>
 
 <div class="row justify-content-center m-4">
@@ -35,7 +46,11 @@
 			</div>
 		</div>
 		<div class="text-end">
-			<a role="button" class="btn btn-primary me-2" href={`/challenges/${challenge.id}`}>Solve</a>
+			<a
+				role="button"
+				class="btn btn-primary me-2"
+				href={`/challenges/${topics.map((t) => t.url).join('/')}/${challenge.url}`}>Solve</a
+			>
 			<a
 				role="button"
 				class="btn btn-secondary text-white me-2"

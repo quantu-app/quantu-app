@@ -7,7 +7,6 @@ import type { User } from '@prisma/client';
 import type bootstrap from 'bootstrap';
 import type HLJSApi from 'highlight.js';
 import type katex from 'katex';
-import type SimplePeer from 'simple-peer';
 
 declare namespace MathQuill {
 	export class EditableField {
@@ -27,19 +26,10 @@ declare namespace MathQuill {
 }
 
 declare global {
-	interface ImportMetaEnv {
-		VITE_API_URL: string;
-		VITE_WS_URL: string;
-		VITE_GOOGLE_OAUTH_CLIENT_ID: string;
-		VITE_GOOGLE_OAUTH_CLIENT_SECRET: string;
-		VITE_JWT_SECRET_KEY: string;
-	}
-
 	interface Window {
 		katex: katex;
 		hljs: HLJSApi;
 		bootstrap: bootstrap;
-		SimplePeer: SimplePeer.SimplePeer;
 		MathQuill: MathQuill;
 		gtag(type: string, id: string, config?: any): void;
 	}

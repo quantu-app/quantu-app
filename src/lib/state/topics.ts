@@ -53,23 +53,26 @@ function getPath(
 }
 
 export async function showTopicsByUrls(...urls: string[]) {
-	const res = await fetch(`${base}/api/creator/topics/url/${urls.join('/')}`);
+	const res = await fetch(`${base}/api/topics/url/${urls.join('/')}`);
 	if (!res.ok) {
 		throw await res.json();
 	}
 	const topics: Topic[] = await res.json();
-	topicsWritable.update((state) => {
-		topics.forEach((topic) => {
-			const index = topics.findIndex((t) => t.id === topic.id);
-			if (index === -1) {
-				topics.push(topic);
-			} else {
-				topics[index] = topic;
-			}
-			return topics;
-		});
-		return state;
-	});
+	topicsWritable.update((state) =>
+		topics.reduce((state, topic) => addOrUpdate(state, topic), state)
+	);
+	return topics;
+}
+
+export async function showTopicsById(id: string) {
+	const res = await fetch(`${base}/api/topics/${id}/path`);
+	if (!res.ok) {
+		throw await res.json();
+	}
+	const topics: Topic[] = await res.json();
+	topicsWritable.update((state) =>
+		topics.reduce((state, topic) => addOrUpdate(state, topic), state)
+	);
 	return topics;
 }
 
@@ -81,4 +84,14 @@ export async function showTopics(parentId?: string) {
 	const topics: Topic[] = await res.json();
 	topicsWritable.set(topics);
 	return topics;
+}
+
+function addOrUpdate(state: Topic[], topic: Topic) {
+	const index = state.findIndex((t) => t.id === topic.id);
+	if (index === -1) {
+		state.push(topic);
+	} else {
+		state[index] = topic;
+	}
+	return state;
 }

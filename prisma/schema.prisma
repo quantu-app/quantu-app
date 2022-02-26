@@ -14,7 +14,7 @@ datasource db {
 // User
 
 model Email {
-  id        String  @id @default(dbgenerated()) @map("_id") @db.ObjectId
+  id        String  @id @default(auto()) @map("_id") @db.ObjectId
   email     String
   user      User    @relation(fields: [userId], references: [id])
   userId    String
@@ -25,7 +25,7 @@ model Email {
 }
 
 model OldPasswords {
-  id                String @id @default(dbgenerated()) @map("_id") @db.ObjectId
+  id                String @id @default(auto()) @map("_id") @db.ObjectId
   encryptedPassword String
   user              User   @relation(fields: [userId], references: [id])
   userId            String
@@ -34,7 +34,7 @@ model OldPasswords {
 }
 
 model User {
-  id                String         @id @default(dbgenerated()) @map("_id") @db.ObjectId
+  id                String         @id @default(auto()) @map("_id") @db.ObjectId
   username          String         @unique
   encryptedPassword String
   emails            Email[]
@@ -49,10 +49,11 @@ model User {
   bio               Json[]
   createdAt         DateTime       @default(now())
   updatedAt         DateTime       @updatedAt
+  results           Result[]
 }
 
 model Topic {
-  id          String      @id @default(dbgenerated()) @map("_id") @db.ObjectId
+  id          String      @id @default(auto()) @map("_id") @db.ObjectId
   name        String      @unique
   url         String      @unique
   imageUrl    String?
@@ -67,24 +68,44 @@ model Topic {
   @@unique([parentId, url])
 }
 
-enum ChallengeType {
+enum QuestionType {
   MULTIPLE_CHOICE
   INPUT
   FLASH_CARD
+  MARK_AS_READ
 }
 
 model Challenge {
-  id          String        @id @default(dbgenerated()) @map("_id") @db.ObjectId
+  id          String       @id @default(auto()) @map("_id") @db.ObjectId
   name        String
   url         String
   description Json[]
-  topic       Topic         @relation(fields: [topicId], references: [id])
-  topicId     String        @db.ObjectId
-  type        ChallengeType @default(MULTIPLE_CHOICE)
+  topic       Topic        @relation(fields: [topicId], references: [id])
+  topicId     String       @db.ObjectId
+  type        QuestionType @default(MULTIPLE_CHOICE)
   prompt      Json
   released_at DateTime?
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
 
   @@unique([topicId, url])
+}
+
+enum ResultType {
+  CHALLENGE
+  QUESTION
+}
+
+model Result {
+  id         String       @id @default(auto()) @map("_id") @db.ObjectId
+  user       User         @relation(fields: [userId], references: [id])
+  userId     String
+  resultType ResultType
+  questionId String
+  type       QuestionType @default(MULTIPLE_CHOICE)
+  prompt     Json
+  result     Float
+  answer     Json
+
+  @@unique([userId, questionId])
 }

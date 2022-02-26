@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { base } from '$app/paths';
-
 	import { createTopic } from '$lib/state/creator/topics';
 	import type { Topic } from '@prisma/client';
 	import TopicEditor from './TopicEditor.svelte';
@@ -25,7 +24,7 @@
 		try {
 			await createTopic(topic);
 			topic = {};
-			goto(`${base}/creator/topics/${path ? `${path}/${topic.url}` : topic.url}`);
+			await goto(`${base}/creator/topics/${path ? `${path}/${topic.url}` : topic.url}`);
 		} finally {
 			creatingTopic = false;
 			editorKey = Math.random();

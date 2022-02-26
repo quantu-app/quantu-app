@@ -22,7 +22,7 @@
 	import RichEditor from '$lib/components/RichEditor.svelte';
 	import RichViewer from '$lib/components/RichViewer.svelte';
 	import { groupBy, randomString } from '$lib/utils';
-	import type { MultipleChoicePrivate } from './types';
+	import type { MultipleChoicePrivate } from '$lib/components/types';
 
 	export let prompt: MultipleChoicePrivate;
 	export let disabled = false;
@@ -52,7 +52,7 @@
 </script>
 
 <div class="mt-4">
-	<label for="question" class="form-label">Challenge</label>
+	<label for="question" class="form-label">Question</label>
 	{#if disabled}
 		<RichViewer content={prompt.question} />
 	{:else}

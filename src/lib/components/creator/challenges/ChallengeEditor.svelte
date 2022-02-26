@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { Challenge } from '@prisma/client';
+	import { ChallengeType } from '@prisma/client';
 	import PromptEditor from '../prompts/PromptEditor.svelte';
 
 	export let challenge: Partial<Challenge>;
@@ -21,6 +22,17 @@
 		/>
 	</div>
 	<div class="col-md">
+		<label for="challenge-url" class="form-label">Challenge Url</label>
+		<input
+			id="challenge-url"
+			type="text"
+			class="form-control"
+			placeholder="Challenge Url"
+			{disabled}
+			bind:value={challenge.url}
+		/>
+	</div>
+	<div class="col-md">
 		<label for="challenge-type" class="form-label">Challenge Type</label>
 		<select
 			id="challenge-type"
@@ -28,10 +40,9 @@
 			bind:value={challenge.type}
 			aria-label="Challenge Type"
 		>
-			<option value="multiple_choice">Multiple Choice</option>
-			<option value="input">Input</option>
-			<option value="mark_as_read">Mark as Read</option>
-			<option value="flash_card">Flash Card</option>
+			<option value={ChallengeType.MULTIPLE_CHOICE}>Multiple Choice</option>
+			<option value={ChallengeType.INPUT}>Input</option>
+			<option value={ChallengeType.FLASH_CARD}>Flash Card</option>
 		</select>
 	</div>
 </div>

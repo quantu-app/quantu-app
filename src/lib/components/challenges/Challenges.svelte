@@ -13,12 +13,16 @@
 	import { fuzzyEquals } from '@aicacia/string-fuzzy_equals';
 	import Search from '$lib/components/Search.svelte';
 	import type { Challenge, Topic } from '@prisma/client';
+
 	export let challenges: Array<Challenge & { topic: Topic }>;
+
 	let latestChallenge: Challenge & { topic: Topic };
 	let previousChallenges: Array<Challenge & { topic: Topic }> = [];
+
 	$: isFiltered = !!$state.challengeNameFilter;
 	$: filter = (challenge: Challenge) =>
 		$state.challengeNameFilter ? fuzzyEquals($state.challengeNameFilter, challenge.name) : true;
+
 	$: if (!isFiltered) {
 		let maxDate = new Date(null);
 		let challengeIndex = -1;

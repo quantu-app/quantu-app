@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client';
-import type { MaybePromise } from '@sveltejs/kit/types/helper';
+import type { MaybePromise } from '@sveltejs/kit/types/internal';
 
 const client = new PrismaClient();
 

@@ -1,9 +1,8 @@
-import type { MaybePromise } from '@sveltejs/kit/types/helper';
-import type { RequestEvent } from '@sveltejs/kit/types/hooks';
 import cookie from 'cookie';
 import { run } from '$lib/prisma';
 import type { IJwtString } from '$lib/api/jwt';
 import { decode } from '$lib/api/jwt';
+import type { MaybePromise, RequestEvent } from '@sveltejs/kit/types/internal';
 
 export function handle({
 	event,

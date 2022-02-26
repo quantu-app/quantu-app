@@ -1,5 +1,5 @@
-import type { RequestEvent } from '@sveltejs/kit';
 import { run } from '$lib/prisma';
+import type { RequestEvent } from '@sveltejs/kit/types/internal';
 
 export async function get(event: RequestEvent) {
 	const parentId = event.url.searchParams.get('parentId');

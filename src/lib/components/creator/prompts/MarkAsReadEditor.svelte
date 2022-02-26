@@ -1,7 +1,7 @@
 <script lang="ts">
 	import RichEditor from '$lib/components/RichEditor.svelte';
 	import RichViewer from '$lib/components/RichViewer.svelte';
-	import type { MarkAsReadPrivate } from './types';
+	import type { MarkAsReadPrivate } from '$lib/components/types';
 
 	export let prompt: MarkAsReadPrivate;
 	export let disabled = false;

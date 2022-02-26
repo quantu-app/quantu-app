@@ -1,28 +1,28 @@
-import type { Challenge } from '@prisma/client';
+import type { Challenge, Topic } from '@prisma/client';
 import { writable, get, derived } from 'svelte/store';
 import { base } from '$app/paths';
 
-const challengesWritable = writable<Challenge[]>([]);
+const challengesWritable = writable<Array<Challenge & { topic: Topic }>>([]);
 
 export const challengesById = derived(challengesWritable, (challenges) =>
 	challenges.reduce((byId, challenge) => {
 		byId[challenge.id] = challenge;
 		return byId;
-	}, {} as { [id: string]: Challenge })
+	}, {} as { [id: string]: Challenge & { topic: Topic } })
 );
 export const challengesByTopicId = derived(challengesWritable, (challenges) =>
 	challenges.reduce((byParentId, challenge) => {
 		const parentChallenges = byParentId[challenge.topicId] || (byParentId[challenge.topicId] = []);
 		parentChallenges.push(challenge);
 		return byParentId;
-	}, {} as { [topicId: string]: Challenge[] })
+	}, {} as { [topicId: string]: Array<Challenge & { topic: Topic }> })
 );
 export const challengesByParentIdUrl = derived(challengesWritable, (challenges) =>
 	challenges.reduce((byParentId, challenge) => {
 		const parentChallenges = byParentId[challenge.topicId] || (byParentId[challenge.topicId] = {});
 		parentChallenges[challenge.url] = challenge;
 		return byParentId;
-	}, {} as { [topicId: string]: { [url: string]: Challenge } })
+	}, {} as { [topicId: string]: { [url: string]: Challenge & { topic: Topic } } })
 );
 
 export async function showChallengeByUrl(url: string, topicId: string = null) {
@@ -36,7 +36,7 @@ export async function showChallengeByUrl(url: string, topicId: string = null) {
 	if (!res.ok) {
 		throw await res.json();
 	}
-	const challenge: Challenge = await res.json();
+	const challenge: Challenge & { topic: Topic } = await res.json();
 	challengesWritable.update((challenges) => {
 		challenges.push(challenge);
 		return challenges;
@@ -49,7 +49,7 @@ export async function showChallenges(topicId?: string) {
 	if (!res.ok) {
 		throw await res.json();
 	}
-	const challenges: Challenge[] = await res.json();
+	const challenges: Array<Challenge & { topic: Topic }> = await res.json();
 	challengesWritable.set(challenges);
 	return challenges;
 }
@@ -62,7 +62,7 @@ export async function createChallenge(body: Partial<Challenge>) {
 	if (!res.ok) {
 		throw await res.json();
 	}
-	const challenge: Challenge = await res.json();
+	const challenge: Challenge & { topic: Topic } = await res.json();
 	challengesWritable.update((challenges) => {
 		challenges.push(challenge);
 		return challenges;
@@ -78,7 +78,7 @@ export async function updateChallenge(id: string, body: Partial<Challenge>) {
 	if (!res.ok) {
 		throw await res.json();
 	}
-	const challenge: Challenge = await res.json();
+	const challenge: Challenge & { topic: Topic } = await res.json();
 	challengesWritable.update((challenges) => {
 		const index = challenges.findIndex((challenge) => challenge.id === id);
 		if (index === -1) {

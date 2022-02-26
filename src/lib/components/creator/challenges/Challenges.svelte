@@ -15,10 +15,11 @@
 	import CreateChallenge from './CreateChallenge.svelte';
 	import { fuzzyEquals } from '@aicacia/string-fuzzy_equals';
 	import Search from '$lib/components/Search.svelte';
-	import type { Challenge } from '@prisma/client';
+	import type { Challenge, Topic } from '@prisma/client';
 
-	export let organizationId: number;
-	export let challenges: Challenge[];
+	export let path: string;
+	export let topicId: string = undefined;
+	export let challenges: Array<Challenge & { topic: Topic }>;
 
 	$: filter = (challenge: Challenge) =>
 		$state.challengeNameFilter ? fuzzyEquals($state.challengeNameFilter, challenge.name) : true;
@@ -26,11 +27,11 @@
 
 <div class="container">
 	<div class="d-flex justify-content-end mt-2">
-		<CreateChallenge {organizationId} quizId={null} />
+		<CreateChallenge {path} {topicId} />
 	</div>
 	<Search bind:filter={$state.challengeNameFilter} />
 </div>
 
 <div class="container">
-	<ChallengeList {organizationId} challenges={challenges.filter(filter)} />
+	<ChallengeList {path} {topicId} challenges={challenges.filter(filter)} />
 </div>

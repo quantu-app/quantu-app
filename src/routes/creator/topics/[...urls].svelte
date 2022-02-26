@@ -1,7 +1,7 @@
 <script context="module" lang="ts">
-	import type { LoadInput, LoadOutput } from '@sveltejs/kit';
+	import type { Load } from '@sveltejs/kit';
 
-	export function load(input: LoadInput): LoadOutput {
+	export const load: Load = (input) => {
 		const response = creatorGuard(input);
 
 		if (!isValidStatus(response)) {
@@ -12,7 +12,7 @@
 		return {
 			props: { urls }
 		};
-	}
+	};
 </script>
 
 <script lang="ts">
@@ -26,17 +26,16 @@
 	export let urls: string[];
 
 	$: topic = $topicsByPath[urls.join('/')];
-	$: if (topic) {
-		showTopics(topic.id);
-	}
 
-	onMount(() => {
-		showTopicsByUrls(...urls);
+	onMount(async () => {
+		const topics = await showTopicsByUrls(...urls);
+		const topic = topics[topics.length - 1];
+		await showTopics(topic.id);
 	});
 </script>
 
 <svelte:head>
-	<title>Creator</title>
+	<title>Creator Studio</title>
 </svelte:head>
 
 <AppLayout

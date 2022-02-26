@@ -3,8 +3,8 @@
 	import { titleCase } from 'title-case';
 
 	export let challenge: Challenge;
-	export let quizId: number = undefined;
-	export let index: number = undefined;
+	export let path: string;
+	export let topicId: string;
 	export let onUpdate: () => void;
 	export let onDelete: () => void;
 
@@ -14,9 +14,6 @@
 <div class="list-group-item">
 	<div class="d-flex w-100 justify-content-between">
 		<h4>
-			{#if quizId != null && index != null}
-				<span class="badge bg-primary">{index + 1}</span>
-			{/if}
 			<button
 				type="button"
 				class="btn btn-link"

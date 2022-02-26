@@ -2,7 +2,7 @@
 	import RichEditor from '$lib/components/RichEditor.svelte';
 	import RichViewer from '$lib/components/RichViewer.svelte';
 	import InputAnswerEditor from './InputAnswerEditor.svelte';
-	import type { InputPrivate } from './types';
+	import type { InputPrivate } from '$lib/components/types';
 
 	export let prompt: InputPrivate;
 	export let disabled = false;

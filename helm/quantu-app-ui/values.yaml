@@ -36,3 +36,14 @@ resources:
   limits:
     cpu: 1000m
     memory: 1000M
+
+mongodb:
+  auth:
+    enabled: true
+    database: quantu-app
+    username: root
+    password: password
+    rootPassword: password
+  persistence:
+    enabled: true
+    storageClass: linode-block-storage-retain

@@ -30,7 +30,9 @@ export async function showChallengeByUrl(url: string, topicId: string = null) {
 	if (cachedChallenge) {
 		return cachedChallenge;
 	}
-	const res = await fetch(`${base}/api/challenges/${url}?${topicId ? `topicId=${topicId}` : ''}`);
+	const res = await fetch(
+		`${base}/api/challenges/url/${url}?${topicId ? `topicId=${topicId}` : ''}`
+	);
 	if (!res.ok) {
 		throw await res.json();
 	}
@@ -43,7 +45,7 @@ export async function showChallengeByUrl(url: string, topicId: string = null) {
 }
 
 export async function showChallenges(topicId?: string) {
-	const res = await fetch(`${base}/api/challenges${topicId ? `?topicId=${topicId}` : ''}`);
+	const res = await fetch(`${base}/api/challenges/url/${topicId ? `?topicId=${topicId}` : ''}`);
 	if (!res.ok) {
 		throw await res.json();
 	}

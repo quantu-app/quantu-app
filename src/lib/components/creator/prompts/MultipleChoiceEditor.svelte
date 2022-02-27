@@ -22,7 +22,7 @@
 	import RichEditor from '$lib/components/RichEditor.svelte';
 	import RichViewer from '$lib/components/RichViewer.svelte';
 	import { groupBy, randomString } from '$lib/utils';
-	import type { MultipleChoicePrivate } from '$lib/components/types';
+	import type { MultipleChoicePrivate } from '$lib/types';
 
 	export let prompt: MultipleChoicePrivate;
 	export let disabled = false;

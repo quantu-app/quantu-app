@@ -1,6 +1,6 @@
 <script lang="ts">
 	import RichViewer from '$lib/components/RichViewer.svelte';
-	import type { FlashCard } from '$lib/components/types';
+	import type { FlashCard } from '$lib/types';
 
 	export let prompt: FlashCard;
 	export let shown = false;

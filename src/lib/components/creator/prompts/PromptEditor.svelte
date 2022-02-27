@@ -4,7 +4,7 @@
 		MultipleChoicePrivate,
 		InputPrivate,
 		MarkAsReadPrivate
-	} from '$lib/components/types';
+	} from '$lib/types';
 	import FlashCardEditor from '$lib/components/creator/prompts/FlashCardEditor.svelte';
 	import InputEditor from '$lib/components/creator/prompts/InputEditor.svelte';
 	import MultipleChoiceEditor from '$lib/components/creator/prompts/MultipleChoiceEditor.svelte';

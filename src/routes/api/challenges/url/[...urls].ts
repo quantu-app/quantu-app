@@ -1,6 +1,6 @@
 import { run } from '$lib/prisma';
 import type { RequestEvent } from '@sveltejs/kit/types/internal';
-import { getTopicsByUrl } from '../topics/url/[...urls]';
+import { getTopicsByUrl } from '../../topics/url/[...urls]';
 
 export async function get(event: RequestEvent) {
 	const urls: string[] = event.params.urls.split('/');

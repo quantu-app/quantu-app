@@ -1,11 +1,10 @@
 <script context="module" lang="ts">
 	import { authGuard } from '$lib/guard/authGuard';
-	import { browser } from '$app/env';
+	import type { Load } from '@sveltejs/kit';
 
-	/** @type {import('@sveltejs/kit').Load} */
-	export async function load(input) {
+	export const load: Load = (input) => {
 		return authGuard(input);
-	}
+	};
 </script>
 
 <script lang="ts">
@@ -13,6 +12,7 @@
 	import { base } from '$app/paths';
 	import type { Challenge, Topic } from '@prisma/client';
 	import Challenges from '$lib/components/challenges/Challenges.svelte';
+	import { browser } from '$app/env';
 
 	let challenges: Array<Challenge & { topic: Topic }> = [];
 

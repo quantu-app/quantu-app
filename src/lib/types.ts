@@ -10,6 +10,8 @@ export interface FlashCard {
 	front: Op[];
 }
 
+export type FlashCardAnswer = number;
+
 export interface MarkAsReadPrivate {
 	content: Op[];
 }
@@ -17,6 +19,8 @@ export interface MarkAsReadPrivate {
 export interface MarkAsRead {
 	content: Op[];
 }
+
+export type MarkAsReadAnswer = boolean;
 
 export enum InputType {
 	NUMBER = 'number',
@@ -36,6 +40,8 @@ export interface Input {
 	type: InputType;
 }
 
+export type InputAnswer = string;
+
 export interface MultipleChoicePrivate {
 	choices: Array<{
 		id: string;
@@ -53,3 +59,13 @@ export interface MultipleChoice {
 	}>;
 	question: Op[];
 }
+
+export type MultipleChoiceAnswer = string[];
+
+export type Answer = FlashCardAnswer | MarkAsReadAnswer | InputAnswer | MultipleChoiceAnswer;
+export type PromptPrivate =
+	| FlashCardPrivate
+	| MarkAsReadPrivate
+	| InputPrivate
+	| MultipleChoicePrivate;
+export type Prompt = FlashCard | MarkAsRead | Input | MultipleChoice;

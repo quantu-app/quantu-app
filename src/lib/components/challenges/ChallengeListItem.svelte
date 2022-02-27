@@ -19,6 +19,7 @@
 
 	let topics: Topic[] = [];
 
+	$: path = [...topics.map((t) => t.url), challenge.url].join('/');
 	$: date = new Date(challenge.createdAt).toLocaleString('default', {
 		weekday: 'long',
 		year: 'numeric',
@@ -46,15 +47,9 @@
 			</div>
 		</div>
 		<div class="text-end">
-			<a
-				role="button"
-				class="btn btn-primary me-2"
-				href={`/challenges/${topics.map((t) => t.url).join('/')}/${challenge.url}`}>Solve</a
-			>
-			<a
-				role="button"
-				class="btn btn-secondary text-white me-2"
-				href={`/challenges/${challenge.id}/review`}>Review</a
+			<a role="button" class="btn btn-primary me-2" href={`/challenges/${path}`}>Solve</a>
+			<a role="button" class="btn btn-secondary text-white me-2" href={`/challenges/${path}/review`}
+				>Review</a
 			>
 		</div>
 		<div class="text-muted">{challenge.topic.name}</div>

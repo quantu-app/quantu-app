@@ -23,10 +23,11 @@ RUN NODE_ENV=production npm run build
 FROM node-builder
 
 COPY --from=builder /app/package*.json ./
+COPY --from=builder /app/prisma .
+
 RUN NODE_ENV=production npm install
 
 COPY --from=builder /app/build .
-RUN npm run prisma generate
 
 EXPOSE 3000
 

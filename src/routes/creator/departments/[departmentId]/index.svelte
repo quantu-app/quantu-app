@@ -22,16 +22,18 @@
 	import DepartmentComponent from '$lib/components/creator/departments/Department.svelte';
 	import { isValidStatus } from '$lib/guard/isValidStatus';
 	import { departmentsById, showDepartmentsById } from '$lib/state/creator/departments';
-	import { browser } from '$app/env';
 	import { base } from '$app/paths';
+	import { onMount } from 'svelte';
+	import { showChallenges } from '$lib/state/creator/challenges';
 
 	export let departmentId: string;
 
 	$: department = $departmentsById[departmentId];
 
-	if (browser) {
-		showDepartmentsById(departmentId);
-	}
+	onMount(async () => {
+		const department = await showDepartmentsById(departmentId);
+		showChallenges(department.id);
+	});
 </script>
 
 <svelte:head>

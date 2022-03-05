@@ -24,7 +24,7 @@ export async function showDepartmentsById(id: string) {
 	}
 	const department: Department = await res.json();
 	departmentsWritable.update((state) => addOrUpdate(state, department));
-	return departments;
+	return department;
 }
 
 export async function showDepartments() {

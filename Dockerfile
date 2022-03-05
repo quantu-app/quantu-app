@@ -10,6 +10,11 @@ FROM node-builder as builder
 COPY package*.json ./
 RUN npm install
 
+ARG DATABASE_URL=https://api.quantu.app
+ENV DATABASE_URL=$DATABASE_URL
+
+RUN echo "DATABASE_URL=$DATABASE_URL" >> .env
+
 COPY . .
 
 RUN npm run prisma generate

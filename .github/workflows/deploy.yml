@@ -18,7 +18,7 @@ jobs:
         run: |
           echo $KUBECONFIG_BASE64 | base64 -di > $RUNNER_TEMP/kubeconfig.yaml
           echo "KUBECONFIG=$RUNNER_TEMP/kubeconfig.yaml" >> $GITHUB_ENV
-      - run: npm install -g npm@8.4.0
+      - run: npm install -g npm@8.5.3
       - run: npm ci
       - uses: docker/login-action@v1
         with:

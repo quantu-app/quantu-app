@@ -10,7 +10,7 @@ FROM node-builder as builder
 COPY package*.json ./
 RUN npm install
 
-ARG DATABASE_URL=https://api.quantu.app
+ARG DATABASE_URL=mongodb://root:password@quantu-app-mongodb.ui:27017/quantu-app?replicaSet=replicaset&retryWrites=false&authSource=admin
 ENV DATABASE_URL=$DATABASE_URL
 
 RUN echo "DATABASE_URL=$DATABASE_URL" >> .env

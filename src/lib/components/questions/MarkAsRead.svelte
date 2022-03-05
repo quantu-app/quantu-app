@@ -1,16 +1,18 @@
 <script lang="ts">
-	import type { Question, QuestionMarkAsRead, QuestionResult } from '$lib/api/quantu-app-api';
 	import Prompt from './Prompt.svelte';
 	import MarkAsReadContent from './MarkAsReadContent.svelte';
+	import type { QuestionType, Result } from '@prisma/client';
+	import type { Answer, MarkAsRead, MarkAsReadAnswer } from '$lib/types';
 
-	export let question: Question;
-	export let result: QuestionResult = undefined;
-	export let input = true;
-
-	$: prompt = question.prompt as QuestionMarkAsRead;
+	export let type: QuestionType;
+	export let input: MarkAsReadAnswer;
+	export let prompt: MarkAsRead;
+	export let result: Result = undefined;
+	export let onExplain: () => Promise<Result>;
+	export let onSubmit: (answer: Answer) => Promise<Result>;
 </script>
 
-<Prompt {question} {input} bind:result>
+<Prompt {type} {input} bind:result {onExplain} {onSubmit}>
 	<MarkAsReadContent slot="content" {prompt} />
 	<slot slot="extra" name="extra" />
 </Prompt>

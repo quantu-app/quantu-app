@@ -1,9 +1,9 @@
 <script lang="ts">
-	import type { QuestionMultipleChoice } from '$lib/api/quantu-app-api';
 	import RichViewer from '$lib/components/RichViewer.svelte';
+	import type { MultipleChoice } from '$lib/types';
 	import { XorShiftRng } from '@aicacia/rand';
 
-	export let prompt: QuestionMultipleChoice;
+	export let prompt: MultipleChoice;
 	export let input: string[] = [];
 	export let correct: Record<string, true> = undefined;
 	export let disabled = false;

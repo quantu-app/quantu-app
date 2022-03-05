@@ -1,27 +1,31 @@
 <script lang="ts">
-	import { answerQuestion, explainQuestion } from '$lib/state/questionResults';
+	import type { Answer } from '$lib/types';
 	import { isEmpty } from '$lib/utils';
+	import { QuestionType } from '@prisma/client';
+	import type { Result } from '@prisma/client';
 
-	export let question: Question;
-	export let input: QuestionAnswer['input'];
-	export let result: QuestionResult = undefined;
+	export let type: QuestionType;
+	export let input: Answer;
+	export let result: Result = undefined;
 	export let showExplanation = false;
+	export let onExplain: () => Promise<Result>;
+	export let onSubmit: (answer: Answer) => Promise<Result>;
 
 	let answering = false;
 	let explaining = false;
-	$: onExplain = async () => {
+	$: onExplainInternal = async () => {
 		explaining = true;
 		try {
-			result = await explainQuestion(question.id, question.quizId);
+			result = await onExplain();
 			showExplanation = true;
 		} finally {
 			explaining = false;
 		}
 	};
-	$: onSubmit = async () => {
+	$: onSubmitInternal = async () => {
 		answering = true;
 		try {
-			result = await answerQuestion(question.id, input, question.quizId);
+			result = await onSubmit(input);
 		} finally {
 			answering = false;
 		}
@@ -40,7 +44,7 @@
 
 			<div class="d-flex justify-content-end mt-2">
 				{#if result != null}
-					{#if !showExplanation && question.type !== 'mark_as_read'}
+					{#if !showExplanation && type !== QuestionType.MARK_AS_READ}
 						<button
 							type="button"
 							class="btn btn-secondary text-white"
@@ -52,12 +56,12 @@
 					{/if}
 					<slot name="extra" />
 				{:else}
-					{#if question.type !== 'mark_as_read'}
+					{#if type !== QuestionType.MARK_AS_READ}
 						<button
 							type="button"
 							class="btn btn-secondary text-white"
 							disabled={explaining || answering}
-							on:click={onExplain}
+							on:click={onExplainInternal}
 						>
 							{#if explaining}
 								<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" />
@@ -69,7 +73,7 @@
 						type="button"
 						class="btn btn-primary"
 						disabled={isEmpty(input) || !!result || answering || explaining}
-						on:click={onSubmit}
+						on:click={onSubmitInternal}
 					>
 						{#if answering}
 							<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" />

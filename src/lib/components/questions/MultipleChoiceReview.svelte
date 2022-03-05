@@ -1,18 +1,15 @@
 <script lang="ts">
-	import type {
-		QuestionResult,
-		MultipleChoiceAnswer,
-		QuestionMultipleChoicePrivate
-	} from '$lib/api/quantu-app-api';
 	import MultipleChoiceInput from './MultipleChoiceInput.svelte';
 	import MultipleChoiceContent from './MultipleChoiceContent.svelte';
 	import Review from './Review.svelte';
+	import type { Result } from '@prisma/client';
+	import type { MultipleChoicePrivate, MultipleChoiceAnswer } from '$lib/types';
 
-	export let result: QuestionResult;
+	export let result: Result;
 	export let seed: number = undefined;
 
-	$: prompt = result.prompt as QuestionMultipleChoicePrivate;
-	$: input = result.answer.input as MultipleChoiceAnswer;
+	$: prompt = result.prompt as unknown as MultipleChoicePrivate;
+	$: input = result.answer as MultipleChoiceAnswer;
 	$: correct = Object.entries(prompt.choices).reduce((correct, [key, choice]) => {
 		if (choice.correct) {
 			correct[key] = true;

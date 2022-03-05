@@ -1,8 +1,8 @@
 <script lang="ts">
-	import type { QuestionMarkAsRead } from '$lib/api/quantu-app-api';
 	import RichViewer from '$lib/components/RichViewer.svelte';
+	import type { MarkAsRead } from '$lib/types';
 
-	export let prompt: QuestionMarkAsRead;
+	export let prompt: MarkAsRead;
 </script>
 
 <div>

@@ -1,13 +1,14 @@
 <script lang="ts">
-	import type { QuestionResult, InputAnswer, QuestionInputPrivate } from '$lib/api/quantu-app-api';
 	import InputInput from './InputInput.svelte';
 	import InputContent from './InputContent.svelte';
 	import Review from './Review.svelte';
+	import type { Result } from '@prisma/client';
+	import type { InputPrivate, InputAnswer } from '$lib/types';
 
-	export let result: QuestionResult;
+	export let result: Result;
 
-	$: prompt = result.prompt as QuestionInputPrivate;
-	$: input = result.answer.input as InputAnswer;
+	$: prompt = result.prompt as unknown as InputPrivate;
+	$: input = result.answer as unknown as InputAnswer;
 </script>
 
 <Review>
@@ -15,9 +16,8 @@
 	<InputInput
 		slot="input"
 		disabled={true}
-		correct={result.result >= 0.5}
+		correct={result.value >= 0.5}
 		type={prompt.type}
-		{prompt}
 		{input}
 	/>
 	<slot slot="extra" name="extra" />

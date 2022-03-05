@@ -54,7 +54,7 @@ export async function post(event: RequestEvent) {
 				questionId,
 				prompt: question.prompt,
 				type: question.type,
-				value: getResult(question.type, question.prompt as any as PromptPrivate, answer),
+				value: getResult(question.type, question.prompt as unknown as PromptPrivate, answer),
 				userId
 			}
 		});

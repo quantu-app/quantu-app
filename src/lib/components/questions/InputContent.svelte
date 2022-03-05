@@ -1,9 +1,9 @@
 <script lang="ts">
 	import type Op from 'quill-delta/dist/Op';
-	import type { QuestionInput } from '$lib/api/quantu-app-api';
 	import RichViewer from '$lib/components/RichViewer.svelte';
+	import type { Input } from '$lib/types';
 
-	export let prompt: QuestionInput;
+	export let prompt: Input;
 	export let showExplanation = false;
 	export let explanation: Op[] = undefined;
 </script>

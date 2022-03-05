@@ -44,6 +44,7 @@ export interface Input {
 export type InputAnswer = string;
 
 export interface MultipleChoicePrivate {
+	singleAnswer?: boolean;
 	choices: Array<{
 		id: string;
 		content: Op[];
@@ -54,6 +55,7 @@ export interface MultipleChoicePrivate {
 }
 
 export interface MultipleChoice {
+	singleAnswer?: boolean;
 	choices: Array<{
 		id: string;
 		content: Op[];

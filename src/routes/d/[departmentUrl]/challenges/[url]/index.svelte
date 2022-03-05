@@ -22,18 +22,29 @@
 <script lang="ts">
 	import AppLayout from '$lib/components/AppLayout.svelte';
 	import { base } from '$app/paths';
-	import { showDepartmentsByUrl } from '$lib/state/departments';
 	import { challengesByDepartmentUrl, showChallengeByUrl } from '$lib/state/challenges';
-	import { browser } from '$app/env';
+	import Challenge from '$lib/components/questions/Challenge.svelte';
+	import { onMount } from 'svelte';
+	import { resultsByTypeAndId, showResultByTypeAndId } from '$lib/state/results';
+	import { ResultType } from '@prisma/client';
+	import ReviewChallenge from '$lib/components/questions/ReviewChallenge.svelte';
 
 	export let departmentUrl: string;
 	export let url: string;
 
-	$: challenge = ($challengesByDepartmentUrl[departmentUrl] || {})[url];
+	let loaded = false;
 
-	if (browser) {
-		showChallengeByUrl(departmentUrl, url);
-	}
+	$: challenge = ($challengesByDepartmentUrl[departmentUrl] || {})[url];
+	$: result = challenge ? ($resultsByTypeAndId[ResultType.CHALLENGE] || {})[challenge.id] : null;
+
+	onMount(async () => {
+		const challenge = await showChallengeByUrl(departmentUrl, url);
+		try {
+			await showResultByTypeAndId(ResultType.CHALLENGE, challenge.id);
+		} finally {
+			loaded = true;
+		}
+	});
 </script>
 
 <svelte:head>
@@ -56,5 +67,27 @@
 		}
 	]}
 >
-	<div class="container d-flex flex-grow-1" />
+	{#if challenge && !result && loaded}
+		<div class="container d-flex flex-grow-1">
+			<Challenge {challenge}>
+				<a
+					slot="extra"
+					role="button"
+					class="btn btn-primary"
+					href={`${base}/d/${departmentUrl}/challenges/${url}/review`}
+				>
+					Review
+				</a>
+			</Challenge>
+		</div>
+	{/if}
+	{#if result}
+		<div class="container flex-grow-1">
+			<ReviewChallenge {result}>
+				<a slot="extra" role="button" class="btn btn-primary" href={`/challenges`}>
+					Return to Challenges
+				</a>
+			</ReviewChallenge>
+		</div>
+	{/if}
 </AppLayout>

@@ -11,7 +11,7 @@ export const resultsById = derived(resultsWritable, (results) =>
 		return byId;
 	}, {} as { [id: string]: Result })
 );
-export const resultsByTypeAndQuestionId = derived(resultsWritable, (results) =>
+export const resultsByTypeAndId = derived(resultsWritable, (results) =>
 	results.reduce((byType, result) => {
 		const byQuestionId = byType[result.resultType] || (byType[result.resultType] = {});
 		byQuestionId[result.questionId] = result;
@@ -19,7 +19,7 @@ export const resultsByTypeAndQuestionId = derived(resultsWritable, (results) =>
 	}, {} as { [resultType: string]: { [id: string]: Result } })
 );
 
-export async function showResultByTypeAndQuestionId(type: ResultType, questionId: string) {
+export async function showResultByTypeAndId(type: ResultType, questionId: string) {
 	const res = await fetch(`${base}/api/results/${type.toLowerCase()}/${questionId}`);
 	if (!res.ok) {
 		throw await res.json();
@@ -33,6 +33,18 @@ export async function answer(type: ResultType, questionId: string, answer: Answe
 	const res = await fetch(`${base}/api/results/${type.toLowerCase()}/${questionId}`, {
 		method: 'POST',
 		body: JSON.stringify(answer)
+	});
+	if (!res.ok) {
+		throw await res.json();
+	}
+	const result: Result = await res.json();
+	resultsWritable.update((state) => addOrUpdate(state, result));
+	return result;
+}
+
+export async function explain(type: ResultType, questionId: string) {
+	const res = await fetch(`${base}/api/results/${type.toLowerCase()}/${questionId}/explain`, {
+		method: 'POST'
 	});
 	if (!res.ok) {
 		throw await res.json();

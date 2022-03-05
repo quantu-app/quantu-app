@@ -1,7 +1,8 @@
 <script lang="ts">
-	import InputAnswerEditor from '$lib/components/UserOrganizations/Questions/InputAnswerEditor.svelte';
+	import InputAnswerEditor from '$lib/components/creator/prompts/InputAnswerEditor.svelte';
+	import type { InputType } from '$lib/types';
 
-	export let type: string;
+	export let type: InputType;
 	export let input: string;
 	export let correct: boolean | undefined = undefined;
 	export let disabled = false;

@@ -1,9 +1,9 @@
 <script lang="ts">
 	import type Op from 'quill-delta/dist/Op';
-	import type { QuestionMultipleChoice } from '$lib/api/quantu-app-api';
 	import RichViewer from '$lib/components/RichViewer.svelte';
+	import type { MultipleChoice } from '$lib/types';
 
-	export let prompt: QuestionMultipleChoice;
+	export let prompt: MultipleChoice;
 	export let showExplanation = false;
 	export let explanation: Op[] = undefined;
 </script>

@@ -22,22 +22,26 @@
 <script lang="ts">
 	import AppLayout from '$lib/components/AppLayout.svelte';
 	import { base } from '$app/paths';
-	import { showDepartmentsByUrl } from '$lib/state/departments';
 	import { challengesByDepartmentUrl, showChallengeByUrl } from '$lib/state/challenges';
-	import { browser } from '$app/env';
+	import ReviewChallenge from '$lib/components/questions/ReviewChallenge.svelte';
+	import { resultsByTypeAndId, showResultByTypeAndId } from '$lib/state/results';
+	import { onMount } from 'svelte';
+	import { ResultType } from '@prisma/client';
 
 	export let departmentUrl: string;
 	export let url: string;
 
 	$: challenge = ($challengesByDepartmentUrl[departmentUrl] || {})[url];
+	$: result = challenge ? ($resultsByTypeAndId[ResultType.CHALLENGE] || {})[challenge.id] : null;
 
-	if (browser) {
-		showChallengeByUrl(departmentUrl, url);
-	}
+	onMount(async () => {
+		const challenge = await showChallengeByUrl(departmentUrl, url);
+		showResultByTypeAndId(ResultType.CHALLENGE, challenge.id);
+	});
 </script>
 
 <svelte:head>
-	<title>Quiz</title>
+	<title>Challenge REvie</title>
 </svelte:head>
 
 <AppLayout
@@ -60,5 +64,13 @@
 		}
 	]}
 >
-	<div class="container d-flex flex-grow-1" />
+	<div class="container flex-grow-1">
+		{#if result}
+			<ReviewChallenge {result}>
+				<a slot="extra" role="button" class="btn btn-primary" href={`/challenges`}>
+					Return to Challenges
+				</a>
+			</ReviewChallenge>
+		{/if}
+	</div>
 </AppLayout>

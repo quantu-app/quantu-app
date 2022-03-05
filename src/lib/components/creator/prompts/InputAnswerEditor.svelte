@@ -1,10 +1,12 @@
 <script lang="ts">
-	export let type: string;
+	import type { InputType } from '$lib/types';
+
+	export let type: InputType;
 	export let input: string;
 	export let correct: boolean | undefined = undefined;
 	export let disabled = false;
 
-	let prevType: string;
+	let prevType: InputType;
 	let mathElement: HTMLElement;
 
 	$: if (prevType !== type && mathElement) {

@@ -100,7 +100,7 @@ model Result {
   questionId String
   type       QuestionType @default(MULTIPLE_CHOICE)
   prompt     Json
-  answer     Json
+  answer     Json?
   value      Float
   createdAt  DateTime     @default(now())
   updatedAt  DateTime     @updatedAt

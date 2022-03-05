@@ -1,23 +1,26 @@
 <script lang="ts">
-	import type {
-		Question,
-		QuestionMultipleChoice,
-		QuestionMultipleChoicePrivate,
-		QuestionResult
-	} from '$lib/api/quantu-app-api';
 	import Prompt from './Prompt.svelte';
 	import MultipleChoiceContent from './MultipleChoiceContent.svelte';
 	import MultipleChoiceInput from './MultipleChoiceInput.svelte';
+	import type { QuestionType, Result } from '@prisma/client';
+	import type {
+		MultipleChoicePrivate,
+		MultipleChoice,
+		MultipleChoiceAnswer,
+		Answer
+	} from '$lib/types';
 
-	export let question: Question;
+	export let type: QuestionType;
+	export let input: MultipleChoiceAnswer;
+	export let prompt: MultipleChoice;
+	export let result: Result = undefined;
 	export let seed: number = undefined;
-	export let result: QuestionResult = undefined;
-	export let input: string[] = [];
+	export let onExplain: () => Promise<Result>;
+	export let onSubmit: (answer: Answer) => Promise<Result>;
 
 	let showExplanation = false;
 	let correct: Record<string, true>;
-	$: prompt = question.prompt as QuestionMultipleChoice;
-	$: resultPrompt = result?.prompt as QuestionMultipleChoicePrivate;
+	$: resultPrompt = result?.prompt as unknown as MultipleChoicePrivate;
 	$: if (resultPrompt) {
 		correct = Object.entries(resultPrompt.choices || {}).reduce((correct, [key, choice]) => {
 			if (choice.correct) {
@@ -28,7 +31,7 @@
 	}
 </script>
 
-<Prompt {question} {input} bind:showExplanation bind:result>
+<Prompt {type} {input} bind:showExplanation bind:result {onExplain} {onSubmit}>
 	<MultipleChoiceContent
 		slot="content"
 		{prompt}

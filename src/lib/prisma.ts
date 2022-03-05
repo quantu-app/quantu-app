@@ -1,8 +1,10 @@
 import { dev } from '$app/env';
-import { PrismaClient } from '@prisma/client';
+import type { PrismaClient } from '@prisma/client';
+import Prisma, * as PrismaScope from '@prisma/client';
+const Client = Prisma?.PrismaClient || PrismaScope?.PrismaClient;
 import type { MaybePromise } from '@sveltejs/kit/types/internal';
 
-const client = new PrismaClient({
+const client = new Client({
 	log: dev ? ['query', 'info', 'warn', 'error'] : ['error']
 });
 

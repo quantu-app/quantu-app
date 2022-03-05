@@ -11,7 +11,7 @@
 <script lang="ts">
 	import AppLayout from '$lib/components/AppLayout.svelte';
 	import { currentUser } from '$lib/state/user';
-	import Welcome from '$lib/components/Welcome.svelte';
+	import Welcome from '$lib/components/user/Welcome.svelte';
 </script>
 
 <svelte:head>

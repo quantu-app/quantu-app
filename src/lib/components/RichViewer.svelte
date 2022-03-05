@@ -8,6 +8,7 @@
 	import type { renderOps } from '$lib/editor';
 	import { onMount } from 'svelte';
 
+	export let id: string = undefined;
 	export let content: Op[];
 
 	let prevContent: Op[];
@@ -27,4 +28,4 @@
 	});
 </script>
 
-<div bind:this={element} />
+<div {id} bind:this={element} />

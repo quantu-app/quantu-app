@@ -1,0 +1,10 @@
+apiVersion: v2
+name: quantu-app
+description: quantu-app ui
+type: application
+version: 0.1.0
+appVersion: latest
+dependencies:
+- name: mongodb
+  version: 11.0.4
+  repository: https://charts.bitnami.com/bitnami

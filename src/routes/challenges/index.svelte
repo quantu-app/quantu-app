@@ -1,40 +1,20 @@
 <script context="module" lang="ts">
 	import { authGuard } from '$lib/guard/authGuard';
-	import type { LoadInput } from '@sveltejs/kit';
-	import { browser } from '$app/env';
-	import { isValidStatus } from '$lib/guard/isValidStatus';
+	import type { Load } from '@sveltejs/kit';
 
-	export async function load(input: LoadInput) {
-		const response = authGuard(input),
-			organizationIdString = input.params.organizationId,
-			organizationId = organizationIdString && parseInt(organizationIdString, 10);
-
-		if (!browser && isValidStatus(response)) {
-			await getQuestions(organizationId, undefined, true);
-		}
-
-		return {
-			...response,
-			props: {
-				organizationId
-			}
-		};
-	}
+	export const load: Load = (input) => {
+		return authGuard(input);
+	};
 </script>
 
 <script lang="ts">
-	import { getQuestions, questions } from '$lib/state/questions';
 	import AppLayout from '$lib/components/AppLayout.svelte';
-	import Challenges from '$lib/components/Challenges/Challenges.svelte';
-
-	export let organizationId: number;
-
-	$: questionList = Object.values(
-		(organizationId ? $questions.byOrganizationId[organizationId] : $questions.byId) || {}
-	);
+	import Challenges from '$lib/components/challenges/Challenges.svelte';
+	import { browser } from '$app/env';
+	import { showAllChallenges, challenges } from '$lib/state/challenges';
 
 	if (browser) {
-		getQuestions(organizationId, undefined, true, true);
+		showAllChallenges();
 	}
 </script>
 
@@ -51,5 +31,5 @@
 		}
 	]}
 >
-	<Challenges questions={questionList} />
+	<Challenges challenges={$challenges} />
 </AppLayout>

@@ -10,7 +10,7 @@
 
 <script lang="ts">
 	import AppLayout from '$lib/components/AppLayout.svelte';
-	import Settings from '$lib/components/Settings.svelte';
+	import Settings from '$lib/components/user/Settings.svelte';
 </script>
 
 <svelte:head>

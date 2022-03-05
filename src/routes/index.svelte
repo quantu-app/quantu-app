@@ -1,7 +1,28 @@
+<script context="module" lang="ts">
+	import type { LoadInput, LoadOutput } from '@sveltejs/kit';
+
+	export function load(input: LoadInput): LoadOutput {
+		const redirectPath = input.url.searchParams.get('redirectPath');
+
+		return {
+			props: {
+				redirectPath
+			}
+		};
+	}
+</script>
+
 <script lang="ts">
-	import { base } from '$app/paths';
 	import AppLayout from '$lib/components/AppLayout.svelte';
-	import { currentUser } from '$lib/state/user';
+	import { currentUser, redirectPathWritable } from '$lib/state/user';
+	import { get } from 'svelte/store';
+	import { base } from '$app/paths';
+
+	export let redirectPath: string = undefined;
+
+	if (redirectPath && !get(redirectPathWritable)) {
+		redirectPathWritable.set(redirectPath);
+	}
 </script>
 
 <svelte:head>
@@ -19,9 +40,9 @@
 					lovers.
 				</p>
 				{#if $currentUser}
-					<a type="button" role="button" class="btn btn-primary" href={`${base}/challenges`}>
-						Challenges
-					</a>
+					<a type="button" role="button" class="btn btn-primary" href={`${base}/challenges`}
+						>Challenges</a
+					>
 				{:else}
 					<button
 						type="button"
@@ -52,7 +73,7 @@
 			<div class="col-md-6 px-4">
 				<h3 class="fw-bold">Learn concepts through guided and interactive lessons</h3>
 				<p>
-					Content creators design and develop lessons so you can learn and master any topic at your
+					Content creators design and develop lessons so you can learn and master any department at your
 					own pace. Lessons are hand-crafted to build mastery and intuition.
 				</p>
 			</div>

@@ -6,12 +6,13 @@
 </script>
 
 <script lang="ts">
-	import { OpenAPI } from '$lib/api/quantu-app-api';
 	import SignIn from './SignIn.svelte';
 	import SignUp from './SignUp.svelte';
-	import { signInWithToken } from '$lib/state/user';
 	import { onDestroy, onMount } from 'svelte';
 	import { browser } from '$app/env';
+	import { base } from '$app/paths';
+	import Cookies from 'js-cookie';
+	import { signIn } from '$lib/state/user';
 
 	let loading = false;
 	let SignInUpComponent = SignIn;
@@ -20,7 +21,7 @@
 	function signInWith(provider = 'google') {
 		loading = true;
 		const childWindow = window.open(
-			`${OpenAPI.BASE}/auth/${provider}`,
+			`${base}/api/oauth2/${provider}/signin?redirect=/`,
 			`${provider} sign in`,
 			`width=${Math.max(window.outerWidth * 0.3, 320)},height=${Math.max(
 				window.outerHeight * 0.7,
@@ -28,22 +29,15 @@
 			)}`
 		);
 
-		function onMessage(e: MessageEvent) {
-			const token = e.data;
-			if (typeof token === 'string') {
-				childWindow.close();
-				signInWithToken(token);
-				loading = false;
-				closeModal();
-			}
+		function cleanUp() {
+			clearInterval(intervalId);
+			loading = false;
+			childWindow.close();
 		}
 
-		window.addEventListener('message', onMessage);
-
 		const intervalId = setInterval(() => {
-			if (childWindow.closed) {
-				loading = false;
-				clearInterval(intervalId);
+			if (childWindow.closed || Cookies.get('token')) {
+				signIn().then(closeModal).finally(cleanUp);
 			}
 		}, 1000);
 	}

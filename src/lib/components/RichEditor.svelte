@@ -10,6 +10,7 @@
 	import { onMount, createEventDispatcher } from 'svelte';
 	import type Op from 'quill-delta/dist/Op';
 
+	export let id: string = undefined;
 	export let content: Op[] = [];
 	export let onQuill: (quill: Quill) => void = undefined;
 	export let placeholder: string = undefined;
@@ -81,6 +82,6 @@
 	});
 </script>
 
-<div class="border">
+<div {id} class="border">
 	<div bind:this={element} on:keydown|capture={onKeyDown} />
 </div>

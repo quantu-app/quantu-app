@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "quantu-app-ui.fullname" . }}
+  name: {{ include "quantu-app.fullname" . }}
   labels:
-    {{- include "quantu-app-ui.labels" . | nindent 4 }}
+    {{- include "quantu-app.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      {{- include "quantu-app-ui.selectorLabels" . | nindent 6 }}
+      {{- include "quantu-app.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       annotations:
         checksum/config-environment: {{ include (print $.Template.BasePath "/config-environment.yaml") . | sha256sum }}
         image/hash: {{ .Values.image.hash }}
       labels:
-        {{- include "quantu-app-ui.selectorLabels" . | nindent 8 }}
+        {{- include "quantu-app.selectorLabels" . | nindent 8 }}
     spec:
       imagePullSecrets:
         - name: regcred
@@ -25,7 +25,7 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           envFrom:
             - configMapRef:
-                name: {{ include "quantu-app-ui.fullname" . }}-environment
+                name: {{ include "quantu-app.fullname" . }}-environment
           ports:
             - name: http
               containerPort: 3000

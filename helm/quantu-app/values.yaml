@@ -6,7 +6,7 @@ replicas:
       utilization: 90
 
 image:
-  repository: ghcr.io/quantu-app/quantu-app/quantu-app-ui
+  repository: ghcr.io/quantu-app/quantu-app/quantu-app
   pullPolicy: Always
   hash: sha256:2af310fac13872efeed20df46547f19616fecab261e1dd0a23bc63c5b75ad30f
 

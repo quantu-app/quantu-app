@@ -1,13 +1,13 @@
 apiVersion: autoscaling/v2beta2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: {{ include "quantu-app-ui.fullname" . }}
-  labels: {{- include "quantu-app-ui.labels" . | nindent 4 }}
+  name: {{ include "quantu-app.fullname" . }}
+  labels: {{- include "quantu-app.labels" . | nindent 4 }}
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: {{ include "quantu-app-ui.fullname" . }}
+    name: {{ include "quantu-app.fullname" . }}
   minReplicas: {{ .Values.replicas.min }}
   maxReplicas: {{ .Values.replicas.max }}
   metrics:

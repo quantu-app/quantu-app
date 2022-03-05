@@ -1,7 +1,7 @@
 import { dev } from '$app/env';
 import type { PrismaClient } from '@prisma/client';
-import Prisma, * as PrismaScope from '@prisma/client';
-const Client = Prisma?.PrismaClient || PrismaScope?.PrismaClient;
+import Prisma, * as PrismaAll from '@prisma/client';
+const Client = Prisma?.PrismaClient || PrismaAll?.PrismaClient;
 import type { MaybePromise } from '@sveltejs/kit/types/internal';
 
 const client = new Client({

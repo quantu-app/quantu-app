@@ -12,15 +12,15 @@
 	import ChallengeList from '$lib/components/challenges/ChallengeList.svelte';
 	import { fuzzyEquals } from '@aicacia/string-fuzzy_equals';
 	import Search from '$lib/components/Search.svelte';
-	import type { Challenge, Topic } from '@prisma/client';
+	import type { StateChallenge } from '$lib/state/challenges';
 
-	export let challenges: Array<Challenge & { topic: Topic }>;
+	export let challenges: Array<StateChallenge>;
 
-	let latestChallenge: Challenge & { topic: Topic };
-	let previousChallenges: Array<Challenge & { topic: Topic }> = [];
+	let latestChallenge: StateChallenge;
+	let previousChallenges: Array<StateChallenge> = [];
 
 	$: isFiltered = !!$state.challengeNameFilter;
-	$: filter = (challenge: Challenge) =>
+	$: filter = (challenge: StateChallenge) =>
 		$state.challengeNameFilter ? fuzzyEquals($state.challengeNameFilter, challenge.name) : true;
 
 	$: if (!isFiltered) {

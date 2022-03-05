@@ -13,7 +13,7 @@
 	"scripts": {
 		"prisma": "prisma",
 		"svelte-kit": "svelte-kit",
-		"clean": "rm -rf node_modules/.vite .svelte-kit build",
+		"clean": "rm -rf node_modules/.vite .svelte-kit build node_modules/.prisma",
 		"start": "svelte-kit dev --host --open",
 		"build": "svelte-kit build",
 		"preview": "svelte-kit preview",

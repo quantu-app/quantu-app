@@ -73,7 +73,7 @@
 			<div class="col-md-6 px-4">
 				<h3 class="fw-bold">Learn concepts through guided and interactive lessons</h3>
 				<p>
-					Content creators design and develop lessons so you can learn and master any topic at your
+					Content creators design and develop lessons so you can learn and master any department at your
 					own pace. Lessons are hand-crafted to build mastery and intuition.
 				</p>
 			</div>

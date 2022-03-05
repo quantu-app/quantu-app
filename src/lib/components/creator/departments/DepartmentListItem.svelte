@@ -1,36 +1,26 @@
 <script lang="ts">
-	import type { StateChallenge } from '$lib/state/creator/challenges';
-	import { titleCase } from 'title-case';
+	import { base } from '$app/paths';
+	import type { Department } from '@prisma/client';
 
-	export let challenge: StateChallenge;
+	export let department: Department;
 	export let onUpdate: () => void;
 	export let onDelete: () => void;
-
-	$: updatedAt = new Date(challenge.updatedAt || '');
 </script>
 
 <div class="list-group-item">
 	<div class="d-flex w-100 justify-content-between">
 		<h4>
-			<button
+			<a
+				href={`${base}/creator/departments/${department.id}`}
 				type="button"
 				class="btn btn-link"
-				data-bs-toggle="modal"
-				data-bs-target="#update-challenge"
-				on:click={onUpdate}>{challenge.name || 'No Name'}</button
+				on:click={onUpdate}>{department.name} - {department.url}</a
 			>
-			<h6 class="d-inline">
-				- {titleCase(challenge.type.replace(/\_/gim, ' '))}
-			</h6>
 		</h4>
 		<div class="d-flex">
-			<div class="d-inline mt-2">
-				Last updated {updatedAt.toLocaleTimeString()}
-				{updatedAt.toLocaleDateString()}
-			</div>
 			<div class="dropdown">
 				<button
-					id={`challenge-dropdown-${challenge.id}`}
+					id={`department-dropdown-${department.id}`}
 					class="btn btn-ghost dropdown-toggle"
 					type="button"
 					data-bs-toggle="dropdown"
@@ -40,15 +30,15 @@
 				</button>
 				<ul
 					class="dropdown-menu dropdown-menu-end"
-					aria-labelledby={`challenge-dropdown-${challenge.id}`}
+					aria-labelledby={`department-dropdown-${department.id}`}
 				>
-					<slot name="dropdown" {challenge} {onUpdate} {onDelete}>
+					<slot name="dropdown" {department} {onUpdate} {onDelete}>
 						<li>
 							<button
 								type="button"
 								class="dropdown-item justify-content-between"
 								data-bs-toggle="modal"
-								data-bs-target="#update-challenge"
+								data-bs-target="#update-department"
 								aria-label="Update"
 								on:click={onUpdate}>Update</button
 							>
@@ -58,7 +48,7 @@
 								type="button"
 								class="dropdown-item justify-content-between"
 								data-bs-toggle="modal"
-								data-bs-target="#delete-challenge"
+								data-bs-target="#delete-department"
 								aria-label="Delete"
 								on:click={onDelete}>Delete</button
 							>

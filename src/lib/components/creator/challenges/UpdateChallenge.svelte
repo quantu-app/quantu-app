@@ -1,8 +1,8 @@
 <script lang="ts">
-	import type { ChallengePrivate } from '$lib/api/quantu-app-api';
+	import type { StateChallenge } from '$lib/state/creator/challenges';
 	import ChallengeEditor from './ChallengeEditor.svelte';
 
-	export let challenge: ChallengePrivate | undefined;
+	export let challenge: StateChallenge | undefined;
 	export let onUpdateChallenge: () => Promise<void>;
 
 	async function internalUpdateChallenge() {

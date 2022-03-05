@@ -1,42 +1,37 @@
-import type { Challenge, Topic } from '@prisma/client';
+import type { Challenge } from '@prisma/client';
 import { writable, get, derived } from 'svelte/store';
 import { base } from '$app/paths';
 
-const challengesWritable = writable<Array<Challenge & { topic: Topic }>>([]);
+export type StateChallenge = Challenge & { department: { url: string; name: string } };
 
+const challengesWritable = writable<Array<StateChallenge>>([]);
+
+export const challenges = derived(challengesWritable, (challenges) => challenges);
 export const challengesById = derived(challengesWritable, (challenges) =>
 	challenges.reduce((byId, challenge) => {
 		byId[challenge.id] = challenge;
 		return byId;
-	}, {} as { [id: string]: Challenge & { topic: Topic } })
+	}, {} as { [id: string]: StateChallenge })
 );
-export const challengesByTopicId = derived(challengesWritable, (challenges) =>
-	challenges.reduce((byTopicId, challenge) => {
-		const parentChallenges = byTopicId[challenge.topicId] || (byTopicId[challenge.topicId] = []);
-		parentChallenges.push(challenge);
-		return byTopicId;
-	}, {} as { [topicId: string]: Challenge & { topic: Topic }[] })
-);
-export const challengesByTopicIdUrl = derived(challengesWritable, (challenges) =>
-	challenges.reduce((byTopicId, challenge) => {
-		const parentChallenges = byTopicId[challenge.topicId] || (byTopicId[challenge.topicId] = {});
-		parentChallenges[challenge.url] = challenge;
-		return byTopicId;
-	}, {} as { [topicId: string]: { [url: string]: Challenge & { topic: Topic } } })
+export const challengesByDepartmentUrl = derived(challengesWritable, (challenges) =>
+	challenges.reduce((byDepartmentUrl, challenge) => {
+		const parentStateChallenges =
+			byDepartmentUrl[challenge.department.url] || (byDepartmentUrl[challenge.department.url] = {});
+		parentStateChallenges[challenge.url] = challenge;
+		return byDepartmentUrl;
+	}, {} as { [departmentUrl: string]: { [url: string]: StateChallenge } })
 );
 
-export async function showChallengeByUrl(url: string, topicId: string = null) {
-	const cachedChallenge = (get(challengesByTopicIdUrl)[topicId] || {})[url];
-	if (cachedChallenge) {
-		return cachedChallenge;
+export async function showChallengeByUrl(departmentUrl: string, url: string) {
+	const cachedStateChallenge = (get(challengesByDepartmentUrl)[departmentUrl] || {})[url];
+	if (cachedStateChallenge) {
+		return cachedStateChallenge;
 	}
-	const res = await fetch(
-		`${base}/api/challenges/url/${url}?${topicId ? `topicId=${topicId}` : ''}`
-	);
+	const res = await fetch(`${base}/api/departments/${departmentUrl}/challenges/${url}`);
 	if (!res.ok) {
 		throw await res.json();
 	}
-	const challenge: Challenge & { topic: Topic } = await res.json();
+	const challenge: StateChallenge = await res.json();
 	challengesWritable.update((challenges) => {
 		challenges.push(challenge);
 		return challenges;
@@ -44,12 +39,39 @@ export async function showChallengeByUrl(url: string, topicId: string = null) {
 	return challenge;
 }
 
-export async function showChallenges(topicId?: string) {
-	const res = await fetch(`${base}/api/challenges/url/${topicId ? `?topicId=${topicId}` : ''}`);
+export async function showChallenges(departmentUrl: string) {
+	const res = await fetch(`${base}/api/departments/${departmentUrl}/challenges`);
 	if (!res.ok) {
 		throw await res.json();
 	}
-	const challenges: Array<Challenge & { topic: Topic }> = await res.json();
-	challengesWritable.set(challenges);
+	const challenges: Array<StateChallenge> = await res.json();
+	challengesWritable.update((state) =>
+		challenges.reduce((state, challenge) => addOrUpdate(state, challenge), state)
+	);
 	return challenges;
+}
+
+export async function showAllChallenges() {
+	const res = await fetch(`${base}/api/challenges`);
+	if (!res.ok) {
+		throw await res.json();
+	}
+	const challenges: Array<StateChallenge> = await res.json();
+	challengesWritable.update((state) =>
+		challenges.reduce((state, challenge) => addOrUpdate(state, challenge), state)
+	);
+	return challenges;
+}
+
+function addOrUpdate(
+	state: Array<StateChallenge>,
+	challenge: StateChallenge
+): Array<StateChallenge> {
+	const index = state.findIndex((c) => c.id === challenge.id);
+	if (index === -1) {
+		state.push(challenge);
+	} else {
+		state[index] = challenge;
+	}
+	return state;
 }

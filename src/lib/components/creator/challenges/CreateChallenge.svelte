@@ -1,23 +1,21 @@
 <script lang="ts">
 	import { createChallenge } from '$lib/state/creator/challenges';
-	import type { Challenge } from '@prisma/client';
-	import { ChallengeType } from '@prisma/client';
+	import { QuestionType } from '@prisma/client';
+	import type { StateChallenge } from '$lib/state/creator/challenges';
 	import ChallengeEditor from './ChallengeEditor.svelte';
 
-	export let path: string;
-	export let topicId: string = undefined;
+	export let departmentId: string = undefined;
 
 	let editorKey = Math.random();
 	let creatingChallenge = false;
 
-	let challenge: Partial<Challenge> = { type: ChallengeType.MULTIPLE_CHOICE, prompt: {} };
+	let challenge: Partial<StateChallenge> = { type: QuestionType.MULTIPLE_CHOICE, prompt: {} };
 
 	async function onCreateChallenge() {
 		creatingChallenge = true;
 		try {
-			await createChallenge({ ...challenge, topicId });
-			delete challenge.name;
-			challenge = { type: ChallengeType.MULTIPLE_CHOICE, prompt: {} };
+			await createChallenge(departmentId, challenge);
+			challenge = { type: QuestionType.MULTIPLE_CHOICE, prompt: {} };
 		} finally {
 			creatingChallenge = false;
 			editorKey = Math.random();

@@ -9,19 +9,12 @@
 
 <script lang="ts">
 	import AppLayout from '$lib/components/AppLayout.svelte';
-	import { base } from '$app/paths';
-	import type { Challenge, Topic } from '@prisma/client';
 	import Challenges from '$lib/components/challenges/Challenges.svelte';
 	import { browser } from '$app/env';
-
-	let challenges: Array<Challenge & { topic: Topic }> = [];
+	import { showAllChallenges, challenges } from '$lib/state/challenges';
 
 	if (browser) {
-		fetch(`${base}/api/challenges`)
-			.then((res) => res.json())
-			.then((data) => {
-				challenges = data;
-			});
+		showAllChallenges();
 	}
 </script>
 
@@ -38,5 +31,5 @@
 		}
 	]}
 >
-	<Challenges {challenges} />
+	<Challenges challenges={$challenges} />
 </AppLayout>

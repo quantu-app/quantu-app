@@ -1,6 +1,4 @@
 <script context="module" lang="ts">
-	import type { LoadInput, LoadOutput } from '@sveltejs/kit';
-
 	export function load(input: LoadInput): LoadOutput {
 		const response = creatorGuard(input);
 
@@ -15,14 +13,13 @@
 <script lang="ts">
 	import AppLayout from '$lib/components/AppLayout.svelte';
 	import { creatorGuard } from '$lib/guard/creatorGuard';
-	import Topics from '$lib/components/creator/topics/Topics.svelte';
-	import { showTopics, topicsByParentId } from '$lib/state/creator/topics';
+	import Departments from '$lib/components/creator/departments/Departments.svelte';
+	import { departments, showDepartments } from '$lib/state/creator/departments';
 	import { isValidStatus } from '$lib/guard/isValidStatus';
 	import { onMount } from 'svelte';
+	import type { LoadInput, LoadOutput } from '@sveltejs/kit/types/internal';
 
-	$: topics = $topicsByParentId['null'] || [];
-
-	onMount(showTopics);
+	onMount(showDepartments);
 </script>
 
 <svelte:head>
@@ -37,5 +34,5 @@
 		}
 	]}
 >
-	<Topics {topics} />
+	<Departments departments={$departments} />
 </AppLayout>

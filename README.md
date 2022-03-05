@@ -10,6 +10,7 @@ This is the main application repository for QuantU.
 4. [Optional] after signing in with a user, make them a creator
     ```bash
     $ mongo -u root -p password admin 
+    > use quantu-app
     > db.User.updateOne({username: "nathanfaucett"}, {$set: {creator: true}})
     ```
 

@@ -1,8 +1,8 @@
 <script lang="ts">
-	import type { ChallengePrivate } from '$lib/api/quantu-app-api';
+	import type { StateChallenge } from '$lib/state/creator/challenges';
 	import { titleCase } from 'title-case';
 
-	export let challenge: ChallengePrivate;
+	export let challenge: StateChallenge;
 	export let onDeleteChallenge: () => Promise<void>;
 
 	let deletingChallenge = false;

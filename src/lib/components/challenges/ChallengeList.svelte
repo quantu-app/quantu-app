@@ -1,8 +1,8 @@
 <script lang="ts">
 	import ChallengeListItem from '$lib/components/challenges/ChallengeListItem.svelte';
-	import type { Challenge, Topic } from '@prisma/client';
+import type { StateChallenge } from '$lib/state/challenges';
 
-	export let challenges: Array<Challenge & { topic: Topic }>;
+	export let challenges: Array<StateChallenge>;
 </script>
 
 <div class="container">

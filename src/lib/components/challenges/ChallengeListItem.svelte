@@ -9,17 +9,12 @@
 
 <script lang="ts">
 	import { base } from '$app/paths';
-
+	import type { StateChallenge } from '$lib/state/challenges';
 	import { XorShiftRng } from '@aicacia/rand';
-	import type { Challenge, Topic } from '@prisma/client';
-	import { onMount } from 'svelte';
 	import { titleCase } from 'title-case';
 
-	export let challenge: Challenge & { topic: Topic };
+	export let challenge: StateChallenge;
 
-	let topics: Topic[] = [];
-
-	$: path = [...topics.map((t) => t.url), challenge.url].join('/');
 	$: date = new Date(challenge.createdAt).toLocaleString('default', {
 		weekday: 'long',
 		year: 'numeric',
@@ -28,10 +23,6 @@
 	});
 	const rng = XorShiftRng.fromSeed(new Date(challenge.createdAt).getTime());
 	const image = rng.fromArray(IMAGES).unwrap();
-
-	onMount(async () => {
-		topics = await fetch(`${base}/api/topics/${challenge.topicId}/path`).then((res) => res.json());
-	});
 </script>
 
 <div class="row justify-content-center m-4">
@@ -47,11 +38,17 @@
 			</div>
 		</div>
 		<div class="text-end">
-			<a role="button" class="btn btn-primary me-2" href={`/challenges/${path}`}>Solve</a>
-			<a role="button" class="btn btn-secondary text-white me-2" href={`/challenges/${path}/review`}
-				>Review</a
+			<a
+				role="button"
+				class="btn btn-primary me-2"
+				href={`${base}/d/${challenge.department.url}/challenges/${challenge.url}`}>Solve</a
+			>
+			<a
+				role="button"
+				class="btn btn-secondary text-white me-2"
+				href={`${base}/d/${challenge.department.url}/challenges/${challenge.url}/review`}>Review</a
 			>
 		</div>
-		<div class="text-muted">{challenge.topic.name}</div>
+		<div class="text-muted">{challenge.department.name}</div>
 	</div>
 </div>

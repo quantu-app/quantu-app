@@ -53,20 +53,15 @@ model User {
   results Result[]
 }
 
-model Topic {
+model Department {
   id          String      @id @default(auto()) @map("_id") @db.ObjectId
   name        String      @unique
   url         String      @unique
   imageUrl    String?
   description Json[]
-  parent      Topic?      @relation("TopicToTopic", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  parentId    String?     @db.ObjectId
-  topics      Topic[]     @relation("TopicToTopic")
   challenges  Challenge[]
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
-
-  @@unique([parentId, url])
 }
 
 enum QuestionType {
@@ -77,19 +72,19 @@ enum QuestionType {
 }
 
 model Challenge {
-  id          String       @id @default(auto()) @map("_id") @db.ObjectId
-  name        String
-  url         String
-  description Json[]
-  topic       Topic        @relation(fields: [topicId], references: [id])
-  topicId     String       @db.ObjectId
-  type        QuestionType @default(MULTIPLE_CHOICE)
-  prompt      Json
-  releasedAt  DateTime?
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
+  id           String       @id @default(auto()) @map("_id") @db.ObjectId
+  name         String
+  url          String
+  description  Json[]
+  department   Department   @relation(fields: [departmentId], references: [id])
+  departmentId String
+  type         QuestionType @default(MULTIPLE_CHOICE)
+  prompt       Json
+  releasedAt   DateTime?
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
 
-  @@unique([topicId, url])
+  @@unique([departmentId, url])
 }
 
 enum ResultType {

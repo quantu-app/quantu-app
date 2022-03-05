@@ -24,7 +24,7 @@
 		"docker.run": "docker run --name quantu-app --rm -it -p 3000:3000 ghcr.io/quantu-app/quantu-app/quantu-app:latest",
 		"docker.stop": "docker stop quantu-app",
 		"helm.delete": "helm delete -n ui quantu-app",
-		"helm.upgrade": "helm upgrade quantu-app helm/quantu-app -n ui --install --set image.hash=\"$(docker inspect --format='{{index .Id}}' --set env.JWT_SECRET_KEY=$JWT_SECRET_KEY --set env.GOOGLE_OAUTH_CLIENT_ID=$GOOGLE_OAUTH_CLIENT_ID --set env.GOOGLE_OAUTH_CLIENT_SECRET=$GOOGLE_OAUTH_CLIENT_SECRET --set env.DATABASE_URL=$DATABASE_URL ghcr.io/quantu-app/quantu-app/quantu-app:latest)\"",
+		"helm.upgrade": "helm upgrade quantu-app helm/quantu-app -n ui --install --set image.hash=\"$(docker inspect --format='{{index .Id}}' ghcr.io/quantu-app/quantu-app/quantu-app:latest)\" --set env.JWT_SECRET_KEY=$JWT_SECRET_KEY --set env.GOOGLE_OAUTH_CLIENT_ID=$GOOGLE_OAUTH_CLIENT_ID --set env.GOOGLE_OAUTH_CLIENT_SECRET=$GOOGLE_OAUTH_CLIENT_SECRET --set env.DATABASE_URL=$DATABASE_URL",
 		"helm": "npm run docker.build && npm run docker.push && npm run helm.upgrade",
 		"check": "svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-check --tsconfig ./tsconfig.json --watch",

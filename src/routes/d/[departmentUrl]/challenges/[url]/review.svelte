@@ -26,17 +26,16 @@
 	import ReviewChallenge from '$lib/components/questions/ReviewChallenge.svelte';
 	import { resultsByTypeAndId, showResultByTypeAndId } from '$lib/state/results';
 	import { onMount } from 'svelte';
-	import { ResultType } from '@prisma/client';
 
 	export let departmentUrl: string;
 	export let url: string;
 
 	$: challenge = ($challengesByDepartmentUrl[departmentUrl] || {})[url];
-	$: result = challenge ? ($resultsByTypeAndId[ResultType.CHALLENGE] || {})[challenge.id] : null;
+	$: result = challenge ? ($resultsByTypeAndId['CHALLENGE'] || {})[challenge.id] : null;
 
 	onMount(async () => {
 		const challenge = await showChallengeByUrl(departmentUrl, url);
-		showResultByTypeAndId(ResultType.CHALLENGE, challenge.id);
+		showResultByTypeAndId('CHALLENGE', challenge.id);
 	});
 </script>
 

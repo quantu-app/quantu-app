@@ -1,8 +1,8 @@
 import type { PrismaClient } from '@prisma/client';
-import { default as Prisma } from '@prisma/client/index.js';
+import prisma from '@prisma/client';
 import type { MaybePromise } from '@sveltejs/kit/types/internal';
 
-const client = new Prisma.PrismaClient();
+const client = new prisma.PrismaClient();
 
 export function run<T = void>(fn: (client: PrismaClient) => MaybePromise<T>): Promise<T> {
 	return client

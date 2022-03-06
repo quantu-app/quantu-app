@@ -9,7 +9,7 @@
 	import InputEditor from '$lib/components/creator/prompts/InputEditor.svelte';
 	import MultipleChoiceEditor from '$lib/components/creator/prompts/MultipleChoiceEditor.svelte';
 	import MarkAsReadEditor from '$lib/components/creator/prompts/MarkAsReadEditor.svelte';
-	import { QuestionType } from '@prisma/client';
+	import type { QuestionType } from '@prisma/client';
 
 	export let type: string;
 	export let prompt: FlashCardPrivate | MultipleChoicePrivate | InputPrivate | MarkAsReadPrivate;
@@ -21,11 +21,11 @@
 	$: promptMarkAsRead = prompt as MarkAsReadPrivate;
 </script>
 
-{#if type === QuestionType.FLASH_CARD}
+{#if type === 'FLASH_CARD'}
 	<FlashCardEditor {disabled} bind:prompt={promptFlashCard} />
-{:else if type === QuestionType.MULTIPLE_CHOICE}
+{:else if type === 'MULTIPLE_CHOICE'}
 	<MultipleChoiceEditor {disabled} bind:prompt={promptMultipleChoice} />
-{:else if type === QuestionType.INPUT}
+{:else if type === 'INPUT'}
 	<InputEditor {disabled} bind:prompt={promptInput} />
 {:else if type === 'mark_as_read'}
 	<MarkAsReadEditor {disabled} bind:prompt={promptMarkAsRead} />

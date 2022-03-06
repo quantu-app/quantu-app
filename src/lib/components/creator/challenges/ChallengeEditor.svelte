@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { StateChallenge } from '$lib/state/creator/challenges';
-	import { QuestionType } from '@prisma/client';
+	import type { QuestionType } from '@prisma/client';
 	import PromptEditor from '../prompts/PromptEditor.svelte';
 
 	export let challenge: Partial<StateChallenge>;
@@ -40,9 +40,9 @@
 			bind:value={challenge.type}
 			aria-label="Challenge Type"
 		>
-			<option value={QuestionType.MULTIPLE_CHOICE}>Multiple Choice</option>
-			<option value={QuestionType.INPUT}>Input</option>
-			<option value={QuestionType.FLASH_CARD}>Flash Card</option>
+			<option value={'MULTIPLE_CHOICE'}>Multiple Choice</option>
+			<option value={'INPUT'}>Input</option>
+			<option value={'FLASH_CARD'}>Flash Card</option>
 		</select>
 	</div>
 </div>

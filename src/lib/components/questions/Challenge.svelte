@@ -4,7 +4,7 @@
 	import MultipleChoice from './MultipleChoice.svelte';
 	import MarkAsRead from './MarkAsRead.svelte';
 	import type { StateChallenge } from '$lib/state/challenges';
-	import { QuestionType, Result, ResultType } from '@prisma/client';
+	import type { QuestionType, Result, ResultType } from '@prisma/client';
 	import { answer, explain } from '$lib/state/results';
 	import type { Answer } from '$lib/types';
 
@@ -20,19 +20,19 @@
 	}
 
 	function onExplain() {
-		return explain(ResultType.CHALLENGE, challenge.id);
+		return explain('CHALLENGE', challenge.id);
 	}
 	async function onSubmit(a: Answer) {
-		return answer(ResultType.CHALLENGE, challenge.id, a);
+		return answer('CHALLENGE', challenge.id, a);
 	}
 </script>
 
 {#key challenge.id}
-	{#if challenge.type === QuestionType.FLASH_CARD}
+	{#if challenge.type === 'FLASH_CARD'}
 		<FlashCard type={challenge.type} prompt={challenge.prompt} bind:result {onExplain} {onSubmit}>
 			<slot slot="extra" name="extra" />
 		</FlashCard>
-	{:else if challenge.type === QuestionType.MULTIPLE_CHOICE}
+	{:else if challenge.type === 'MULTIPLE_CHOICE'}
 		<MultipleChoice
 			type={challenge.type}
 			{seed}
@@ -43,11 +43,11 @@
 		>
 			<slot slot="extra" name="extra" />
 		</MultipleChoice>
-	{:else if challenge.type === QuestionType.INPUT}
+	{:else if challenge.type === 'INPUT'}
 		<Input type={challenge.type} prompt={challenge.prompt} bind:result {onExplain} {onSubmit}>
 			<slot slot="extra" name="extra" />
 		</Input>
-	{:else if challenge.type === QuestionType.MARK_AS_READ}
+	{:else if challenge.type === 'MARK_AS_READ'}
 		<MarkAsRead type={challenge.type} prompt={challenge.prompt} bind:result {onExplain} {onSubmit}>
 			<slot slot="extra" name="extra" />
 		</MarkAsRead>

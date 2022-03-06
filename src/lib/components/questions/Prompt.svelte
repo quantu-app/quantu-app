@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { Answer } from '$lib/types';
 	import { isEmpty } from '$lib/utils';
-	import { QuestionType } from '@prisma/client';
+	import type { QuestionType } from '@prisma/client';
 	import type { Result } from '@prisma/client';
 
 	export let type: QuestionType;
@@ -44,7 +44,7 @@
 
 			<div class="d-flex justify-content-end mt-2">
 				{#if result != null}
-					{#if !showExplanation && type !== QuestionType.MARK_AS_READ}
+					{#if !showExplanation && type !== 'MARK_AS_READ'}
 						<button
 							type="button"
 							class="btn btn-secondary text-white"
@@ -56,7 +56,7 @@
 					{/if}
 					<slot name="extra" />
 				{:else}
-					{#if type !== QuestionType.MARK_AS_READ}
+					{#if type !== 'MARK_AS_READ'}
 						<button
 							type="button"
 							class="btn btn-secondary text-white"

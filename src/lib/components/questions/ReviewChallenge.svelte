@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { QuestionType } from '@prisma/client';
+	import type { QuestionType } from '@prisma/client';
 	import type { Result } from '@prisma/client';
 	import FlashCardReview from './FlashCardReview.svelte';
 	import InputReview from './InputReview.svelte';
@@ -11,19 +11,19 @@
 </script>
 
 {#key result.id}
-	{#if result.type === QuestionType.FLASH_CARD}
+	{#if result.type === 'FLASH_CARD'}
 		<FlashCardReview bind:result>
 			<slot slot="extra" name="extra" />
 		</FlashCardReview>
-	{:else if result.type === QuestionType.MULTIPLE_CHOICE}
+	{:else if result.type === 'MULTIPLE_CHOICE'}
 		<MultipleChoiceReview {seed} bind:result>
 			<slot slot="extra" name="extra" />
 		</MultipleChoiceReview>
-	{:else if result.type === QuestionType.INPUT}
+	{:else if result.type === 'INPUT'}
 		<InputReview bind:result>
 			<slot slot="extra" name="extra" />
 		</InputReview>
-	{:else if result.type === QuestionType.MARK_AS_READ}
+	{:else if result.type === 'MARK_AS_READ'}
 		<MarkAsReadReview bind:result>
 			<slot slot="extra" name="extra" />
 		</MarkAsReadReview>

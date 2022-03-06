@@ -1,4 +1,4 @@
-import { QuestionType } from '@prisma/client';
+import type { QuestionType } from '@prisma/client';
 import type Op from 'quill-delta/dist/Op';
 
 export interface FlashCardPrivate {
@@ -77,26 +77,26 @@ export function isFlashCardPrivate(
 	type: QuestionType,
 	_prompt: PromptPrivate
 ): _prompt is FlashCardPrivate {
-	return type === QuestionType.FLASH_CARD;
+	return type === 'FLASH_CARD';
 }
 
 export function isMarkAsReadPrivate(
 	type: QuestionType,
 	_prompt: PromptPrivate
 ): _prompt is MarkAsReadPrivate {
-	return type === QuestionType.MARK_AS_READ;
+	return type === 'MARK_AS_READ';
 }
 
 export function isInputPrivate(
 	type: QuestionType,
 	_prompt: PromptPrivate
 ): _prompt is InputPrivate {
-	return type === QuestionType.INPUT;
+	return type === 'INPUT';
 }
 
 export function isMultipleChoicePrivate(
 	type: QuestionType,
 	_prompt: PromptPrivate
 ): _prompt is MultipleChoicePrivate {
-	return type === QuestionType.MULTIPLE_CHOICE;
+	return type === 'MULTIPLE_CHOICE';
 }

@@ -1,5 +1,5 @@
 import type { ResultType } from '@prisma/client';
-import { QuestionType } from '@prisma/client';
+import type { QuestionType } from '@prisma/client';
 import { run } from '$lib/prisma';
 import type { RequestEvent } from '@sveltejs/kit/types/internal';
 import { decode } from '$lib/api/jwt';
@@ -66,7 +66,7 @@ export async function post(event: RequestEvent) {
 
 function getResult(type: QuestionType, prompt: PromptPrivate, answer: Answer): number {
 	switch (type) {
-		case QuestionType.MULTIPLE_CHOICE: {
+		case 'MULTIPLE_CHOICE': {
 			const multipleChoicePrompt = prompt as MultipleChoicePrivate;
 			const multipleChoiceAnswer = answer as MultipleChoiceAnswer;
 			const correctChoices = multipleChoicePrompt.choices.filter((choice) => choice.correct);
@@ -79,7 +79,7 @@ function getResult(type: QuestionType, prompt: PromptPrivate, answer: Answer): n
 
 			return correct / correctChoices.length;
 		}
-		case QuestionType.INPUT: {
+		case 'INPUT': {
 			const inputPrompt = prompt as InputPrivate;
 
 			// TODO: actually check based on the input type
@@ -92,10 +92,10 @@ function getResult(type: QuestionType, prompt: PromptPrivate, answer: Answer): n
 					return inputPrompt.answers.includes(answer as string) ? 1 : 0;
 			}
 		}
-		case QuestionType.FLASH_CARD: {
+		case 'FLASH_CARD': {
 			return answer as FlashCardAnswer;
 		}
-		case QuestionType.MARK_AS_READ: {
+		case 'MARK_AS_READ': {
 			return answer ? 1 : 0;
 		}
 		default: {

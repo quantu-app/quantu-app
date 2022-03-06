@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { createChallenge } from '$lib/state/creator/challenges';
-	import { QuestionType } from '@prisma/client';
+	import type { QuestionType } from '@prisma/client';
 	import type { StateChallenge } from '$lib/state/creator/challenges';
 	import ChallengeEditor from './ChallengeEditor.svelte';
 
@@ -9,13 +9,13 @@
 	let editorKey = Math.random();
 	let creatingChallenge = false;
 
-	let challenge: Partial<StateChallenge> = { type: QuestionType.MULTIPLE_CHOICE, prompt: {} };
+	let challenge: Partial<StateChallenge> = { type: 'MULTIPLE_CHOICE', prompt: {} };
 
 	async function onCreateChallenge() {
 		creatingChallenge = true;
 		try {
 			await createChallenge(departmentId, challenge);
-			challenge = { type: QuestionType.MULTIPLE_CHOICE, prompt: {} };
+			challenge = { type: 'MULTIPLE_CHOICE', prompt: {} };
 		} finally {
 			creatingChallenge = false;
 			editorKey = Math.random();

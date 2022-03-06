@@ -32,7 +32,7 @@ worker.addEventListener('activate', (event) => {
 });
 
 async function fetchAndCache(request: Request) {
-	const cache = await caches.open(`offline${timestamp}`);
+	const cache = await caches.open(`offline${version}`);
 
 	try {
 		const response = await fetch(request);

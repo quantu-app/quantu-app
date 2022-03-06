@@ -1,6 +1,4 @@
 <script context="module" lang="ts">
-	import type { LoadInput, LoadOutput } from '@sveltejs/kit';
-
 	export function load(input: LoadInput): LoadOutput {
 		const redirectPath = input.url.searchParams.get('redirectPath');
 
@@ -17,6 +15,7 @@
 	import { currentUser, redirectPathWritable } from '$lib/state/user';
 	import { get } from 'svelte/store';
 	import { base } from '$app/paths';
+	import type { LoadInput, LoadOutput } from '@sveltejs/kit/types/internal';
 
 	export let redirectPath: string = undefined;
 
@@ -73,8 +72,8 @@
 			<div class="col-md-6 px-4">
 				<h3 class="fw-bold">Learn concepts through guided and interactive lessons</h3>
 				<p>
-					Content creators design and develop lessons so you can learn and master any department at your
-					own pace. Lessons are hand-crafted to build mastery and intuition.
+					Content creators design and develop lessons so you can learn and master any department at
+					your own pace. Lessons are hand-crafted to build mastery and intuition.
 				</p>
 			</div>
 		</div>

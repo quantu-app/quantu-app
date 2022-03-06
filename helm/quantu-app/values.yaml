@@ -39,6 +39,7 @@ resources:
 
 mongodb:
   architecture: replicaset
+  replicaSetName: replicaset
   auth:
     enabled: true
     database: quantu-app

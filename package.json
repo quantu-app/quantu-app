@@ -17,6 +17,7 @@
 		"start": "svelte-kit dev --host --open",
 		"build": "svelte-kit build",
 		"preview": "svelte-kit preview --host",
+		"test": "playwright test",
 		"mongo": "cd mongo && docker-compose up -d",
 		"mongo.delete": "cd mongo && docker-compose down",
 		"docker.build": "docker build -t ghcr.io/quantu-app/quantu-app/quantu-app:latest .",
@@ -33,6 +34,7 @@
 		"secret": "node -e \"console.log(require('crypto').randomBytes(64).toString('base64'));\""
 	},
 	"devDependencies": {
+		"@playwright/test": "^1.19.2",
 		"@sveltejs/adapter-node": "next",
 		"@types/bootstrap": "^5.1.9",
 		"@types/cookie": "^0.4.1",

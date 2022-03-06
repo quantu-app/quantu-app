@@ -38,6 +38,7 @@ resources:
     memory: 1000M
 
 mongodb:
+  architecture: replicaset
   auth:
     enabled: true
     database: quantu-app

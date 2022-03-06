@@ -46,6 +46,7 @@ mongodb:
     username: root
     password: password
     rootPassword: password
+    replicaSetKey: replicasetkey
   persistence:
     enabled: true
     storageClass: linode-block-storage-retain

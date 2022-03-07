@@ -2,6 +2,7 @@
 	import type { StateChallenge } from '$lib/state/creator/challenges';
 	import type { QuestionType } from '@prisma/client';
 	import PromptEditor from '../prompts/PromptEditor.svelte';
+	import DateTimeInput from '../../DateTimeInput.svelte';
 
 	export let challenge: Partial<StateChallenge>;
 	export let disabled = false;
@@ -31,6 +32,10 @@
 			{disabled}
 			bind:value={challenge.url}
 		/>
+	</div>
+	<div class="col-md">
+		<label for="challenge-releasedAt" class="form-label">Release At</label>
+		<DateTimeInput id="challenge-releasedAt" {disabled} bind:date={challenge.releasedAt} />
 	</div>
 	<div class="col-md">
 		<label for="challenge-type" class="form-label">Challenge Type</label>

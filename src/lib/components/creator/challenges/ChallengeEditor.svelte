@@ -34,10 +34,6 @@
 		/>
 	</div>
 	<div class="col-md">
-		<label for="challenge-releasedAt" class="form-label">Release At</label>
-		<DateTimeInput id="challenge-releasedAt" bind:date={challenge.releasedAt} {disabled} />
-	</div>
-	<div class="col-md">
 		<label for="challenge-type" class="form-label">Challenge Type</label>
 		<select
 			id="challenge-type"
@@ -49,6 +45,23 @@
 			<option value={'INPUT'}>Input</option>
 			<option value={'FLASH_CARD'}>Flash Card</option>
 		</select>
+	</div>
+</div>
+
+<div class="row mt-2">
+	<div class="col-md">
+		<label for="challenge-releasedAt" class="form-label">Release At</label>
+		<DateTimeInput id="challenge-releasedAt" bind:date={challenge.releasedAt} {disabled} />
+	</div>
+
+	<div class="col-md">
+		<label for="challenge-visible" class="form-label">Visible</label><br />
+		<input
+			class="form-check-input"
+			type="checkbox"
+			bind:checked={challenge.visible}
+			id="flexCheckDefault"
+		/>
 	</div>
 </div>
 

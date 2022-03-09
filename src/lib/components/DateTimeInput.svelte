@@ -1,6 +1,5 @@
 <script lang="ts">
-	import { formatISO, format, parseISO, toDate, isValid } from 'date-fns';
-	import { onMount } from 'svelte';
+	import { format } from 'date-fns';
 
 	export let date: string = new Date().toJSON();
 	export let id: string = '';

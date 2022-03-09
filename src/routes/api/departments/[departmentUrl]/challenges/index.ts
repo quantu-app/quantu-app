@@ -13,14 +13,6 @@ export async function get(event: RequestEvent) {
 				department: {
 					url: departmentUrl
 				}
-			},
-			include: {
-				department: {
-					select: {
-						url: true,
-						name: true
-					}
-				}
 			}
 		})
 	).then((challenges) => ({

@@ -3,8 +3,19 @@ import type { RequestEvent } from '@sveltejs/kit/types/internal';
 import { removePrivate } from './departments/[departmentUrl]/challenges';
 
 export async function get(_event: RequestEvent) {
+
 	return run((client) =>
 		client.challenge.findMany({
+			where: {
+				visible: true,
+
+				NOT: [
+					{ releasedAt: null }
+				],
+				releasedAt: {
+					lte: new Date()
+				}
+			},
 			include: {
 				department: {
 					select: {
@@ -12,6 +23,9 @@ export async function get(_event: RequestEvent) {
 						name: true
 					}
 				}
+			},
+			orderBy: {
+				releasedAt: 'desc'
 			}
 		})
 	).then((challenges) => ({

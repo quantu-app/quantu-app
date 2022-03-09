@@ -1,9 +1,7 @@
 <script lang="ts">
 	import languages from '$lib/data/languages';
-	import timezones from '$lib/data/timezones';
 
-	let timezone: string = 'EST';
-	let displayLanguange: string = 'en';
+	let displayLanguage: string = 'en';
 </script>
 
 <div class="container">
@@ -14,26 +12,17 @@
 
 	<form on:submit|preventDefault class="my-4">
 		<div class="row my-4">
-			<label for="timezone">Timezone</label>
-			<p class="text-black-50 m-0">
-				This will display dates and times correctly for your learning needs.
-			</p>
-			<div class="input-group">
-				<select id="timezone" class="form-select" bind:value={timezone}>
-					{#each timezones as timezone}
-						<option value={timezone.abbr}>{timezone.value}</option>
-					{/each}
-				</select>
-			</div>
-		</div>
-		<div class="row my-4">
-			<div class="col-md-6">
+			<div class="col-12">
 				<label for="display-languange">Display Language</label>
-				<p class="text-black-50 m-0">
-					This is your real first name, no other user on the system can see this.
+				<p class="text-black-50 mt-2 mb-2">
+					This will set the desired display language for the application. <small
+						>*Please note our translations are community driven and currently we only support
+						English. However, choosing a desired language will help us focus on adding and updating
+						interface languages in the future.</small
+					>
 				</p>
 				<div class="input-group">
-					<select id="display-languange" class="form-select" bind:value={displayLanguange}>
+					<select id="display-languange" class="form-select" bind:value={displayLanguage}>
 						{#each languages as language}
 							<option value={language.code}>{language.nativeName} | {language.name}</option>
 						{/each}
@@ -48,3 +37,10 @@
 		</div>
 	</form>
 </div>
+
+<style>
+	label {
+		font-weight: bold;
+		font-size: 18px;
+	}
+</style>

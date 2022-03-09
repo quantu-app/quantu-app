@@ -5,11 +5,10 @@ import { build, files, version } from '$service-worker';
 const worker = self as unknown as ServiceWorkerGlobalScope;
 const FILES = `cache${version}`;
 
-const toCache = build.concat(files).filter((file) => file.includes('/pages/api/oauth2/'));
+const toCache = build.concat(files).filter((file) => !file.includes('/pages/api/oauth2/'));
 const staticAssets = new Set(toCache);
 
 worker.addEventListener('install', (event) => {
-	console.log(toCache);
 	event.waitUntil(
 		caches
 			.open(FILES)

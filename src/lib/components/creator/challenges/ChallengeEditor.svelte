@@ -35,7 +35,7 @@
 	</div>
 	<div class="col-md">
 		<label for="challenge-releasedAt" class="form-label">Release At</label>
-		<DateTimeInput id="challenge-releasedAt" {disabled} bind:date={challenge.releasedAt} />
+		<DateTimeInput id="challenge-releasedAt" bind:date={challenge.releasedAt} {disabled} />
 	</div>
 	<div class="col-md">
 		<label for="challenge-type" class="form-label">Challenge Type</label>

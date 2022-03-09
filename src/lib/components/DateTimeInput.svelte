@@ -1,26 +1,18 @@
 <script lang="ts">
 	import { formatISO, format, parseISO, toDate, isValid } from 'date-fns';
+	import { onMount } from 'svelte';
 
-	export let date: Date = new Date();
+	export let date: string = new Date().toJSON();
 	export let id: string = '';
 	export let placeholder: string = '';
 	export let disabled: boolean = false;
 
-	let internalValue: string;
+	let internalValue: string = format(new Date(date), "yyyy-MM-dd'T'HH:mm");
 
-	const input = (x: Date) => {
-		if (isValid(x)) {
-			internalValue = format(x, "yyyy-MM-dd'T'hh:mm");
-		}
-	};
 	const output = (x: string) => {
-		date = toDate(parseISO(x));
-		if (!isValid(date)) {
-			date = null;
-		}
+		date = new Date(internalValue).toJSON();
 	};
 
-	$: input(date);
 	$: output(internalValue);
 </script>
 

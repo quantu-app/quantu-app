@@ -26,7 +26,9 @@
 
 	async function onUpdateChallenge() {
 		if (challenge) {
-			await updateChallenge(departmentId, challenge.id, challenge);
+			const { id, department, ...challengeBody } = challenge;
+
+			await updateChallenge(departmentId, challenge.id, challengeBody);
 			challenge = undefined;
 			challengeIndex = undefined;
 		}

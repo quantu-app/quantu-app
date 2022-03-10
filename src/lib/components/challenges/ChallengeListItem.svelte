@@ -12,43 +12,54 @@
 	import type { StateChallenge } from '$lib/state/challenges';
 	import { XorShiftRng } from '@aicacia/rand';
 	import { titleCase } from 'title-case';
+	import { format } from 'date-fns';
+	import enUSLocale from 'date-fns/locale/en-US';
 
 	export let challenge: StateChallenge;
 
-	$: date = new Date(challenge.createdAt).toLocaleString('default', {
-		weekday: 'long',
-		year: 'numeric',
-		month: 'long',
-		day: 'numeric'
+	$: date = format(new Date(challenge.releasedAt || challenge.createdAt), 'PPPP', {
+		locale: enUSLocale
 	});
+
 	const rng = XorShiftRng.fromSeed(new Date(challenge.createdAt).getTime());
 	const image = rng.fromArray(IMAGES).unwrap();
 </script>
 
-<div class="row justify-content-center m-4">
-	<h3 class="text-center">{date}</h3>
-	<div class="col-md-8 border p-4">
+<div class="row justify-content-center my-4">
+	<p class="text-center">{date}</p>
+	<div class="col-md-12 border p-4">
 		<div class="row">
 			<div class="col-lg-6">
-				<img src={image} alt={challenge.name || 'No Name'} />
+				<img src={image} alt={challenge.name} />
 			</div>
 			<div class="col-lg-6">
-				<h2>{challenge.name || 'No Name'}</h2>
-				<p class="d-inline">{titleCase(challenge.type.replace('_', ' '))}</p>
+				<h2 class="challenge-name">{challenge.name}</h2>
+				<p class="challenge-description">{challenge.description}</p>
 			</div>
 		</div>
-		<div class="text-end">
-			<a
-				role="button"
-				class="btn btn-primary me-2"
-				href={`${base}/d/${challenge.department.url}/challenges/${challenge.url}`}>Solve</a
-			>
-			<a
-				role="button"
-				class="btn btn-secondary text-white me-2"
-				href={`${base}/d/${challenge.department.url}/challenges/${challenge.url}/review`}>Review</a
-			>
+		<div class="row">
+			<div class="col-6">
+				<div class="text-muted text-uppercase mt-4">{challenge.department.name}</div>
+			</div>
+
+			<div class="col-6 text-end">
+				<a
+					role="button"
+					class="btn btn-primary me-2"
+					href={`${base}/d/${challenge.department.url}/challenges/${challenge.url}`}>Solve</a
+				>
+			</div>
 		</div>
-		<div class="text-muted">{challenge.department.name}</div>
 	</div>
 </div>
+
+<style>
+	.challenge-name {
+		font-size: 32px;
+		font-weight: bold;
+	}
+	.challenge-description {
+		font-size: 20px;
+		line-height: 1.2em;
+	}
+</style>

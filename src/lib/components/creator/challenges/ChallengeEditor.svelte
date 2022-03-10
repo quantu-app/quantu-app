@@ -2,6 +2,7 @@
 	import type { StateChallenge } from '$lib/state/creator/challenges';
 	import type { QuestionType } from '@prisma/client';
 	import PromptEditor from '../prompts/PromptEditor.svelte';
+	import RichEditor from '$lib/components/RichEditor.svelte';
 	import DateTimeInput from '../../DateTimeInput.svelte';
 
 	export let challenge: Partial<StateChallenge>;
@@ -48,10 +49,15 @@
 	</div>
 </div>
 
-<div class="row mt-2">
-	<div class="col-md">
+<div class="row mt-2 mb-4">
+	<div class="col-6">
 		<label for="challenge-releasedAt" class="form-label">Release At</label>
 		<DateTimeInput id="challenge-releasedAt" bind:date={challenge.releasedAt} {disabled} />
+	</div>
+
+	<div class="col-6">
+		<label for="challenge-description" class="form-label">Description</label>
+		<RichEditor id="challenge-description" bind:content={challenge.description} />
 	</div>
 
 	<div class="col-md">

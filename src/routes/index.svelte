@@ -25,7 +25,7 @@
 </script>
 
 <svelte:head>
-	<title>Home</title>
+	<title>QUANTU | Where learning meets fun</title>
 </svelte:head>
 
 <AppLayout>

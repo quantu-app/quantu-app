@@ -35,6 +35,26 @@
 			<div class="navbar-nav ms-auto me-4">
 				<UserDropdown />
 			</div>
+		{:else}
+			<div class="navbar-nav ms-auto me-4">
+				<button
+					type="button"
+					data-bs-toggle="modal"
+					data-bs-target="#sign-in-up-modal"
+					class="btn btn-light me-4"
+				>
+					Login
+				</button>
+				<button
+					type="button"
+					data-bs-toggle="modal"
+					data-bs-target="#sign-in-up-modal"
+					data-signup="true"
+					class="btn btn-light"
+				>
+					Sign Up
+				</button>
+			</div>
 		{/if}
 	</div>
 </nav>

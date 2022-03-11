@@ -14,6 +14,7 @@
 	import { titleCase } from 'title-case';
 	import { format } from 'date-fns';
 	import enUSLocale from 'date-fns/locale/en-US';
+	import RichViewer from '$lib/components/RichViewer.svelte';
 
 	export let challenge: StateChallenge;
 
@@ -34,7 +35,7 @@
 			</div>
 			<div class="col-lg-6">
 				<h2 class="challenge-name">{challenge.name}</h2>
-				<p class="challenge-description">{challenge.description}</p>
+				<p class="challenge-description"><RichViewer content={challenge.description} /></p>
 			</div>
 		</div>
 		<div class="row">

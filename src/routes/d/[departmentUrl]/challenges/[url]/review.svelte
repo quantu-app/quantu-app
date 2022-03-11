@@ -63,7 +63,7 @@
 		}
 	]}
 >
-	<div class="container flex-grow-1">
+	<div class="container-xxl flex-grow-1">
 		{#if result}
 			<ReviewChallenge {result}>
 				<a slot="extra" role="button" class="btn btn-primary" href={`/challenges`}>

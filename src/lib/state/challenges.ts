@@ -1,8 +1,9 @@
-import type { Challenge } from '@prisma/client';
+import type { Challenge, Result } from '@prisma/client';
 import { writable, get, derived } from 'svelte/store';
 import { base } from '$app/paths';
 
-export type StateChallenge = Challenge & { department: { url: string; name: string } };
+export type StateChallenge = Challenge & { department: { url: string; name: string } }
+	& { result?: Result };
 
 const challengesWritable = writable<Array<StateChallenge>>([]);
 

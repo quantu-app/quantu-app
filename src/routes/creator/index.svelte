@@ -26,13 +26,6 @@
 	<title>Creator Studio</title>
 </svelte:head>
 
-<AppLayout
-	breadcrumbs={[
-		{
-			title: 'Creator Studio',
-			href: '/creator'
-		}
-	]}
->
+<AppLayout>
 	<Departments departments={$departments} />
 </AppLayout>

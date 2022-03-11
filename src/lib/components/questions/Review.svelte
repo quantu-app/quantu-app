@@ -1,10 +1,10 @@
-<div class="row h-100">
-	<div class="col-md-8">
+<div class="row">
+	<div class="col-12">
 		<div class="d-flex flex-column h-100 pt-4">
 			<slot name="content" />
 		</div>
 	</div>
-	<div class="col-md-4">
+	<div class="col-12">
 		<div class="d-flex flex-column border-lg-start pt-4 h-100 input">
 			<slot name="input" />
 
@@ -14,12 +14,3 @@
 		</div>
 	</div>
 </div>
-
-<style lang="scss">
-	// find a way to use bootstrap variables and mixins in components
-	@media (min-width: 768px) {
-		.input {
-			border-left: 1px solid #dee2e6;
-		}
-	}
-</style>

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import ChallengeListItem from '$lib/components/challenges/ChallengeListItem.svelte';
-import type { StateChallenge } from '$lib/state/challenges';
+	import type { StateChallenge } from '$lib/state/challenges';
 
 	export let challenges: Array<StateChallenge>;
 </script>

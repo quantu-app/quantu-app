@@ -66,8 +66,8 @@
 		}
 	]}
 >
-	{#if challenge && !result && loaded}
-		<div class="container d-flex flex-grow-1">
+	<div class="container-xxl">
+		{#if challenge && !result && loaded}
 			<Challenge {challenge}>
 				<a
 					slot="extra"
@@ -78,15 +78,13 @@
 					Review
 				</a>
 			</Challenge>
-		</div>
-	{/if}
-	{#if result}
-		<div class="container flex-grow-1">
+		{/if}
+		{#if result}
 			<ReviewChallenge {result}>
 				<a slot="extra" role="button" class="btn btn-primary" href={`/challenges`}>
 					Return to Challenges
 				</a>
 			</ReviewChallenge>
-		</div>
-	{/if}
+		{/if}
+	</div>
 </AppLayout>

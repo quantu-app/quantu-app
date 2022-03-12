@@ -114,7 +114,9 @@
 	{dir}
 	{contenteditable}
 >
-	<div contenteditable={false}><span bind:this={latexElement} on:mousedown={onEdit} /></div>
+	<div class:inline={currentInline} contenteditable={false}>
+		<span bind:this={latexElement} on:mousedown={onEdit} />
+	</div>
 	<slot />
 </div>
 

@@ -11,16 +11,12 @@
 	import { base } from '$app/paths';
 	import type { StateChallenge } from '$lib/state/challenges';
 	import { XorShiftRng } from '@aicacia/rand';
-	import { titleCase } from 'title-case';
 	import { format } from 'date-fns';
-	import enUSLocale from 'date-fns/locale/en-US';
-	import RichViewer from '$lib/components/RichViewer.svelte';
+	import RichViewer from '$lib/components/Editor/RichViewer.svelte';
 
 	export let challenge: StateChallenge;
 
-	$: date = format(new Date(challenge.releasedAt || challenge.createdAt), 'PPPP', {
-		locale: enUSLocale
-	});
+	$: date = format(new Date(challenge.releasedAt || challenge.createdAt), 'PPPP');
 
 	const rng = XorShiftRng.fromSeed(new Date(challenge.createdAt).getTime());
 	const image = rng.fromArray(IMAGES).unwrap();

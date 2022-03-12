@@ -1,5 +1,5 @@
 <script lang="ts">
-	import RichViewer from '$lib/components/RichViewer.svelte';
+	import RichViewer from '$lib/components/Editor/RichViewer.svelte';
 	import type { MarkAsRead } from '$lib/types';
 
 	export let prompt: MarkAsRead;

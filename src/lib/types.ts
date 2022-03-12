@@ -1,24 +1,24 @@
 import type { QuestionType } from '@prisma/client';
-import type Op from 'quill-delta/dist/Op';
+import type { IElement, IText } from '$lib/components/Editor';
 
 export interface FlashCardPrivate {
-	back: Op[];
-	front: Op[];
+	back: Array<IElement | IText>;
+	front: Array<IElement | IText>;
 }
 
 export interface FlashCard {
-	back: Op[];
-	front: Op[];
+	back: Array<IElement | IText>;
+	front: Array<IElement | IText>;
 }
 
 export type FlashCardAnswer = number;
 
 export interface MarkAsReadPrivate {
-	content: Op[];
+	content: Array<IElement | IText>;
 }
 
 export interface MarkAsRead {
-	content: Op[];
+	content: Array<IElement | IText>;
 }
 
 export type MarkAsReadAnswer = boolean;
@@ -31,13 +31,13 @@ export enum InputType {
 
 export interface InputPrivate {
 	answers: string[];
-	explanation?: Op[];
-	question: Op[];
+	explanation?: Array<IElement | IText>;
+	question: Array<IElement | IText>;
 	type: InputType;
 }
 
 export interface Input {
-	question: Op[];
+	question: Array<IElement | IText>;
 	type: InputType;
 }
 
@@ -47,20 +47,20 @@ export interface MultipleChoicePrivate {
 	singleAnswer?: boolean;
 	choices: Array<{
 		id: string;
-		content: Op[];
+		content: Array<IElement | IText>;
 		correct: boolean;
 	}>;
-	explanation?: Op[];
-	question: Op[];
+	explanation?: Array<IElement | IText>;
+	question: Array<IElement | IText>;
 }
 
 export interface MultipleChoice {
 	singleAnswer?: boolean;
 	choices: Array<{
 		id: string;
-		content: Op[];
+		content: Array<IElement | IText>;
 	}>;
-	question: Op[];
+	question: Array<IElement | IText>;
 }
 
 export type MultipleChoiceAnswer = string[];

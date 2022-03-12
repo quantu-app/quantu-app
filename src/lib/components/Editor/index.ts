@@ -6,4 +6,6 @@ export { default as Element } from './Element.svelte';
 export type { IText } from './Leaf.svelte';
 export { default as Leaf } from './Leaf.svelte';
 export { default as MarkButton } from './MarkButton.svelte';
+export { default as RichEditor } from './RichEditor.svelte';
+export { default as RichViewer } from './RichViewer.svelte';
 export { toggleBlock, toggleMark, isBlockActive, isMarkActive } from './utils';

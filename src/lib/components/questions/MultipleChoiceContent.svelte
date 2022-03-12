@@ -1,11 +1,11 @@
 <script lang="ts">
-	import type Op from 'quill-delta/dist/Op';
-	import RichViewer from '$lib/components/RichViewer.svelte';
+	import type { IElement, IText } from '$lib/components/Editor';
+	import RichViewer from '$lib/components/Editor/RichViewer.svelte';
 	import type { MultipleChoice } from '$lib/types';
 
 	export let prompt: MultipleChoice;
 	export let showExplanation = false;
-	export let explanation: Op[] = undefined;
+	export let explanation: Array<IElement | IText> = undefined;
 </script>
 
 <RichViewer content={prompt.question} />

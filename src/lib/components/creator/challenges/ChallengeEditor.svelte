@@ -1,8 +1,7 @@
 <script lang="ts">
 	import type { StateChallenge } from '$lib/state/creator/challenges';
-	import type { QuestionType } from '@prisma/client';
 	import PromptEditor from '../prompts/PromptEditor.svelte';
-	import RichEditor from '$lib/components/RichEditor.svelte';
+	import RichEditor from '$lib/components/Editor/RichEditor.svelte';
 	import DateTimeInput from '../../DateTimeInput.svelte';
 
 	export let challenge: Partial<StateChallenge>;

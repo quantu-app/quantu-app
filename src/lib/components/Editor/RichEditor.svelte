@@ -1,0 +1,22 @@
+<svelte:options immutable={true} />
+
+<script lang="ts">
+	import type { Selection } from 'slate';
+	import type { IElement } from './Element.svelte';
+	import type { IText } from './Leaf.svelte';
+	import Editor from './Editor.svelte';
+
+	export let id: string = undefined;
+	export let value: Array<IText | IElement> = [
+		{
+			type: 'paragraph',
+			children: [{ text: '' }]
+		}
+	];
+	export let selection: Selection | null = null;
+	export let placeholder = 'Type...';
+</script>
+
+<div {id} class="border">
+	<Editor {value} {selection} readOnly={false} {placeholder} />
+</div>

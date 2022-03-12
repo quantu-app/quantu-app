@@ -17,6 +17,6 @@
 	export let placeholder = 'Type...';
 </script>
 
-<div {id} class="border">
+<div {id} class="border p-2">
 	<Editor {value} {selection} readOnly={false} {placeholder} />
 </div>

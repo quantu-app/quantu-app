@@ -14,6 +14,6 @@
 	];
 </script>
 
-<div {id}>
+<div {id} class="p-2">
 	<Editor {value} readOnly={true} placeholder={''} />
 </div>

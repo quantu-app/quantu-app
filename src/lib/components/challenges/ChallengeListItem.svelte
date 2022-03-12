@@ -31,7 +31,7 @@
 			</div>
 			<div class="col-lg-6">
 				<h2 class="challenge-name">{challenge.name}</h2>
-				<p class="challenge-description"><RichViewer content={challenge.description} /></p>
+				<p class="challenge-description"><RichViewer value={challenge.description} /></p>
 			</div>
 		</div>
 		<div class="row">

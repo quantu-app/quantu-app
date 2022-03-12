@@ -82,7 +82,7 @@
 		border: 1px solid #888;
 		padding: 0.25rem;
 		position: absolute;
-		z-index: 1;
+		z-index: 10000;
 		top: -10000px;
 		left: -10000px;
 		opacity: 0;

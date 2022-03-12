@@ -10,9 +10,9 @@
 <div class="mt-4">
 	<label for="front" class="form-label">Front</label>
 	{#if disabled}
-		<RichViewer content={prompt.front} />
+		<RichViewer value={prompt.front} />
 	{:else}
-		<RichEditor bind:content={prompt.front} />
+		<RichEditor bind:value={prompt.front} />
 	{/if}
 </div>
 
@@ -21,8 +21,8 @@
 <div>
 	<label for="back" class="form-label">Back</label>
 	{#if disabled}
-		<RichViewer content={prompt.back} />
+		<RichViewer value={prompt.back} />
 	{:else}
-		<RichEditor bind:content={prompt.back} />
+		<RichEditor bind:value={prompt.back} />
 	{/if}
 </div>

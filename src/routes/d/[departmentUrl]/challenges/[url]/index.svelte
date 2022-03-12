@@ -25,24 +25,14 @@
 	import { challengesByDepartmentUrl, showChallengeByUrl } from '$lib/state/challenges';
 	import Challenge from '$lib/components/questions/Challenge.svelte';
 	import { onMount } from 'svelte';
-	import { resultsByTypeAndId, showResultByTypeAndId } from '$lib/state/results';
-	import ReviewChallenge from '$lib/components/questions/ReviewChallenge.svelte';
 
 	export let departmentUrl: string;
 	export let url: string;
 
-	let loaded = false;
-
 	$: challenge = ($challengesByDepartmentUrl[departmentUrl] || {})[url];
-	$: result = challenge ? ($resultsByTypeAndId['CHALLENGE'] || {})[challenge.id] : null;
 
 	onMount(async () => {
-		const challenge = await showChallengeByUrl(departmentUrl, url);
-		try {
-			await showResultByTypeAndId('CHALLENGE', challenge.id);
-		} finally {
-			loaded = true;
-		}
+		await showChallengeByUrl(departmentUrl, url);
 	});
 </script>
 
@@ -67,7 +57,7 @@
 	]}
 >
 	<div class="container-xxl">
-		{#if challenge && !result && loaded}
+		{#if challenge}
 			<Challenge {challenge}>
 				<a
 					slot="extra"
@@ -78,13 +68,6 @@
 					Review
 				</a>
 			</Challenge>
-		{/if}
-		{#if result}
-			<ReviewChallenge {result}>
-				<a slot="extra" role="button" class="btn btn-primary" href={`/challenges`}>
-					Return to Challenges
-				</a>
-			</ReviewChallenge>
 		{/if}
 	</div>
 </AppLayout>

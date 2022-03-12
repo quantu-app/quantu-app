@@ -12,8 +12,9 @@
 			children: [{ text: '' }]
 		}
 	];
+	$: console.log(value);
 </script>
 
 <div {id} class="p-2">
-	<Editor {value} readOnly={true} placeholder={''} />
+	<Editor bind:value readOnly={true} placeholder={''} />
 </div>

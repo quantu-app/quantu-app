@@ -10,8 +10,8 @@ export async function get(event: RequestEvent) {
 				url: departmentUrl
 			}
 		})
-	).then((departments) => ({
-		body: departments,
-		status: 200
+	).then((department) => ({
+		body: department,
+		status: department ? 200 : 404
 	}));
 }

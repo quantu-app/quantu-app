@@ -3,15 +3,15 @@ import type { QuestionType } from '@prisma/client';
 import { run } from '$lib/prisma';
 import type { RequestEvent } from '@sveltejs/kit/types/internal';
 import { decode } from '$lib/api/jwt';
-import {
+import type {
 	Answer,
 	FlashCardAnswer,
 	InputPrivate,
-	InputType,
 	MultipleChoiceAnswer,
 	MultipleChoicePrivate,
 	PromptPrivate
 } from '$lib/types';
+import { InputType } from '$lib/types';
 
 export async function get(event: RequestEvent) {
 	const { userId } = await decode<{ userId: string }>(event.locals.token);
@@ -30,7 +30,7 @@ export async function get(event: RequestEvent) {
 		})
 	).then((result) => ({
 		body: result,
-		status: 200
+		status: result ? 200 : 404
 	}));
 }
 

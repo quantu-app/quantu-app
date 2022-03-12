@@ -18,5 +18,5 @@
 </script>
 
 <div {id} class="border p-2">
-	<Editor {value} {selection} readOnly={false} {placeholder} />
+	<Editor bind:value bind:selection readOnly={false} {placeholder} />
 </div>

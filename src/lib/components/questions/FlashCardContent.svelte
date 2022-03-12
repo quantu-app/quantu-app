@@ -7,9 +7,9 @@
 </script>
 
 <div>
-	<RichViewer content={prompt.front} />
+	<RichViewer value={prompt.front} />
 	{#if shown}
 		<hr />
-		<RichViewer content={prompt.back} />
+		<RichViewer value={prompt.back} />
 	{/if}
 </div>

@@ -6,5 +6,5 @@
 </script>
 
 <div>
-	<RichViewer content={prompt.content} />
+	<RichViewer value={prompt.content} />
 </div>

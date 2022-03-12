@@ -8,8 +8,8 @@
 	export let explanation: Array<IElement | IText> = undefined;
 </script>
 
-<RichViewer content={prompt.question} />
+<RichViewer value={prompt.question} />
 {#if explanation && showExplanation}
 	<hr />
-	<RichViewer content={explanation} />
+	<RichViewer value={explanation} />
 {/if}

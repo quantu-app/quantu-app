@@ -36,18 +36,18 @@
 <div class="mt-4">
 	<label for="question" class="form-label">Challenge</label>
 	{#if disabled}
-		<RichViewer content={prompt.question} />
+		<RichViewer value={prompt.question} />
 	{:else}
-		<RichEditor bind:content={prompt.question} />
+		<RichEditor bind:value={prompt.question} />
 	{/if}
 </div>
 
 <div>
 	<label for="explanation" class="form-label">Explanation</label>
 	{#if disabled}
-		<RichViewer content={prompt.explanation} />
+		<RichViewer value={prompt.explanation} />
 	{:else}
-		<RichEditor bind:content={prompt.explanation} />
+		<RichEditor bind:value={prompt.explanation} />
 	{/if}
 </div>
 

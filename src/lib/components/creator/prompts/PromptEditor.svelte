@@ -9,7 +9,6 @@
 	import InputEditor from '$lib/components/creator/prompts/InputEditor.svelte';
 	import MultipleChoiceEditor from '$lib/components/creator/prompts/MultipleChoiceEditor.svelte';
 	import MarkAsReadEditor from '$lib/components/creator/prompts/MarkAsReadEditor.svelte';
-	import type { QuestionType } from '@prisma/client';
 
 	export let type: string;
 	export let prompt: FlashCardPrivate | MultipleChoicePrivate | InputPrivate | MarkAsReadPrivate;

@@ -30,6 +30,6 @@ export async function get(event: RequestEvent) {
 		});
 	}).then((department) => ({
 		body: removePrivate(department),
-		status: 200
+		status: department ? 200 : 404
 	}));
 }

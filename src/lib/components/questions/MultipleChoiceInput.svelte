@@ -50,7 +50,7 @@
 					/>
 				</div>
 				<div class="flex-grow-1">
-					<RichViewer content={choice.content} />
+					<RichViewer value={choice.content} />
 				</div>
 			</div>
 		</li>

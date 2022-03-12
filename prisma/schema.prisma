@@ -46,7 +46,7 @@ model User {
   lastName          String?
   birthday          DateTime?
   country           String?
-  bio               Json[]
+  bio               Json
   createdAt         DateTime       @default(now())
   updatedAt         DateTime       @updatedAt
 
@@ -58,7 +58,7 @@ model Department {
   name        String      @unique
   url         String      @unique
   imageUrl    String?
-  description Json[]
+  description Json
   challenges  Challenge[]
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
@@ -75,7 +75,7 @@ model Challenge {
   id           String       @id @default(auto()) @map("_id") @db.ObjectId
   name         String
   url          String
-  description  Json[]
+  description  Json
   department   Department   @relation(fields: [departmentId], references: [id])
   results      Result[]
   departmentId String
@@ -107,7 +107,7 @@ model Result {
   createdAt  DateTime     @default(now())
   updatedAt  DateTime     @updatedAt
 
-  @@unique([userId, resultType, questionId])
   Challenge   Challenge? @relation(fields: [challengeId], references: [id])
   challengeId String?    @db.ObjectId
+  @@unique([userId, resultType, questionId])
 }

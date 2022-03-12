@@ -56,7 +56,7 @@
 
 	<div class="col-6">
 		<label for="challenge-description" class="form-label">Description</label>
-		<RichEditor id="challenge-description" bind:content={challenge.description} />
+		<RichEditor id="challenge-description" bind:value={challenge.description} />
 	</div>
 
 	<div class="col-md">

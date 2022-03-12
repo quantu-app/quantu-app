@@ -25,7 +25,8 @@
 
 	async function onUpdateDepartment() {
 		if (department) {
-			await updateDepartment(department.id, department);
+			const { id, ...updateBody } = department;
+			await updateDepartment(id, updateBody);
 			department = undefined;
 			departmentIndex = undefined;
 		}

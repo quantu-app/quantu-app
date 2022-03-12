@@ -34,6 +34,6 @@
 <div class="row">
 	<div class="col-md">
 		<label for="department-description" class="form-label">Description</label>
-		<RichEditor id="department-description" bind:content={department.description} />
+		<RichEditor id="department-description" bind:value={department.description} />
 	</div>
 </div>

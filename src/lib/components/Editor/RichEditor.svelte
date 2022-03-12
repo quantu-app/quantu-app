@@ -7,14 +7,13 @@
 	import Editor from './Editor.svelte';
 
 	export let id: string = undefined;
-	export let value: Array<IText | IElement> = [
-		{
-			type: 'paragraph',
-			children: [{ text: '' }]
-		}
-	];
+	export let value: Array<IText | IElement>;
 	export let selection: Selection | null = null;
 	export let placeholder = 'Type...';
+
+	$: if (!value || value.length === 0) {
+		value = [{ type: 'paragraph', children: [{ text: '' }] }];
+	}
 </script>
 
 <div {id} class="border p-2">

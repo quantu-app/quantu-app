@@ -13,9 +13,9 @@
 	async function onCreateDepartment() {
 		creatingDepartment = true;
 		try {
-			await createDepartment(department);
+			const { id } = await createDepartment(department);
 			window.bootstrap.Modal.getInstance('#create-department').hide();
-			await goto(`${base}/creator/departments/${department.id}`);
+			await goto(`${base}/creator/departments/${id}`);
 			department = {};
 		} finally {
 			creatingDepartment = false;

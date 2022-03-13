@@ -15,7 +15,7 @@ export async function fromCallback(prisma: PrismaClient, params: IFromCallbackPa
 		}
 	});
 	const user = email
-	? prisma.user.findFirst({
+	? await prisma.user.findFirst({
 			where: {
 				id: email.userId
 			},
@@ -24,6 +24,7 @@ export async function fromCallback(prisma: PrismaClient, params: IFromCallbackPa
 			}
 		})
 	: null;
+
 	if (user) {
 		return user;
 	} else {

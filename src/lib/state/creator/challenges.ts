@@ -48,7 +48,6 @@ export async function showChallenges(departmentId: string) {
 }
 
 export async function createChallenge(departmentId: string, body: Partial<StateChallenge>) {
-	console.log(body);
 	const res = await fetch(`${base}/api/creator/departments/${departmentId}/challenges`, {
 		method: 'POST',
 		body: JSON.stringify(body)

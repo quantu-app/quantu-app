@@ -2,7 +2,7 @@ import { encode } from '$lib/api/jwt';
 import { fromCallback } from '$lib/api/users/fromCallback';
 import { providers } from '$lib/oauth2';
 import { run } from '$lib/prisma';
-import type { RequestEvent } from '@sveltejs/kit';
+import type { RequestEvent } from '@sveltejs/kit/types/internal';
 
 export async function get(event: RequestEvent) {
 	const provider = providers[event.params.provider];

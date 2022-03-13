@@ -11,7 +11,7 @@
 </script>
 
 <script lang="ts">
-	import AppLayout from '$lib/components/AppLayout.svelte';
+	import UserLayout from '$lib/components/layouts/UserLayout.svelte';
 	import { base } from '$app/paths';
 	import type { User } from '@prisma/client';
 	import Profile from '$lib/components/user/Profile.svelte';
@@ -30,8 +30,8 @@
 	<title>Profile</title>
 </svelte:head>
 
-<AppLayout>
+<UserLayout>
 	{#if user}
 		<Profile {user} />
 	{/if}
-</AppLayout>
+</UserLayout>

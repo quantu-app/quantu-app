@@ -11,7 +11,7 @@
 </script>
 
 <script lang="ts">
-	import AppLayout from '$lib/components/AppLayout.svelte';
+	import PublicLayout from '$lib/components/layouts/PublicLayout.svelte';
 	import { currentUser, redirectPathWritable } from '$lib/state/user';
 	import { get } from 'svelte/store';
 	import { base } from '$app/paths';
@@ -28,7 +28,7 @@
 	<title>QUANTU | Where learning meets fun</title>
 </svelte:head>
 
-<AppLayout>
+<PublicLayout>
 	<div class="container">
 		<div class="row py-4 my-4">
 			<div class="col-md-6 px-4 pb-4">
@@ -103,4 +103,4 @@
 			</div>
 		</div>
 	</div>
-</AppLayout>
+</PublicLayout>

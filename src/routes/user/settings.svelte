@@ -9,7 +9,7 @@
 </script>
 
 <script lang="ts">
-	import AppLayout from '$lib/components/AppLayout.svelte';
+	import UserLayout from '$lib/components/layouts/UserLayout.svelte';
 	import Settings from '$lib/components/user/Settings.svelte';
 </script>
 
@@ -17,6 +17,6 @@
 	<title>Settings</title>
 </svelte:head>
 
-<AppLayout>
+<UserLayout>
 	<Settings />
-</AppLayout>
+</UserLayout>

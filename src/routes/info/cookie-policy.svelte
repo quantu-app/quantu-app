@@ -1,13 +1,13 @@
 <script lang="ts">
 	import { base } from '$app/paths';
-	import AppLayout from '$lib/components/AppLayout.svelte';
+	import PublicLayout from '$lib/components/layouts/PublicLayout.svelte';
 </script>
 
 <svelte:head>
 	<title>Cookie Policy &amp; Preferences</title>
 </svelte:head>
 
-<AppLayout>
+<PublicLayout>
 	<div class="container">
 		<div class="row py-4">
 			<div class="col offset-lg-2 col-lg-8">
@@ -147,4 +147,4 @@
 			</div>
 		</div>
 	</div>
-</AppLayout>
+</PublicLayout>

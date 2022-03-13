@@ -11,7 +11,7 @@
 </script>
 
 <script lang="ts">
-	import AppLayout from '$lib/components/AppLayout.svelte';
+	import StudioLayout from '$lib/components/layouts/StudioLayout.svelte';
 	import { creatorGuard } from '$lib/guard/creatorGuard';
 	import Departments from '$lib/components/creator/departments/Departments.svelte';
 	import { departments, showDepartments } from '$lib/state/creator/departments';
@@ -26,6 +26,6 @@
 	<title>Creator Studio</title>
 </svelte:head>
 
-<AppLayout>
+<StudioLayout>
 	<Departments departments={$departments} />
-</AppLayout>
+</StudioLayout>

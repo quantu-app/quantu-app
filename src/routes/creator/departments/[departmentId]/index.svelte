@@ -17,7 +17,7 @@
 </script>
 
 <script lang="ts">
-	import AppLayout from '$lib/components/AppLayout.svelte';
+	import StudioLayout from '$lib/components/layouts/StudioLayout.svelte';
 	import { creatorGuard } from '$lib/guard/creatorGuard';
 	import DepartmentComponent from '$lib/components/creator/departments/Department.svelte';
 	import { isValidStatus } from '$lib/guard/isValidStatus';
@@ -40,7 +40,7 @@
 	<title>Creator Studio</title>
 </svelte:head>
 
-<AppLayout
+<StudioLayout
 	breadcrumbs={[
 		{
 			title: 'Creator Studio',
@@ -58,4 +58,4 @@
 	{#if department}
 		<DepartmentComponent {department} />
 	{/if}
-</AppLayout>
+</StudioLayout>

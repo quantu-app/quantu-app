@@ -9,7 +9,7 @@
 </script>
 
 <script lang="ts">
-	import AppLayout from '$lib/components/AppLayout.svelte';
+	import UserLayout from '$lib/components/layouts/UserLayout.svelte';
 	import { currentUser } from '$lib/state/user';
 	import Welcome from '$lib/components/user/Welcome.svelte';
 </script>
@@ -18,8 +18,8 @@
 	<title>Welcome</title>
 </svelte:head>
 
-<AppLayout>
+<UserLayout>
 	{#if $currentUser}
 		<Welcome user={$currentUser} />
 	{/if}
-</AppLayout>
+</UserLayout>

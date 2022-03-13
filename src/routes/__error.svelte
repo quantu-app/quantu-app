@@ -12,7 +12,7 @@
 
 <script lang="ts">
 	import { dev } from '$app/env';
-	import Layout from '$lib/components/Layout.svelte';
+	import PublicLayout from '$lib/components/layouts/PublicLayout.svelte';
 
 	export let error: Error;
 	export let status: number;
@@ -22,7 +22,7 @@
 	let rest = lines.slice(1);
 </script>
 
-<Layout>
+<PublicLayout>
 	<div class="container">
 		<h1>{status} - {error.message}</h1>
 		<p class="m-0">{firstLine}</p>
@@ -32,4 +32,4 @@
 			{/each}
 		{/if}
 	</div>
-</Layout>
+</PublicLayout>

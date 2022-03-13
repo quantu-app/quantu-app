@@ -8,7 +8,7 @@
 </script>
 
 <script lang="ts">
-	import AppLayout from '$lib/components/AppLayout.svelte';
+	import UserLayout from '$lib/components/layouts/UserLayout.svelte';
 	import Challenges from '$lib/components/challenges/Challenges.svelte';
 	import { browser } from '$app/env';
 	import { showAllChallenges, challenges } from '$lib/state/challenges';
@@ -22,14 +22,6 @@
 	<title>Challenges</title>
 </svelte:head>
 
-<AppLayout
-	breadcrumbs={[
-		{ href: '/', title: 'Home' },
-		{
-			href: `/challenges`,
-			title: 'Challenges'
-		}
-	]}
->
+<UserLayout>
 	<Challenges challenges={$challenges} />
-</AppLayout>
+</UserLayout>

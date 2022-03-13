@@ -8,7 +8,7 @@
 </script>
 
 <script lang="ts">
-	import AppLayout from '$lib/components/AppLayout.svelte';
+	import UserLayout from '$lib/components/layouts/UserLayout.svelte';
 	import { currentUser } from '$lib/state/user';
 	import EditProfile from '$lib/components/user/EditProfile.svelte';
 </script>
@@ -17,8 +17,8 @@
 	<title>Edit Profile</title>
 </svelte:head>
 
-<AppLayout>
+<UserLayout>
 	{#if $currentUser}
 		<EditProfile user={$currentUser} />
 	{/if}
-</AppLayout>
+</UserLayout>

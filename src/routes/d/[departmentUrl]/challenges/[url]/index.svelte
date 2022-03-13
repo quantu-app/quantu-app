@@ -20,7 +20,7 @@
 </script>
 
 <script lang="ts">
-	import AppLayout from '$lib/components/AppLayout.svelte';
+	import UserLayout from '$lib/components/layouts/UserLayout.svelte';
 	import { base } from '$app/paths';
 	import { challengesByDepartmentUrl, showChallengeByUrl } from '$lib/state/challenges';
 	import Challenge from '$lib/components/questions/Challenge.svelte';
@@ -40,22 +40,7 @@
 	<title>Quiz</title>
 </svelte:head>
 
-<AppLayout
-	breadcrumbs={[
-		{ href: `${base}/`, title: 'Home' },
-		{
-			href: `${base}/challenges`,
-			title: 'Challenges'
-		},
-		{
-			title: challenge?.department.name || 'Department'
-		},
-		{
-			title: challenge?.name || 'Challenge',
-			href: `${base}/d/${departmentUrl}/challenges/${url}`
-		}
-	]}
->
+<UserLayout>
 	<div class="container-xxl">
 		{#if challenge}
 			<Challenge {challenge}>
@@ -70,4 +55,4 @@
 			</Challenge>
 		{/if}
 	</div>
-</AppLayout>
+</UserLayout>

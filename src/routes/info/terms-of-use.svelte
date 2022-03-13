@@ -1,13 +1,13 @@
 <script lang="ts">
 	import { base } from '$app/paths';
-	import AppLayout from '$lib/components/AppLayout.svelte';
+	import PublicLayout from '$lib/components/layouts/PublicLayout.svelte';
 </script>
 
 <svelte:head>
 	<title>Terms of Use</title>
 </svelte:head>
 
-<AppLayout>
+<PublicLayout>
 	<div class="container">
 		<div class="row py-4 my-4">
 			<div class="col offset-lg-1 col-lg-9">
@@ -564,5 +564,5 @@
 				</p>
 			</div>
 		</div>
-	</div></AppLayout
+	</div></PublicLayout
 >

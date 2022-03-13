@@ -44,8 +44,8 @@ mongodb:
     enabled: true
     database: quantu-app
     username: root
-    password: password
-    rootPassword: password
+    # password: password
+    # rootPassword: password
     replicaSetKey: replicasetkey
   persistence:
     enabled: true

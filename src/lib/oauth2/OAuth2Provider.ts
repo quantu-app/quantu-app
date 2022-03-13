@@ -35,7 +35,7 @@ export class OAuth2Provider<
 	Tokens extends IOAuth2Tokens = IOAuth2Tokens,
 	Config extends IOAuth2ProviderConfig = IOAuth2ProviderConfig
 > {
-	private config: Config;
+	protected config: Config;
 
 	constructor(config: Config) {
 		this.config = {
@@ -109,7 +109,9 @@ export class OAuth2Provider<
 	getUserProfile(tokens: Tokens): Promise<Profile> {
 		return fetch(this.config.profileUrl, {
 			headers: { Authorization: `${tokens.token_type} ${tokens.access_token}` }
-		}).then((res) => res.json());
+		})
+			.then((res) => res.json())
+			.then((profile) => (profile['error'] ? Promise.reject(profile) : profile));
 	}
 }
 

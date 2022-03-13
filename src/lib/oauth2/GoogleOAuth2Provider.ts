@@ -6,7 +6,6 @@ export interface GoogleProfile extends IOAuth2Profile {
 	name: string;
 	give_name: string;
 	picture: string;
-	email: string;
 	email_verified: boolean;
 	locale: string;
 }

@@ -1,5 +1,5 @@
 import { providers } from '$lib/oauth2';
-import type { RequestEvent } from '@sveltejs/kit';
+import type { RequestEvent } from '@sveltejs/kit/types/internal';
 
 export async function get(event: RequestEvent) {
 	const url = new URL(event.request.url);

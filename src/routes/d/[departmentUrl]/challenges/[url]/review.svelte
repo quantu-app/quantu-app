@@ -31,16 +31,14 @@
 	export let url: string;
 
 	$: challenge = ($challengesByDepartmentUrl[departmentUrl] || {})[url];
-	$: result = challenge ? ($resultsByTypeAndId['CHALLENGE'] || {})[challenge.id] : null;
 
 	onMount(async () => {
-		const challenge = await showChallengeByUrl(departmentUrl, url);
-		showResultByTypeAndId('CHALLENGE', challenge.id);
+		await showChallengeByUrl(departmentUrl, url);
 	});
 </script>
 
 <svelte:head>
-	<title>Challenge REvie</title>
+	<title>Challenge Review</title>
 </svelte:head>
 
 <AppLayout
@@ -64,8 +62,8 @@
 	]}
 >
 	<div class="container-xxl flex-grow-1">
-		{#if result}
-			<ReviewChallenge {result}>
+		{#if challenge.result}
+			<ReviewChallenge result={challenge.result}>
 				<a slot="extra" role="button" class="btn btn-primary" href={`/challenges`}>
 					Return to Challenges
 				</a>

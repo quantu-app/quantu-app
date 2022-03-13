@@ -1,4 +1,3 @@
-import type { ResultType } from '@prisma/client';
 import type { QuestionType } from '@prisma/client';
 import { run } from '$lib/prisma';
 import type { RequestEvent } from '@sveltejs/kit/types/internal';
@@ -15,16 +14,14 @@ import { InputType } from '$lib/types';
 
 export async function get(event: RequestEvent) {
 	const { userId } = await decode<{ userId: string }>(event.locals.token);
-	const resultType = event.params.type.toUpperCase() as ResultType;
-	const questionId = event.params.questionId;
+	const id = event.params.id;
 
 	return run((client) =>
 		client.result.findUnique({
 			where: {
-				userId_resultType_questionId: {
+				userId_challengeId: {
 					userId,
-					resultType,
-					questionId
+					challengeId: id
 				}
 			}
 		})
@@ -37,21 +34,19 @@ export async function get(event: RequestEvent) {
 export async function post(event: RequestEvent) {
 	const { userId } = await decode<{ userId: string }>(event.locals.token);
 	const answer: Answer = await event.request.json();
-	const resultType = event.params.type.toUpperCase() as ResultType;
-	const questionId = event.params.questionId;
+	const id = event.params.id;
 
 	return run(async (client) => {
 		const question = await client.challenge.findUnique({
 			where: {
-				id: questionId
+				id
 			}
 		});
 
 		return client.result.create({
 			data: {
 				answer,
-				resultType,
-				questionId,
+				challengeId: id,
 				prompt: question.prompt,
 				type: question.type,
 				value: getResult(question.type, question.prompt as unknown as PromptPrivate, answer),

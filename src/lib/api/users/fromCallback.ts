@@ -33,6 +33,7 @@ export async function fromCallback(prisma: PrismaClient, params: IFromCallbackPa
 				encryptedPassword: Math.random().toString(36).slice(2),
 				firstName: params.firstName,
 				lastName: params.lastName,
+				bio: [],
 				emails: {
 					create: {
 						email: params.email,

@@ -1,5 +1,5 @@
 import { run } from '$lib/prisma';
-import type { RequestEvent } from '@sveltejs/kit';
+import type { RequestEvent } from '@sveltejs/kit/types/internal';
 
 export function get(event: RequestEvent) {
 	const username = event.params.username;

@@ -26,7 +26,7 @@ npm run mongo
 
 # now sign-in with your user in the frontend
 # then login to mongo and make your user a creator
-mongo -u root -p password admin 
+mongo -u root -p password admin
 > use quantu-app
 > db.User.updateOne({username: "nathanfaucett"}, {$set: {creator: true}})
 

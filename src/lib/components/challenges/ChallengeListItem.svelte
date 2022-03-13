@@ -40,11 +40,20 @@
 			</div>
 
 			<div class="col-6 text-end">
-				<a
-					role="button"
-					class="btn btn-primary me-2"
-					href={`${base}/d/${challenge.department.url}/challenges/${challenge.url}`}>Solve</a
-				>
+				{#if challenge.result}
+					<a
+						role="button"
+						class="btn btn-primary me-2"
+						href={`${base}/d/${challenge.department.url}/challenges/${challenge.url}/review`}
+						>Review</a
+					>
+				{:else}
+					<a
+						role="button"
+						class="btn btn-primary me-2"
+						href={`${base}/d/${challenge.department.url}/challenges/${challenge.url}`}>Solve</a
+					>
+				{/if}
 			</div>
 		</div>
 	</div>

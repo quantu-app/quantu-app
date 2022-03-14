@@ -22,41 +22,44 @@
 	const image = rng.fromArray(IMAGES).unwrap();
 </script>
 
-<div class="row justify-content-center my-4">
+<div class="row my-4">
 	<p class="text-center">{date}</p>
-	<div class="col-md-12 border p-4">
+	<div class="challenge-card col-md-11 border card-border-color p-4">
 		<div class="row">
 			<div class="col-lg-6">
-				<img src={image} alt={challenge.name} />
+				<img src={image} alt={challenge.name} width="414" height="227" />
 			</div>
 			<div class="col-lg-6">
-				<h2 class="challenge-name">{challenge.name}</h2>
+				<h2 class="challenge-name mt-4 mt-lg-0">{challenge.name}</h2>
 				<p class="challenge-description"><RichViewer value={challenge.description} /></p>
 			</div>
 		</div>
 		<div class="row">
 			<div class="col-6">
-				<div class="text-muted text-uppercase mt-4">{challenge.department.name}</div>
+				<div class="text-muted text-uppercase mt-3">{challenge.department.name}</div>
 			</div>
 
 			<div class="col-6 text-end">
 				{#if challenge.result}
 					<a
 						role="button"
-						class="btn btn-primary me-2"
+						class="btn btn-outline-primary"
 						href={`${base}/d/${challenge.department.url}/challenges/${challenge.url}/review`}
-						>Review</a
+						>Solved</a
 					>
 				{:else}
 					<a
 						role="button"
-						class="btn btn-primary me-2"
+						class="btn btn-outline-primary"
 						href={`${base}/d/${challenge.department.url}/challenges/${challenge.url}`}>Solve</a
 					>
 				{/if}
 			</div>
 		</div>
 	</div>
+	{#if challenge.result}
+		<div class="col-md-11 completion-bar" />
+	{/if}
 </div>
 
 <style>
@@ -67,5 +70,14 @@
 	.challenge-description {
 		font-size: 20px;
 		line-height: 1.2em;
+		text-overflow: ellipsis;
+	}
+	.card-border-color {
+		border-color: #707070;
+	}
+	.completion-bar {
+		background: #8be59c;
+		height: 12px;
+		border: 1px solid #707070;
 	}
 </style>

@@ -8,10 +8,13 @@
 	export let challenge: Partial<StateChallenge>;
 	export let disabled = false;
 
+	const MAX_NAME_LEN: number = 50;
+
 	let validUrl: boolean = false;
 
 	$: prompt = challenge.prompt as any;
 	$: validUrl = isUrlSafe(challenge.url);
+	$: nameTooLong = (challenge.name || '').length > MAX_NAME_LEN;
 </script>
 
 <div class="row">
@@ -20,11 +23,16 @@
 		<input
 			id="challenge-name"
 			type="text"
-			class="form-control"
+			class={`form-control${nameTooLong ? ' is-invalid' : ''}`}
 			placeholder="Challenge Name"
 			{disabled}
 			bind:value={challenge.name}
 		/>
+		{#if nameTooLong}
+			<div class="invalid-feedback">
+				Character Limit reached: {challenge.name.length - MAX_NAME_LEN} too many.
+			</div>
+		{/if}
 	</div>
 	<div class="col-md">
 		<label for="challenge-url" class="form-label">Challenge Url</label>

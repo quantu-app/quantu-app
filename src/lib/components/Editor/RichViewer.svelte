@@ -13,6 +13,6 @@
 	}
 </script>
 
-<div {id} class="p-2">
+<div {id}>
 	<Editor bind:value readOnly={true} placeholder={''} />
 </div>

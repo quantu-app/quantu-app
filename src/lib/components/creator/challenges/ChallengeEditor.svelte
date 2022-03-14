@@ -3,11 +3,15 @@
 	import PromptEditor from '../prompts/PromptEditor.svelte';
 	import RichEditor from '$lib/components/Editor/RichEditor.svelte';
 	import DateTimeInput from '../../DateTimeInput.svelte';
+	import { isUrlSafe } from '../../../utils';
 
 	export let challenge: Partial<StateChallenge>;
 	export let disabled = false;
 
+	let validUrl: boolean = false;
+
 	$: prompt = challenge.prompt as any;
+	$: validUrl = isUrlSafe(challenge.url);
 </script>
 
 <div class="row">
@@ -27,7 +31,7 @@
 		<input
 			id="challenge-url"
 			type="text"
-			class="form-control"
+			class={`form-control${validUrl ? '' : ' is-invalid'}`}
 			placeholder="Challenge Url"
 			{disabled}
 			bind:value={challenge.url}

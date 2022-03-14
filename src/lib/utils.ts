@@ -98,3 +98,23 @@ export function groupBy<K extends string | symbol | number, T extends Record<K, 
 		return acc;
 	}, {} as Record<string, T[]>);
 }
+
+export function convertToUrlSafe(value: string): string {
+	/**
+	 * Converts a string to a value which can safely be sent and read in the url bar of browsers.
+	 *
+	 * @remarks
+	 * This method trims off beginning and ending space,
+	 * converts remaining space to a single character, deletes everything not a-z0-9,
+	 * and finally lowercases the resultant value
+	 */
+	return value.trim()
+		.replace(/\s\s+/g, ' ')
+		.replace(/[^a-z0-9]/gi, '')
+		.toLowerCase();
+}
+
+export function isUrlSafe(value: string): boolean {
+	// is an empty string url safe?
+	return /^[a-zA-Z0-9_-]+$/.test(value);
+}

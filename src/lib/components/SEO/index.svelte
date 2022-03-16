@@ -1,7 +1,32 @@
 <script lang="ts">
-	export let title: string;
+	import Robots, { type TagDirective } from './Robots.svelte';
+	import OpenGraph from './OpenGraph.svelte';
+
+	export let title: string = undefined;
+	export let description: string = undefined;
+	export let keywords: string = undefined;
+	export let canonical: string = undefined;
+	export let robotsDirectives: TagDirective[] = [];
+	export let openGraph: object = undefined;
 </script>
 
 <svelte:head>
-	<title>{title}</title>
+	{#if title}
+		<title>{title}</title>
+	{/if}
+	{#if description}
+		<meta name="description" content={description} />
+	{/if}
+	{#if keywords}
+		<meta name="keywords" content={keywords} />
+	{/if}
+	{#if canonical}
+		<link rel="canonical" href={canonical} />
+	{/if}
+	{#if robotsDirectives.length > 0}
+		<Robots directives={robotsDirectives} />
+	{/if}
+	{#if openGraph}
+		<OpenGraph {...openGraph} />
+	{/if}
 </svelte:head>

@@ -25,12 +25,12 @@
 	import { challengesByDepartmentUrl, showChallengeByUrl } from '$lib/state/challenges';
 	import Challenge from '$lib/components/questions/Challenge.svelte';
 	import { onMount } from 'svelte';
-	import SEO from '$lib/components/SEO/index.svelte';
+	import SEO from '$lib/components/seo/index.svelte';
 
 	export let departmentUrl: string;
 	export let url: string;
 
-	let titlePrefix: string = '[Q] Challenges | ';
+	let titlePrefix: string = '[Q] - ';
 
 	$: challenge = ($challengesByDepartmentUrl[departmentUrl] || {})[url];
 
@@ -40,7 +40,7 @@
 </script>
 
 {#if challenge}
-	<SEO title={titlePrefix + challenge.name} />
+	<SEO title={titlePrefix + challenge.name} robotsDirectives={['all']} />
 {/if}
 
 <UserLayout>

@@ -20,6 +20,14 @@
 
 <Review>
 	<MultipleChoiceContent slot="content" {prompt} />
-	<MultipleChoiceInput slot="input" disabled={true} {correct} {seed} {prompt} {input} />
+	<MultipleChoiceInput
+		slot="input"
+		disabled={true}
+		{correct}
+		{seed}
+		{prompt}
+		{input}
+		reviewMode={true}
+	/>
 	<slot slot="extra" name="extra" />
 </Review>

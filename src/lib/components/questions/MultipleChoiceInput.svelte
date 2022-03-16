@@ -8,6 +8,7 @@
 	export let correct: Record<string, true> = undefined;
 	export let disabled = false;
 	export let seed: number = undefined;
+	export let reviewMode: boolean = false;
 
 	$: choices = XorShiftRng.fromSeed(seed).shuffle(Object.entries(prompt.choices));
 
@@ -34,7 +35,7 @@
 <ul class="choices-list list-group list-group-flush">
 	{#each choices as [key, choice]}
 		<li
-			class="list-group-item my-2"
+			class={'list-group-item my-2' + (reviewMode ? ' review-mode' : '')}
 			class:list-group-item-success={correct && correct[key]}
 			class:list-group-item-danger={correct && !correct[key] && checked[key]}
 		>
@@ -66,14 +67,24 @@
 		border-width: 2px 0px 2px 20px;
 		border-color: white;
 	}
+	.list-group-flush .list-group-item.review-mode {
+		opacity: 0.7;
+	}
+	.list-group-flush .list-group-item.review-mode.list-group-item-success,
+	.list-group-flush .list-group-item.review-mode.list-group-item-danger {
+		opacity: 1;
+		color: #202020;
+	}
 	.list-group-flush .list-group-item.list-group-item-success {
 		background: white;
 		border-color: #cceecc;
 		border-width: 2px 0px 2px 20px;
+		opacity: 1;
 	}
 	.list-group-flush .list-group-item.list-group-item-danger {
 		background: white;
 		border-color: #ed6161;
 		border-width: 2px 0px 2px 20px;
+		opacity: 1;
 	}
 </style>

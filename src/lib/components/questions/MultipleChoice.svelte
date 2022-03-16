@@ -1,4 +1,5 @@
 <script lang="ts">
+	import RichViewer from '$lib/components/Editor/RichViewer.svelte';
 	import Prompt from './Prompt.svelte';
 	import MultipleChoiceContent from './MultipleChoiceContent.svelte';
 	import MultipleChoiceInput from './MultipleChoiceInput.svelte';
@@ -32,12 +33,7 @@
 </script>
 
 <Prompt {type} {input} bind:showExplanation bind:result {onExplain} {onSubmit}>
-	<MultipleChoiceContent
-		slot="content"
-		{prompt}
-		{showExplanation}
-		explanation={resultPrompt?.explanation}
-	/>
+	<MultipleChoiceContent slot="content" {prompt} />
 	<MultipleChoiceInput
 		slot="input"
 		disabled={result != null}
@@ -47,4 +43,9 @@
 		bind:input
 	/>
 	<slot slot="extra" name="extra" />
+	{#if resultPrompt?.explanation && showExplanation}
+		<div class="explanation">
+			<RichViewer value={resultPrompt?.explanation} />
+		</div>
+	{/if}
 </Prompt>

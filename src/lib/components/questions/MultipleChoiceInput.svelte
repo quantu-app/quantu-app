@@ -31,10 +31,10 @@
 	}
 </script>
 
-<ul class="list-group list-group-flush">
+<ul class="choices-list list-group list-group-flush">
 	{#each choices as [key, choice]}
 		<li
-			class="list-group-item"
+			class="list-group-item my-2"
 			class:list-group-item-success={correct && correct[key]}
 			class:list-group-item-danger={correct && !correct[key] && checked[key]}
 		>
@@ -56,3 +56,24 @@
 		</li>
 	{/each}
 </ul>
+
+<style>
+	.choices-list {
+		border-top: 1px #707070 solid;
+		border-bottom: 1px #707070 solid;
+	}
+	.list-group-flush .list-group-item {
+		border-width: 2px 0px 2px 20px;
+		border-color: white;
+	}
+	.list-group-flush .list-group-item.list-group-item-success {
+		background: white;
+		border-color: #cceecc;
+		border-width: 2px 0px 2px 20px;
+	}
+	.list-group-flush .list-group-item.list-group-item-danger {
+		background: white;
+		border-color: #ed6161;
+		border-width: 2px 0px 2px 20px;
+	}
+</style>

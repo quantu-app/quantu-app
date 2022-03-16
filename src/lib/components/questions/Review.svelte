@@ -4,8 +4,8 @@
 			<slot name="content" />
 		</div>
 	</div>
-	<div class="col-12">
-		<div class="d-flex flex-column border-lg-start pt-4 h-100 input">
+	<div class="col-12 p-0">
+		<div class="d-flex flex-column pt-4 h-100 input">
 			<slot name="input" />
 
 			<div class="d-flex justify-content-end mt-2">

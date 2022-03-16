@@ -32,17 +32,17 @@
 	};
 </script>
 
-<div class="row flex-grow-1">
-	<div class="col-lg-8">
+<div class="row ps-0">
+	<div class="col-lg-12 mt-4">
 		<div class="d-flex flex-column flex-grow-1 pt-4">
 			<slot name="content" />
 		</div>
 	</div>
-	<div class="col-lg-4 border-xxl-start input">
-		<div class="d-flex flex-column pt-4 flex-grow-1">
+	<div class="response-input col-lg-12 input mt-4 px-0">
+		<div class="d-flex flex-column flex-grow-1">
 			<slot name="input" />
 
-			<div class="d-flex justify-content-end mt-2">
+			<div class="d-flex mt-2">
 				{#if result != null}
 					{#if !showExplanation && type !== 'MARK_AS_READ'}
 						<button
@@ -51,27 +51,14 @@
 							disabled={showExplanation}
 							on:click={() => (showExplanation = true)}
 						>
-							Explain
+							Show Explanation
 						</button>
 					{/if}
 					<slot name="extra" />
 				{:else}
-					{#if type !== 'MARK_AS_READ'}
-						<button
-							type="button"
-							class="btn btn-secondary text-white"
-							disabled={explaining || answering}
-							on:click={onExplainInternal}
-						>
-							{#if explaining}
-								<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" />
-							{/if}
-							Explain
-						</button>
-					{/if}
 					<button
 						type="button"
-						class="btn btn-primary"
+						class="btn btn-primary mx-4 mt-2"
 						disabled={isEmpty(input) || !!result || answering || explaining}
 						on:click={onSubmitInternal}
 					>
@@ -80,17 +67,26 @@
 						{/if}
 						Submit
 					</button>
+					{#if type !== 'MARK_AS_READ'}
+						<button
+							type="button"
+							class="btn btn-outline-primary mt-2"
+							disabled={explaining || answering}
+							on:click={onExplainInternal}
+						>
+							{#if explaining}
+								<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" />
+							{/if}
+							Show Explanation
+						</button>
+					{/if}
 				{/if}
 			</div>
 		</div>
 	</div>
 </div>
 
-<style lang="scss">
-	// find a way to use bootstrap variables and mixins in components
-	@media (min-width: 960px) {
-		.input {
-			border-left: 1px solid #dee2e6;
-		}
+<style>
+	.response-input {
 	}
 </style>

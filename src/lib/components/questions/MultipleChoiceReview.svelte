@@ -19,7 +19,7 @@
 </script>
 
 <Review>
-	<MultipleChoiceContent slot="content" {prompt} showExplanation explanation={prompt.explanation} />
+	<MultipleChoiceContent slot="content" {prompt} />
 	<MultipleChoiceInput slot="input" disabled={true} {correct} {seed} {prompt} {input} />
 	<slot slot="extra" name="extra" />
 </Review>

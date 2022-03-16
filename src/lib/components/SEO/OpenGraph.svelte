@@ -32,6 +32,8 @@
 	export let profile: ProfileObject = undefined;
 </script>
 
+<meta property="og:site_name" content="QUANTU" />
+<meta property="og:locale" content={language ? language : 'en'} />
 {#if url}
 	<meta property="og:url" content={url} />
 {/if}
@@ -41,20 +43,17 @@
 {#if description}
 	<meta property="og:url" content={description} />
 {/if}
-{#if language}
-	<meta property="og:locale" content={language} />
-{/if}
 {#if type}
 	<meta property="og:type" content={type} />
 	{#if type == 'article'}
 		<meta
 			property="article:published_time"
-			content={format(article.publishedTime, "yyyy-MM-dd'T'HH:mm:ss'Z'")}
+			content={format(new Date(article.publishedTime), "yyyy-MM-dd'T'HH:mm:ss'Z'")}
 		/>
 		{#if article.modifiedTime}
 			<meta
 				property="article:modified_time"
-				content={format(article.modifiedTime, "yyyy-MM-dd'T'HH:mm:ss'Z'")}
+				content={format(new Date(article.modifiedTime), "yyyy-MM-dd'T'HH:mm:ss'Z'")}
 			/>
 		{/if}
 		{#if article.expirationTime}

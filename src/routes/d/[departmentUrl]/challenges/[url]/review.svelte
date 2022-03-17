@@ -52,17 +52,15 @@
 {/if}
 
 <UserLayout>
-	<div id="challenge-wrapper">
-		<nav id="challenge-sidebar">
-			<div class="challenge-sidebar-header">
-				<h5 class="mt-4 mb-0 ms-4 department-heading">Department</h5>
-				{#if challenge}
+	{#if challenge}
+		<div id="challenge-wrapper">
+			<nav id="challenge-sidebar">
+				<div class="challenge-sidebar-header">
+					<h5 class="mt-4 mb-0 ms-4 department-heading">Department</h5>
 					<h5 class="ms-4 department">{challenge.department.name}</h5>
-				{/if}
-			</div>
-		</nav>
-		<div id="challenge-content">
-			{#if challenge.result}
+				</div>
+			</nav>
+			<div id="challenge-content">
 				<div class="row mt-3 mx-0">
 					<div class="col-lg-12">
 						<h2>{challenge.name}</h2>
@@ -75,10 +73,10 @@
 						</ReviewChallenge>
 					</div>
 				</div>
-			{/if}
+			</div>
+			<div id="challenge-menu" />
 		</div>
-		<div id="challenge-menu" />
-	</div>
+	{/if}
 </UserLayout>
 
 <style type="css">

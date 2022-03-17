@@ -2,6 +2,7 @@
 	import RichViewer from '$lib/components/Editor/RichViewer.svelte';
 	import type { MultipleChoice } from '$lib/types';
 	import { XorShiftRng } from '@aicacia/rand';
+	import Checkbox from '$lib/components/ui/Checkbox.svelte';
 
 	export let prompt: MultipleChoice;
 	export let input: string[] = [];
@@ -41,9 +42,15 @@
 		>
 			<div class="d-flex">
 				<div class="flex-shink-0 flex-row">
-					<input
+					<!-- <input
 						class="form-check-input me-2"
 						type="checkbox"
+						{disabled}
+						value={checked[key] + ''}
+						checked={!!checked[key]}
+						on:change={createOnChange(key)}
+					/> -->
+					<Checkbox
 						{disabled}
 						value={checked[key] + ''}
 						checked={!!checked[key]}

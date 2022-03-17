@@ -16,17 +16,18 @@
 	import { get } from 'svelte/store';
 	import { base } from '$app/paths';
 	import type { LoadInput, LoadOutput } from '@sveltejs/kit/types/internal';
+	import SEO from '$lib/components/seo/index.svelte';
 
 	export let redirectPath: string = undefined;
 
 	if (redirectPath && !get(redirectPathWritable)) {
 		redirectPathWritable.set(redirectPath);
 	}
+
+	let pageTitle: string = 'QUANTU | Where learning meets fun';
 </script>
 
-<svelte:head>
-	<title>QUANTU | Where learning meets fun</title>
-</svelte:head>
+<SEO title={pageTitle} robotsDirectives={['all']} />
 
 <PublicLayout>
 	<div class="container">

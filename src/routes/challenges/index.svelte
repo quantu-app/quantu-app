@@ -12,15 +12,19 @@
 	import Challenges from '$lib/components/challenges/Challenges.svelte';
 	import { browser } from '$app/env';
 	import { showAllChallenges, challenges } from '$lib/state/challenges';
+	import SEO from '$lib/components/seo/index.svelte';
 
 	if (browser) {
 		showAllChallenges();
 	}
 </script>
 
-<svelte:head>
-	<title>Challenges</title>
-</svelte:head>
+<SEO
+	title="Challenges"
+	description="University level problems requiring reasoning to solve."
+	keywords="challenges, difficult problems, reasoning puzzles"
+	robotsDirectives={['all']}
+/>
 
 <UserLayout>
 	<Challenges challenges={$challenges} />

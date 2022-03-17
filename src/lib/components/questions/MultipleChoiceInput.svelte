@@ -2,12 +2,14 @@
 	import RichViewer from '$lib/components/Editor/RichViewer.svelte';
 	import type { MultipleChoice } from '$lib/types';
 	import { XorShiftRng } from '@aicacia/rand';
+	import Checkbox from '$lib/components/ui/Checkbox.svelte';
 
 	export let prompt: MultipleChoice;
 	export let input: string[] = [];
 	export let correct: Record<string, true> = undefined;
 	export let disabled = false;
 	export let seed: number = undefined;
+	export let reviewMode: boolean = false;
 
 	$: choices = XorShiftRng.fromSeed(seed).shuffle(Object.entries(prompt.choices));
 
@@ -31,18 +33,24 @@
 	}
 </script>
 
-<ul class="list-group list-group-flush">
+<ul class="choices-list list-group list-group-flush">
 	{#each choices as [key, choice]}
 		<li
-			class="list-group-item"
+			class={'list-group-item my-2' + (reviewMode ? ' review-mode' : '')}
 			class:list-group-item-success={correct && correct[key]}
 			class:list-group-item-danger={correct && !correct[key] && checked[key]}
 		>
 			<div class="d-flex">
 				<div class="flex-shink-0 flex-row">
-					<input
+					<!-- <input
 						class="form-check-input me-2"
 						type="checkbox"
+						{disabled}
+						value={checked[key] + ''}
+						checked={!!checked[key]}
+						on:change={createOnChange(key)}
+					/> -->
+					<Checkbox
 						{disabled}
 						value={checked[key] + ''}
 						checked={!!checked[key]}
@@ -56,3 +64,34 @@
 		</li>
 	{/each}
 </ul>
+
+<style>
+	.choices-list {
+		border-top: 1px #707070 solid;
+		border-bottom: 1px #707070 solid;
+	}
+	.list-group-flush .list-group-item {
+		border-width: 2px 0px 2px 20px;
+		border-color: white;
+	}
+	.list-group-flush .list-group-item.review-mode {
+		opacity: 0.7;
+	}
+	.list-group-flush .list-group-item.review-mode.list-group-item-success,
+	.list-group-flush .list-group-item.review-mode.list-group-item-danger {
+		opacity: 1;
+		color: #202020;
+	}
+	.list-group-flush .list-group-item.list-group-item-success {
+		background: white;
+		border-color: #cceecc;
+		border-width: 2px 0px 2px 20px;
+		opacity: 1;
+	}
+	.list-group-flush .list-group-item.list-group-item-danger {
+		background: white;
+		border-color: #ed6161;
+		border-width: 2px 0px 2px 20px;
+		opacity: 1;
+	}
+</style>

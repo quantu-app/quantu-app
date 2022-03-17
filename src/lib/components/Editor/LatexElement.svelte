@@ -29,13 +29,10 @@
 </script>
 
 <script lang="ts">
-	import { DECORATE_CONTEXT_KEY, defaultDecorate } from 'svelte-slate/components/Slate.svelte';
-	import type { ISvelteEditor } from 'svelte-slate';
+	import { isReadOnly, type ISvelteEditor } from 'svelte-slate';
 	import { findPath } from 'svelte-slate';
 	import { getEditor } from 'svelte-slate';
 	import { Editor, Transforms } from 'slate';
-	import { writable } from 'svelte/store';
-	import { setContext } from 'svelte';
 	import Button from './Button.svelte';
 	import katex from 'katex';
 	import Modal from './Modal.svelte';
@@ -48,9 +45,6 @@
 	export let dir: 'rtl' | 'ltr' = undefined;
 
 	const editor = getEditor();
-
-	const decorateContext = writable(defaultDecorate);
-	setContext(DECORATE_CONTEXT_KEY, decorateContext);
 
 	$: path = findPath(element);
 	let currentLatex = element.latex;
@@ -79,9 +73,11 @@
 	let latex: string;
 	let inline: boolean;
 	function onEdit() {
-		latex = currentLatex;
-		inline = currentInline;
-		editing = true;
+		if (!isReadOnly(editor)) {
+			latex = currentLatex;
+			inline = currentInline;
+			editing = true;
+		}
 	}
 	$: onLatexChange = () => {
 		Transforms.setNodes(editor, { latex, inline } as any, { at: path });
@@ -152,7 +148,7 @@
 		margin: 0;
 	}
 	.inline {
-		display: inline-block;
+		display: inline;
 	}
 	.body {
 		background-color: white;

@@ -133,4 +133,8 @@
 		color: #aaa;
 		font-style: italic;
 	}
+
+	p {
+		display: inline-block;
+	}
 </style>

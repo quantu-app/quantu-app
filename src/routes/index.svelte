@@ -16,7 +16,7 @@
 	import { get } from 'svelte/store';
 	import { base } from '$app/paths';
 	import type { LoadInput, LoadOutput } from '@sveltejs/kit/types/internal';
-	import SEO from '$lib/components/seo/index.svelte';
+	import SEO from '$lib/components/SEO/index.svelte';
 
 	export let redirectPath: string = undefined;
 

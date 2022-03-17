@@ -1,7 +1,5 @@
 import type { QuestionType } from '@prisma/client';
 import { run } from '$lib/prisma';
-import type { RequestEvent } from '@sveltejs/kit/types/internal';
-import { decode } from '$lib/api/jwt';
 import type {
 	Answer,
 	FlashCardAnswer,
@@ -11,16 +9,16 @@ import type {
 	PromptPrivate
 } from '$lib/types';
 import { InputType } from '$lib/types';
+import { authenticated } from '$lib/api/auth';
 
-export async function get(event: RequestEvent) {
-	const { userId } = await decode<{ userId: string }>(event.locals.token);
+export const get = authenticated((event) => {
 	const id = event.params.id;
 
 	return run((client) =>
 		client.result.findUnique({
 			where: {
 				userId_challengeId: {
-					userId,
+					userId: event.locals.token.userId,
 					challengeId: id
 				}
 			}
@@ -29,10 +27,9 @@ export async function get(event: RequestEvent) {
 		body: result,
 		status: result ? 200 : 404
 	}));
-}
+});
 
-export async function post(event: RequestEvent) {
-	const { userId } = await decode<{ userId: string }>(event.locals.token);
+export const post = authenticated(async (event) => {
 	const answer: Answer = await event.request.json();
 	const id = event.params.id;
 
@@ -50,14 +47,14 @@ export async function post(event: RequestEvent) {
 				prompt: question.prompt,
 				type: question.type,
 				value: getResult(question.type, question.prompt as unknown as PromptPrivate, answer),
-				userId
+				userId: event.locals.token.userId
 			}
 		});
 	}).then((result) => ({
 		body: result,
 		status: 201
 	}));
-}
+});
 
 function getResult(type: QuestionType, prompt: PromptPrivate, answer: Answer): number {
 	switch (type) {

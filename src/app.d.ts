@@ -2,7 +2,8 @@
 /// <reference types="svelte" />
 /// <reference types="vite/client" />
 
-import type { IToken } from '$lib/api/jwt';
+import type { ITokenValue } from '$lib/api/auth';
+import type { IJwtString } from '$lib/api/jwt';
 import type { User } from '@prisma/client';
 import type bootstrap from 'bootstrap';
 import type HLJSApi from 'highlight.js';
@@ -36,7 +37,8 @@ declare global {
 
 	declare namespace App {
 		interface Locals {
-			token?: IToken<{ userId: string }>;
+			rawToken?: IJwtString<ITokenValue>;
+			token?: ITokenValue;
 		}
 		interface Session {
 			user: User;

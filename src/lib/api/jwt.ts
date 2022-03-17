@@ -2,14 +2,15 @@ import jsonwebtoken from 'jsonwebtoken';
 import type { JwtPayload } from 'jsonwebtoken';
 
 export type IJwtString<T = any> = {_type: T} & string;
+export type IJwtPayload<T extends object = object> = JwtPayload & T;
 
-export function decode<T extends object = object>(token: IJwtString<T>): Promise<JwtPayload & T> {
-  return new Promise((resolve, reject) => 
-  jsonwebtoken.verify(token, process.env.JWT_SECRET_KEY, (error, payload) => {
+export function decode<T extends object = object>(token: IJwtString<T>): Promise<IJwtPayload<T> | null> {
+  return new Promise((resolve) => 
+    jsonwebtoken.verify(token, process.env.JWT_SECRET_KEY, (error, payload) => {
       if (error || !payload) {
-        reject(error || new Error('Invalid token'));
+        resolve(null);
       } else {
-        resolve(payload as JwtPayload & T)
+        resolve(payload as IJwtPayload<T>);
       }
     })
   );

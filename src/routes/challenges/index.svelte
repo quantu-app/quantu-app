@@ -12,7 +12,7 @@
 	import Challenges from '$lib/components/challenges/Challenges.svelte';
 	import { browser } from '$app/env';
 	import { showAllChallenges, challenges } from '$lib/state/challenges';
-	import SEO from '$lib/components/seo/index.svelte';
+	import SEO from '$lib/components/SEO/index.svelte';
 
 	if (browser) {
 		showAllChallenges();

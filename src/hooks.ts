@@ -1,22 +1,26 @@
 import cookie from 'cookie';
 import { run } from '$lib/prisma';
-import type { IJwtString } from '$lib/api/jwt';
 import { decode } from '$lib/api/jwt';
+import type { IJwtString } from '$lib/api/jwt';
 import type { MaybePromise, RequestEvent } from '@sveltejs/kit/types/internal';
+import type { ITokenValue } from '$lib/api/auth';
 
-export function handle({
+export async function handle({
 	event,
 	resolve
 }: {
 	event: RequestEvent;
 	resolve: (request: RequestEvent) => MaybePromise<Response>;
 }) {
-	const token = event.request.headers.has('cookie')
+	const rawToken = event.request.headers.has('cookie')
 		? cookie.parse(event.request.headers.get('cookie')).token
 		: 'undefined';
 
-	if (token && token !== 'undefined') {
-		event.locals.token = token as IJwtString<{ userId: string }>;
+	if (rawToken && rawToken !== 'undefined') {
+		event.locals.rawToken = rawToken as IJwtString<ITokenValue>;
+	}
+	if (event.locals.rawToken) {
+		event.locals.token = await decode(event.locals.rawToken);
 	}
 
 	return resolve(event);
@@ -24,20 +28,16 @@ export function handle({
 
 export function getSession(request: RequestEvent): MaybePromise<App.Session> {
 	if (request.locals.token) {
-		return decode<{ userId: string }>(request.locals.token)
-			.then(({ userId }) =>
-				run((client) =>
-					client.user.findUnique({
-						where: {
-							id: userId
-						},
-						include: {
-							emails: true
-						}
-					})
-				)
-			)
-			.then((user) => ({ user }));
+		return run((client) =>
+			client.user.findUnique({
+				where: {
+					id: request.locals.token.userId
+				},
+				include: {
+					emails: true
+				}
+			})
+		).then((user) => ({ user }));
 	} else {
 		return null;
 	}

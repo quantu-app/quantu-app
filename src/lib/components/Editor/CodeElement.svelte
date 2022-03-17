@@ -79,7 +79,7 @@
 				ranges.push({
 					[token.type]: true,
 					anchor: { path, offset: start },
-					focus: { path, offset: start === end - 1 ? start : end }
+					focus: { path, offset: end }
 				});
 			}
 

@@ -1,19 +1,14 @@
-import { decode } from '$lib/api/jwt';
+import { authenticated } from '$lib/api/auth';
 import { run } from '$lib/prisma';
-import type { RequestEvent } from '@sveltejs/kit/types/internal';
 
-export async function get(event: RequestEvent) {
-	await decode<{ userId: string }>(event.locals.token);
-
-	return run((client) => client.department.findMany()).then((departments) => ({
+export const get = authenticated(() =>
+	run((client) => client.department.findMany()).then((departments) => ({
 		body: departments,
 		status: 200
-	}));
-}
+	}))
+);
 
-export async function post(event: RequestEvent) {
-	await decode<{ userId: string }>(event.locals.token);
-
+export const post = authenticated(async (event) => {
 	const data = await event.request.json();
 
 	return run((client) =>
@@ -24,4 +19,4 @@ export async function post(event: RequestEvent) {
 		body: department,
 		status: 201
 	}));
-}
+});

@@ -26,7 +26,7 @@
 	import { challengesByDepartmentUrl, showChallengeByUrl } from '$lib/state/challenges';
 	import Challenge from '$lib/components/questions/Challenge.svelte';
 	import { onMount } from 'svelte';
-	import SEO from '$lib/components/seo/index.svelte';
+	import SEO from '$lib/components/SEO/index.svelte';
 
 	export let departmentUrl: string;
 	export let url: string;

@@ -32,10 +32,10 @@
 	export let selection: Selection | null = null;
 	export let readOnly = false;
 	export let placeholder = 'Type...';
+	export let editor = withHistory(withImages(withSvelte(createEditor())));
 
 	let open = false;
 	let ref: HTMLDivElement;
-	const editor = withHistory(withImages(withSvelte(createEditor())));
 
 	function onKeyDown(event: KeyboardEvent) {
 		for (const hotkey in HOTKEYS) {
@@ -52,7 +52,7 @@
 	}
 </script>
 
-<Slate {editor} bind:selection bind:value>
+<Slate bind:editor bind:selection bind:value>
 	<HoveringToolbar container={ref} bind:open />
 	<div use:longpress on:longpress={onLongPress}>
 		<Editable bind:ref {readOnly} {Element} {Leaf} {onKeyDown} {placeholder} />

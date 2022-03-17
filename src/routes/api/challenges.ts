@@ -1,13 +1,12 @@
-import { decode } from '$lib/api/jwt';
+import { authenticated } from '$lib/api/auth';
 import { run } from '$lib/prisma';
 import type { RequestEvent } from '@sveltejs/kit/types/internal';
 import { removePrivate } from './departments/[departmentUrl]/challenges';
 
-export async function get(_event: RequestEvent) {
-	const { userId } = await decode<{ userId: string }>(_event.locals.token);
+export const get = authenticated((event: RequestEvent) =>
 	// left join challenges on results where user_id = currentUser.id (in mongodb)
 	// Two queries, iterate over second.
-	return run((client) => {
+	run((client) => {
 		return client.challenge.findMany({
 			where: {
 				visible: true,
@@ -20,7 +19,7 @@ export async function get(_event: RequestEvent) {
 
 				results: {
 					every: {
-						userId
+						userId: event.locals.token.userId
 					}
 				}
 			},
@@ -46,5 +45,5 @@ export async function get(_event: RequestEvent) {
 			return c;
 		}),
 		status: 200
-	}));
-}
+	}))
+);

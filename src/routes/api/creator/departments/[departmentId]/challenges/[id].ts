@@ -1,10 +1,7 @@
-import { decode } from '$lib/api/jwt';
+import { authenticated } from '$lib/api/auth';
 import { run } from '$lib/prisma';
-import type { RequestEvent } from '@sveltejs/kit/types/internal';
 
-export async function get(event: RequestEvent) {
-	await decode<{ userId: string }>(event.locals.token);
-
+export const get = authenticated((event) => {
 	const id = event.params.id;
 
 	return run((client) =>
@@ -25,11 +22,9 @@ export async function get(event: RequestEvent) {
 		body: department,
 		status: 200
 	}));
-}
+});
 
-export async function patch(event: RequestEvent) {
-	await decode<{ userId: string }>(event.locals.token);
-
+export const patch = authenticated(async (event) => {
 	const data = await event.request.json();
 	const id = event.params.id;
 
@@ -52,11 +47,9 @@ export async function patch(event: RequestEvent) {
 		body: department,
 		status: 200
 	}));
-}
+});
 
-export async function del(event: RequestEvent) {
-	await decode<{ userId: string }>(event.locals.token);
-
+export const del = authenticated((event) => {
 	const id = event.params.id;
 
 	return run((client) =>
@@ -76,4 +69,4 @@ export async function del(event: RequestEvent) {
 	).then(() => ({
 		status: 204
 	}));
-}
+});

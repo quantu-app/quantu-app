@@ -1,9 +1,7 @@
 import { run } from '$lib/prisma';
-import type { RequestEvent } from '@sveltejs/kit/types/internal';
-import { decode } from '$lib/api/jwt';
+import { authenticated } from '$lib/api/auth';
 
-export async function post(event: RequestEvent) {
-	const { userId } = await decode<{ userId: string }>(event.locals.token);
+export const post = authenticated((event) => {
 	const id = event.params.id;
 
 	return run(async (client) => {
@@ -19,11 +17,11 @@ export async function post(event: RequestEvent) {
 				prompt: question.prompt,
 				type: question.type,
 				value: 0,
-				userId
+				userId: event.locals.token.userId
 			}
 		});
 	}).then((result) => ({
 		body: result,
 		status: 201
 	}));
-}
+});

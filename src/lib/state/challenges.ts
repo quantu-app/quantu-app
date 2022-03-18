@@ -1,9 +1,10 @@
 import type { Challenge, Result } from '@prisma/client';
-import { writable, get, derived } from 'svelte/store';
+import { writable, derived } from 'svelte/store';
 import { base } from '$app/paths';
 
-export type StateChallenge = Challenge & { department: { url: string; name: string } }
-	& { result?: Result };
+export type StateChallenge = Challenge & { department: { url: string; name: string } } & {
+	result?: Result;
+};
 
 const challengesWritable = writable<Array<StateChallenge>>([]);
 
@@ -24,10 +25,6 @@ export const challengesByDepartmentUrl = derived(challengesWritable, (challenges
 );
 
 export async function showChallengeByUrl(departmentUrl: string, url: string) {
-	const cachedStateChallenge = (get(challengesByDepartmentUrl)[departmentUrl] || {})[url];
-	if (cachedStateChallenge) {
-		return cachedStateChallenge;
-	}
 	const res = await fetch(`${base}/api/departments/${departmentUrl}/challenges/${url}`);
 	if (!res.ok) {
 		throw await res.json();

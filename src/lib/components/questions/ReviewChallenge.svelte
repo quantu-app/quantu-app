@@ -1,5 +1,4 @@
 <script lang="ts">
-	import type { QuestionType } from '@prisma/client';
 	import type { Result } from '@prisma/client';
 	import FlashCardReview from './FlashCardReview.svelte';
 	import InputReview from './InputReview.svelte';
@@ -8,6 +7,8 @@
 
 	export let result: Result;
 	export let seed: number = undefined;
+
+	$: console.log(result);
 </script>
 
 {#key result.id}

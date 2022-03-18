@@ -1,5 +1,5 @@
 import type { Department } from '@prisma/client';
-import { writable, derived, get } from 'svelte/store';
+import { writable, derived } from 'svelte/store';
 import { base } from '$app/paths';
 
 const departmentsWritable = writable<Department[]>([]);
@@ -18,10 +18,6 @@ export const departmentsByUrl = derived(departmentsWritable, (departments) =>
 );
 
 export async function showDepartmentsByUrl(url: string) {
-	const cachedDepartment = get(departmentsByUrl)[url];
-	if (cachedDepartment) {
-		return cachedDepartment;
-	}
 	const res = await fetch(`${base}/api/departments/${url}`);
 	if (!res.ok) {
 		throw await res.json();

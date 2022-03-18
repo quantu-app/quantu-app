@@ -66,11 +66,13 @@
 						<h2>{challenge.name}</h2>
 					</div>
 					<div class="col-lg-12">
-						<ReviewChallenge result={challenge.result}>
-							<a slot="extra" role="button" class="btn btn-primary" href={`/challenges`}>
-								Return to Challenges
-							</a>
-						</ReviewChallenge>
+						{#if challenge.result}
+							<ReviewChallenge result={challenge.result}>
+								<a slot="extra" role="button" class="btn btn-primary" href={`/challenges`}>
+									Return to Challenges
+								</a>
+							</ReviewChallenge>
+						{/if}
 					</div>
 				</div>
 			</div>

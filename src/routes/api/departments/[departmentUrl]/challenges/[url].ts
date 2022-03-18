@@ -12,11 +12,14 @@ export async function get(event: RequestEvent) {
 				url: departmentUrl
 			}
 		});
-		return client.challenge.findUnique({
+		return client.challenge.findFirst({
 			where: {
-				departmentId_url: {
-					url,
-					departmentId: department.id
+				departmentId: department.id,
+				url,
+				results: {
+					every: {
+						userId: event.locals.token.userId
+					}
 				}
 			},
 			include: {
@@ -25,11 +28,17 @@ export async function get(event: RequestEvent) {
 						url: true,
 						name: true
 					}
-				}
+				},
+				results: true
 			}
 		});
-	}).then((department) => ({
-		body: removePrivate(department),
-		status: department ? 200 : 404
-	}));
+	}).then((challenge) => {
+		removePrivate(challenge);
+		(challenge as any).result = challenge.results[0];
+		delete challenge.results;
+		return {
+			body: challenge,
+			status: challenge ? 200 : 404
+		};
+	});
 }

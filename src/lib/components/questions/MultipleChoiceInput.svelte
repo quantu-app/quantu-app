@@ -11,7 +11,7 @@
 	export let seed: number = undefined;
 	export let reviewMode: boolean = false;
 
-	$: choices = XorShiftRng.fromSeed(seed).shuffle(Object.entries(prompt.choices));
+	$: choices = XorShiftRng.fromSeed(seed).shuffle([...prompt.choices]);
 
 	let checked: Record<string, boolean> = {};
 	$: createOnChange = (key: string) => {
@@ -34,11 +34,11 @@
 </script>
 
 <ul class="choices-list list-group list-group-flush">
-	{#each choices as [key, choice]}
+	{#each choices as choice (choice.id)}
 		<li
 			class={'list-group-item my-2' + (reviewMode ? ' review-mode' : '')}
-			class:list-group-item-success={correct && correct[key]}
-			class:list-group-item-danger={correct && !correct[key] && checked[key]}
+			class:list-group-item-success={correct && correct[choice.id]}
+			class:list-group-item-danger={correct && !correct[choice.id] && checked[choice.id]}
 		>
 			<div class="d-flex">
 				<div class="flex-shink-0 flex-row">
@@ -52,9 +52,9 @@
 					/> -->
 					<Checkbox
 						{disabled}
-						value={checked[key] + ''}
-						checked={!!checked[key]}
-						on:change={createOnChange(key)}
+						value={checked[choice.id] + ''}
+						checked={!!checked[choice.id]}
+						onChange={createOnChange(choice.id)}
 					/>
 				</div>
 				<div class="flex-grow-1">

@@ -10,12 +10,13 @@
 
 	$: prompt = result.prompt as unknown as MultipleChoicePrivate;
 	$: input = result.answer as MultipleChoiceAnswer;
-	$: correct = Object.entries(prompt.choices).reduce((correct, [key, choice]) => {
+	$: correct = prompt.choices.reduce((correct, choice) => {
 		if (choice.correct) {
-			correct[key] = true;
+			correct[choice.id] = true;
 		}
 		return correct;
-	}, {});
+	}, {} as Record<string, true>);
+	$: console.log(correct);
 </script>
 
 <Review>

@@ -1,5 +1,5 @@
 import type { Challenge } from '@prisma/client';
-import { writable, get, derived } from 'svelte/store';
+import { writable, derived } from 'svelte/store';
 import { base } from '$app/paths';
 
 export type StateChallenge = Challenge & { department: { url: string; name: string } };
@@ -22,10 +22,6 @@ export const challengesByDepartmentId = derived(challengesWritable, (challenges)
 );
 
 export async function showChallengeById(departmentId: string, id: string) {
-	const cachedStateChallenge = get(challengesById)[id];
-	if (cachedStateChallenge) {
-		return cachedStateChallenge;
-	}
 	const res = await fetch(`${base}/api/creator/departments/${departmentId}/challenges/${id}`);
 	if (!res.ok) {
 		throw await res.json();

@@ -12,11 +12,24 @@ export async function get(event: RequestEvent) {
 			where: {
 				department: {
 					url: departmentUrl
+				},
+				results: {
+					every: {
+						userId: event.locals.token.userId
+					}
 				}
+			},
+			include: {
+				results: true
 			}
 		})
 	).then((challenges) => ({
-		body: challenges.map(removePrivate),
+		body: challenges.map((c) => {
+			(c as any).result = c.results[0];
+			delete c.results;
+			removePrivate(c);
+			return c;
+		}),
 		status: 200
 	}));
 }

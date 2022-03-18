@@ -23,9 +23,9 @@
 	let correct: Record<string, true>;
 	$: resultPrompt = result?.prompt as unknown as MultipleChoicePrivate;
 	$: if (resultPrompt) {
-		correct = Object.entries(resultPrompt.choices || {}).reduce((correct, [key, choice]) => {
+		correct = (resultPrompt.choices || []).reduce((correct, choice) => {
 			if (choice.correct) {
-				correct[key] = true;
+				correct[choice.id] = true;
 			}
 			return correct;
 		}, {});

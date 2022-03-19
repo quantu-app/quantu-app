@@ -22,21 +22,19 @@
 		return editor;
 	}
 
-	export function insertLatex(editor: Editor) {
-		const image = { type: 'latex', latex: '', inline: true, children: [{ text: ' ' }] };
+	export function insertLatex(editor: Editor, latex: string, inline: boolean) {
+		const image = { type: 'latex', latex, inline, children: [{ text: '' }] };
 		Transforms.insertNodes(editor, image);
 	}
 </script>
 
 <script lang="ts">
-	import { isReadOnly, type ISvelteEditor } from 'svelte-slate';
+	import { type ISvelteEditor } from 'svelte-slate';
 	import { findPath } from 'svelte-slate';
 	import { getEditor } from 'svelte-slate';
 	import { Editor, Transforms } from 'slate';
-	import Button from './Button.svelte';
 	import katex from 'katex';
-	import Modal from './Modal.svelte';
-
+	import LatexEditor from './LatexEditor.svelte';
 	export let element: ILatexElement;
 	export let isInline: boolean;
 	export let isVoid: boolean;
@@ -56,6 +54,27 @@
 		currentInline = element.inline;
 	}
 
+	let open = false;
+
+	function onDone(latex: string, inline: boolean) {
+		Transforms.setNodes(editor, { latex, inline } as any, { at: path });
+		open = false;
+	}
+	function onDelete() {
+		open = false;
+		Transforms.delete(editor, { at: path });
+	}
+
+	let latex = currentLatex;
+	let inline = currentInline;
+	function onEdit() {
+		if (contenteditable) {
+			latex = currentLatex;
+			inline = currentInline;
+			open = true;
+		}
+	}
+
 	let latexElement: HTMLElement;
 	$: if (latexElement) {
 		if (currentLatex) {
@@ -65,38 +84,8 @@
 				throwOnError: false
 			});
 		} else if (contenteditable) {
-			latexElement.innerHTML = 'Click to Edit LaTeX';
+			onDelete();
 		}
-	}
-
-	let editing = false;
-	let latex: string;
-	let inline: boolean;
-	function onEdit() {
-		if (!isReadOnly(editor)) {
-			latex = currentLatex;
-			inline = currentInline;
-			editing = true;
-		}
-	}
-	$: onLatexChange = () => {
-		Transforms.setNodes(editor, { latex, inline } as any, { at: path });
-		editing = false;
-	};
-	function onInlineChange() {
-		inline = !inline;
-	}
-	$: onDelete = () => {
-		Transforms.delete(editor, { at: path });
-	};
-
-	let latexDisplayElement: HTMLElement;
-	$: if (editing && latexDisplayElement) {
-		katex.render(latex, latexDisplayElement, {
-			displayMode: !inline,
-			output: 'html',
-			throwOnError: false
-		});
 	}
 </script>
 
@@ -111,36 +100,12 @@
 	{contenteditable}
 >
 	<div class:inline={currentInline} contenteditable={false}>
-		<span bind:this={latexElement} on:mousedown={onEdit} />
+		<span bind:this={latexElement} on:mousedown={onEdit} on:touchstart={onEdit} />
 	</div>
 	<slot />
 </div>
 
-<Modal bind:open={editing}>
-	<div class="body">
-		<div class="editor">
-			<div class="latex">
-				<div>
-					<textarea bind:value={latex} />
-				</div>
-				<div>
-					<span bind:this={latexDisplayElement} />
-				</div>
-			</div>
-			<div class="buttons">
-				<div>
-					<Button active={!latex} onClick={onLatexChange}><i class="bi bi-check" /></Button>
-				</div>
-				<div>
-					<Button onClick={onDelete}><i class="bi bi-trash" /></Button>
-				</div>
-				<div>
-					<Button active={!inline} onClick={onInlineChange}><i class="bi bi-forward" /></Button>
-				</div>
-			</div>
-		</div>
-	</div></Modal
->
+<LatexEditor bind:open bind:latex bind:inline {onDone} {onDelete} />
 
 <style>
 	.container {
@@ -149,25 +114,5 @@
 	}
 	.inline {
 		display: inline;
-	}
-	.body {
-		background-color: white;
-	}
-	.editor {
-		display: flex;
-	}
-	.latex {
-		flex-direction: column;
-	}
-	.buttons {
-		flex-direction: row;
-		flex-grow: 0;
-	}
-	textarea {
-		resize: vertical;
-		border: 1px solid #888;
-		padding: 0.25rem 0.5rem;
-		min-width: 300px;
-		outline: none;
 	}
 </style>

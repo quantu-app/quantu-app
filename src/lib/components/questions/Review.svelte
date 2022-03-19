@@ -11,6 +11,9 @@
 			<div class="d-flex justify-content-end mt-2">
 				<slot name="extra" />
 			</div>
+			<div>
+				<slot name="explanation" />
+			</div>
 		</div>
 	</div>
 </div>

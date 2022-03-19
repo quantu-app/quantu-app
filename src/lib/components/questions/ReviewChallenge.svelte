@@ -7,8 +7,6 @@
 
 	export let result: Result;
 	export let seed: number = undefined;
-
-	$: console.log(result);
 </script>
 
 {#key result.id}

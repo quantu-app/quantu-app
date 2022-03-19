@@ -4,6 +4,7 @@
 	import Review from './Review.svelte';
 	import type { Result } from '@prisma/client';
 	import type { MultipleChoicePrivate, MultipleChoiceAnswer } from '$lib/types';
+	import RichViewer from '../Editor/RichViewer.svelte';
 
 	export let result: Result;
 	export let seed: number = undefined;
@@ -16,7 +17,6 @@
 		}
 		return correct;
 	}, {} as Record<string, true>);
-	$: console.log(correct);
 </script>
 
 <Review>
@@ -31,4 +31,13 @@
 		reviewMode={true}
 	/>
 	<slot slot="extra" name="extra" />
+	<div name="explanation" slot="explanation">
+		{#if prompt.explanation && prompt.explanation.length}
+			<hr />
+			<div class="px-2">
+				<h1>Explanation</h1>
+				<RichViewer value={prompt.explanation} />
+			</div>
+		{/if}
+	</div>
 </Review>

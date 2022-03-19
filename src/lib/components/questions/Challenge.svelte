@@ -4,7 +4,7 @@
 	import MultipleChoice from './MultipleChoice.svelte';
 	import MarkAsRead from './MarkAsRead.svelte';
 	import type { StateChallenge } from '$lib/state/challenges';
-	import type { QuestionType, Result, ResultType } from '@prisma/client';
+	import type { Result } from '@prisma/client';
 	import { answer, explain } from '$lib/state/results';
 	import type { Answer } from '$lib/types';
 

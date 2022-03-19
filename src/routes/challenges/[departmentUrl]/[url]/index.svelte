@@ -72,7 +72,7 @@
 								slot="extra"
 								role="button"
 								class="btn btn-primary"
-								href={`${base}/d/${departmentUrl}/challenges/${url}/review`}
+								href={`${base}/challenges/${departmentUrl}/${url}/review`}
 							>
 								Review
 							</a>

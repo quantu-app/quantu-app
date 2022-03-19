@@ -44,14 +44,14 @@
 					<a
 						role="button"
 						class="btn btn-outline-primary"
-						href={`${base}/d/${challenge.department.url}/challenges/${challenge.url}/review`}
+						href={`${base}/challenges/${challenge.department.url}/${challenge.url}/review`}
 						>Solved</a
 					>
 				{:else}
 					<a
 						role="button"
 						class="btn btn-outline-primary"
-						href={`${base}/d/${challenge.department.url}/challenges/${challenge.url}`}>Solve</a
+						href={`${base}/challenges/${challenge.department.url}/${challenge.url}`}>Solve</a
 					>
 				{/if}
 			</div>

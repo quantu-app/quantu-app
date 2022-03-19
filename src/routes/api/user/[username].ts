@@ -5,7 +5,7 @@ export function get(event: RequestEvent) {
 	const username = event.params.username;
 
 	return run((client) =>
-		client.user.findUnique({ where: { username }, select: { username: true } })
+		client.user.findUnique({ where: { username }, select: { id: true, username: true } })
 	)
 		.then((user) => {
 			if (!user) {

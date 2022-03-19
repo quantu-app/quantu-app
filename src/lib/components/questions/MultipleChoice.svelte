@@ -43,9 +43,13 @@
 		bind:input
 	/>
 	<slot slot="extra" name="extra" />
-	{#if resultPrompt?.explanation && showExplanation}
-		<div class="explanation">
-			<RichViewer value={resultPrompt?.explanation} />
-		</div>
-	{/if}
+	<div name="explanation" slot="explanation">
+		{#if showExplanation && resultPrompt?.explanation && resultPrompt?.explanation.length}
+			<hr />
+			<div class="px-2">
+				<h1>Explanation</h1>
+				<RichViewer value={resultPrompt?.explanation} />
+			</div>
+		{/if}
+	</div>
 </Prompt>

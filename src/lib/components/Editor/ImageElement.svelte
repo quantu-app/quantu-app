@@ -48,7 +48,7 @@
 
 	export function insertImage(editor: Editor, url: string | ArrayBuffer) {
 		const image = { type: 'image', url, children: [{ text: '' }] };
-		Transforms.insertNodes(editor, image);
+		Transforms.insertNodes(editor, [image, { text: '' }]);
 	}
 
 	export function isImageUrl(url: string): boolean {

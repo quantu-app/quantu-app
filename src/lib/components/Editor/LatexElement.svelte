@@ -23,13 +23,13 @@
 	}
 
 	export function insertLatex(editor: Editor, latex: string, inline: boolean) {
-		const image = { type: 'latex', latex, inline, children: [{ text: '' }] };
-		Transforms.insertNodes(editor, image);
+		const node = { type: 'latex', latex, inline, children: [{ text: '' }] };
+		Transforms.insertNodes(editor, [node, { text: '' }]);
 	}
 </script>
 
 <script lang="ts">
-	import { type ISvelteEditor } from 'svelte-slate';
+	import type { ISvelteEditor } from 'svelte-slate';
 	import { findPath } from 'svelte-slate';
 	import { getEditor } from 'svelte-slate';
 	import { Editor, Transforms } from 'slate';

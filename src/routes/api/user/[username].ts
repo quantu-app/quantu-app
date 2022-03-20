@@ -1,14 +1,15 @@
+import { authenticated } from '$lib/api/auth';
 import { run } from '$lib/prisma';
-import type { RequestEvent } from '@sveltejs/kit/types/internal';
 
-export function get(event: RequestEvent) {
+export const get = authenticated((event) => {
 	const username = event.params.username;
 
 	return run((client) =>
 		client.user.findUnique({
 			where: {
 				username: username
-			}, select: {
+			},
+			select: {
 				id: true,
 				username: true,
 				firstName: true,
@@ -19,18 +20,16 @@ export function get(event: RequestEvent) {
 			}
 		})
 	)
-		.then((user) => {
-			if (!user) {
-				throw new Error('User not found');
-			} else {
-				return {
-					status: 200,
-					body: user
-				};
-			}
-		})
+		.then((user) =>
+			user
+				? {
+						status: 200,
+						body: user
+				  }
+				: { status: 404 }
+		)
 		.catch((error) => ({
 			status: 401,
 			body: error
 		}));
-}
+});

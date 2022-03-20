@@ -20,9 +20,16 @@
 	export let username: string;
 
 	let user: User;
+	let loaded = false;
 
 	onMount(async () => {
-		user = await fetch(`${base}/api/user/${username}`).then((res) => res.json());
+		user = await fetch(`${base}/api/user/${username}`).then((res) => {
+			loaded = true;
+			if (!res.ok) {
+				return null;
+			}
+			return res.json();
+		});
 	});
 </script>
 
@@ -31,7 +38,12 @@
 </svelte:head>
 
 <UserLayout>
-	{#if user}
+	{#if user && loaded}
 		<Profile {user} />
+	{/if}
+	{#if !user && loaded}
+		<div class="container mt-4">
+			<h1>User {username} not found.</h1>
+		</div>
 	{/if}
 </UserLayout>

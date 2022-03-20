@@ -4,7 +4,7 @@
 	import { currentUser } from '$lib/state/user';
 	import type { User } from '@prisma/client';
 	import RichViewer from '../Editor/RichViewer.svelte';
-	import { formatRelative, subDays } from 'date-fns';
+	import { formatRelative } from 'date-fns';
 
 	export let user: User;
 

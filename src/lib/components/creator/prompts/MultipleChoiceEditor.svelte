@@ -69,6 +69,16 @@
 	{/if}
 </div>
 
+<div class="my-4">
+	<label for="single-answer" class="form-label">Can the user select only one answer?</label>
+	<input
+		class="form-check-input"
+		type="checkbox"
+		bind:checked={prompt.singleAnswer}
+		id="flexCheckDefault"
+	/>
+</div>
+
 <ul class="list-group list-group-flush">
 	{#each choices as choice (choice.id)}
 		<li class="list-group-item px-0 pt-1">

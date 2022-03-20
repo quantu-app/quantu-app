@@ -2,10 +2,10 @@ import type { PrismaClient } from "@prisma/client";
 
 export interface IFromCallbackParams {
 	isCreate?: boolean;
-  firstName?: string;
-  lastName?: string;
-  email: string;
-  emailVerified?: boolean;
+	firstName?: string;
+	lastName?: string;
+	email: string;
+	emailVerified?: boolean;
 }
 
 export async function fromCallback(prisma: PrismaClient, params: IFromCallbackParams) {
@@ -15,7 +15,7 @@ export async function fromCallback(prisma: PrismaClient, params: IFromCallbackPa
 		}
 	});
 	const user = email
-	? await prisma.user.findFirst({
+		? await prisma.user.findFirst({
 			where: {
 				id: email.userId
 			},
@@ -23,11 +23,14 @@ export async function fromCallback(prisma: PrismaClient, params: IFromCallbackPa
 				emails: true
 			}
 		})
-	: null;
+		: null;
 
 	if (user) {
 		return user;
 	} else {
+		// todo: check if user exist (we must ensure username is unique)
+		// - if exists: add hash to email for unique username
+		// - else: just create the user.
 		return prisma.user.create({
 			data: {
 				username: params.email.split('@')[0],
@@ -47,5 +50,5 @@ export async function fromCallback(prisma: PrismaClient, params: IFromCallbackPa
 				emails: true
 			}
 		});
-	} 
+	}
 }

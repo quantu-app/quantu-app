@@ -33,7 +33,7 @@
 		/>
 	</div>
 {:else if type === 'text'}
-	<div class="input-group">
+	<div class="input-group px-4">
 		<input
 			type="text"
 			class="form-control"

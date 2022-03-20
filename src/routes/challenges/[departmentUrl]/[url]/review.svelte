@@ -68,7 +68,12 @@
 					<div class="col-lg-12">
 						{#if challenge.result}
 							<ReviewChallenge result={challenge.result}>
-								<a slot="extra" role="button" class="btn btn-primary" href={`/challenges`}>
+								<a
+									slot="extra"
+									role="button"
+									class="btn btn-outline-primary ms-4 mt-2"
+									href={`/challenges`}
+								>
 									Return to Challenges
 								</a>
 							</ReviewChallenge>

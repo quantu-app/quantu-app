@@ -4,12 +4,6 @@
 	import type { Input } from '$lib/types';
 
 	export let prompt: Input;
-	export let showExplanation = false;
-	export let explanation: Array<IElement | IText> = undefined;
 </script>
 
 <RichViewer value={prompt.question} />
-{#if explanation && showExplanation}
-	<hr />
-	<RichViewer value={explanation} />
-{/if}

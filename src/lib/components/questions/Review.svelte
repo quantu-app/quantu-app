@@ -8,7 +8,7 @@
 		<div class="d-flex flex-column pt-4 h-100 input">
 			<slot name="input" />
 
-			<div class="d-flex justify-content-end mt-2">
+			<div class="d-flex mt-2">
 				<slot name="extra" />
 			</div>
 			<div>

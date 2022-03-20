@@ -4,6 +4,7 @@
 	import Review from './Review.svelte';
 	import type { Result } from '@prisma/client';
 	import type { InputPrivate, InputAnswer } from '$lib/types';
+	import RichViewer from '../Editor/RichViewer.svelte';
 
 	export let result: Result;
 
@@ -21,4 +22,13 @@
 		{input}
 	/>
 	<slot slot="extra" name="extra" />
+	<div name="explanation" slot="explanation">
+		{#if prompt.explanation && prompt.explanation.length}
+			<hr />
+			<div class="px-4">
+				<h1>Explanation</h1>
+				<RichViewer value={prompt.explanation} />
+			</div>
+		{/if}
+	</div>
 </Review>

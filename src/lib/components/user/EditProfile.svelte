@@ -4,6 +4,7 @@
 	import { base } from '$app/paths';
 	import type { User } from '@prisma/client';
 	import { updateUser } from '$lib/state/user';
+	import RichEditor from '$lib/components/Editor/RichEditor.svelte';
 
 	export let user: User;
 
@@ -12,6 +13,7 @@
 	let lastName = user.lastName;
 	let birthday = user.birthday?.toJSON().slice(0, 10);
 	let country = user.country || 'US';
+	let biography = user.bio;
 	let updating = false;
 
 	let date: Date;
@@ -24,6 +26,7 @@
 		try {
 			const user = await updateUser({
 				username,
+				bio: biography,
 				firstName,
 				lastName,
 				birthday: date,
@@ -110,6 +113,11 @@
 					bind:value={birthday}
 				/>
 			</div>
+		</div>
+		<div class="col-md-6">
+			<label for="qu-user--biography" class="form-label">Biography</label>
+			<p class="text-black-50 m-0">This is where you can tell us about yourself.</p>
+			<RichEditor id="qu-user--biography" bind:value={biography} />
 		</div>
 		<div class="row my-4">
 			<div class="col-md-6">

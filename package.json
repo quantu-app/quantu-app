@@ -10,6 +10,17 @@
 	"engines": {
 		"node": ">=15"
 	},
+	"license": "MIT",
+	"funding": {
+		"type": "patreon",
+		"url": "https://www.patreon.com/quantu"
+	},
+	"contributors": [
+		{
+			"name": "John Faucett",
+			"email": "jwaterfaucett@gmail.com"
+		}
+	],
 	"scripts": {
 		"prisma": "prisma",
 		"svelte-kit": "svelte-kit",

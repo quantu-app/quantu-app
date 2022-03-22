@@ -13,26 +13,27 @@
 	}
 
 	export function withLatex<T extends ISvelteEditor = ISvelteEditor>(editor: T): T {
-		const { isVoid } = editor;
+		const { isVoid, isInline } = editor;
 
-		editor.isVoid = (element) => {
-			return isLatexElement(element as IBaseElement) ? true : isVoid(element);
-		};
+		editor.isInline = (element) =>
+			isLatexElement(element as IBaseElement) ? !!element['inline'] : isInline(element);
+
+		editor.isVoid = (element) => (isLatexElement(element as IBaseElement) ? true : isVoid(element));
 
 		return editor;
 	}
 
-	export function insertLatex(editor: Editor, latex: string, inline: boolean) {
+	export function insertLatex(editor: Editor, latex: string, inline: boolean, at?: Location) {
 		const node = { type: 'latex', latex, inline, children: [{ text: '' }] };
-		Transforms.insertNodes(editor, [node, { text: '' }]);
+		Editor.withoutNormalizing(editor, () => {
+			Transforms.insertNodes(editor, [node], { at: inline ? at : undefined });
+		});
 	}
 </script>
 
 <script lang="ts">
-	import type { ISvelteEditor } from 'svelte-slate';
-	import { findPath } from 'svelte-slate';
-	import { getEditor } from 'svelte-slate';
-	import { Editor, Transforms } from 'slate';
+	import { isReadOnly, findPath, getEditor, type ISvelteEditor } from 'svelte-slate';
+	import { Editor, Location, Transforms } from 'slate';
 	import katex from 'katex';
 	import LatexEditor from './LatexEditor.svelte';
 	export let element: ILatexElement;
@@ -68,7 +69,7 @@
 	let latex = currentLatex;
 	let inline = currentInline;
 	function onEdit() {
-		if (contenteditable) {
+		if (!isReadOnly(editor)) {
 			latex = currentLatex;
 			inline = currentInline;
 			open = true;
@@ -90,7 +91,7 @@
 </script>
 
 <div
-	class="container"
+	class="latex-element"
 	class:inline={currentInline}
 	bind:this={ref}
 	data-slate-node="element"
@@ -105,10 +106,10 @@
 	<slot />
 </div>
 
-<LatexEditor bind:open bind:latex bind:inline {onDone} {onDelete} />
+<LatexEditor bind:open {latex} {inline} {onDone} {onDelete} />
 
 <style>
-	.container {
+	.latex-element {
 		position: relative;
 		margin: 0;
 	}

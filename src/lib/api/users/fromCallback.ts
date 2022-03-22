@@ -1,4 +1,6 @@
 import type { PrismaClient } from '@prisma/client';
+import { hash } from 'bcrypt';
+import { randomString } from '$lib/utils';
 
 export interface IFromCallbackParams {
 	isCreate?: boolean;
@@ -30,8 +32,8 @@ export async function fromCallback(prisma: PrismaClient, params: IFromCallbackPa
 	} else {
 		return prisma.user.create({
 			data: {
-				username: params.email.split('@')[0],
-				encryptedPassword: Math.random().toString(36).slice(2),
+				username: await getUniqueUsername(prisma, params.email.split('@')[0]),
+				encryptedPassword: await hash(randomString(16)),
 				firstName: params.firstName,
 				lastName: params.lastName,
 				bio: [],
@@ -47,5 +49,18 @@ export async function fromCallback(prisma: PrismaClient, params: IFromCallbackPa
 				emails: true
 			}
 		});
+	}
+}
+
+function getUniqueUsername(prisma: PrismaClient, username: string): Promise<string> | string {
+	const user = prisma.user.findUnique({
+		where: {
+			username: username
+		}
+	});
+	if (user) {
+		return getUniqueUsername(prisma, `${username}${randomString(2)}`);
+	} else {
+		return username;
 	}
 }

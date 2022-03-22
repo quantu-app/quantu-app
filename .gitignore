@@ -10,3 +10,5 @@ src-tauri/target/
 WixTools
 .env
 !.env.example
+
+src/routes/editor.svelte

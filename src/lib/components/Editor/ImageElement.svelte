@@ -48,7 +48,7 @@
 
 	export function insertImage(editor: Editor, url: string | ArrayBuffer) {
 		const image = { type: 'image', url, children: [{ text: '' }] };
-		Transforms.insertNodes(editor, [image, { text: '' }]);
+		Transforms.insertNodes(editor, [image]);
 	}
 
 	export function isImageUrl(url: string): boolean {
@@ -106,13 +106,13 @@
 	{dir}
 	contenteditable={false}
 >
-	<slot />
 	<div contenteditable={false} class="image">
 		<img src={element.url} alt="" class:selected />
 		<div class="delete" class:selected>
 			<Button onClick={onRemove}><i class="bi bi-trash" /></Button>
 		</div>
 	</div>
+	<slot />
 </div>
 
 <style>

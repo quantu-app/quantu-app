@@ -22,6 +22,7 @@
 	import HoveringToolbar from './HoveringToolbar.svelte';
 	import { withImages } from './ImageElement.svelte';
 	import { longpress } from './longpress';
+	import { withLatex } from './LatexElement.svelte';
 
 	export let value: Array<IText | IElement> = [
 		{
@@ -32,7 +33,7 @@
 	export let selection: Selection | null = null;
 	export let readOnly = false;
 	export let placeholder = 'Type...';
-	export let editor = withHistory(withImages(withSvelte(createEditor())));
+	export let editor = withHistory(withLatex(withImages(withSvelte(createEditor()))));
 
 	let open = false;
 	let ref: HTMLDivElement;

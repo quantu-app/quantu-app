@@ -12,6 +12,8 @@
 	function onDoneInternal() {
 		open = false;
 		onDone(latex, inline);
+		latex = '';
+		inline = true;
 	}
 	function onInlineChange() {
 		inline = !inline;

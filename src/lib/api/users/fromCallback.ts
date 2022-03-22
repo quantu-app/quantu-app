@@ -1,11 +1,11 @@
-import type { PrismaClient } from "@prisma/client";
+import type { PrismaClient } from '@prisma/client';
 
 export interface IFromCallbackParams {
 	isCreate?: boolean;
-  firstName?: string;
-  lastName?: string;
-  email: string;
-  emailVerified?: boolean;
+	firstName?: string;
+	lastName?: string;
+	email: string;
+	emailVerified?: boolean;
 }
 
 export async function fromCallback(prisma: PrismaClient, params: IFromCallbackParams) {
@@ -15,15 +15,15 @@ export async function fromCallback(prisma: PrismaClient, params: IFromCallbackPa
 		}
 	});
 	const user = email
-	? await prisma.user.findFirst({
-			where: {
-				id: email.userId
-			},
-			include: {
-				emails: true
-			}
-		})
-	: null;
+		? await prisma.user.findFirst({
+				where: {
+					id: email.userId
+				},
+				include: {
+					emails: true
+				}
+		  })
+		: null;
 
 	if (user) {
 		return user;
@@ -47,5 +47,5 @@ export async function fromCallback(prisma: PrismaClient, params: IFromCallbackPa
 				emails: true
 			}
 		});
-	} 
+	}
 }

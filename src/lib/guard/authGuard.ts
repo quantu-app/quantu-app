@@ -1,4 +1,4 @@
-import type { LoadOutput } from '@sveltejs/kit';
+import type { LoadOutput } from '@sveltejs/kit/types/private';
 
 export function authGuard({ url, session }): LoadOutput {
 	if (session?.user) {

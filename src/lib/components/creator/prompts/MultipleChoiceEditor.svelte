@@ -83,7 +83,7 @@
 						{disabled}
 						on:change={createChoiceCorrectSetter(choice)}
 					/>
-					<label class="form-check-label" for={`correct-${choice.id}`}> Correct? </label>
+					<label class="form-check-label" for={`correct-${choice.id}`}>Correct?</label>
 				</div>
 				{#if !disabled}
 					<button class="ms-auto btn btn-sm btn-danger" on:click={createOnDelete(choice.id)}

@@ -8,28 +8,48 @@ export async function get(event: RequestEvent) {
 	const departmentUrl: string = event.params.departmentUrl;
 
 	return run((client) =>
-		client.challenge.findMany({
-			where: {
-				department: {
-					url: departmentUrl
-				},
-				results: {
-					every: {
-						userId: event.locals.token.userId
+		client.challenge
+			.findMany({
+				where: {
+					department: {
+						url: departmentUrl
 					}
+				},
+				include: {
+					department: {
+						select: {
+							url: true,
+							name: true
+						}
+					}
+				},
+				orderBy: {
+					releasedAt: 'desc'
 				}
-			},
-			include: {
-				results: true
-			}
-		})
+			})
+			.then((challenges) =>
+				client.result
+					.findMany({
+						where: {
+							userId: event.locals.token.userId,
+							challengeId: {
+								in: challenges.map((challenge) => challenge.id)
+							}
+						}
+					})
+					.then((results) => {
+						const resultMap = results.reduce((map, result) => {
+							map[result.challengeId] = result;
+							return map;
+						}, {});
+						return challenges.map((challenge) => {
+							(challenge as any).result = resultMap[challenge.id];
+							return challenge;
+						});
+					})
+			)
 	).then((challenges) => ({
-		body: challenges.map((c) => {
-			(c as any).result = c.results[0];
-			delete c.results;
-			removePrivate(c);
-			return c;
-		}),
+		body: challenges.map(removePrivate),
 		status: 200
 	}));
 }

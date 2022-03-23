@@ -30,10 +30,7 @@ export async function showChallengeByUrl(departmentUrl: string, url: string) {
 		throw await res.json();
 	}
 	const challenge: StateChallenge = await res.json();
-	challengesWritable.update((challenges) => {
-		challenges.push(challenge);
-		return challenges;
-	});
+	challengesWritable.update((challenges) => addOrUpdate(challenges, challenge));
 	return challenge;
 }
 

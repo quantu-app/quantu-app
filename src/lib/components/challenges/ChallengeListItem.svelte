@@ -36,7 +36,9 @@
 		</div>
 		<div class="row">
 			<div class="col-6">
-				<div class="text-muted text-uppercase mt-3">{challenge.department.name}</div>
+				<div class="text-muted text-uppercase mt-3">
+					{challenge.department.name} | Solvers: {challenge.solvers}
+				</div>
 			</div>
 
 			<div class="col-6 text-end">

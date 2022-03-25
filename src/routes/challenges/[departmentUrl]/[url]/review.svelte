@@ -47,6 +47,10 @@
 			url: $page.url.toString(),
 			type: 'website'
 		}}
+		twitter={{
+			title: challenge.name,
+			card: 'summary'
+		}}
 		robotsDirectives={['all']}
 	/>
 {/if}

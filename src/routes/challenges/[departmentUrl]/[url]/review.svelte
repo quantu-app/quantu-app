@@ -25,7 +25,6 @@
 	import { page } from '$app/stores';
 	import { challengesByDepartmentUrl, showChallengeByUrl } from '$lib/state/challenges';
 	import ReviewChallenge from '$lib/components/questions/ReviewChallenge.svelte';
-	import { resultsByTypeAndId, showResultByTypeAndId } from '$lib/state/results';
 	import SEO from '$lib/components/SEO/index.svelte';
 	import { onMount } from 'svelte';
 

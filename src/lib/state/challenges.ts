@@ -1,6 +1,7 @@
 import type { Challenge, Result } from '@prisma/client';
 import { writable, derived } from 'svelte/store';
 import { base } from '$app/paths';
+import type { Answer } from '$lib/types';
 
 export type StateChallenge = Challenge & {
 	department: { url: string; name: string };
@@ -8,7 +9,7 @@ export type StateChallenge = Challenge & {
 	solvers: number;
 };
 
-const challengesWritable = writable<Array<StateChallenge>>([]);
+export const challengesWritable = writable<Array<StateChallenge>>([]);
 
 export const challenges = derived(challengesWritable, (challenges) => challenges);
 export const challengesById = derived(challengesWritable, (challenges) =>
@@ -58,6 +59,43 @@ export async function showAllChallenges() {
 		challenges.reduce((state, challenge) => addOrUpdate(state, challenge), state)
 	);
 	return challenges;
+}
+
+export async function answer(challengeId: string, answer: Answer) {
+	const res = await fetch(`${base}/api/results/challenge/${challengeId}`, {
+		method: 'POST',
+		body: JSON.stringify(answer)
+	});
+	if (!res.ok) {
+		throw await res.json();
+	}
+	const result: Result = await res.json();
+	challengesWritable.update((challenges) => {
+		const challenge = challenges.find((c) => c.id === result.challengeId);
+		if (challenge) {
+			challenge.result = result;
+		}
+		return challenges;
+	});
+	return result;
+}
+
+export async function explain(challengeId: string) {
+	const res = await fetch(`${base}/api/results/challenge/${challengeId}/explain`, {
+		method: 'POST'
+	});
+	if (!res.ok) {
+		throw await res.json();
+	}
+	const result: Result = await res.json();
+	challengesWritable.update((challenges) => {
+		const challenge = challenges.find((c) => c.id === result.challengeId);
+		if (challenge) {
+			challenge.result = result;
+		}
+		return challenges;
+	});
+	return result;
 }
 
 function addOrUpdate(

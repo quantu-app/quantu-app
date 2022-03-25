@@ -59,7 +59,7 @@ export const get = authenticated((event: RequestEvent) =>
 					}, {} as Record<string, number>);
 					return challenges.map((challenge) => {
 						(challenge as any).result = resultMap[challenge.id];
-						(challenge as any).solvers = solverMap[challenge.id];
+						(challenge as any).solvers = solverMap[challenge.id] || 0;
 						return challenge;
 					});
 				})

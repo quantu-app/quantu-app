@@ -4,8 +4,8 @@
 	import MultipleChoice from './MultipleChoice.svelte';
 	import MarkAsRead from './MarkAsRead.svelte';
 	import type { StateChallenge } from '$lib/state/challenges';
+	import { answer, explain } from '$lib/state/challenges';
 	import type { Result } from '@prisma/client';
-	import { answer, explain } from '$lib/state/results';
 	import type { Answer } from '$lib/types';
 
 	export let challenge: StateChallenge;
@@ -20,10 +20,10 @@
 	}
 
 	function onExplain() {
-		return explain('CHALLENGE', challenge.id);
+		return explain(challenge.id);
 	}
 	async function onSubmit(a: Answer) {
-		return answer('CHALLENGE', challenge.id, a);
+		return answer(challenge.id, a);
 	}
 </script>
 

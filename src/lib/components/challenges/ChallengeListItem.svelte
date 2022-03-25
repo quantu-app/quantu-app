@@ -24,7 +24,7 @@
 	const image = rng.fromArray(IMAGES).unwrap();
 </script>
 
-<div class="row my-4">
+<div class="row my-4 px-4">
 	<p class="text-center">{date}</p>
 	<div class="challenge-card col-12 border p-4">
 		<div class="row">

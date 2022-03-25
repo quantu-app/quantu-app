@@ -100,10 +100,10 @@
 	{dir}
 	{contenteditable}
 >
+	<slot />
 	<div class:inline={currentInline} contenteditable={false}>
 		<span bind:this={latexElement} on:mousedown={onEdit} on:touchstart={onEdit} />
 	</div>
-	<slot />
 </div>
 
 <LatexEditor bind:open {latex} {inline} {onDone} {onDelete} />

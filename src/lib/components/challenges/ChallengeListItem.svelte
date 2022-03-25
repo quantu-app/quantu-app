@@ -24,10 +24,10 @@
 
 <div class="row my-4">
 	<p class="text-center">{date}</p>
-	<div class="challenge-card col-md-11 border card-border-color p-4">
+	<div class="challenge-card col-12 border p-4">
 		<div class="row">
-			<div class="col-lg-6">
-				<img src={image} alt={challenge.name} width="414" height="227" />
+			<div class="col-lg-6 text-center">
+				<img src={image} alt={challenge.name} class="img-fluid" />
 			</div>
 			<div class="col-lg-6">
 				<h2 class="challenge-name mt-4 mt-lg-0">{challenge.name}</h2>
@@ -36,8 +36,9 @@
 		</div>
 		<div class="row">
 			<div class="col-6">
-				<div class="text-muted text-uppercase mt-3">
-					{challenge.department.name} | Solvers: {challenge.solvers}
+				<div class="text-muted mt-3">
+					<span class="text-uppercase">{challenge.department.name}</span> |
+					<span>{challenge.solvers == 1 ? `1 Solver` : `${challenge.solvers} Solvers`} </span>
 				</div>
 			</div>
 
@@ -60,7 +61,7 @@
 		</div>
 	</div>
 	{#if challenge.result}
-		<div class="col-md-11 completion-bar" />
+		<div class="col-12 completion-bar" />
 	{/if}
 </div>
 
@@ -73,9 +74,6 @@
 		font-size: 20px;
 		line-height: 1.2em;
 		text-overflow: ellipsis;
-	}
-	.card-border-color {
-		border-color: #707070;
 	}
 	.completion-bar {
 		background: #8be59c;

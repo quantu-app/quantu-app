@@ -16,8 +16,8 @@
 	<button
 		class="navbar-toggler"
 		type="button"
-		data-toggle="collapse"
-		data-target="#navbarSupportedContent"
+		data-bs-toggle="collapse"
+		data-bs-target="#navbarSupportedContent"
 		aria-controls="navbarSupportedContent"
 		aria-expanded="false"
 		aria-label="Toggle navigation"
@@ -27,12 +27,12 @@
 
 	<div class="collapse navbar-collapse" id="navbarSupportedContent">
 		{#if $currentUser}
-			<ul class="navbar-nav">
+			<ul class="navbar-nav ms-4 ms-lg-0 me-auto">
 				<li class="nav-item">
 					<a class="nav-link linkExtra" href={`${base}/challenges`}>Challenges</a>
 				</li>
 			</ul>
-			<div class="navbar-nav ms-auto me-4">
+			<div class="navbar-nav ms-4 ms-lg-auto me-4">
 				<UserDropdown />
 			</div>
 		{:else}
@@ -41,7 +41,7 @@
 					type="button"
 					data-bs-toggle="modal"
 					data-bs-target="#sign-in-up-modal"
-					class="btn btn-light me-4"
+					class="btn btn-light me-lg-4 m-2 ms-4"
 				>
 					Login
 				</button>
@@ -50,7 +50,7 @@
 					data-bs-toggle="modal"
 					data-bs-target="#sign-in-up-modal"
 					data-signup="true"
-					class="btn btn-light"
+					class="btn btn-light m-2 ms-4 ms-lg-2"
 				>
 					Sign Up
 				</button>

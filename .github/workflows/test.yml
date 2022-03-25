@@ -18,4 +18,5 @@ jobs:
       - run: npm ci
       - env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          CI: true
         run: npm test

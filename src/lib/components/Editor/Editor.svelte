@@ -10,7 +10,7 @@
 </script>
 
 <script lang="ts">
-	import { Slate, Editable, withSvelte, isHotkey } from 'svelte-slate';
+	import { Slate, Editable, withSvelte, isHotkey, isReadOnly } from 'svelte-slate';
 	import type { Selection } from 'slate';
 	import { createEditor } from 'slate';
 	import { withHistory } from 'slate-history';
@@ -49,7 +49,9 @@
 	}
 
 	function onLongPress() {
-		open = true;
+		if (!isReadOnly(editor)) {
+			open = true;
+		}
 	}
 </script>
 

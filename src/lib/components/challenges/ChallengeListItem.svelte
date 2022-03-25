@@ -1,9 +1,11 @@
 <script lang="ts" context="module">
 	const IMAGES = [
+		'https://github.com/quantu-app/design-platform/blob/c8023510d3491c97da21e0a5dc167456573ee4ac/app/resources/challenges/no_image_placeholder_imgs/Parallelogram.png',
 		'https://raw.githubusercontent.com/quantu-app/design-platform/master/app/resources/challenges/no_image_placeholder_imgs/Three%20octogons.png',
 		'https://raw.githubusercontent.com/quantu-app/design-platform/master/app/resources/challenges/no_image_placeholder_imgs/Two%20Hexagons.png',
 		'https://github.com/quantu-app/design-platform/raw/master/app/resources/challenges/no_image_placeholder_imgs/Two%20Triangles.png',
-		'https://github.com/quantu-app/design-platform/raw/master/app/resources/challenges/no_image_placeholder_imgs/Single%20Triangle%20Touching%20Edges.png'
+		'https://github.com/quantu-app/design-platform/raw/master/app/resources/challenges/no_image_placeholder_imgs/Single%20Triangle%20Touching%20Edges.png',
+		'https://github.com/quantu-app/design-platform/blob/c8023510d3491c97da21e0a5dc167456573ee4ac/app/resources/challenges/no_image_placeholder_imgs/Parallelogram%20Blue%20Tilt.png'
 	];
 </script>
 
@@ -24,10 +26,10 @@
 
 <div class="row my-4">
 	<p class="text-center">{date}</p>
-	<div class="challenge-card col-md-11 border card-border-color p-4">
+	<div class="challenge-card col-12 border p-4">
 		<div class="row">
-			<div class="col-lg-6">
-				<img src={image} alt={challenge.name} width="414" height="227" />
+			<div class="col-lg-6 text-center">
+				<img src={image} alt={challenge.name} class="img-fluid" />
 			</div>
 			<div class="col-lg-6">
 				<h2 class="challenge-name mt-4 mt-lg-0">{challenge.name}</h2>
@@ -36,8 +38,9 @@
 		</div>
 		<div class="row">
 			<div class="col-6">
-				<div class="text-muted text-uppercase mt-3">
-					{challenge.department.name} | Solvers: {challenge.solvers}
+				<div class="text-muted mt-3">
+					<span class="text-uppercase">{challenge.department.name}</span> |
+					<span>{challenge.solvers == 1 ? `1 Solver` : `${challenge.solvers} Solvers`} </span>
 				</div>
 			</div>
 
@@ -60,7 +63,7 @@
 		</div>
 	</div>
 	{#if challenge.result}
-		<div class="col-md-11 completion-bar" />
+		<div class="col-12 completion-bar" />
 	{/if}
 </div>
 
@@ -73,9 +76,6 @@
 		font-size: 20px;
 		line-height: 1.2em;
 		text-overflow: ellipsis;
-	}
-	.card-border-color {
-		border-color: #707070;
 	}
 	.completion-bar {
 		background: #8be59c;

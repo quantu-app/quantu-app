@@ -48,14 +48,14 @@
 <div class="container my-4">
 	{#if latestChallenge}
 		<div class="row">
-			<h2 class="ps-0">Latest Challenge</h2>
+			<h2 class="ps-md-0">Latest Challenge</h2>
 
 			<ChallengeList challenges={[latestChallenge]} />
 		</div>
 	{/if}
 	{#if previousChallenges.length}
 		<div class="row mt-4">
-			<h2 class="ps-0">Previous Challenges</h2>
+			<h2 class="ps-md-0">Previous Challenges</h2>
 			<ChallengeList challenges={previousChallenges} />
 		</div>
 	{/if}

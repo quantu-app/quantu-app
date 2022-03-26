@@ -4,7 +4,7 @@
 	import { currentUser } from '$lib/state/user';
 </script>
 
-<nav class="navbar navbar-dark navbar-expand-lg bg-dark justify-content-between">
+<nav class="navbar navbar-dark navbar-expand bg-dark justify-content-between">
 	<a class="navbar-brand ms-4 logo" href="/">
 		<img
 			src="https://raw.githubusercontent.com/quantu-app/design-platform/master/branding/logo/1x/logo-matrix-symmetric.png"
@@ -13,50 +13,37 @@
 			height="21"
 		/>
 	</a>
-	<button
-		class="navbar-toggler"
-		type="button"
-		data-bs-toggle="collapse"
-		data-bs-target="#navbarSupportedContent"
-		aria-controls="navbarSupportedContent"
-		aria-expanded="false"
-		aria-label="Toggle navigation"
-	>
-		<span class="navbar-toggler-icon" />
-	</button>
 
-	<div class="collapse navbar-collapse" id="navbarSupportedContent">
-		{#if $currentUser}
-			<ul class="navbar-nav ms-4 ms-lg-0 me-auto">
-				<li class="nav-item">
-					<a class="nav-link linkExtra" href={`${base}/challenges`}>Challenges</a>
-				</li>
-			</ul>
-			<div class="navbar-nav ms-4 ms-lg-auto me-4">
-				<UserDropdown />
-			</div>
-		{:else}
-			<div class="navbar-nav ms-auto me-4">
-				<button
-					type="button"
-					data-bs-toggle="modal"
-					data-bs-target="#sign-in-up-modal"
-					class="btn btn-light me-lg-4 m-2 ms-4"
-				>
-					Login
-				</button>
-				<button
-					type="button"
-					data-bs-toggle="modal"
-					data-bs-target="#sign-in-up-modal"
-					data-signup="true"
-					class="btn btn-light m-2 ms-4 ms-lg-2"
-				>
-					Sign Up
-				</button>
-			</div>
-		{/if}
-	</div>
+	{#if $currentUser}
+		<ul class="navbar-nav me-auto">
+			<li class="nav-item">
+				<a class="nav-link linkExtra" href={`${base}/challenges`}>Challenges</a>
+			</li>
+		</ul>
+		<div class="navbar-nav ms-4 ms-lg-auto me-4">
+			<UserDropdown />
+		</div>
+	{:else}
+		<div class="navbar-nav ms-auto me-4">
+			<button
+				type="button"
+				data-bs-toggle="modal"
+				data-bs-target="#sign-in-up-modal"
+				class="btn btn-light me-lg-4 m-2 ms-4"
+			>
+				Login
+			</button>
+			<button
+				type="button"
+				data-bs-toggle="modal"
+				data-bs-target="#sign-in-up-modal"
+				data-signup="true"
+				class="btn btn-light m-2 ms-4 ms-lg-2"
+			>
+				Sign Up
+			</button>
+		</div>
+	{/if}
 </nav>
 
 <style lang="scss">

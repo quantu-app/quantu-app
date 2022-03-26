@@ -56,67 +56,70 @@
 
 <UserLayout>
 	{#if challenge}
-		<div id="challenge-wrapper">
-			<nav id="challenge-sidebar">
-				<div class="challenge-sidebar-header">
-					<h5 class="mt-4 mb-0 ms-4 department-heading">Department</h5>
-					<h5 class="ms-4 department">{challenge.department.name}</h5>
-				</div>
-			</nav>
-			<div id="challenge-content">
-				<div class="row mt-3 mx-0">
-					<div class="col-lg-12">
-						<h2>{challenge.name}</h2>
+		<div id="challenge-wrapper" class="container-fluid">
+			<div class="row flex-nowrap">
+				<div id="challenge--sidebar" class="col-auto px-sm-2 px-0">
+					<div class="d-flex flex-column mt-3" id="challenge--sidebarContent">
+						<ul class="nav nav-pills flex-column align-items-center align-items-sm-start">
+							<li class="nav-item mx-3">
+								{#if challenge && challenge.department}
+									<a
+										href="/challenges"
+										class="nav-link align-middle px-0 py-0"
+										alt={challenge.department.name}
+									>
+										<i class="fs-4 bi-building d-sm-none" />
+										<span id="challenge--departmentHeading" class="d-none d-sm-block"
+											>Department</span
+										>
+										<span id="challenge--department" class="d-none d-sm-inline"
+											>{challenge.department.name}</span
+										>
+									</a>
+								{/if}
+							</li>
+						</ul>
 					</div>
-					<div class="col-lg-12">
-						{#if challenge.result}
-							<ReviewChallenge result={challenge.result}>
-								<a
-									slot="extra"
-									role="button"
-									class="btn btn-outline-primary ms-4 mt-2"
-									href={`/challenges`}
-								>
-									Return to Challenges
-								</a>
-							</ReviewChallenge>
-						{/if}
+				</div>
+				<div id="challenge--mainContent" class="col">
+					<div class="row mt-3 mx-0">
+						<div class="col-lg-12">
+							<h2>{challenge.name}</h2>
+						</div>
+						<div class="col-lg-12">
+							{#if challenge.result}
+								<ReviewChallenge result={challenge.result}>
+									<a
+										slot="extra"
+										role="button"
+										class="btn btn-outline-primary mt-2"
+										href={`/challenges`}
+									>
+										Return to Challenges
+									</a>
+								</ReviewChallenge>
+							{/if}
+						</div>
 					</div>
 				</div>
 			</div>
-			<div id="challenge-menu" />
 		</div>
 	{/if}
 </UserLayout>
 
 <style type="css">
-	#challenge-wrapper {
-		display: flex;
-		width: 100%;
-		align-items: stretch;
-	}
-	#challenge-sidebar {
-		min-width: 270px;
-		max-width: 270px;
-		border-right: 1px solid #707070;
-		background: white;
-		z-index: 1;
-	}
-	#challenge-menu {
-		z-index: 1;
-	}
-	#challenge-content {
-		width: 100%;
-		max-width: 800px;
-		min-height: 100vh;
+	#challenge--sidebar {
 		border-right: 1px solid #707070;
 	}
-	h5.department-heading {
+	#challenge--mainContent {
+		min-height: 500px;
+	}
+	#challenge--departmentHeading {
 		color: black;
 		font-weight: bold;
 		font-size: 18px;
 	}
-	h5.department {
+	#challenge--department {
 		font-weight: 500;
 		color: #999999;
 		font-size: 18px;

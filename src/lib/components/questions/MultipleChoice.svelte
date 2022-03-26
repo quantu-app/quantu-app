@@ -46,7 +46,7 @@
 	<div name="explanation" slot="explanation">
 		{#if showExplanation && resultPrompt?.explanation && resultPrompt?.explanation.length}
 			<hr />
-			<div class="px-4">
+			<div class="mb-4">
 				<h1>Explanation</h1>
 				<RichViewer value={resultPrompt?.explanation} />
 			</div>

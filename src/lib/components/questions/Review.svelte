@@ -4,7 +4,7 @@
 			<slot name="content" />
 		</div>
 	</div>
-	<div class="col-12 p-0">
+	<div class="col-12">
 		<div class="d-flex flex-column pt-4 h-100 input">
 			<slot name="input" />
 

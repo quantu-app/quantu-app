@@ -32,13 +32,13 @@
 	};
 </script>
 
-<div class="row ps-0">
-	<div class="col-lg-12 mt-4">
+<div class="row ps-0 prompt">
+	<div class="col-lg-12">
 		<div class="d-flex flex-column flex-grow-1 pt-4">
 			<slot name="content" />
 		</div>
 	</div>
-	<div class="response-input col-lg-12 input mt-4 px-0">
+	<div class="mt-4">
 		<div class="d-flex flex-column flex-grow-1">
 			<slot name="input" />
 
@@ -58,7 +58,7 @@
 				{:else}
 					<button
 						type="button"
-						class="btn btn-primary mx-4 mt-2"
+						class="btn btn-primary mt-2 me-4"
 						disabled={isEmpty(input) || !!result || answering || explaining}
 						on:click={onSubmitInternal}
 					>
@@ -85,8 +85,3 @@
 		</div>
 	</div>
 </div>
-
-<style>
-	.response-input {
-	}
-</style>

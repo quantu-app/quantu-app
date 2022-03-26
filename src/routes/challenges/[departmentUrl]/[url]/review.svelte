@@ -56,8 +56,8 @@
 
 <UserLayout>
 	{#if challenge}
-		<div id="challenge-wrapper" class="container-fluid">
-			<div class="row flex-nowrap">
+		<div id="challenge-wrapper" class="container-fluid flex-grow-1">
+			<div class="row min-vh-100">
 				<div id="challenge--sidebar" class="col-auto px-sm-2 px-0">
 					<div class="d-flex flex-column mt-3" id="challenge--sidebarContent">
 						<ul class="nav nav-pills flex-column align-items-center align-items-sm-start">

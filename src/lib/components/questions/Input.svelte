@@ -18,7 +18,7 @@
 </script>
 
 <Prompt {type} {input} bind:result bind:showExplanation {onExplain} {onSubmit}>
-	<InputContent slot="content" {prompt} {showExplanation} explanation={resultPrompt?.explanation} />
+	<InputContent slot="content" {prompt} />
 	<InputInput slot="input" disabled={result != null} type={prompt.type} {correct} bind:input />
 	<slot slot="extra" name="extra" />
 </Prompt>

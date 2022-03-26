@@ -13,7 +13,7 @@
 </script>
 
 <Review>
-	<InputContent slot="content" {prompt} showExplanation explanation={prompt.explanation} />
+	<InputContent slot="content" {prompt} />
 	<InputInput
 		slot="input"
 		disabled={true}

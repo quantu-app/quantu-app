@@ -9,7 +9,7 @@
 
 	const editorContext = getEditorContext();
 	$: editor = $editorContext;
-	$: active = isBlockActive(editor, 'code');
+	$: active = isBlockActive(editor, 'latex');
 
 	let at: Location;
 	let open = false;

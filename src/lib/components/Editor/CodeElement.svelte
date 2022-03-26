@@ -42,6 +42,15 @@
 	import 'prismjs/components/prism-php.js';
 	import 'prismjs/components/prism-sql.js';
 	import 'prismjs/components/prism-java.js';
+	import 'prismjs/components/prism-typescript.js';
+	import 'prismjs/components/prism-elixir.js';
+	import 'prismjs/components/prism-css.js';
+	import 'prismjs/components/prism-c.js';
+	import 'prismjs/components/prism-cpp.js';
+	import 'prismjs/components/prism-rust.js';
+	import 'prismjs/components/prism-bash.js';
+	import 'prismjs/components/prism-sass.js';
+	import 'prismjs/components/prism-scala.js';
 	import { DECORATE_CONTEXT_KEY, defaultDecorate } from 'svelte-slate';
 	import type { NodeEntry } from 'slate';
 	import { Editor, Transforms, Element as SlateElement, Text, Range } from 'slate';
@@ -64,11 +73,12 @@
 		currentLanguage = element.language;
 	}
 	function decorate([node, path]: NodeEntry): Range[] {
-		const ranges = [];
-		if (!Text.isText(node)) {
+		const ranges: Range[] = [];
+		const lang = Prism.languages[currentLanguage];
+		if (!Text.isText(node) || !lang) {
 			return ranges;
 		}
-		const tokens = Prism.tokenize(node.text, Prism.languages[currentLanguage]);
+		const tokens = Prism.tokenize(node.text, lang);
 		let start = 0;
 
 		for (const token of tokens) {

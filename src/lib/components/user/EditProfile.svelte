@@ -11,7 +11,7 @@
 	let username = user.username;
 	let firstName = user.firstName;
 	let lastName = user.lastName;
-	let birthday = user.birthday?.toJSON().slice(0, 10);
+	let birthday = user.birthday;
 	let country = user.country || 'US';
 	let biography = user.bio;
 	let updating = false;

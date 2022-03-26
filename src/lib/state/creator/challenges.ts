@@ -26,7 +26,7 @@ export async function showChallengeById(departmentId: string, id: string) {
 	if (!res.ok) {
 		throw await res.json();
 	}
-	const challenge: StateChallenge = await res.json();
+	const challenge: StateChallenge = challengeFromJSON(await res.json());
 	challengesWritable.update((state) => addOrUpdate(state, challenge));
 	return challenge;
 }
@@ -36,7 +36,7 @@ export async function showChallenges(departmentId: string) {
 	if (!res.ok) {
 		throw await res.json();
 	}
-	const challenges: Array<StateChallenge> = await res.json();
+	const challenges: Array<StateChallenge> = (await res.json()).map(challengeFromJSON);
 	challengesWritable.update((state) =>
 		challenges.reduce((state, challenge) => addOrUpdate(state, challenge), state)
 	);
@@ -51,7 +51,7 @@ export async function createChallenge(departmentId: string, body: Partial<StateC
 	if (!res.ok) {
 		throw await res.json();
 	}
-	const challenge: StateChallenge = await res.json();
+	const challenge: StateChallenge = challengeFromJSON(await res.json());
 	challengesWritable.update((state) => addOrUpdate(state, challenge));
 	return challenge;
 }
@@ -68,7 +68,7 @@ export async function updateChallenge(
 	if (!res.ok) {
 		throw await res.json();
 	}
-	const challenge: StateChallenge = await res.json();
+	const challenge: StateChallenge = challengeFromJSON(await res.json());
 	challengesWritable.update((state) => addOrUpdate(state, challenge));
 	return challenge;
 }
@@ -97,4 +97,12 @@ function addOrUpdate(challenges: StateChallenge[], challenge: StateChallenge): S
 		challenges[index] = challenge;
 	}
 	return challenges;
+}
+
+function challengeFromJSON(challenge: StateChallenge): StateChallenge {
+	return {
+		...challenge,
+		createdAt: new Date(challenge.createdAt),
+		updatedAt: new Date(challenge.updatedAt)
+	};
 }

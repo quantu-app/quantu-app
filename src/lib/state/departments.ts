@@ -22,7 +22,7 @@ export async function showDepartmentsByUrl(url: string) {
 	if (!res.ok) {
 		throw await res.json();
 	}
-	const departments: Department[] = await res.json();
+	const departments: Department[] = (await res.json()).map(departmentFromJSON);
 	departmentsWritable.update((state) =>
 		departments.reduce((state, department) => addOrUpdate(state, department), state)
 	);
@@ -34,7 +34,7 @@ export async function showDepartments() {
 	if (!res.ok) {
 		throw await res.json();
 	}
-	const departments: Department[] = await res.json();
+	const departments: Department[] = (await res.json()).map(departmentFromJSON);
 	departmentsWritable.set(departments);
 	return departments;
 }
@@ -47,4 +47,12 @@ function addOrUpdate(state: Department[], department: Department) {
 		state[index] = department;
 	}
 	return state;
+}
+
+function departmentFromJSON(department: Department): Department {
+	return {
+		...department,
+		createdAt: new Date(department.createdAt),
+		updatedAt: new Date(department.updatedAt)
+	};
 }

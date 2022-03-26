@@ -40,15 +40,23 @@ export const post = authenticated(async (event) => {
 			}
 		});
 
-		return client.result.create({
-			data: {
-				answer,
-				challengeId: id,
-				prompt: question.prompt,
-				type: question.type,
-				value: getResult(question.type, question.prompt as unknown as PromptPrivate, answer),
-				userId: event.locals.token.userId
-			}
+		const data = {
+			answer,
+			challengeId: id,
+			prompt: question.prompt,
+			type: question.type,
+			value: getResult(question.type, question.prompt as unknown as PromptPrivate, answer),
+			userId: event.locals.token.userId
+		};
+		return client.result.upsert({
+			where: {
+				userId_challengeId: {
+					userId: event.locals.token.userId,
+					challengeId: id
+				}
+			},
+			update: data,
+			create: data
 		});
 	}).then((result) => ({
 		body: result,

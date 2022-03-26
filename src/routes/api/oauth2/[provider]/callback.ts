@@ -23,7 +23,7 @@ export async function get(event: RequestEvent) {
 
 	return {
 		headers: {
-			'Set-Cookie': `token=${token}; path=/; expires=${new Date(
+			'Set-Cookie': `token=${token}; path=/; SameSite=Strict; Secure; expires=${new Date(
 				Date.now() + 1000 * 60 * 60 * 24 * 365
 			).toUTCString()}`,
 			Location: state['redirect'] || '/'

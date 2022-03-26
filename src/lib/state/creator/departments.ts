@@ -18,7 +18,7 @@ export async function showDepartmentsById(id: string) {
 	if (!res.ok) {
 		throw await res.json();
 	}
-	const department: Department = await res.json();
+	const department: Department = departmentFromJSON(await res.json());
 	departmentsWritable.update((state) => addOrUpdate(state, department));
 	return department;
 }
@@ -28,7 +28,7 @@ export async function showDepartments() {
 	if (!res.ok) {
 		throw await res.json();
 	}
-	const departments: Department[] = await res.json();
+	const departments: Department[] = (await res.json()).map(departmentFromJSON);
 	departmentsWritable.update((state) =>
 		departments.reduce((state, department) => addOrUpdate(state, department), state)
 	);
@@ -43,7 +43,7 @@ export async function createDepartment(body: Partial<Department>) {
 	if (!res.ok) {
 		throw await res.json();
 	}
-	const department: Department = await res.json();
+	const department: Department = departmentFromJSON(await res.json());
 	departmentsWritable.update((state) => addOrUpdate(state, department));
 	return department;
 }
@@ -56,7 +56,7 @@ export async function updateDepartment(id: string, body: Partial<Department>) {
 	if (!res.ok) {
 		throw await res.json();
 	}
-	const department: Department = await res.json();
+	const department: Department = departmentFromJSON(await res.json());
 	departmentsWritable.update((departments) => addOrUpdate(departments, department));
 	return department;
 }
@@ -85,4 +85,12 @@ function addOrUpdate(departments: Department[], department: Department): Departm
 		departments[index] = department;
 	}
 	return departments;
+}
+
+function departmentFromJSON(department: Department): Department {
+	return {
+		...department,
+		createdAt: new Date(department.createdAt),
+		updatedAt: new Date(department.updatedAt)
+	};
 }

@@ -11,14 +11,22 @@ export const post = authenticated((event) => {
 			}
 		});
 
-		return client.result.create({
-			data: {
-				challengeId: id,
-				prompt: question.prompt,
-				type: question.type,
-				value: 0,
-				userId: event.locals.token.userId
-			}
+		const data = {
+			challengeId: id,
+			prompt: question.prompt,
+			type: question.type,
+			value: 0,
+			userId: event.locals.token.userId
+		};
+		return client.result.upsert({
+			where: {
+				userId_challengeId: {
+					userId: event.locals.token.userId,
+					challengeId: id
+				}
+			},
+			update: data,
+			create: data
 		});
 	}).then((result) => ({
 		body: result,

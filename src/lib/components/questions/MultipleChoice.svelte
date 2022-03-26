@@ -30,6 +30,7 @@
 			return correct;
 		}, {});
 	}
+	$: console.log(showExplanation, resultPrompt?.explanation);
 </script>
 
 <Prompt {type} {input} bind:showExplanation bind:result {onExplain} {onSubmit}>
@@ -48,7 +49,7 @@
 			<hr />
 			<div class="mb-4">
 				<h1>Explanation</h1>
-				<RichViewer value={resultPrompt?.explanation} />
+				<RichViewer value={resultPrompt.explanation} />
 			</div>
 		{/if}
 	</div>

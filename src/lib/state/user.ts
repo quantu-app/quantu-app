@@ -26,14 +26,14 @@ export function isSignedIn() {
 
 export async function signIn() {
 	const res = await fetch(`${base}/api/user`);
-	const json = await res.json();
 	if (!res.ok) {
 		throw new Error('Failed to sign in');
 	}
+	const user = userFromJSON(await res.json());
 	const redirectPath = get(redirectPathWritable);
 
-	session.update((session) => ({ ...session, user: json }));
-	if (json.confirmed) {
+	session.update((session) => ({ ...session, user }));
+	if (user.confirmed) {
 		if (redirectPath) {
 			redirectPathWritable.set(undefined);
 			goto(redirectPath);
@@ -41,7 +41,7 @@ export async function signIn() {
 	} else {
 		goto(`${base}/user/welcome`);
 	}
-	userEmitter.emit('signIn', json);
+	userEmitter.emit('signIn', user);
 }
 
 export function signOut() {
@@ -55,11 +55,20 @@ export async function updateUser(updateUser: Partial<User>) {
 		method: 'PATCH',
 		body: JSON.stringify(updateUser)
 	});
-	const body = await res.json();
 	if (res.ok) {
+		const body = userFromJSON(await res.json());
 		session.update((session) => ({ ...session, user: body }));
 		return body;
 	} else {
-		throw body;
+		throw await res.json();
 	}
+}
+
+function userFromJSON(user: User): User {
+	return {
+		...user,
+		birthday: new Date(user.birthday),
+		updatedAt: new Date(user.updatedAt),
+		createdAt: new Date(user.createdAt)
+	};
 }

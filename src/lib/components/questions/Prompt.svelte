@@ -82,6 +82,9 @@
 					{/if}
 				{/if}
 			</div>
+			<div>
+				<slot name="explanation" />
+			</div>
 		</div>
 	</div>
 </div>

@@ -32,7 +32,7 @@ export async function showChallengeByUrl(departmentUrl: string, url: string) {
 	if (!res.ok) {
 		throw await res.json();
 	}
-	const challenge: StateChallenge = await res.json();
+	const challenge: StateChallenge = challengeFromJSON(await res.json());
 	challengesWritable.update((challenges) => addOrUpdate(challenges, challenge));
 	return challenge;
 }
@@ -42,7 +42,7 @@ export async function showChallenges(departmentUrl: string) {
 	if (!res.ok) {
 		throw await res.json();
 	}
-	const challenges: Array<StateChallenge> = await res.json();
+	const challenges: Array<StateChallenge> = (await res.json()).map(challengeFromJSON);
 	challengesWritable.update((state) =>
 		challenges.reduce((state, challenge) => addOrUpdate(state, challenge), state)
 	);
@@ -54,7 +54,7 @@ export async function showAllChallenges() {
 	if (!res.ok) {
 		throw await res.json();
 	}
-	const challenges: Array<StateChallenge> = await res.json();
+	const challenges: Array<StateChallenge> = (await res.json()).map(challengeFromJSON);
 	challengesWritable.update((state) =>
 		challenges.reduce((state, challenge) => addOrUpdate(state, challenge), state)
 	);
@@ -69,7 +69,7 @@ export async function answer(challengeId: string, answer: Answer) {
 	if (!res.ok) {
 		throw await res.json();
 	}
-	const result: Result = await res.json();
+	const result: Result = resultFromJSON(await res.json());
 	challengesWritable.update((challenges) => {
 		const challenge = challenges.find((c) => c.id === result.challengeId);
 		if (challenge) {
@@ -87,7 +87,7 @@ export async function explain(challengeId: string) {
 	if (!res.ok) {
 		throw await res.json();
 	}
-	const result: Result = await res.json();
+	const result: Result = resultFromJSON(await res.json());
 	challengesWritable.update((challenges) => {
 		const challenge = challenges.find((c) => c.id === result.challengeId);
 		if (challenge) {
@@ -109,4 +109,20 @@ function addOrUpdate(
 		state[index] = challenge;
 	}
 	return state;
+}
+
+function resultFromJSON(result: Result): Result {
+	return {
+		...result,
+		createdAt: new Date(result.createdAt),
+		updatedAt: new Date(result.updatedAt)
+	};
+}
+
+function challengeFromJSON(challenge: StateChallenge): StateChallenge {
+	return {
+		...challenge,
+		createdAt: new Date(challenge.createdAt),
+		updatedAt: new Date(challenge.updatedAt)
+	};
 }

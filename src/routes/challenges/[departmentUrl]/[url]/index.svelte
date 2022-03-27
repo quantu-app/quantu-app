@@ -84,7 +84,7 @@
 				{#if challenge}
 					<div id="challenge-content" data-challenge-id={challenge.id}>
 						<div class="row mt-3 mx-2">
-							<div class="col-xl-8 col-12">
+							<div class="col-lg-8 col-md-10">
 								<h2>{challenge.name}</h2>
 								<Challenge {challenge}>
 									<a

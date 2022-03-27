@@ -83,10 +83,8 @@
 				</div>
 				<div id="challenge--mainContent" class="col">
 					<div class="row mt-3 mx-0">
-						<div class="col-lg-12">
+						<div class="col-12 col-lg-8 col-md-10">
 							<h2>{challenge.name}</h2>
-						</div>
-						<div class="col-lg-12">
 							{#if challenge.result}
 								<ReviewChallenge result={challenge.result}>
 									<a

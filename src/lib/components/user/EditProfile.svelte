@@ -4,39 +4,58 @@
 	import { base } from '$app/paths';
 	import type { User } from '@prisma/client';
 	import { updateUser } from '$lib/state/user';
+	import { validate } from './userProfileSuite';
+	import { format, subYears, parseISO } from 'date-fns';
 	import RichEditor from '$lib/components/editor/RichEditor.svelte';
 
 	export let user: User;
 
-	let username = user.username;
-	let firstName = user.firstName;
-	let lastName = user.lastName;
-	let birthday = user.birthday;
-	let country = user.country || 'US';
-	let biography = user.bio;
 	let updating = false;
 
-	let date: Date;
-	let eighteenYearsAgo = new Date();
-	eighteenYearsAgo.setFullYear(eighteenYearsAgo.getFullYear() - 18);
-	$: date = new Date(birthday || '');
+	let maxDateOfBirth: string = format(subYears(new Date(), 16), 'yyyy-MM-dd');
+
+	let formState = {
+		username: user.username,
+		firstName: user.firstName,
+		lastName: user.lastName,
+		birthday: user.birthday ? format(user.birthday, 'yyyy-MM-dd') : null,
+		country: user.country || 'US',
+		bio: user.bio
+	};
+
+	let validationResult = validate.get();
+	let errors: Record<string, string[]> = { username: [], birthday: [] };
+	$: disabled = validationResult.hasErrors();
+
+	const runValidation = () => {
+		validationResult = validate(formState);
+		errors = validationResult.getErrors();
+		disabled = validationResult.hasErrors();
+	};
 
 	async function onUpdate() {
 		updating = true;
 		try {
-			const user = await updateUser({
-				username,
-				bio: biography,
-				firstName,
-				lastName,
-				birthday: date,
-				country
-			});
+			let { birthday, ...rest } = formState;
+			let updateData: Record<string, any> = rest;
+			if (birthday) {
+				updateData.birthday = parseISO(birthday);
+			}
+
+			const user = await updateUser(updateData);
 			await goto(`${base}/user/profile/${user.username}`);
 		} finally {
 			updating = false;
 		}
 	}
+
+	const formatErrorMessage = (err) => {
+		let fmt = err.join(', ');
+		return fmt;
+	};
+	$: usernameError = errors.username && errors.username.length > 0;
+	$: birthdayError = errors.birthday && errors.birthday.length > 0;
+	$: console.log(errors);
 </script>
 
 <div class="container">
@@ -50,15 +69,23 @@
 			<p class="text-black-50 m-0">
 				This is your main handle on the platform and how other users reference you
 			</p>
-			<div class="input-group">
+			<div class="input-group has-validation">
 				<span class="input-group-text">@</span>
 				<input
 					type="text"
-					class="form-control"
+					class={'form-control' + (usernameError ? ' is-invalid' : '')}
 					id="username"
 					placeholder="Username"
-					bind:value={username}
+					on:input={runValidation}
+					bind:value={formState.username}
 				/>
+				{#if usernameError}
+					<div class="invalid-feedback">
+						<p>
+							{formatErrorMessage(errors.username)}
+						</p>
+					</div>
+				{/if}
 			</div>
 		</div>
 
@@ -78,7 +105,7 @@
 						class="form-control"
 						id="first-name"
 						placeholder="First name"
-						bind:value={firstName}
+						bind:value={formState.firstName}
 					/>
 				</div>
 			</div>
@@ -93,7 +120,7 @@
 						class="form-control"
 						id="last-name"
 						placeholder="Last name"
-						bind:value={lastName}
+						bind:value={formState.lastName}
 					/>
 				</div>
 			</div>
@@ -104,20 +131,29 @@
 				Your birthday is used to calculate your age and for olympiads, competitions, and awards
 				across the platform
 			</p>
-			<div class="input-group">
+			<div class="input-group has-validation">
 				<input
 					type="date"
-					class="form-control"
+					class={'form-control' + (birthdayError ? ' is-invalid' : '')}
 					id="birthday"
 					placeholder="Birthday"
-					bind:value={birthday}
+					on:blur={runValidation}
+					bind:value={formState.birthday}
+					max={maxDateOfBirth}
 				/>
+				{#if birthdayError}
+					<div class="invalid-feedback">
+						<p>
+							{formatErrorMessage(errors.birthday)}
+						</p>
+					</div>
+				{/if}
 			</div>
 		</div>
 		<div class="col-md-6">
 			<label for="qu-user--biography" class="form-label">Biography</label>
 			<p class="text-black-50 m-0">This is where you can tell us about yourself.</p>
-			<RichEditor id="qu-user--biography" bind:value={biography} />
+			<RichEditor id="qu-user--biography" bind:value={formState.bio} />
 		</div>
 		<div class="row my-4">
 			<div class="col-md-6">
@@ -127,7 +163,7 @@
 					leaderboards and can be used for participating in country wide competitions.
 				</p>
 				<div class="input-group">
-					<select id="country" class="form-select" bind:value={country}>
+					<select id="country" class="form-select" bind:value={formState.country}>
 						{#each countries as country}
 							<option value={country.code}>{country.name}</option>
 						{/each}
@@ -136,9 +172,9 @@
 						><img
 							style="max-height: 38px"
 							src={`https://raw.githubusercontent.com/hampusborgos/country-flags/main/png100px/${(
-								country || 'us'
+								formState.country || 'us'
 							).toLowerCase()}.png`}
-							alt={country}
+							alt={formState.country}
 						/></span
 					>
 				</div>
@@ -146,14 +182,7 @@
 		</div>
 		<div class="row my-4">
 			<div class="d-inline-block text-end">
-				<button
-					type="submit"
-					disabled={Number.isNaN(date.getDate()) ||
-						date.getTime() >= eighteenYearsAgo.getTime() ||
-						updating}
-					class="btn btn-primary"
-					on:click={onUpdate}>Update</button
-				>
+				<button type="submit" {disabled} class="btn btn-primary" on:click={onUpdate}>Update</button>
 			</div>
 		</div>
 	</form>

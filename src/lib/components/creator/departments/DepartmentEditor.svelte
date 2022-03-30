@@ -1,5 +1,5 @@
 <script lang="ts">
-	import RichEditor from '$lib/components/Editor/RichEditor.svelte';
+	import RichEditor from '$lib/components/editor/RichEditor.svelte';
 	import type { Department } from '@prisma/client';
 
 	export let department: Partial<Department>;

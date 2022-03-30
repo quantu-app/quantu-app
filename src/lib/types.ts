@@ -1,5 +1,5 @@
 import type { QuestionType } from '@prisma/client';
-import type { IElement, IText } from '$lib/components/Editor';
+import type { IElement, IText } from '$lib/components/editor';
 
 export interface FlashCardPrivate {
 	back: Array<IElement | IText>;

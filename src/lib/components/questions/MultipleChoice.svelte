@@ -1,5 +1,5 @@
 <script lang="ts">
-	import RichViewer from '$lib/components/Editor/RichViewer.svelte';
+	import RichViewer from '$lib/components/editor/RichViewer.svelte';
 	import Prompt from './Prompt.svelte';
 	import MultipleChoiceContent from './MultipleChoiceContent.svelte';
 	import MultipleChoiceInput from './MultipleChoiceInput.svelte';

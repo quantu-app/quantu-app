@@ -4,7 +4,7 @@
 	import Review from './Review.svelte';
 	import type { Result } from '@prisma/client';
 	import type { MultipleChoicePrivate, MultipleChoiceAnswer } from '$lib/types';
-	import RichViewer from '../Editor/RichViewer.svelte';
+	import RichViewer from '../editor/RichViewer.svelte';
 
 	export let result: Result;
 	export let seed: number = undefined;

@@ -14,7 +14,7 @@
 	import type { StateChallenge } from '$lib/state/challenges';
 	import { XorShiftRng } from '@aicacia/rand';
 	import { format } from 'date-fns';
-	import RichViewer from '$lib/components/Editor/RichViewer.svelte';
+	import RichViewer from '$lib/components/editor/RichViewer.svelte';
 
 	export let challenge: StateChallenge;
 

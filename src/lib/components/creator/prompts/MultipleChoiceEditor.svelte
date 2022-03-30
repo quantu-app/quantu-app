@@ -19,8 +19,8 @@
 </script>
 
 <script lang="ts">
-	import RichEditor from '$lib/components/Editor/RichEditor.svelte';
-	import RichViewer from '$lib/components/Editor/RichViewer.svelte';
+	import RichEditor from '$lib/components/editor/RichEditor.svelte';
+	import RichViewer from '$lib/components/editor/RichViewer.svelte';
 	import { groupBy, randomString } from '$lib/utils';
 	import type { MultipleChoicePrivate } from '$lib/types';
 
@@ -28,6 +28,10 @@
 	export let disabled = false;
 
 	$: choices = prompt.choices || [];
+	$: canBeSingleAnswer = choices.reduce((acc, choice) => acc + (choice.correct ? 1 : 0), 0) === 1;
+	$: if (prompt.singleAnswer && !canBeSingleAnswer) {
+		Object.assign(prompt, { singleAnswer: false });
+	}
 
 	$: createOnDelete = (id: string) => {
 		return function onDelete() {
@@ -74,6 +78,7 @@
 	<input
 		class="form-check-input"
 		type="checkbox"
+		disabled={!canBeSingleAnswer}
 		bind:checked={prompt.singleAnswer}
 		id="flexCheckDefault"
 	/>

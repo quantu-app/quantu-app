@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { StateChallenge } from '$lib/state/creator/challenges';
 	import PromptEditor from '../prompts/PromptEditor.svelte';
-	import RichEditor from '$lib/components/Editor/RichEditor.svelte';
+	import RichEditor from '$lib/components/editor/RichEditor.svelte';
 	import DateTimeInput from '../../DateTimeInput.svelte';
 	import { isUrlSafe } from '../../../utils';
 

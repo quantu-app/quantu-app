@@ -4,7 +4,7 @@
 	import { base } from '$app/paths';
 	import type { User } from '@prisma/client';
 	import { updateUser } from '$lib/state/user';
-	import RichEditor from '$lib/components/Editor/RichEditor.svelte';
+	import RichEditor from '$lib/components/editor/RichEditor.svelte';
 
 	export let user: User;
 

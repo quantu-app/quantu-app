@@ -38,11 +38,11 @@
 			<slot name="content" />
 		</div>
 	</div>
-	<div class="mt-4">
+	<div class="my-4">
 		<div class="d-flex flex-column flex-grow-1">
 			<slot name="input" />
 
-			<div class="d-flex mt-2">
+			<div class="d-flex mt-3">
 				{#if result != null}
 					{#if !showExplanation && type !== 'MARK_AS_READ'}
 						<button

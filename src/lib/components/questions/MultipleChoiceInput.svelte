@@ -36,20 +36,12 @@
 <ul class="choices-list list-group list-group-flush">
 	{#each choices as choice (choice.id)}
 		<li
-			class={'list-group-item my-2' + (reviewMode ? ' review-mode' : '')}
+			class={'list-group-item' + (reviewMode ? ' review-mode' : '')}
 			class:list-group-item-success={correct && correct[choice.id]}
 			class:list-group-item-danger={correct && !correct[choice.id] && checked[choice.id]}
 		>
 			<div class="d-flex">
-				<div class="flex-shink-0 flex-row">
-					<!-- <input
-						class="form-check-input me-2"
-						type="checkbox"
-						{disabled}
-						value={checked[key] + ''}
-						checked={!!checked[key]}
-						on:change={createOnChange(key)}
-					/> -->
+				<div class="flex-shink-0 flex-row justify-content-center align-self-center me-3">
 					<Checkbox
 						{disabled}
 						value={checked[choice.id] + ''}
@@ -57,7 +49,7 @@
 						onChange={createOnChange(choice.id)}
 					/>
 				</div>
-				<div class="flex-grow-1">
+				<div class="flex-grow-1 pt-2">
 					<RichViewer value={choice.content} />
 				</div>
 			</div>
@@ -67,15 +59,14 @@
 
 <style>
 	.choices-list {
-		border-top: 1px #707070 solid;
-		border-bottom: 1px #707070 solid;
+		background: #f5f5f5;
+		border: 1px solid #707070;
 	}
-	.list-group-flush .list-group-item {
-		border-width: 2px 0px 2px 20px;
-		border-color: white;
+	.choices-list .list-group-item {
+		border: 1px solid #707070;
 	}
 	.list-group-flush .list-group-item.review-mode {
-		opacity: 0.7;
+		opacity: 0.65;
 	}
 	.list-group-flush .list-group-item.review-mode.list-group-item-success,
 	.list-group-flush .list-group-item.review-mode.list-group-item-danger {
@@ -83,15 +74,11 @@
 		color: #202020;
 	}
 	.list-group-flush .list-group-item.list-group-item-success {
-		background: white;
-		border-color: #cceecc;
-		border-width: 2px 0px 2px 20px;
+		background: rgb(218, 236, 253);
 		opacity: 1;
 	}
 	.list-group-flush .list-group-item.list-group-item-danger {
-		background: white;
-		border-color: #ed6161;
-		border-width: 2px 0px 2px 20px;
+		background: #ed6161;
 		opacity: 1;
 	}
 </style>

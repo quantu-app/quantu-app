@@ -104,6 +104,8 @@
 		"svelte-portal": "^2.1.2",
 		"svelte-slate": "^0.1.28",
 		"title-case": "^3.0.3",
-		"uuid": "^8.3.2"
+		"uuid": "^8.3.2",
+		"validator": "^13.7.0",
+		"vest": "^4.3.1"
 	}
 }

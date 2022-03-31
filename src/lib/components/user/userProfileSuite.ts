@@ -13,7 +13,7 @@ export const validate = create((data = {}) => {
     });
 
     if (data.birthday) {
-        test('birthday', 'must be at least 16 years old', () => {
+        test('birthday', `must be at least ${MIN_AGE} years old`, () => {
             enforce(data.birthday).condition(value => {
                 const minAge = subYears(new Date(), MIN_AGE);
                 const dob = parseISO(value);

@@ -49,13 +49,12 @@
 		}
 	}
 
-	const formatErrorMessage = (err) => {
-		let fmt = err.join(', ');
-		return fmt;
-	};
+	const formatErrorMessage = (errors: Array<string>) => errors.join(', ');
+	const getCssClasses = (hasError: boolean) =>
+		hasError ? 'form-control is-invalid' : 'form-control';
+
 	$: usernameError = errors.username && errors.username.length > 0;
 	$: birthdayError = errors.birthday && errors.birthday.length > 0;
-	$: console.log(errors);
 </script>
 
 <div class="container">
@@ -73,7 +72,7 @@
 				<span class="input-group-text">@</span>
 				<input
 					type="text"
-					class={'form-control' + (usernameError ? ' is-invalid' : '')}
+					class={getCssClasses(usernameError)}
 					id="username"
 					placeholder="Username"
 					on:input={runValidation}
@@ -134,7 +133,7 @@
 			<div class="input-group has-validation">
 				<input
 					type="date"
-					class={'form-control' + (birthdayError ? ' is-invalid' : '')}
+					class={getCssClasses(birthdayError)}
 					id="birthday"
 					placeholder="Birthday"
 					on:blur={runValidation}

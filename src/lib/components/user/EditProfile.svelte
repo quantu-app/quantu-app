@@ -23,18 +23,24 @@
 		bio: user.bio
 	};
 
-	let validationResult = validate.get();
+	let result = validate.get();
 	let errors: Record<string, string[]> = { username: [], birthday: [] };
-	$: disabled = validationResult.hasErrors();
+	let warnings = {};
 
-	const runValidation = () => {
-		validationResult = validate(formState);
-		errors = validationResult.getErrors();
-		disabled = validationResult.hasErrors();
+	const runValidation = (fieldname?: string) => {
+		result = validate(formState, fieldname);
+		errors = result.getErrors();
+		warnings = result.getWarnings();
 	};
 
 	async function onUpdate() {
+		result = runValidation();
+		if (result.hasErrors()) {
+			return;
+		}
+
 		updating = true;
+
 		try {
 			let { birthday, ...rest } = formState;
 			let updateData: Record<string, any> = rest;
@@ -50,11 +56,10 @@
 	}
 
 	const formatErrorMessage = (errors: Array<string>) => errors.join(', ');
-	const getCssClasses = (hasError: boolean) =>
-		hasError ? 'form-control is-invalid' : 'form-control';
 
 	$: usernameError = errors.username && errors.username.length > 0;
 	$: birthdayError = errors.birthday && errors.birthday.length > 0;
+	$: disabled = result.hasErrors();
 </script>
 
 <div class="container">
@@ -72,10 +77,11 @@
 				<span class="input-group-text">@</span>
 				<input
 					type="text"
-					class={getCssClasses(usernameError)}
+					class="form-control"
+					class:is-invalid={usernameError}
 					id="username"
 					placeholder="Username"
-					on:input={runValidation}
+					on:input={() => runValidation('username')}
 					bind:value={formState.username}
 				/>
 				{#if usernameError}
@@ -133,10 +139,11 @@
 			<div class="input-group has-validation">
 				<input
 					type="date"
-					class={getCssClasses(birthdayError)}
+					class="form-control"
+					class:is-invalid={birthdayError}
 					id="birthday"
 					placeholder="Birthday"
-					on:blur={runValidation}
+					on:blur={() => runValidation('birthday')}
 					bind:value={formState.birthday}
 					max={maxDateOfBirth}
 				/>

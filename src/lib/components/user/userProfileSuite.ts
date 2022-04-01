@@ -1,16 +1,25 @@
-import { create, test, enforce } from 'vest';
+import { create, test, enforce, only } from 'vest';
 import { isAfter, isBefore, subYears, parseISO } from 'date-fns';
 
-export const validate = create((data = {}) => {
+export const validate = create('user_edit_profile_form', (data = {}, fieldname?) => {
+    only(fieldname);
+
     const validUsernameRegex = /^[a-z]+[a-z0-9]+$/;
     const MIN_AGE = 16;
+
+    test('username', 'is not empty or blank', () => {
+        console.log(data.username);
+        enforce(data.username).isNotEmpty().isNotBlank();
+    })
+
+    test('username', 'must contain only letters and numbers and cannot start with a number', () => {
+        enforce(data.username).matches(validUsernameRegex);
+    });
 
     test("username", "must be at least three characters long", () => {
         enforce(data.username).longerThanOrEquals(3);
     });
-    test('username', 'must contain only letters and numbers and cannot start with a number', () => {
-        enforce(data.username).matches(validUsernameRegex);
-    });
+
 
     if (data.birthday) {
         test('birthday', `must be at least ${MIN_AGE} years old`, () => {

@@ -34,7 +34,7 @@
 	};
 
 	async function onUpdate() {
-		result = runValidation();
+		result = validate(formState);
 		if (result.hasErrors()) {
 			return;
 		}

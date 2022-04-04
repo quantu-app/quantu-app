@@ -52,8 +52,8 @@ export async function fromCallback(prisma: PrismaClient, params: IFromCallbackPa
 	}
 }
 
-function getUniqueUsername(prisma: PrismaClient, username: string): Promise<string> | string {
-	const user = prisma.user.findUnique({
+async function getUniqueUsername(prisma: PrismaClient, username: string): Promise<string> {
+	const user = await prisma.user.findUnique({
 		where: {
 			username: username
 		}

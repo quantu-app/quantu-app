@@ -33,7 +33,7 @@ export async function fromCallback(prisma: PrismaClient, params: IFromCallbackPa
 		return prisma.user.create({
 			data: {
 				username: await getUniqueUsername(prisma, params.email.split('@')[0]),
-				encryptedPassword: await hash(randomString(16)),
+				encryptedPassword: await hash(randomString(16), 13),
 				firstName: params.firstName,
 				lastName: params.lastName,
 				bio: [],

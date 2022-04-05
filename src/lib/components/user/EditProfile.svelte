@@ -12,7 +12,7 @@
 
 	let updating = false;
 
-	let maxDateOfBirth: string = format(subYears(new Date(), 16), 'yyyy-MM-dd');
+	const maxDateOfBirth = format(subYears(new Date(), 16), 'yyyy-MM-dd');
 
 	let formState = {
 		username: user.username,
@@ -27,11 +27,20 @@
 	let errors: Record<string, string[]> = { username: [], birthday: [] };
 	let warnings = {};
 
-	const runValidation = (fieldname?: string) => {
+	function runValidation(fieldname?: string, value?: string) {
+		if (fieldname) {
+			formState[fieldname] = value;
+		}
 		result = validate(formState, fieldname);
 		errors = result.getErrors();
 		warnings = result.getWarnings();
-	};
+	}
+
+	function check({
+		target: { name, value }
+	}: Event & { target: { name?: string; value: string } }) {
+		runValidation(name, value);
+	}
 
 	async function onUpdate() {
 		result = validate(formState);
@@ -80,8 +89,9 @@
 					class="form-control"
 					class:is-invalid={usernameError}
 					id="username"
+					name="username"
 					placeholder="Username"
-					on:input={() => runValidation('username')}
+					on:input={check}
 					bind:value={formState.username}
 				/>
 				{#if usernameError}
@@ -142,8 +152,9 @@
 					class="form-control"
 					class:is-invalid={birthdayError}
 					id="birthday"
+					name="birthday"
 					placeholder="Birthday"
-					on:blur={() => runValidation('birthday')}
+					on:input={check}
 					bind:value={formState.birthday}
 					max={maxDateOfBirth}
 				/>

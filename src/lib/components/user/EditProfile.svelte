@@ -27,19 +27,14 @@
 	let errors: Record<string, string[]> = { username: [], birthday: [] };
 	let warnings = {};
 
-	function runValidation(fieldname?: string, value?: string) {
-		if (fieldname) {
-			formState[fieldname] = value;
-		}
+	function runValidation(fieldname?: string) {
 		result = validate(formState, fieldname);
 		errors = result.getErrors();
 		warnings = result.getWarnings();
 	}
 
-	function check({
-		target: { name, value }
-	}: Event & { target: { name?: string; value: string } }) {
-		runValidation(name, value);
+	function check({ target: { name } }: Event & { target: { name?: string } }) {
+		runValidation(name);
 	}
 
 	async function onUpdate() {
@@ -91,8 +86,8 @@
 					id="username"
 					name="username"
 					placeholder="Username"
-					on:input={check}
 					bind:value={formState.username}
+					on:input={check}
 				/>
 				{#if usernameError}
 					<div class="invalid-feedback">
@@ -154,8 +149,8 @@
 					id="birthday"
 					name="birthday"
 					placeholder="Birthday"
-					on:input={check}
 					bind:value={formState.birthday}
+					on:input={check}
 					max={maxDateOfBirth}
 				/>
 				{#if birthdayError}

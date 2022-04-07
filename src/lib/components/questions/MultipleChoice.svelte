@@ -30,7 +30,6 @@
 			return correct;
 		}, {});
 	}
-	$: console.log(showExplanation, resultPrompt?.explanation);
 </script>
 
 <Prompt {type} {input} bind:showExplanation bind:result {onExplain} {onSubmit}>

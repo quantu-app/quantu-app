@@ -8,7 +8,6 @@ export const validate = create('user_edit_profile_form', (data = {}, fieldname?)
     const MIN_AGE = 16;
 
     test('username', 'is not empty or blank', () => {
-        console.log(data.username);
         enforce(data.username).isNotEmpty().isNotBlank();
     })
 

@@ -11,7 +11,7 @@ export interface IFromCallbackParams {
 }
 
 export async function fromCallback(prisma: PrismaClient, params: IFromCallbackParams) {
-	const email = await prisma.email.findFirst({
+	const email = await prisma.email.findUnique({
 		where: {
 			email: params.email
 		}

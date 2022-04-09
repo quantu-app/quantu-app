@@ -60,6 +60,7 @@ model Department {
   challenges  Challenge[]
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
+  Asset       Asset[]
 }
 
 enum QuestionType {

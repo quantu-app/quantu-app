@@ -25,9 +25,13 @@
 
 	export function insertLatex(editor: Editor, latex: string, inline: boolean, at?: Location) {
 		const node = { type: 'latex', latex, inline, children: [{ text: '' }] };
-		Editor.withoutNormalizing(editor, () => {
-			Transforms.insertNodes(editor, [node], { at: inline ? at : undefined });
-		});
+		if (inline) {
+			Editor.withoutNormalizing(editor, () => {
+				Transforms.insertNodes(editor, [node], { at });
+			});
+		} else {
+			Transforms.insertNodes(editor, [node], { at });
+		}
 	}
 </script>
 
@@ -56,10 +60,14 @@
 	}
 
 	let open = false;
-
 	function onDone(latex: string, inline: boolean) {
-		Transforms.setNodes(editor, { latex, inline } as any, { at: path });
-		open = false;
+		if (element.inline !== inline) {
+			onDelete();
+			insertLatex(editor, latex, inline, path);
+		} else {
+			Transforms.setNodes(editor, { latex } as any, { at: path });
+			open = false;
+		}
 	}
 	function onDelete() {
 		open = false;

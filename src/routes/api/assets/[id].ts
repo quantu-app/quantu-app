@@ -21,7 +21,7 @@ export async function get(event: RequestEvent) {
 						status: 404
 				  }
 		)
-		.catch((e) => {
+		.catch(() => {
 			return {
 				status: 404
 			};

@@ -3,7 +3,7 @@ import { getType } from 'mime';
 import { authenticated } from '$lib/api/auth';
 import { s3Upload, s3Delete } from '$lib/s3';
 import { run } from '$lib/prisma';
-import { AssetType } from '@prisma/client';
+import type { AssetType } from '@prisma/client';
 import { listAssets } from '..';
 
 const ONE_GIBIBYTE = 1024 * 1024 * 1024;

@@ -1,5 +1,5 @@
 import { extname } from 'path';
-import { getType } from 'mime';
+import mime from 'mime';
 import { authenticated } from '$lib/api/auth';
 import { s3Upload, s3Delete } from '$lib/s3';
 import { run } from '$lib/prisma';
@@ -36,14 +36,14 @@ export const post = authenticated(async (event) => {
 		};
 	}
 
-	const contentType = getType(ext);
+	const contentType = mime.getType(ext);
 	let type: AssetType;
 	if (contentType.startsWith('image/')) {
-		type = AssetType.IMAGE;
+		type = 'IMAGE';
 	} else if (contentType.startsWith('video/')) {
-		type = AssetType.VIDEO;
+		type = 'VIDEO';
 	} else if (contentType.startsWith('audio/')) {
-		type = AssetType.AUDIO;
+		type = 'AUDIO';
 	} else {
 		return {
 			status: 400,

@@ -17,6 +17,7 @@
 	import ChallengeList from '$lib/components/creator/challenges/ChallengeList.svelte';
 	import { challengesByDepartmentId } from '$lib/state/creator/challenges';
 	import CreateChallenge from '../challenges/CreateChallenge.svelte';
+	import { base } from '$app/paths';
 
 	export let department: Department;
 
@@ -29,6 +30,9 @@
 <div class="container">
 	<div class="d-flex justify-content-end mt-2">
 		<div class="d-flex">
+			<a class="btn btn-primary me-2" href={`${base}/creator/departments/${department.id}/assets`}
+				>Assets</a
+			>
 			<CreateChallenge departmentId={department.id} />
 		</div>
 	</div>

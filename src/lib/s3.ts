@@ -3,19 +3,14 @@ import {
 	S3Client,
 	ListObjectsCommand,
 	PutObjectCommand,
-	GetObjectCommand
+	GetObjectCommand,
+	type _Object,
+	DeleteObjectCommand
 } from '@aws-sdk/client-s3';
-import { basename, dirname } from 'path';
 
 const ENV = dev ? 'dev' : 'prod';
 
-export interface IAsset {
-	type: string;
-	folder: string;
-	name: string;
-}
-
-export const client = new S3Client({
+export const s3Client = new S3Client({
 	region: process.env.S3_REGION,
 	endpoint: `https://${process.env.S3_REGION}.linodeobjects.com`,
 	credentials: {
@@ -24,68 +19,72 @@ export const client = new S3Client({
 	}
 });
 
-export async function listAssets(type: string, folder = '/'): Promise<IAsset[]> {
-	const assets: IAsset[] = [];
-	const basePath = `${ENV}/${type}/`;
-
-	if (!folder.endsWith('/')) {
+export async function s3Upload(folder: string, name: string, body: ArrayBuffer) {
+	if (folder === '.') {
+		folder = '';
+	}
+	if (folder.length && !folder.endsWith('/')) {
 		folder += '/';
 	}
-
-	for await (const item of list(`${basePath}${folder}`)) {
-		let path: string;
-		let itemType = type;
-
-		if (typeof item === 'string') {
-			path = item.slice(basePath.length);
-			itemType = 'folder';
-		} else {
-			path = item.Key.slice(basePath.length);
-		}
-
-		assets.push({
-			type: itemType,
-			folder: dirname(path),
-			name: basename(path)
-		});
-	}
-
-	return assets;
-}
-
-export async function uploadAsset(
-	type: string,
-	folder: string,
-	name: string,
-	body: ArrayBuffer
-): Promise<IAsset> {
-	await client.send(
+	const buffer = Buffer.from(body);
+	await s3Client.send(
 		new PutObjectCommand({
-			Key: `${ENV}/${type}/${folder ? `${folder}/` : ''}${name}`,
+			Key: `${ENV}/${folder}${name}`,
 			Bucket: process.env.S3_BUCKET,
-			ContentLength: body.byteLength,
-			Body: Buffer.from(body)
+			ContentLength: buffer.byteLength,
+			Body: buffer
 		})
 	);
-	return { type, folder, name };
 }
 
-export async function getAsset(type: string, folder: string, name: string) {
-	const result = await client.send(
+export async function s3Get(folder: string, name: string) {
+	if (folder === '.') {
+		folder = '';
+	}
+	if (folder.length && !folder.endsWith('/')) {
+		folder += '/';
+	}
+	const result = await s3Client.send(
 		new GetObjectCommand({
-			Key: `${ENV}/${type}/${folder ? `${folder}/` : ''}${name}`,
+			Key: `${ENV}/${folder}${name}`,
 			Bucket: process.env.S3_BUCKET
 		})
 	);
 	return result.Body;
 }
 
-async function* list(folder: string) {
-	let result = await client.send(
+export async function s3Delete(folder: string, name: string) {
+	if (folder === '.') {
+		folder = '';
+	}
+	if (folder.length && !folder.endsWith('/')) {
+		folder += '/';
+	}
+	await s3Client.send(
+		new DeleteObjectCommand({
+			Key: `${ENV}/${folder}${name}`,
+			Bucket: process.env.S3_BUCKET
+		})
+	);
+}
+
+export async function* s3List(folder: string) {
+	if (folder === '.') {
+		folder = '';
+	}
+	if (folder.length && !folder.endsWith('/')) {
+		folder += '/';
+	}
+	yield* s3ListRecur(folder);
+}
+
+async function* s3ListRecur(folder: string, marker?: string): AsyncGenerator<string | _Object> {
+	const result = await s3Client.send(
 		new ListObjectsCommand({
 			Bucket: process.env.S3_BUCKET,
+			Marker: marker,
 			Delimiter: '/',
-			Prefix: folder
+			Prefix: `${ENV}/${folder}`
 		})
 	);
 
@@ -102,27 +101,7 @@ async function* list(folder: string) {
 		}
 	}
 
-	while (result.IsTruncated) {
-		result = await client.send(
-			new ListObjectsCommand({
-				Bucket: process.env.S3_BUCKET,
-				Marker: result.NextMarker,
-				Delimiter: '/',
-				Prefix: folder
-			})
-		);
-
-		if (result.CommonPrefixes) {
-			for (const prefix of result.CommonPrefixes) {
-				if (prefix.Prefix) {
-					yield prefix.Prefix;
-				}
-			}
-		}
-		if (result.Contents) {
-			for (const item of result.Contents) {
-				yield item;
-			}
-		}
+	if (result.IsTruncated) {
+		yield* s3ListRecur(folder, result.NextMarker);
 	}
 }

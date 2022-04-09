@@ -39,6 +39,7 @@
 					type="button"
 					on:click={internalOnDeleteChallenge}
 					class="btn btn-danger text-white"
+					disabled={deletingChallenge}
 				>
 					{#if deletingChallenge}
 						<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" />

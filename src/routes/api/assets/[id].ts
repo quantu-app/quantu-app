@@ -1,0 +1,29 @@
+import { extname } from 'path';
+import { getType } from 'mime';
+import { s3Get } from '$lib/s3';
+import type { RequestEvent } from '@sveltejs/kit/types/internal';
+import { run } from '$lib/prisma';
+
+export async function get(event: RequestEvent) {
+	return run((client) => client.asset.findUnique({ where: { id: event.params.id } }))
+		.then((asset) =>
+			asset
+				? s3Get([asset.departmentId, asset.folder].join('/'), asset.name).then((body) => {
+						return {
+							status: 200,
+							header: {
+								'Content-Type': getType(extname(asset.name))
+							},
+							body
+						};
+				  })
+				: {
+						status: 404
+				  }
+		)
+		.catch((e) => {
+			return {
+				status: 404
+			};
+		});
+}

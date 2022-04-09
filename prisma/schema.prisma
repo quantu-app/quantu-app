@@ -2,8 +2,7 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider        = "prisma-client-js"
-  previewFeatures = ["mongoDb"]
+  provider = "prisma-client-js"
 }
 
 datasource db {
@@ -102,4 +101,23 @@ model Result {
   updatedAt   DateTime     @updatedAt
 
   @@unique([userId, challengeId])
+}
+
+enum AssetType {
+  IMAGE
+  VIDEO
+  AUDIO
+}
+
+model Asset {
+  id           String     @id @default(auto()) @map("_id") @db.ObjectId
+  type         AssetType
+  name         String
+  folder       String
+  department   Department @relation(fields: [departmentId], references: [id])
+  departmentId String
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  @@unique([departmentId, folder, name])
 }

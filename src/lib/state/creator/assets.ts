@@ -1,7 +1,7 @@
 import type { Asset } from '@prisma/client';
 import { writable, derived } from 'svelte/store';
 import { base } from '$app/paths';
-import { getType } from 'mime';
+import mime from 'mime';
 
 interface IAssetList {
 	folders: Array<string>;
@@ -121,7 +121,7 @@ export async function uploadAsset(
 		{
 			method: 'POST',
 			headers: {
-				'Content-Type': getType(ext)
+				'Content-Type': mime.getType(ext)
 			},
 			body
 		}

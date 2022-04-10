@@ -3,8 +3,8 @@ import type { RequestEvent } from '@sveltejs/kit/types/internal';
 import { removePrivate } from '.';
 
 export async function get(event: RequestEvent) {
-	const departmentUrl: string = event.params.departmentUrl;
-	const url: string = event.params.url;
+	const departmentUrl = event.params.departmentUrl;
+	const url = event.params.url;
 
 	return run(async (client) => {
 		const challenge = await client.challenge.findFirst({

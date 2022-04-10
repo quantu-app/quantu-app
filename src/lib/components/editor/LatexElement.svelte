@@ -27,10 +27,10 @@
 		const node = { type: 'latex', latex, inline, children: [{ text: '' }] };
 		if (inline) {
 			Editor.withoutNormalizing(editor, () => {
-				Transforms.insertNodes(editor, [node], { at });
+				Transforms.insertNodes(editor, node, { at });
 			});
 		} else {
-			Transforms.insertNodes(editor, [node], { at });
+			Transforms.insertNodes(editor, node, { at });
 		}
 	}
 </script>
@@ -61,13 +61,16 @@
 
 	let open = false;
 	function onDone(latex: string, inline: boolean) {
+		Transforms.setNodes(editor, { latex } as any, { at: path });
 		if (element.inline !== inline) {
-			onDelete();
-			insertLatex(editor, latex, inline, path);
-		} else {
-			Transforms.setNodes(editor, { latex } as any, { at: path });
-			open = false;
+			if (inline) {
+				Transforms.unwrapNodes(editor, {
+					at: path,
+					split: true
+				});
+			}
 		}
+		open = false;
 	}
 	function onDelete() {
 		open = false;

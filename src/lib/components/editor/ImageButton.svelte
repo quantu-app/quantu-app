@@ -11,16 +11,16 @@
 	let url: string;
 	let entering = false;
 
-	$: onClick = () => {
+	function onClick() {
 		entering = true;
-	};
-	$: onEnter = () => {
+	}
+	function onEnter() {
 		if (isUrl(url)) {
 			insertImage(editor, url);
 			url = '';
 			entering = false;
 		}
-	};
+	}
 </script>
 
 <Button {onClick}>

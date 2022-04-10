@@ -11,7 +11,7 @@
 
 <script lang="ts">
 	import { Slate, Editable, withSvelte, isHotkey, isReadOnly } from 'svelte-slate';
-	import type { Selection } from 'slate';
+	import { Editor, type Selection } from 'slate';
 	import { createEditor } from 'slate';
 	import { withHistory } from 'slate-history';
 	import { toggleMark } from './utils';
@@ -23,6 +23,7 @@
 	import { withImages } from './ImageElement.svelte';
 	import { longpress } from './longpress';
 	import { withLatex } from './LatexElement.svelte';
+	import { isCodeElement } from './CodeElement.svelte';
 
 	export let value: Array<IText | IElement> = [
 		{
@@ -50,7 +51,15 @@
 
 	function onLongPress() {
 		if (!isReadOnly(editor)) {
-			open = true;
+			const [match] = Array.from(
+				Editor.nodes(editor, {
+					at: Editor.unhangRange(editor, editor.selection),
+					match: isCodeElement
+				})
+			);
+			if (!match) {
+				open = true;
+			}
 		}
 	}
 </script>

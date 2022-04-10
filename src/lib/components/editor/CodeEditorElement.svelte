@@ -7,6 +7,10 @@
 		type: 'code-line';
 		children: Array<ICodeEditorText>;
 	}
+
+	export function isCodeEditorElement(element: IBaseElement): element is ICodeEditorElement {
+		return element.type === 'code-line';
+	}
 </script>
 
 <script lang="ts">

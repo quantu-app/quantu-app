@@ -33,7 +33,7 @@
 		editor.deleteBackward = (...args) => {
 			if (editor.selection && Range.isCollapsed(editor.selection)) {
 				const [match] = Editor.nodes(editor, {
-					match: (n) => !Editor.isEditor(n) && SlateElement.isElement(n) && n['type'] === 'code'
+					match: isCodeElement
 				});
 
 				if (match) {
@@ -45,7 +45,7 @@
 							type: 'paragraph'
 						};
 						Transforms.setNodes(editor, newProperties, {
-							match: (n) => !Editor.isEditor(n) && SlateElement.isElement(n) && n['type'] === 'code'
+							match: isCodeElement
 						});
 						return;
 					}
@@ -86,15 +86,7 @@
 	import 'prismjs/components/prism-bash.js';
 	import 'prismjs/components/prism-sass.js';
 	import 'prismjs/components/prism-scala.js';
-	import {
-		Editor,
-		Range,
-		Transforms,
-		Point,
-		Element as SlateElement,
-		type NodeEntry,
-		Text
-	} from 'slate';
+	import { Editor, Range, Transforms, Point, type NodeEntry, Text } from 'slate';
 	import type { ICodeEditorElement } from './CodeEditorElement.svelte';
 	import {
 		DECORATE_CONTEXT_KEY,

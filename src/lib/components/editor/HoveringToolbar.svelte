@@ -30,6 +30,7 @@
 	import Portal from 'svelte-portal/src/Portal.svelte';
 	import { getEditorContext, getFocusedContext, getSelectionContext } from 'svelte-slate';
 	import Buttons from './Buttons.svelte';
+	import { isCodeElement } from './CodeElement.svelte';
 
 	export let container: HTMLElement = undefined;
 	export let open = false;
@@ -56,8 +57,16 @@
 			ref.removeAttribute('style');
 			open = false;
 		} else {
-			repositionElement(ref, container);
-			open = true;
+			const [match] = Array.from(
+				Editor.nodes(editor, {
+					at: Editor.unhangRange(editor, editor.selection),
+					match: isCodeElement
+				})
+			);
+			if (!match) {
+				repositionElement(ref, container);
+				open = true;
+			}
 		}
 	}
 

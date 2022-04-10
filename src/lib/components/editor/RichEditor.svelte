@@ -17,7 +17,6 @@
 	$: if (!value || value.length === 0) {
 		value = [{ type: 'paragraph', children: [{ text: '' }] }];
 	}
-	$: console.log(value);
 </script>
 
 <div {id} class="border p-2">

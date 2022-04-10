@@ -13,11 +13,27 @@
 	}
 
 	export function withLatex<T extends ISvelteEditor = ISvelteEditor>(editor: T): T {
-		const { isVoid, isInline } = editor;
+		const { isVoid, isInline, insertBreak } = editor;
 
 		editor.isInline = (element) =>
 			isLatexElement(element as IBaseElement) ? !!element['inline'] : isInline(element);
+
 		editor.isVoid = (element) => (isLatexElement(element as IBaseElement) ? true : isVoid(element));
+
+		editor.insertBreak = () => {
+			if (!editor.selection || !Range.isCollapsed(editor.selection)) {
+				insertBreak();
+			} else {
+				if (Editor.isVoid(editor, Node.get(editor, Path.parent(editor.selection.anchor.path)))) {
+					Editor.insertNode(editor, {
+						type: 'paragraph',
+						children: [{ text: '' }]
+					} as any);
+				} else {
+					insertBreak();
+				}
+			}
+		};
 
 		return editor;
 	}
@@ -44,7 +60,7 @@
 		getReadOnlyContext,
 		type ISvelteEditor
 	} from 'svelte-slate';
-	import { Editor, Location, Transforms } from 'slate';
+	import { Editor, Location, Range, Node, Path, Transforms } from 'slate';
 	import katex from 'katex';
 	import LatexEditor from './LatexEditor.svelte';
 	export let element: ILatexElement;

@@ -17,7 +17,6 @@
 
 		editor.isInline = (element) =>
 			isLatexElement(element as IBaseElement) ? !!element['inline'] : isInline(element);
-
 		editor.isVoid = (element) => (isLatexElement(element as IBaseElement) ? true : isVoid(element));
 
 		return editor;
@@ -36,7 +35,15 @@
 </script>
 
 <script lang="ts">
-	import { isReadOnly, findPath, getEditor, type ISvelteEditor } from 'svelte-slate';
+	import {
+		isReadOnly,
+		findPath,
+		getEditor,
+		getSelectedContext,
+		getFocusedContext,
+		getReadOnlyContext,
+		type ISvelteEditor
+	} from 'svelte-slate';
 	import { Editor, Location, Transforms } from 'slate';
 	import katex from 'katex';
 	import LatexEditor from './LatexEditor.svelte';
@@ -48,7 +55,11 @@
 	export let dir: 'rtl' | 'ltr' = undefined;
 
 	const editor = getEditor();
+	const selectedContext = getSelectedContext();
+	const focusedContext = getFocusedContext();
+	const readOnlyContext = getReadOnlyContext();
 
+	$: selected = $readOnlyContext ? false : $selectedContext && $focusedContext;
 	$: path = findPath(element);
 	let currentLatex = element.latex;
 	$: if (currentLatex !== element.latex) {
@@ -61,16 +72,25 @@
 
 	let open = false;
 	function onDone(latex: string, inline: boolean) {
-		Transforms.setNodes(editor, { latex } as any, { at: path });
 		if (element.inline !== inline) {
+			onDelete();
+			const node = { type: 'latex', latex, inline, children: [{ text: '' }] };
 			if (inline) {
-				Transforms.unwrapNodes(editor, {
-					at: path,
-					split: true
-				});
+				Transforms.insertNodes(
+					editor,
+					{
+						type: 'paragraph',
+						children: [node]
+					} as any,
+					{ at: path }
+				);
+			} else {
+				Transforms.insertNodes(editor, node, { at: path.slice(0, -1) });
 			}
+		} else {
+			Transforms.setNodes(editor, { latex } as any, { at: path });
+			open = false;
 		}
-		open = false;
 	}
 	function onDelete() {
 		open = false;
@@ -79,7 +99,7 @@
 
 	let latex = currentLatex;
 	let inline = currentInline;
-	function onEdit() {
+	function onEdit(e: MouseEvent | TouchEvent) {
 		if (!isReadOnly(editor)) {
 			latex = currentLatex;
 			inline = currentInline;
@@ -95,11 +115,11 @@
 				output: 'html',
 				throwOnError: false
 			});
-		} else if (contenteditable) {
-			onDelete();
 		}
 	}
 </script>
+
+<LatexEditor bind:open bind:latex bind:inline {onDone} {onDelete} />
 
 <div
 	class="latex-element"
@@ -111,20 +131,40 @@
 	{dir}
 	{contenteditable}
 >
-	<slot />
-	<div class:inline={currentInline} contenteditable={false}>
-		<span bind:this={latexElement} on:mousedown={onEdit} on:touchstart={onEdit} />
+	<div class="latex-value" class:inline={currentInline} contenteditable={false} class:selected>
+		<span bind:this={latexElement} />
+		<div class="edit" class:selected>
+			<button class="btn btn-sm btn-primary" on:mousedown={onEdit} on:touchstart={onEdit}
+				><i class="bi bi-pencil" /></button
+			>
+		</div>
 	</div>
+	<slot />
 </div>
 
-<LatexEditor bind:open {latex} {inline} {onDone} {onDelete} />
-
 <style>
+	.inline {
+		display: inline;
+	}
 	.latex-element {
 		position: relative;
 		margin: 0;
 	}
-	.inline {
+	.latex-value {
+		position: relative;
+	}
+	.latex-value.selected {
+		box-shadow: 0 0 0 3px #333;
+	}
+
+	.edit {
+		display: none;
+		position: absolute;
+		top: -2em;
+		left: calc(50% - 1em);
+		background-color: white;
+	}
+	.edit.selected {
 		display: inline;
 	}
 </style>

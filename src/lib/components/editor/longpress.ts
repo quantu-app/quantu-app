@@ -1,4 +1,6 @@
 export function longpress(node: HTMLElement, threshold = 500) {
+	const document = node.ownerDocument;
+
 	function onStart(event: MouseEvent | TouchEvent) {
 		if (event.type === 'mousedown' && (event as MouseEvent).button !== 0) {
 			return;
@@ -10,16 +12,16 @@ export function longpress(node: HTMLElement, threshold = 500) {
 
 		function cancel() {
 			clearTimeout(timeout);
-			node.removeEventListener('mousemove', cancel);
-			node.removeEventListener('mouseup', cancel);
-			node.addEventListener('touchmove', cancel);
-			node.addEventListener('touchend', cancel);
+			document.removeEventListener('mousemove', cancel);
+			document.removeEventListener('mouseup', cancel);
+			document.addEventListener('touchmove', cancel);
+			document.addEventListener('touchend', cancel);
 		}
 
-		node.addEventListener('mousemove', cancel);
-		node.addEventListener('mouseup', cancel);
-		node.addEventListener('touchmove', cancel);
-		node.addEventListener('touchend', cancel);
+		document.addEventListener('mousemove', cancel);
+		document.addEventListener('mouseup', cancel);
+		document.addEventListener('touchmove', cancel);
+		document.addEventListener('touchend', cancel);
 	}
 
 	node.addEventListener('mousedown', onStart);

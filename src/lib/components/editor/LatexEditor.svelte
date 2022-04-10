@@ -64,6 +64,7 @@
 	}
 	.latex {
 		flex-direction: column;
+		flex-grow: 1;
 	}
 	.buttons {
 		flex-direction: row;
@@ -73,7 +74,7 @@
 		resize: vertical;
 		border: 1px solid #888;
 		padding: 0.25rem 0.5rem;
-		min-width: 300px;
+		width: 100%;
 		outline: none;
 	}
 </style>

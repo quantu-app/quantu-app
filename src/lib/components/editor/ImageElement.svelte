@@ -13,9 +13,7 @@
 	export function withImages<T extends ISvelteEditor = ISvelteEditor>(editor: T): T {
 		const { insertData, isVoid } = editor;
 
-		editor.isVoid = (element) => {
-			return isImageElement(element as IBaseElement) ? true : isVoid(element);
-		};
+		editor.isVoid = (element) => (isImageElement(element as IBaseElement) ? true : isVoid(element));
 
 		editor.insertData = (data) => {
 			const text = data.getData('text/plain');
@@ -48,7 +46,7 @@
 
 	export function insertImage(editor: Editor, url: string | ArrayBuffer) {
 		const image = { type: 'image', url, children: [{ text: '' }] };
-		Transforms.insertNodes(editor, [image]);
+		Transforms.insertNodes(editor, image);
 	}
 
 	export function isImageUrl(url: string): boolean {

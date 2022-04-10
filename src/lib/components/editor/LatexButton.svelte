@@ -13,8 +13,12 @@
 
 	let at: Location;
 	let open = false;
+	let latex = '';
+	let inline = true;
 	function onClick() {
 		at = editor.selection ? editor.selection.anchor || editor.selection.focus : undefined;
+		latex = '';
+		inline = true;
 		open = !open;
 	}
 	function onDone(latex: string, inline: boolean) {
@@ -22,8 +26,8 @@
 	}
 </script>
 
+<LatexEditor bind:open bind:latex bind:inline {onDone} />
+
 <Button {active} {onClick}>
 	<i class="bi bi-plus-slash-minus" />
 </Button>
-
-<LatexEditor bind:open {onDone} />

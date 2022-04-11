@@ -90,10 +90,10 @@
 									<a
 										slot="extra"
 										role="button"
-										class="btn btn-primary"
-										href={`${base}/challenges/${departmentUrl}/${url}/review`}
+										class="btn btn-outline-primary mt-2"
+										href={`/challenges`}
 									>
-										Review
+										Return to Challenges
 									</a>
 								</Challenge>
 							</div>

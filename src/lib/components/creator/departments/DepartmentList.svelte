@@ -7,52 +7,48 @@
 
 	export let departments: Department[];
 
-	let department: Department;
-	let departmentIndex: number;
+	let departmentToUpdate: Department;
+	let departmentToDelete: Department;
 
-	function createOnUpdate(t: Department, index: number) {
+	function createOnUpdate(t: Department) {
 		return function onUpdate() {
-			department = t;
-			departmentIndex = index;
+			departmentToUpdate = t;
 		};
 	}
-	function createOnDelete(t: Department, index: number) {
+	function createOnDelete(t: Department) {
 		return function onDelete() {
-			department = t;
-			departmentIndex = index;
+			departmentToDelete = t;
 		};
 	}
 
 	async function onUpdateDepartment() {
-		if (department) {
-			const { id, ...updateBody } = department;
+		if (departmentToUpdate) {
+			const { id, ...updateBody } = departmentToUpdate;
 			await updateDepartment(id, updateBody);
-			department = undefined;
-			departmentIndex = undefined;
+			departmentToUpdate = undefined;
 		}
 	}
 	async function onDeleteDepartment() {
-		if (department) {
-			await deleteDepartment(department.id);
-			department = undefined;
-			departmentIndex = undefined;
+		if (departmentToDelete) {
+			await deleteDepartment(departmentToDelete.id);
+			departmentToDelete = undefined;
 		}
 	}
 </script>
 
 <div class="list-group list-group-flush">
-	{#each departments as department, index (department.id)}
+	{#each departments as department (department.id)}
 		<DepartmentListItem
 			{department}
-			onUpdate={createOnUpdate(department, index)}
-			onDelete={createOnDelete(department, index)}
+			onUpdate={createOnUpdate(department)}
+			onDelete={createOnDelete(department)}
 		>
 			<slot
 				slot="dropdown"
 				name="dropdown"
 				{department}
-				onUpdate={createOnUpdate(department, index)}
-				onDelete={createOnDelete(department, index)}
+				onUpdate={createOnUpdate(department)}
+				onDelete={createOnDelete(department)}
 			>
 				<li>
 					<button
@@ -61,7 +57,7 @@
 						data-bs-toggle="modal"
 						data-bs-target="#update-department"
 						aria-label="Update"
-						on:click={createOnUpdate(department, index)}>Update</button
+						on:click={createOnUpdate(department)}>Update</button
 					>
 				</li>
 				<li>
@@ -71,7 +67,7 @@
 						data-bs-toggle="modal"
 						data-bs-target="#delete-department"
 						aria-label="Delete"
-						on:click={createOnDelete(department, index)}>Delete</button
+						on:click={createOnDelete(department)}>Delete</button
 					>
 				</li>
 			</slot>
@@ -79,5 +75,5 @@
 	{/each}
 </div>
 
-<UpdateDepartment {department} {onUpdateDepartment} />
-<DeleteDepartment {department} {onDeleteDepartment} />
+<UpdateDepartment department={departmentToUpdate} {onUpdateDepartment} />
+<DeleteDepartment department={departmentToDelete} {onDeleteDepartment} />

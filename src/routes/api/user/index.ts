@@ -11,16 +11,14 @@ export const get = authenticated((event) =>
 				emails: true
 			}
 		})
-	).then((user) => {
-		if (!user) {
-			throw new Error('User not found');
-		} else {
-			return {
-				status: 200,
-				body: user
-			};
-		}
-	})
+	).then((user) =>
+		user
+			? {
+					status: 200,
+					body: user
+			  }
+			: { status: 404 }
+	)
 );
 
 export const patch = authenticated((event) =>
@@ -35,15 +33,13 @@ export const patch = authenticated((event) =>
 					emails: true
 				}
 			})
-		).then((user) => {
-			if (!user) {
-				throw new Error('User not found');
-			} else {
-				return {
-					status: 200,
-					body: user
-				};
-			}
-		})
+		).then((user) =>
+			user
+				? {
+						status: 200,
+						body: user
+				  }
+				: { status: 404 }
+		)
 	)
 );

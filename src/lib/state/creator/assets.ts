@@ -9,9 +9,30 @@ interface IAssetList {
 }
 
 export class AssetTree {
+	folder = '';
+	parent: AssetTree | undefined = undefined;
 	children: Record<string, AssetTree> = {};
 	assets: Array<Asset> = [];
 
+	constructor(folder = '', parent?: AssetTree) {
+		this.folder = folder;
+		this.parent = parent;
+	}
+
+	getById(id: string) {
+		for (const asset of this.assets) {
+			if (asset.id === id) {
+				return asset;
+			}
+		}
+		for (const [, tree] of Object.entries(this.children)) {
+			const asset = tree.getById(id);
+			if (asset) {
+				return asset;
+			}
+		}
+		return undefined;
+	}
 	folders() {
 		return Object.keys(this.children);
 	}
@@ -25,7 +46,7 @@ export class AssetTree {
 
 		while (current) {
 			if (!currentTree.children[current]) {
-				currentTree.children[current] = new AssetTree();
+				currentTree.children[current] = new AssetTree(current, currentTree);
 			}
 			currentTree = currentTree.children[current];
 			current = parts.shift();
@@ -88,13 +109,29 @@ const assetsWritable = writable(new DepartmentAssetTrees());
 
 export const assets = derived(assetsWritable, (assetsWritable) => assetsWritable);
 
+export async function showAssetById(departmentId: string, id: string): Promise<Asset> {
+	const res = await fetch(`${base}/api/creator/departments/${departmentId}/assets/crud/${id}`);
+	if (!res.ok) {
+		throw await res.json();
+	}
+	const asset = assetFromJSON(await res.json());
+	assetsWritable.update((state) => {
+		const tree = state.get(departmentId);
+		tree.addAsset(asset);
+		return state;
+	});
+	return asset;
+}
+
 export async function showAssets(
 	departmentId: string,
 	folder = '',
 	type?: string
 ): Promise<Asset[]> {
 	const res = await fetch(
-		`${base}/api/creator/departments/${departmentId}/assets/${folder}${type ? `?type=${type}` : ''}`
+		`${base}/api/creator/departments/${departmentId}/assets/fs${folder ? `/${folder}` : folder}${
+			type ? `?type=${type}` : ''
+		}`
 	);
 	if (!res.ok) {
 		throw await res.json();
@@ -109,21 +146,18 @@ export async function showAssets(
 	return assets;
 }
 
-export async function uploadAsset(
-	departmentId: string,
-	folder = '',
-	name: string,
-	body: FileReader['result']
-) {
+export async function uploadAsset(departmentId: string, folder = '', name: string, file: File) {
 	const ext = name.substring(name.lastIndexOf('.'));
 	const res = await fetch(
-		`${base}/api/creator/departments/${departmentId}/assets/${folder}/${name}`,
+		`${base}/api/creator/departments/${departmentId}/assets/fs${
+			folder ? `/${folder}` : folder
+		}/${name}`,
 		{
 			method: 'POST',
 			headers: {
 				'Content-Type': mime.getType(ext)
 			},
-			body
+			body: await readFileToArrayBuffer(file)
 		}
 	);
 	if (!res.ok) {
@@ -137,9 +171,22 @@ export async function uploadAsset(
 	return asset;
 }
 
+function readFileToArrayBuffer(file: File): Promise<ArrayBuffer> {
+	const reader = new FileReader();
+	return new Promise((resolve, reject) => {
+		reader.onload = async (e) => {
+			resolve(e.target.result as ArrayBuffer);
+		};
+		reader.onerror = reject;
+		reader.readAsArrayBuffer(file);
+	});
+}
+
 export async function deleteAsset(departmentId: string, folder = '', name: string) {
 	const res = await fetch(
-		`${base}/api/creator/departments/${departmentId}/assets/${folder}/${name}`,
+		`${base}/api/creator/departments/${departmentId}/assets/fs${
+			folder ? `/${folder}` : folder
+		}/${name}`,
 		{
 			method: 'DELETE'
 		}

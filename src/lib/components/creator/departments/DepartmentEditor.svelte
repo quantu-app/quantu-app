@@ -1,6 +1,7 @@
 <script lang="ts">
 	import RichEditor from '$lib/components/editor/RichEditor.svelte';
 	import type { Department } from '@prisma/client';
+	import SelectAsset from '../assets/SelectAsset.svelte';
 
 	export let department: Partial<Department>;
 	export let disabled = false;
@@ -30,6 +31,23 @@
 		/>
 	</div>
 </div>
+{#if department.id}
+	<div class="row mt-2">
+		<div class="col-md">
+			<div class="form-control">
+				<SelectAsset
+					id="department-logo"
+					departmentId={department.id}
+					bind:assetId={department.logoId}
+					type="IMAGE">Select/Upload Department Logo</SelectAsset
+				>
+				{#if department.logoId}
+					<img src={`/api/assets/${department.logoId}`} />
+				{/if}
+			</div>
+		</div>
+	</div>
+{/if}
 <hr />
 <div class="row">
 	<div class="col-md">

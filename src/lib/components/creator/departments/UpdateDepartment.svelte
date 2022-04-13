@@ -5,6 +5,8 @@
 	export let department: Department | undefined;
 	export let onUpdateDepartment: () => Promise<void>;
 
+	$: console.log(department);
+
 	async function internalUpdateDepartment() {
 		await onUpdateDepartment();
 		window.bootstrap.Modal.getInstance('#update-department').hide();

@@ -59,7 +59,6 @@ model Department {
   description Json
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
-  assetId     String?     @db.ObjectId
   challenges  Challenge[]
   assets      Asset[]
 }

@@ -4,6 +4,7 @@
 	import RichEditor from '$lib/components/editor/RichEditor.svelte';
 	import DateTimeInput from '../../DateTimeInput.svelte';
 	import { isUrlSafe } from '../../../utils';
+	import SelectAsset from '../assets/SelectAsset.svelte';
 
 	export let challenge: Partial<StateChallenge>;
 	export let disabled = false;
@@ -70,8 +71,22 @@
 		<label for="challenge-description" class="form-label">Description</label>
 		<RichEditor id="challenge-description" bind:value={challenge.description} />
 	</div>
+</div>
 
-	<div class="col-md">
+<div class="row mt-2 mb-4">
+	<div class="col-3">
+		<div class="form-control">
+			<label for="challenge-logo" class="form-label">Logo</label>
+			<SelectAsset
+				id="challenge-logo"
+				departmentId={challenge.departmentId}
+				bind:assetId={challenge.logoId}
+				type="IMAGE"
+			/>
+		</div>
+	</div>
+
+	<div class="col">
 		<label for="challenge-visible" class="form-label">Visible</label><br />
 		<input
 			class="form-check-input"

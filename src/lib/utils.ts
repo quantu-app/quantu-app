@@ -119,3 +119,14 @@ export function isUrlSafe(value: string): boolean {
 	// is an empty string url safe?
 	return /^[a-zA-Z0-9_-]+$/.test(value);
 }
+
+export function readFileToArrayBuffer(file: File): Promise<ArrayBuffer> {
+	const reader = new FileReader();
+	return new Promise((resolve, reject) => {
+		reader.onload = async (e) => {
+			resolve(e.target.result as ArrayBuffer);
+		};
+		reader.onerror = reject;
+		reader.readAsArrayBuffer(file);
+	});
+}

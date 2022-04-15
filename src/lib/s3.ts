@@ -44,13 +44,12 @@ export async function s3Get(folder: string, name: string) {
 	if (folder.length && !folder.endsWith('/')) {
 		folder += '/';
 	}
-	const result = await s3Client.send(
+	return s3Client.send(
 		new GetObjectCommand({
 			Key: `${ENV}/${folder}${name}`,
 			Bucket: process.env.S3_BUCKET
 		})
 	);
-	return result.Body;
 }
 
 export async function s3Delete(folder: string, name: string) {

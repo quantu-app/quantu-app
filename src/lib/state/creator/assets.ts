@@ -1,7 +1,8 @@
 import type { Asset } from '@prisma/client';
-import { writable, derived } from 'svelte/store';
+import { writable, derived, get } from 'svelte/store';
 import { base } from '$app/paths';
 import mime from 'mime';
+import { readFileToArrayBuffer } from '$lib/utils';
 
 interface IAssetList {
 	folders: Array<string>;
@@ -13,31 +14,36 @@ export class AssetTree {
 	parent: AssetTree | undefined = undefined;
 	children: Record<string, AssetTree> = {};
 	assets: Array<Asset> = [];
+	byId: Record<string, Asset> = {};
 
 	constructor(folder = '', parent?: AssetTree) {
 		this.folder = folder;
-		this.parent = parent;
+		if (parent) {
+			this.parent = parent;
+			this.byId = parent.byId;
+		}
 	}
 
-	getById(id: string) {
-		for (const asset of this.assets) {
-			if (asset.id === id) {
-				return asset;
-			}
-		}
-		for (const [, tree] of Object.entries(this.children)) {
-			const asset = tree.getById(id);
-			if (asset) {
-				return asset;
-			}
-		}
-		return undefined;
-	}
 	folders() {
 		return Object.keys(this.children);
 	}
 	list(folder = '') {
 		return this.getOrCreateFolder(folder);
+	}
+	hasFolder(folder: string) {
+		const parts = folder.split('/');
+		let current = parts.shift();
+		let currentTree = this as AssetTree;
+
+		while (current) {
+			if (!currentTree.children[current]) {
+				return false;
+			}
+			currentTree = currentTree.children[current];
+			current = parts.shift();
+		}
+
+		return true;
 	}
 	getOrCreateFolder(folder: string) {
 		const parts = folder.split('/');
@@ -62,6 +68,7 @@ export class AssetTree {
 		} else {
 			tree.assets[index] = asset;
 		}
+		tree.byId[asset.id] = asset;
 		return this;
 	}
 	removeAsset(asset: Asset) {
@@ -110,6 +117,10 @@ const assetsWritable = writable(new DepartmentAssetTrees());
 export const assets = derived(assetsWritable, (assetsWritable) => assetsWritable);
 
 export async function showAssetById(departmentId: string, id: string): Promise<Asset> {
+	const cachedAsset = get(assetsWritable).get(departmentId).byId[id];
+	if (cachedAsset) {
+		return cachedAsset;
+	}
 	const res = await fetch(`${base}/api/creator/departments/${departmentId}/assets/crud/${id}`);
 	if (!res.ok) {
 		throw await res.json();
@@ -169,17 +180,6 @@ export async function uploadAsset(departmentId: string, folder = '', name: strin
 		return state;
 	});
 	return asset;
-}
-
-function readFileToArrayBuffer(file: File): Promise<ArrayBuffer> {
-	const reader = new FileReader();
-	return new Promise((resolve, reject) => {
-		reader.onload = async (e) => {
-			resolve(e.target.result as ArrayBuffer);
-		};
-		reader.onerror = reject;
-		reader.readAsArrayBuffer(file);
-	});
 }
 
 export async function deleteAsset(departmentId: string, folder = '', name: string) {

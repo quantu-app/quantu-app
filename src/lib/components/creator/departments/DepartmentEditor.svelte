@@ -9,7 +9,7 @@
 
 <div class="row">
 	<div class="col-md">
-		<label for="department-name" class="form-label">Department Name</label>
+		<label for="department-name" class="form-label">Name</label>
 		<input
 			id="department-name"
 			type="text"
@@ -20,7 +20,7 @@
 		/>
 	</div>
 	<div class="col-md">
-		<label for="department-url" class="form-label">Department URL</label>
+		<label for="department-url" class="form-label">URL</label>
 		<input
 			id="department-url"
 			type="text"
@@ -31,26 +31,22 @@
 		/>
 	</div>
 </div>
-{#if department.id}
-	<div class="row mt-2">
-		<div class="col-md">
+<hr />
+<div class="row">
+	{#if department.id}
+		<div class="col-md-3">
 			<div class="form-control">
+				<label for="department-logo" class="form-label">Logo</label>
 				<SelectAsset
 					id="department-logo"
 					departmentId={department.id}
 					bind:assetId={department.logoId}
-					type="IMAGE">Select/Upload Department Logo</SelectAsset
-				>
-				{#if department.logoId}
-					<img src={`/api/assets/${department.logoId}`} />
-				{/if}
+					type="IMAGE"
+				/>
 			</div>
 		</div>
-	</div>
-{/if}
-<hr />
-<div class="row">
-	<div class="col-md">
+	{/if}
+	<div class="col-md-9">
 		<label for="department-description" class="form-label">Description</label>
 		<RichEditor id="department-description" bind:value={department.description} />
 	</div>

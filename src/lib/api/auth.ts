@@ -1,3 +1,4 @@
+import { run } from '$lib/prisma';
 import type { RequestEvent, RequestHandler } from '@sveltejs/kit/types/internal';
 
 export interface ITokenValue {
@@ -10,3 +11,20 @@ export const authenticated = (handler: RequestHandler) => (event: RequestEvent) 
 		: {
 				status: 401
 		  };
+
+export const isCreator = (handler: RequestHandler) => (event: RequestEvent) =>
+	run((client) =>
+		client.user
+			.findUnique({
+				where: {
+					id: event.locals.token.userId
+				}
+			})
+			.then((user) =>
+				user.creator
+					? handler(event)
+					: {
+							status: 403
+					  }
+			)
+	);

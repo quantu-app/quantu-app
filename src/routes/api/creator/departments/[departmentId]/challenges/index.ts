@@ -1,7 +1,7 @@
-import { authenticated } from '$lib/api/auth';
+import { isCreator } from '$lib/api/auth';
 import { run } from '$lib/prisma';
 
-export const get = authenticated((event) => {
+export const get = isCreator((event) => {
 	const departmentId = event.params.departmentId;
 
 	return run((client) =>
@@ -24,7 +24,7 @@ export const get = authenticated((event) => {
 	}));
 });
 
-export const post = authenticated(async (event) => {
+export const post = isCreator(async (event) => {
 	const data = await event.request.json();
 	const departmentId = event.params.departmentId;
 

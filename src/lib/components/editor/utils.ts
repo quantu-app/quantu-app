@@ -1,4 +1,6 @@
-import { Editor, Transforms, Element as SlateElement } from 'slate';
+import { Editor, Transforms, Element as SlateElement, Node } from 'slate';
+import type { IElement } from './Element.svelte';
+import type { IText } from './Leaf.svelte';
 
 export function isMarkActive(editor: Editor, format: string): boolean {
 	const marks = Editor.marks(editor);

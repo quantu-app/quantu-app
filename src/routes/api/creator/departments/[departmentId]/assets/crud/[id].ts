@@ -1,8 +1,8 @@
-import { authenticated } from '$lib/api/auth';
+import { isCreator } from '$lib/api/auth';
 import { run } from '$lib/prisma';
 import type { RequestEvent } from '@sveltejs/kit/types/internal';
 
-export const get = authenticated((event: RequestEvent) => {
+export const get = isCreator((event: RequestEvent) => {
 	const id = event.params.id;
 
 	return run((client) =>

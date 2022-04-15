@@ -10,12 +10,9 @@ export async function get(event: RequestEvent) {
 		const challenge = await client.challenge.findFirst({
 			where: {
 				url,
-				departmentId: (
-					await client.department.findUnique({
-						where: { url: departmentUrl },
-						select: { id: true }
-					})
-				).id
+				department: {
+					url: departmentUrl
+				}
 			},
 			include: {
 				department: {
@@ -29,10 +26,12 @@ export async function get(event: RequestEvent) {
 
 		if (challenge) {
 			const [result, solvers] = await Promise.all([
-				client.result.findFirst({
+				client.result.findUnique({
 					where: {
-						userId: event.locals.token.userId,
-						challengeId: challenge.id
+						userId_challengeId: {
+							userId: event.locals.token.userId,
+							challengeId: challenge.id
+						}
 					}
 				}),
 				client.result.aggregate({

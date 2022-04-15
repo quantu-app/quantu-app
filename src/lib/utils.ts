@@ -108,7 +108,8 @@ export function convertToUrlSafe(value: string): string {
 	 * converts remaining space to a single character, deletes everything not a-z0-9,
 	 * and finally lowercases the resultant value
 	 */
-	return value.trim()
+	return value
+		.trim()
 		.replace(/\s\s+/g, ' ')
 		.replace(/[^a-z0-9]/gi, '')
 		.toLowerCase();

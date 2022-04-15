@@ -1,6 +1,6 @@
 import { extname } from 'path';
 import mime from 'mime';
-import { authenticated } from '$lib/api/auth';
+import { isCreator } from '$lib/api/auth';
 import { s3Upload, s3Delete } from '$lib/s3';
 import { run } from '$lib/prisma';
 import type { AssetType } from '@prisma/client';
@@ -8,7 +8,7 @@ import { listAssets } from '..';
 
 const ONE_GIBIBYTE = 1024 * 1024 * 1024;
 
-export const get = authenticated(async (event) => {
+export const get = isCreator(async (event) => {
 	const departmentId = event.params.departmentId;
 	const folder = event.params.folder;
 	const type = event.url.searchParams.get('type');
@@ -21,7 +21,7 @@ export const get = authenticated(async (event) => {
 	}));
 });
 
-export const post = authenticated(async (event) => {
+export const post = isCreator(async (event) => {
 	const departmentId = event.params.departmentId;
 	const path = event.params.folder.split('/');
 	const name = path.pop();
@@ -96,7 +96,7 @@ export const post = authenticated(async (event) => {
 	);
 });
 
-export const del = authenticated(async (event) => {
+export const del = isCreator(async (event) => {
 	const departmentId = event.params.departmentId;
 	const path = event.params.folder.split('/');
 	const name = path.pop();

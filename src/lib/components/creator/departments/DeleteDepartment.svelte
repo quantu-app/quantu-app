@@ -13,7 +13,7 @@
 		} finally {
 			deletingDepartment = false;
 		}
-		window.bootstrap.Modal.getInstance('#delete-department').hide();
+		window.bootstrap.Modal.getOrCreateInstance('#delete-department').hide();
 	}
 </script>
 

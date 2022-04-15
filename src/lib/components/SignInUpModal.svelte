@@ -1,6 +1,8 @@
 <script lang="ts" context="module">
 	export function closeModal() {
-		const modal = window.bootstrap.Modal.getInstance(document.getElementById('sign-in-up-modal'));
+		const modal = window.bootstrap.Modal.getOrCreateInstance(
+			document.getElementById('sign-in-up-modal')
+		);
 		modal.hide();
 	}
 </script>

@@ -14,7 +14,7 @@
 		} finally {
 			deletingChallenge = false;
 		}
-		window.bootstrap.Modal.getInstance('#delete-challenge').hide();
+		window.bootstrap.Modal.getOrCreateInstance('#delete-challenge').hide();
 	}
 </script>
 

@@ -7,7 +7,7 @@
 
 	async function internalUpdateChallenge() {
 		await onUpdateChallenge();
-		window.bootstrap.Modal.getInstance('#update-challenge').hide();
+		window.bootstrap.Modal.getOrCreateInstance('#update-challenge').hide();
 	}
 </script>
 

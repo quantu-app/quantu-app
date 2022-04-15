@@ -14,7 +14,7 @@
 		creatingDepartment = true;
 		try {
 			const { id } = await createDepartment(department);
-			window.bootstrap.Modal.getInstance('#create-department').hide();
+			window.bootstrap.Modal.getOrCreateInstance('#create-department').hide();
 			await goto(`${base}/creator/departments/${id}`);
 			department = {};
 		} finally {

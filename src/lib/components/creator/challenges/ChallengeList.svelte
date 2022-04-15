@@ -8,53 +8,49 @@
 	export let departmentId: string = undefined;
 	export let challenges: Array<StateChallenge>;
 
-	let challenge: StateChallenge;
-	let challengeIndex: number;
+	let challengeToUpdate: StateChallenge;
+	let challengeToDelete: StateChallenge;
 
-	function createOnUpdate(q: StateChallenge, index: number) {
+	function createOnUpdate(q: StateChallenge) {
 		return function onUpdate() {
-			challenge = q;
-			challengeIndex = index;
+			challengeToUpdate = q;
 		};
 	}
-	function createOnDelete(q: StateChallenge, index: number) {
+	function createOnDelete(q: StateChallenge) {
 		return function onDelete() {
-			challenge = q;
-			challengeIndex = index;
+			challengeToDelete = q;
 		};
 	}
 
 	async function onUpdateChallenge() {
-		if (challenge) {
-			const { id, department, ...challengeBody } = challenge;
+		if (challengeToUpdate) {
+			const { id, department, ...challengeBody } = challengeToUpdate;
 
-			await updateChallenge(departmentId, challenge.id, challengeBody);
-			challenge = undefined;
-			challengeIndex = undefined;
+			await updateChallenge(departmentId, challengeToUpdate.id, challengeBody);
+			challengeToUpdate = undefined;
 		}
 	}
 	async function onDeleteChallenge() {
-		if (challenge) {
-			await deleteChallenge(departmentId, challenge.id);
-			challenge = undefined;
-			challengeIndex = undefined;
+		if (challengeToDelete) {
+			await deleteChallenge(departmentId, challengeToDelete.id);
+			challengeToDelete = undefined;
 		}
 	}
 </script>
 
 <div class="list-group list-group-flush">
-	{#each challenges as challenge, index (challenge.id)}
+	{#each challenges as challenge (challenge.id)}
 		<ChallengeListItem
 			{challenge}
-			onUpdate={createOnUpdate(challenge, index)}
-			onDelete={createOnDelete(challenge, index)}
+			onUpdate={createOnUpdate(challenge)}
+			onDelete={createOnDelete(challenge)}
 		>
 			<slot
 				slot="dropdown"
 				name="dropdown"
 				{challenge}
-				onUpdate={createOnUpdate(challenge, index)}
-				onDelete={createOnDelete(challenge, index)}
+				onUpdate={createOnUpdate(challenge)}
+				onDelete={createOnDelete(challenge)}
 			>
 				<li>
 					<button
@@ -63,7 +59,7 @@
 						data-bs-toggle="modal"
 						data-bs-target="#update-challenge"
 						aria-label="Update"
-						on:click={createOnUpdate(challenge, index)}>Update</button
+						on:click={createOnUpdate(challenge)}>Update</button
 					>
 				</li>
 				<li>
@@ -73,7 +69,7 @@
 						data-bs-toggle="modal"
 						data-bs-target="#delete-challenge"
 						aria-label="Delete"
-						on:click={createOnDelete(challenge, index)}>Delete</button
+						on:click={createOnDelete(challenge)}>Delete</button
 					>
 				</li>
 			</slot>
@@ -81,5 +77,5 @@
 	{/each}
 </div>
 
-<UpdateChallenge {challenge} {onUpdateChallenge} />
-<DeleteChallenge {challenge} {onDeleteChallenge} />
+<UpdateChallenge challenge={challengeToUpdate} {onUpdateChallenge} />
+<DeleteChallenge challenge={challengeToDelete} {onDeleteChallenge} />

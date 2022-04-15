@@ -19,7 +19,7 @@
 			creatingChallenge = false;
 			editorKey = Math.random();
 		}
-		window.bootstrap.Modal.getInstance('#create-challenge').hide();
+		window.bootstrap.Modal.getOrCreateInstance('#create-challenge').hide();
 	}
 </script>
 

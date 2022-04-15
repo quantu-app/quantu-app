@@ -7,7 +7,7 @@
 
 	async function internalUpdateDepartment() {
 		await onUpdateDepartment();
-		window.bootstrap.Modal.getInstance('#update-department').hide();
+		window.bootstrap.Modal.getOrCreateInstance('#update-department').hide();
 	}
 </script>
 

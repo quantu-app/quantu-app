@@ -1,8 +1,11 @@
+<script lang="ts" context="module">
+	let SELECT_ID = 0;
+</script>
+
 <script lang="ts">
 	import { browser } from '$app/env';
 	import { showAssetById } from '$lib/state/creator/assets';
 	import type { Asset } from '@prisma/client';
-	import Portal from 'svelte-portal/src/Portal.svelte';
 	import AssetComponent from './Asset.svelte';
 	import AssetManager from './AssetManager.svelte';
 
@@ -12,6 +15,7 @@
 	export let assetId: string = undefined;
 	export let type: string = undefined;
 
+	let ID = SELECT_ID++;
 	let folder = '';
 	$: if (browser && assetId && !asset) {
 		showAssetById(departmentId, assetId).then((a) => {
@@ -28,7 +32,7 @@
 	{id}
 	type="button"
 	data-bs-toggle="modal"
-	data-bs-target="#select-asset"
+	data-bs-target={`#select-asset-${ID}`}
 	class="btn btn-primary w-100 d-block"
 >
 	{#if asset}
@@ -38,35 +42,33 @@
 	{/if}
 </button>
 
-<Portal>
-	<div
-		class="modal fade"
-		id="select-asset"
-		tabindex="-1"
-		aria-labelledby="select-asset-label"
-		aria-hidden="true"
-	>
-		<div class="modal-dialog modal-lg">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h5 id="select-asset-label" class="modal-title">Select/Upload Asset</h5>
-					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" />
-				</div>
-				<div class="modal-body">
-					<AssetManager {departmentId} {type} bind:selectAsset={asset} bind:folder {onSelect} />
-				</div>
-				<div class="modal-footer">
-					<button
-						type="button"
-						class="btn btn-primary text-white"
-						disabled={!asset}
-						data-bs-dismiss="modal">Select</button
-					>
-					<button type="button" class="btn btn-secondary text-white" data-bs-dismiss="modal"
-						>Close</button
-					>
-				</div>
+<div
+	class="modal fade"
+	id={`select-asset-${ID}`}
+	tabindex="-1"
+	aria-labelledby={`select-asset-${ID}-label`}
+	aria-hidden="true"
+>
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 id={`select-asset-${ID}-label`} class="modal-title">Select/Upload Asset</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" />
+			</div>
+			<div class="modal-body">
+				<AssetManager {departmentId} {type} bind:selectAsset={asset} bind:folder {onSelect} />
+			</div>
+			<div class="modal-footer">
+				<button
+					type="button"
+					class="btn btn-primary text-white"
+					disabled={!asset}
+					data-bs-dismiss="modal">Select</button
+				>
+				<button type="button" class="btn btn-secondary text-white" data-bs-dismiss="modal"
+					>Close</button
+				>
 			</div>
 		</div>
 	</div>
-</Portal>
+</div>

@@ -15,6 +15,7 @@
 	import { XorShiftRng } from '@aicacia/rand';
 	import { format } from 'date-fns';
 	import RichViewer from '$lib/components/editor/RichViewer.svelte';
+	import Asset from '../creator/assets/Asset.svelte';
 
 	export let challenge: StateChallenge;
 
@@ -29,7 +30,11 @@
 	<div class="challenge-card col-12 border p-4">
 		<div class="row">
 			<div class="col-lg-6 text-center">
-				<img src={image} alt={challenge.name} class="img-fluid" />
+				<img
+					src={challenge.logoId ? `${base}/api/assets/${challenge.logoId}` : image}
+					alt={challenge.name}
+					class="img-fluid"
+				/>
 			</div>
 			<div class="col-lg-6">
 				<h2 class="challenge-name mt-4 mt-lg-0">{challenge.name}</h2>

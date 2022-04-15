@@ -8,5 +8,5 @@
 </script>
 
 {#if asset.type === 'IMAGE'}
-	<img class="w-100 h-auto" src={url} alt={asset.name} />
+	<img class="img-fluid" src={url} alt={asset.name} />
 {/if}

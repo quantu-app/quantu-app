@@ -1,35 +1,34 @@
 import { run } from '$lib/prisma';
 import { authenticated } from '$lib/api/auth';
+import type { PrismaClient } from '@prisma/client';
 
-export const post = authenticated((event) => {
-	const id = event.params.id;
+export const post = authenticated(async (event) => ({
+	body: await run((client) => explain(client, event.locals.token.userId, event.params.id)),
+	status: 201
+}));
 
-	return run(async (client) => {
-		const question = await client.challenge.findUnique({
-			where: {
-				id: id
+export async function explain(client: PrismaClient, userId: string, challengeId: string) {
+	const question = await client.challenge.findUnique({
+		where: {
+			id: challengeId
+		}
+	});
+
+	const data = {
+		challengeId,
+		prompt: question.prompt,
+		type: question.type,
+		value: 0,
+		userId: userId
+	};
+	return client.result.upsert({
+		where: {
+			userId_challengeId: {
+				userId: userId,
+				challengeId
 			}
-		});
-
-		const data = {
-			challengeId: id,
-			prompt: question.prompt,
-			type: question.type,
-			value: 0,
-			userId: event.locals.token.userId
-		};
-		return client.result.upsert({
-			where: {
-				userId_challengeId: {
-					userId: event.locals.token.userId,
-					challengeId: id
-				}
-			},
-			update: data,
-			create: data
-		});
-	}).then((result) => ({
-		body: result,
-		status: 201
-	}));
-});
+		},
+		update: data,
+		create: data
+	});
+}

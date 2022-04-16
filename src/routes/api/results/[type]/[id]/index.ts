@@ -1,4 +1,4 @@
-import type { QuestionType } from '@prisma/client';
+import type { PrismaClient, QuestionType } from '@prisma/client';
 import { run } from '$lib/prisma';
 import type {
 	Answer,
@@ -11,58 +11,65 @@ import type {
 import { InputType } from '$lib/types';
 import { authenticated } from '$lib/api/auth';
 
-export const get = authenticated((event) => {
-	const id = event.params.id;
-
-	return run((client) =>
-		client.result.findUnique({
-			where: {
-				userId_challengeId: {
-					userId: event.locals.token.userId,
-					challengeId: id
-				}
-			}
-		})
-	).then((result) => ({
+export const get = authenticated(async (event) => {
+	const result = await run((client) =>
+		getResultById(client, event.locals.token.userId, event.params.id)
+	);
+	return {
 		body: result,
 		status: result ? 200 : 404
-	}));
+	};
 });
 
-export const post = authenticated(async (event) => {
-	const answer: Answer = await event.request.json();
-	const id = event.params.id;
-
-	return run(async (client) => {
-		const question = await client.challenge.findUnique({
-			where: {
-				id
+export function getResultById(client: PrismaClient, userId: string, challengeId: string) {
+	return client.result.findUnique({
+		where: {
+			userId_challengeId: {
+				userId,
+				challengeId
 			}
-		});
+		}
+	});
+}
 
-		const data = {
-			answer,
-			challengeId: id,
-			prompt: question.prompt,
-			type: question.type,
-			value: getResult(question.type, question.prompt as unknown as PromptPrivate, answer),
-			userId: event.locals.token.userId
-		};
-		return client.result.upsert({
-			where: {
-				userId_challengeId: {
-					userId: event.locals.token.userId,
-					challengeId: id
-				}
-			},
-			update: data,
-			create: data
-		});
-	}).then((result) => ({
-		body: result,
-		status: 201
-	}));
-});
+export const post = authenticated(async (event) => ({
+	body: await run(async (client) =>
+		answer(client, event.locals.token.userId, event.params.id, await event.request.json())
+	),
+	status: 201
+}));
+
+export async function answer(
+	client: PrismaClient,
+	userId: string,
+	challengeId: string,
+	answer: Answer
+) {
+	const question = await client.challenge.findUnique({
+		where: {
+			id: challengeId
+		}
+	});
+
+	const data = {
+		answer,
+		challengeId,
+		prompt: question.prompt,
+		type: question.type,
+		value: getResult(question.type, question.prompt as unknown as PromptPrivate, answer),
+		userId
+	};
+	return client.result.upsert({
+		where: {
+			userId_challengeId: {
+				userId,
+				challengeId
+			}
+		},
+		update: data,
+		create: data
+	});
+}
 
 function getResult(type: QuestionType, prompt: PromptPrivate, answer: Answer): number {
 	switch (type) {

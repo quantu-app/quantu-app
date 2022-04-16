@@ -1,9 +1,12 @@
+import { authenticated } from '$lib/api/auth';
 import { run } from '$lib/prisma';
-import type { RequestEvent } from '@sveltejs/kit/types/internal';
+import type { PrismaClient } from '@prisma/client';
 
-export async function get(_event: RequestEvent) {
-	return run((client) => client.department.findMany()).then((departments) => ({
-		body: departments,
-		status: 200
-	}));
+export const get = authenticated(async () => ({
+	body: await run(getDepartments),
+	status: 200
+}));
+
+export async function getDepartments(client: PrismaClient) {
+	return client.department.findMany();
 }

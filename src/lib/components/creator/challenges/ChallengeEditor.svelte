@@ -85,16 +85,6 @@
 			/>
 		</div>
 	</div>
-
-	<div class="col">
-		<label for="challenge-visible" class="form-label">Visible</label><br />
-		<input
-			class="form-check-input"
-			type="checkbox"
-			bind:checked={challenge.visible}
-			id="flexCheckDefault"
-		/>
-	</div>
 </div>
 
 <PromptEditor {disabled} type={challenge.type} {prompt} />

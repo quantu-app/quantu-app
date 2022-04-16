@@ -4,6 +4,7 @@
 	import ImageButton from './ImageButton.svelte';
 	import CodeButton from './CodeButton.svelte';
 	import LatexButton from './LatexButton.svelte';
+	import TableButton from './TableButton.svelte';
 </script>
 
 <MarkButton format="bold"><i class="bi bi-type-bold" /></MarkButton>
@@ -18,3 +19,4 @@
 <ImageButton />
 <CodeButton />
 <LatexButton />
+<!-- <TableButton /> -->

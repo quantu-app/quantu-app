@@ -9,8 +9,6 @@ export const get = authenticated((event: RequestEvent) =>
 	run(async (client) => {
 		const challenges = await client.challenge.findMany({
 			where: {
-				visible: true,
-
 				NOT: [{ releasedAt: null }],
 
 				releasedAt: {

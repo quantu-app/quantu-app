@@ -6,7 +6,12 @@
 		children: (IElement | IText)[];
 	}
 
-	export type IElement = IBaseElement | IImageElement | ICodeElement | ILatexElement;
+	export type IElement =
+		| IBaseElement
+		| IImageElement
+		| ICodeElement
+		| ILatexElement
+		| ITableElement;
 </script>
 
 <script lang="ts">
@@ -17,6 +22,8 @@
 	import CodeElement, { isCodeElement } from './CodeElement.svelte';
 	import type { ILatexElement } from './LatexElement.svelte';
 	import LatexElement, { isLatexElement } from './LatexElement.svelte';
+	import type { ITableElement } from './TableElement.svelte';
+	import TableElement, { isTableElement } from './TableElement.svelte';
 	import type { IText } from './Leaf.svelte';
 
 	export let element: IElement;
@@ -102,6 +109,13 @@
 		{isVoid}
 		{dir}
 		{contenteditable}><slot /></LatexElement
+	>{:else if isTableElement(element)}<TableElement
+		bind:ref
+		{element}
+		{isInline}
+		{isVoid}
+		{dir}
+		{contenteditable}><slot /></TableElement
 	>{:else}<p
 		bind:this={ref}
 		data-slate-node="element"

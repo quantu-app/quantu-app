@@ -82,7 +82,6 @@ model Challenge {
   results      Result[]
   type         QuestionType @default(MULTIPLE_CHOICE)
   prompt       Json
-  visible      Boolean      @default(false)
   releasedAt   DateTime?
   createdAt    DateTime     @default(now())
   updatedAt    DateTime     @updatedAt

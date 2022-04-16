@@ -105,7 +105,7 @@
 		"slate-history": "^0.66.0",
 		"svelte": "^3.47.0",
 		"svelte-portal": "^2.1.2",
-		"svelte-slate": "^0.1.28",
+		"svelte-slate": "^0.1.29",
 		"title-case": "^3.0.3",
 		"uuid": "^8.3.2",
 		"validator": "^13.7.0",

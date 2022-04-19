@@ -1,7 +1,7 @@
 import { run } from '$lib/prisma';
 import type { PrismaClient } from '@prisma/client';
 import type { RequestEvent } from '@sveltejs/kit/types/internal';
-import { removePrivate } from '.';
+import { removePrivate } from '..';
 
 export async function get(event: RequestEvent) {
 	const challenge = await run((client) =>
@@ -9,7 +9,7 @@ export async function get(event: RequestEvent) {
 			client,
 			event.locals.token.userId,
 			event.params.departmentUrl,
-			event.params.url
+			event.params.challengeUrl
 		)
 	);
 
@@ -23,11 +23,11 @@ export async function getChallengeByUrl(
 	client: PrismaClient,
 	userId: string,
 	departmentUrl: string,
-	url: string
+	challengeUrl: string
 ) {
 	const challenge = await client.challenge.findFirst({
 		where: {
-			url,
+			url: challengeUrl,
 			department: {
 				url: departmentUrl
 			}

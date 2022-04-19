@@ -48,10 +48,10 @@ model User {
   updatedAt         DateTime       @updatedAt
 
   results                Result[]
-  comments               Comment[]
   solutions              ChallengeSolution[]
-  commentVotes           CommentVote[]
   challengeSolutionVotes ChallengeSolutionVote[]
+  comments               Comment[]
+  commentVotes           CommentVote[]
 }
 
 model Department {
@@ -96,17 +96,18 @@ model Challenge {
 }
 
 model ChallengeSolution {
-  id                     String                  @id @default(auto()) @map("_id") @db.ObjectId
-  challengeId            String                  @db.ObjectId
-  challenge              Challenge               @relation(fields: [challengeId], references: [id])
-  userId                 String                  @db.ObjectId
-  user                   User                    @relation(fields: [userId], references: [id])
-  solution               Json
-  createdAt              DateTime                @default(now())
-  updatedAt              DateTime                @updatedAt
-  challengeSolutionVotes ChallengeSolutionVote[]
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  challengeId String    @db.ObjectId
+  challenge   Challenge @relation(fields: [challengeId], references: [id])
+  userId      String    @db.ObjectId
+  user        User      @relation(fields: [userId], references: [id])
+  solution    Json
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 
-  @@unique([challengeId, userId])
+  votes ChallengeSolutionVote[]
+
+  @@unique([userId, challengeId])
 }
 
 model ChallengeSolutionVote {
@@ -120,6 +121,41 @@ model ChallengeSolutionVote {
   updatedAt           DateTime          @updatedAt
 
   @@unique([userId, challengeSolutionId])
+}
+
+enum CommentReferenceType {
+  CHALLENGE_SOLUTION
+}
+
+model Comment {
+  id            String               @id @default(auto()) @map("_id") @db.ObjectId
+  referenceType CommentReferenceType @default(CHALLENGE_SOLUTION)
+  referenceId   String               @db.ObjectId
+  commentId     String?              @db.ObjectId
+  comment       Comment?             @relation(name: "Comments", fields: [commentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  userId        String               @db.ObjectId
+  user          User                 @relation(fields: [userId], references: [id])
+  content       Json
+  createdAt     DateTime             @default(now())
+  updatedAt     DateTime             @updatedAt
+
+  votes    CommentVote[]
+  comments Comment[]     @relation(name: "Comments")
+
+  @@unique([referenceType, referenceId, commentId])
+}
+
+model CommentVote {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  commentId String   @db.ObjectId
+  comment   Comment  @relation(fields: [commentId], references: [id])
+  userId    String   @db.ObjectId
+  user      User     @relation(fields: [userId], references: [id])
+  vote      Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, commentId])
 }
 
 model Result {
@@ -158,30 +194,4 @@ model Asset {
   departmentLogos Department[] @relation(name: "DepartmentLogo")
 
   @@unique([departmentId, folder, name])
-}
-
-model Comment {
-  id           String        @id @default(auto()) @map("_id") @db.ObjectId
-  referenceId  String        @db.ObjectId
-  userId       String        @db.ObjectId
-  user         User          @relation(fields: [userId], references: [id])
-  content      Json
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
-  commentVotes CommentVote[]
-
-  @@unique([referenceId, userId])
-}
-
-model CommentVote {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  commentId String   @db.ObjectId
-  comment   Comment  @relation(fields: [commentId], references: [id])
-  userId    String   @db.ObjectId
-  user      User     @relation(fields: [userId], references: [id])
-  vote      Boolean  @default(true)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@unique([userId, commentId])
 }

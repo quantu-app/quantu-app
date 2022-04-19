@@ -148,7 +148,7 @@
 	{contenteditable}
 >
 	<div class="latex-value" class:inline={currentInline} contenteditable={false} class:selected>
-		<span bind:this={latexElement} />
+		<span class="latex" bind:this={latexElement} />
 		<div class="edit" class:selected>
 			<button class="btn btn-sm btn-primary" on:mousedown={onEdit} on:touchstart={onEdit}
 				><i class="bi bi-pencil" /></button

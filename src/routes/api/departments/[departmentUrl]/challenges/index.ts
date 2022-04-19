@@ -13,6 +13,7 @@ export const get = authenticated(async (event) => ({
 
 export async function getChallenges(client: PrismaClient, userId: string, departmentUrl?: string) {
 	const where = {
+		visible: true,
 		NOT: [{ releasedAt: null }],
 
 		releasedAt: {

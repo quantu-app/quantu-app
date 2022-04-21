@@ -18,6 +18,7 @@
 	export let seed: number = undefined;
 	export let onExplain: () => Promise<Result>;
 	export let onSubmit: (answer: Answer) => Promise<Result>;
+	export let disabled = false;
 
 	let showExplanation = false;
 	let correct: Record<string, true>;
@@ -32,11 +33,11 @@
 	}
 </script>
 
-<Prompt {type} {input} bind:showExplanation bind:result {onExplain} {onSubmit}>
+<Prompt {type} {input} bind:showExplanation bind:result {disabled} {onExplain} {onSubmit}>
 	<MultipleChoiceContent slot="content" {prompt} />
 	<MultipleChoiceInput
 		slot="input"
-		disabled={result != null}
+		disabled={disabled || result != null}
 		{correct}
 		{seed}
 		{prompt}

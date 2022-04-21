@@ -12,15 +12,22 @@
 	export let result: Result = undefined;
 	export let onExplain: () => Promise<Result>;
 	export let onSubmit: (answer: Answer) => Promise<Result>;
+	export let disabled = false;
 
 	let showExplanation = false;
 	$: resultPrompt = result?.prompt as unknown as InputPrivate;
 	$: correct = result ? result.value >= 0.5 : undefined;
 </script>
 
-<Prompt {type} {input} bind:result bind:showExplanation {onExplain} {onSubmit}>
+<Prompt {type} {input} bind:result bind:showExplanation {disabled} {onExplain} {onSubmit}>
 	<InputContent slot="content" {prompt} />
-	<InputInput slot="input" disabled={result != null} type={prompt.type} {correct} bind:input />
+	<InputInput
+		slot="input"
+		disabled={disabled || result != null}
+		type={prompt.type}
+		{correct}
+		bind:input
+	/>
 	<slot slot="extra" name="extra" />
 	<div name="explanation" slot="explanation">
 		{#if showExplanation && resultPrompt?.explanation && resultPrompt?.explanation.length}

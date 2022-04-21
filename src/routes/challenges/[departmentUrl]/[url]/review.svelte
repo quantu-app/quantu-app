@@ -21,12 +21,12 @@
 
 <script lang="ts">
 	import UserLayout from '$lib/components/layouts/UserLayout.svelte';
-	import { base } from '$app/paths';
 	import { page } from '$app/stores';
 	import { challengesByDepartmentUrl, showChallengeByUrl } from '$lib/state/challenges';
 	import ReviewChallenge from '$lib/components/questions/ReviewChallenge.svelte';
 	import SEO from '$lib/components/SEO/index.svelte';
 	import { onMount } from 'svelte';
+	import ChallengeWrapper from '$lib/components/challenges/ChallengeWrapper.svelte';
 
 	export let departmentUrl: string;
 	export let url: string;
@@ -56,70 +56,14 @@
 
 <UserLayout>
 	{#if challenge}
-		<div id="challenge-wrapper" class="container-fluid flex-grow-1">
-			<div class="row min-vh-100">
-				<div id="challenge--sidebar" class="col-auto px-sm-2 px-0">
-					<div class="d-flex flex-column mt-3" id="challenge--sidebarContent">
-						<ul class="nav nav-pills flex-column align-items-center align-items-sm-start">
-							<li class="nav-item mx-3">
-								{#if challenge && challenge.department}
-									<a
-										href="/challenges"
-										class="nav-link align-middle px-0 py-0"
-										alt={challenge.department.name}
-									>
-										<i class="fs-4 bi-building d-sm-none" />
-										<span id="challenge--departmentHeading" class="d-none d-sm-block"
-											>Department</span
-										>
-										<span id="challenge--department" class="d-none d-sm-inline"
-											>{challenge.department.name}</span
-										>
-									</a>
-								{/if}
-							</li>
-						</ul>
-					</div>
-				</div>
-				<div id="challenge--mainContent" class="col">
-					<div class="row mt-3 mx-0">
-						<div class="col-12 col-lg-8 col-md-10">
-							<h2>{challenge.name}</h2>
-							{#if challenge.result}
-								<ReviewChallenge result={challenge.result}>
-									<a
-										slot="extra"
-										role="button"
-										class="btn btn-outline-primary mt-2"
-										href={`/challenges`}
-									>
-										Return to Challenges
-									</a>
-								</ReviewChallenge>
-							{/if}
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
+		<ChallengeWrapper {challenge}>
+			{#if challenge.result}
+				<ReviewChallenge result={challenge.result}>
+					<a slot="extra" role="button" class="btn btn-outline-primary mt-2" href={`/challenges`}>
+						Return to Challenges
+					</a>
+				</ReviewChallenge>
+			{/if}
+		</ChallengeWrapper>
 	{/if}
 </UserLayout>
-
-<style type="css">
-	#challenge--sidebar {
-		border-right: 1px solid #707070;
-	}
-	#challenge--mainContent {
-		min-height: 500px;
-	}
-	#challenge--departmentHeading {
-		color: black;
-		font-weight: bold;
-		font-size: 18px;
-	}
-	#challenge--department {
-		font-weight: 500;
-		color: #999999;
-		font-size: 18px;
-	}
-</style>

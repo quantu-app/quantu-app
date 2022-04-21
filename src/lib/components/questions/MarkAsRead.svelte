@@ -10,9 +10,10 @@
 	export let result: Result = undefined;
 	export let onExplain: () => Promise<Result>;
 	export let onSubmit: (answer: Answer) => Promise<Result>;
+	export let disabled = false;
 </script>
 
-<Prompt {type} {input} bind:result {onExplain} {onSubmit}>
+<Prompt {type} {input} bind:result {disabled} {onExplain} {onSubmit}>
 	<MarkAsReadContent slot="content" {prompt} />
 	<slot slot="extra" name="extra" />
 </Prompt>

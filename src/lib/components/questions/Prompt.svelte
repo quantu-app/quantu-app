@@ -10,6 +10,7 @@
 	export let showExplanation = false;
 	export let onExplain: () => Promise<Result>;
 	export let onSubmit: (answer: Answer) => Promise<Result>;
+	export let disabled = false;
 
 	let answering = false;
 	let explaining = false;
@@ -43,23 +44,23 @@
 			<slot name="input" />
 
 			<div class="d-flex mt-3">
-				{#if result != null}
+				{#if !disabled && result != null}
 					{#if !showExplanation && type !== 'MARK_AS_READ'}
 						<button
 							type="button"
 							class="btn btn-secondary text-white"
-							disabled={showExplanation}
+							disabled={disabled || showExplanation}
 							on:click={() => (showExplanation = true)}
 						>
 							Show Explanation
 						</button>
 					{/if}
 					<slot name="extra" />
-				{:else}
+				{:else if !disabled}
 					<button
 						type="button"
 						class="btn btn-primary mt-2 me-4"
-						disabled={isEmpty(input) || !!result || answering || explaining}
+						disabled={disabled || isEmpty(input) || !!result || answering || explaining}
 						on:click={onSubmitInternal}
 					>
 						{#if answering}
@@ -71,7 +72,7 @@
 						<button
 							type="button"
 							class="btn btn-outline-primary mt-2"
-							disabled={explaining || answering}
+							disabled={disabled || explaining || answering}
 							on:click={onExplainInternal}
 						>
 							{#if explaining}

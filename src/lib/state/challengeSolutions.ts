@@ -4,8 +4,10 @@ import { base } from '$app/paths';
 import { addComments } from './comments';
 
 export type StateChallengeSolution = ChallengeSolution & {
+	user: { id: string; username: string };
 	challenge: { url: string; department: { url: string } };
 	votes: ChallengeSolutionVote[];
+	commentCount: number;
 };
 
 export const challengeSolutionsWritable = writable<Array<StateChallengeSolution>>([]);
@@ -146,6 +148,7 @@ function addOrUpdate(
 
 	const comments = (challengeSolution as any).comments || [];
 	delete (challengeSolution as any).comments;
+	challengeSolution.commentCount = comments.length;
 	if (comments.length) {
 		addComments(comments);
 	}

@@ -23,18 +23,21 @@
 	import UserLayout from '$lib/components/layouts/UserLayout.svelte';
 	import { page } from '$app/stores';
 	import { challengesByDepartmentUrl, showChallengeByUrl } from '$lib/state/challenges';
-	import Challenge from '$lib/components/questions/Challenge.svelte';
-	import { onMount } from 'svelte';
+	import Solutions from '$lib/components/challenges/solutions/Solutions.svelte';
 	import SEO from '$lib/components/SEO/index.svelte';
+	import { onMount } from 'svelte';
+	import { challengeSolutionsByUrl, showChallengeSolutions } from '$lib/state/challengeSolutions';
 	import ChallengeWrapper from '$lib/components/challenges/ChallengeWrapper.svelte';
 
 	export let departmentUrl: string;
 	export let url: string;
 
 	$: challenge = ($challengesByDepartmentUrl[departmentUrl] || {})[url];
+	$: solutions = ($challengeSolutionsByUrl[departmentUrl] || {})[url] || [];
 
 	onMount(async () => {
 		await showChallengeByUrl(departmentUrl, url);
+		await showChallengeSolutions(departmentUrl, url);
 	});
 </script>
 
@@ -57,11 +60,7 @@
 <UserLayout>
 	{#if challenge}
 		<ChallengeWrapper {challenge}>
-			<Challenge {challenge}>
-				<a slot="extra" role="button" class="btn btn-outline-primary mt-2" href={`/challenges`}>
-					Return to Challenges
-				</a>
-			</Challenge>
+			<Solutions {challenge} {solutions} />
 		</ChallengeWrapper>
 	{/if}
 </UserLayout>

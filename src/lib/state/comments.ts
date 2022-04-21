@@ -3,10 +3,11 @@ import { writable, derived } from 'svelte/store';
 import { base } from '$app/paths';
 
 export type StateComment = Comment & {
+	user: { id: string; username: string };
 	votes: CommentVote[];
 };
 
-export type StateCommentWithChildren = Comment & {
+export type StateCommentWithChildren = StateComment & {
 	children: StateCommentWithChildren[];
 };
 

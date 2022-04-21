@@ -31,8 +31,14 @@ export async function getCommentsByReferenceId(
 	const comments = await client.comment.findMany({
 		where,
 		include: {
-			commentVotes: true,
-			comments: createNestedIncludeRecur(depth)
+			comments: createNestedIncludeRecur(depth),
+			votes: true,
+			user: {
+				select: {
+					id: true,
+					username: true
+				}
+			}
 		}
 	});
 
@@ -45,8 +51,14 @@ function createNestedIncludeRecur(depth: number) {
 	} else {
 		return {
 			include: {
-				commentVotes: true,
-				comments: createNestedIncludeRecur(depth - 1)
+				comments: createNestedIncludeRecur(depth - 1),
+				votes: true,
+				user: {
+					select: {
+						id: true,
+						username: true
+					}
+				}
 			}
 		};
 	}
@@ -77,8 +89,14 @@ export async function createComment(
 			referenceId
 		},
 		include: {
-			commentVotes: true,
-			comments: true
+			comments: true,
+			votes: true,
+			user: {
+				select: {
+					id: true,
+					username: true
+				}
+			}
 		}
 	});
 

@@ -42,7 +42,13 @@ export async function getSolutions(
 					}
 				}
 			},
-			challengeSolutionVotes: true
+			votes: true,
+			user: {
+				select: {
+					id: true,
+					username: true
+				}
+			}
 		}
 	});
 	const comments = await getCommentsByReferenceId(
@@ -93,11 +99,14 @@ export async function createSolution(
 			},
 			challenge: {
 				connect: {
-					url: challengeUrl,
-					department: {
-						connect: {
-							url: departmentUrl
-						}
+					departmentId_url: {
+						url: challengeUrl,
+						departmentId: (
+							await client.department.findUnique({
+								where: { url: departmentUrl },
+								select: { id: true }
+							})
+						).id
 					}
 				}
 			}
@@ -113,7 +122,13 @@ export async function createSolution(
 					}
 				}
 			},
-			challengeSolutionVotes: true
+			votes: true,
+			user: {
+				select: {
+					id: true,
+					username: true
+				}
+			}
 		}
 	});
 	(solution as any).comments = [];

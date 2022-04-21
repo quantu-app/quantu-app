@@ -33,7 +33,13 @@ export async function getSolutionById(client: PrismaClient, solutionId: string, 
 					}
 				}
 			},
-			challengeSolutionVotes: true
+			votes: true,
+			user: {
+				select: {
+					id: true,
+					username: true
+				}
+			}
 		}
 	});
 	if (solution) {
@@ -91,7 +97,9 @@ export async function updateSolution(
 				).id
 			}
 		},
-		data,
+		data: {
+			solution: data.solution
+		},
 		include: {
 			challenge: {
 				select: {
@@ -103,7 +111,13 @@ export async function updateSolution(
 					}
 				}
 			},
-			challengeSolutionVotes: true
+			votes: true,
+			user: {
+				select: {
+					id: true,
+					username: true
+				}
+			}
 		}
 	});
 	if (solution) {

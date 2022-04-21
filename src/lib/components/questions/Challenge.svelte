@@ -11,6 +11,7 @@
 	export let challenge: StateChallenge;
 	export let seed: number = undefined;
 	export let result: Result = undefined;
+	export let disabled = false;
 
 	let prevQuesion: StateChallenge;
 
@@ -22,14 +23,21 @@
 	function onExplain() {
 		return explain(challenge.id);
 	}
-	async function onSubmit(a: Answer) {
+	function onSubmit(a: Answer) {
 		return answer(challenge.id, a);
 	}
 </script>
 
 {#key challenge.id}
 	{#if challenge.type === 'FLASH_CARD'}
-		<FlashCard type={challenge.type} prompt={challenge.prompt} bind:result {onExplain} {onSubmit}>
+		<FlashCard
+			type={challenge.type}
+			prompt={challenge.prompt}
+			bind:result
+			{disabled}
+			{onExplain}
+			{onSubmit}
+		>
 			<slot slot="extra" name="extra" />
 		</FlashCard>
 	{:else if challenge.type === 'MULTIPLE_CHOICE'}
@@ -38,17 +46,32 @@
 			{seed}
 			prompt={challenge.prompt}
 			bind:result
+			{disabled}
 			{onExplain}
 			{onSubmit}
 		>
 			<slot slot="extra" name="extra" />
 		</MultipleChoice>
 	{:else if challenge.type === 'INPUT'}
-		<Input type={challenge.type} prompt={challenge.prompt} bind:result {onExplain} {onSubmit}>
+		<Input
+			type={challenge.type}
+			prompt={challenge.prompt}
+			bind:result
+			{disabled}
+			{onExplain}
+			{onSubmit}
+		>
 			<slot slot="extra" name="extra" />
 		</Input>
 	{:else if challenge.type === 'MARK_AS_READ'}
-		<MarkAsRead type={challenge.type} prompt={challenge.prompt} bind:result {onExplain} {onSubmit}>
+		<MarkAsRead
+			type={challenge.type}
+			prompt={challenge.prompt}
+			bind:result
+			{disabled}
+			{onExplain}
+			{onSubmit}
+		>
 			<slot slot="extra" name="extra" />
 		</MarkAsRead>
 	{/if}

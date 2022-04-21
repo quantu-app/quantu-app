@@ -12,10 +12,11 @@
 	export let showExplanation = false;
 	export let onExplain: () => Promise<Result>;
 	export let onSubmit: (answer: Answer) => Promise<Result>;
+	export let disabled = false;
 </script>
 
-<Prompt {type} {input} bind:result {showExplanation} {onExplain} {onSubmit}>
+<Prompt {type} {input} bind:result {showExplanation} {disabled} {onExplain} {onSubmit}>
 	<FlashCardContent slot="content" {prompt} />
-	<FlashCardInput slot="input" disabled={result != null} bind:input />
+	<FlashCardInput slot="input" disabled={disabled || result != null} bind:input />
 	<slot slot="extra" name="extra" />
 </Prompt>

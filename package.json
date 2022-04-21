@@ -80,14 +80,14 @@
 		"ts-jest": "^27.1.4",
 		"tslib": "^2.3.1",
 		"typescript": "^4.6.3",
-		"vite": "^2.9.4"
+		"vite": "^2.9.5"
 	},
 	"dependencies": {
 		"@aicacia/debounce": "^0.1.13",
 		"@aicacia/rand": "^0.2.9",
 		"@aicacia/range": "^0.1.1",
 		"@aicacia/string-fuzzy_equals": "^0.1.4",
-		"@aws-sdk/client-s3": "^3.67.0",
+		"@aws-sdk/client-s3": "^3.72.0",
 		"@prisma/client": "^3.12.0",
 		"@sveltejs/kit": "next",
 		"bcrypt": "^5.0.1",
@@ -100,8 +100,8 @@
 		"jsonwebtoken": "^8.5.1",
 		"katex": "^0.15.3",
 		"mime": "^3.0.0",
-		"prismjs": "^1.27.0",
-		"slate": "^0.77.0",
+		"prismjs": "^1.28.0",
+		"slate": "^0.77.2",
 		"slate-history": "^0.66.0",
 		"svelte": "^3.47.0",
 		"svelte-portal": "^2.1.2",

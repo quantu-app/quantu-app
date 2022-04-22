@@ -116,7 +116,7 @@ model ChallengeSolutionVote {
   challengeSolution   ChallengeSolution @relation(fields: [challengeSolutionId], references: [id])
   userId              String            @db.ObjectId
   user                User              @relation(fields: [userId], references: [id])
-  vote                Boolean           @default(true)
+  vote                Boolean?
   createdAt           DateTime          @default(now())
   updatedAt           DateTime          @updatedAt
 
@@ -151,7 +151,7 @@ model CommentVote {
   comment   Comment  @relation(fields: [commentId], references: [id])
   userId    String   @db.ObjectId
   user      User     @relation(fields: [userId], references: [id])
-  vote      Boolean  @default(true)
+  vote      Boolean?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 

@@ -126,14 +126,18 @@ export async function voteOnChallengeSolution(
 		await res.json()
 	);
 	challengeSolutionsWritable.update((state) => {
-		const challengeSolution = state.find((c) => c.id === challengeSolutionVote.challengeSolutionId);
+		const index = state.findIndex((c) => c.id === challengeSolutionVote.challengeSolutionId);
+		const challengeSolution = state[index];
+
 		if (challengeSolution) {
-			const index = challengeSolution.votes.findIndex((v) => v.id === challengeSolution.id);
-			if (index === -1) {
+			const voteIndex = challengeSolution.votes.findIndex((v) => v.id === challengeSolutionVote.id);
+			if (voteIndex === -1) {
 				challengeSolution.votes.push(challengeSolutionVote);
 			} else {
-				challengeSolution.votes[index] = challengeSolutionVote;
+				challengeSolution.votes[voteIndex] = challengeSolutionVote;
 			}
+
+			state[index] = { ...challengeSolution };
 		}
 		return state;
 	});

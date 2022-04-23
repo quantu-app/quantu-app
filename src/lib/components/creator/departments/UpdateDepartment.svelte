@@ -1,3 +1,5 @@
+<svelte:options immutable />
+
 <script lang="ts">
 	import type { Department } from '@prisma/client';
 	import DepartmentEditor from './DepartmentEditor.svelte';

@@ -1,3 +1,5 @@
+<svelte:options immutable />
+
 <script lang="ts">
 	import DeleteDepartment from './DeleteDepartment.svelte';
 	import DepartmentListItem from './DepartmentListItem.svelte';

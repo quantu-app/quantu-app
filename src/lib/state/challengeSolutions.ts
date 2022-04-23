@@ -5,7 +5,7 @@ import { addComments } from './comments';
 
 export type StateChallengeSolution = ChallengeSolution & {
 	user: { id: string; username: string };
-	challenge: { url: string; department: { url: string } };
+	challenge: { name: string; url: string; department: { url: string } };
 	votes: ChallengeSolutionVote[];
 	commentCount: number;
 };

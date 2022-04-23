@@ -1,3 +1,5 @@
+<svelte:options immutable />
+
 <div class="row">
 	<div class="col-12">
 		<div class="d-flex flex-column h-100 pt-4">

@@ -1,3 +1,5 @@
+<svelte:options immutable />
+
 <script lang="ts">
 	import Prompt from './Prompt.svelte';
 	import FlashCardContent from './FlashCardContent.svelte';
@@ -6,8 +8,8 @@
 	import type { Answer, FlashCard, FlashCardAnswer } from '$lib/types';
 
 	export let type: QuestionType;
-	export let input: FlashCardAnswer;
 	export let prompt: FlashCard;
+	export let input: FlashCardAnswer = undefined;
 	export let result: Result = undefined;
 	export let showExplanation = false;
 	export let onExplain: () => Promise<Result>;

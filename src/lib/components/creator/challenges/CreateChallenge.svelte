@@ -1,3 +1,5 @@
+<svelte:options immutable />
+
 <script lang="ts">
 	import { createChallenge } from '$lib/state/creator/challenges';
 	import type { StateChallenge } from '$lib/state/creator/challenges';

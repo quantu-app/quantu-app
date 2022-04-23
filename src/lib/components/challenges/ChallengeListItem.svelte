@@ -53,14 +53,20 @@
 				{#if challenge.result}
 					<a
 						role="button"
-						class="btn btn-outline-primary"
+						class="btn btn-primary"
 						href={`${base}/challenges/${challenge.department.url}/${challenge.url}/review`}
 						>Solved</a
+					>
+					<a
+						role="button"
+						class="btn btn-primary"
+						href={`${base}/challenges/${challenge.department.url}/${challenge.url}/solutions`}
+						>Solutions</a
 					>
 				{:else}
 					<a
 						role="button"
-						class="btn btn-outline-primary"
+						class="btn btn-primary"
 						href={`${base}/challenges/${challenge.department.url}/${challenge.url}`}>Solve</a
 					>
 				{/if}

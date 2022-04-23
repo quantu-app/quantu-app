@@ -8,7 +8,8 @@
 		type StateChallengeSolution
 	} from '$lib/state/challengeSolutions';
 	import { base } from '$app/paths';
-	import Vote from '$lib/components/Vote.svelte';
+	import Vote from '$lib/components/ui/Vote.svelte';
+	import { currentUser } from '$lib/state/user';
 
 	export let challenge: StateChallenge;
 	export let solution: StateChallengeSolution;
@@ -36,7 +37,17 @@
 			<RichViewer value={solution.solution} />
 		</div>
 		<div class="d-flex flex-grow-0 justify-content-between">
-			<a href={`${base}/user/profile/${solution.user.username}`}>{solution.user.username}</a>
+			<div>
+				{#if $currentUser?.id === solution.user.id}
+					<a
+						role="button"
+						class="btn btn-sm btn-primary"
+						href={`${base}/challenges/${solution.challenge.department.url}/${solution.challenge.url}/solutions/${solution.id}/edit`}
+						>Edit</a
+					>
+				{/if}
+				<a href={`${base}/user/profile/${solution.user.username}`}>{solution.user.username}</a>
+			</div>
 			<a
 				href={`${base}/challenges/${solution.challenge.department.url}/${solution.challenge.url}/solutions/${solution.id}`}
 				>View Thread ({solution.commentCount})</a

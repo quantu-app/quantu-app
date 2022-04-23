@@ -1,3 +1,5 @@
+<svelte:options immutable />
+
 <script lang="ts">
 	import Button from './Button.svelte';
 	import katex from 'katex';

@@ -1,3 +1,5 @@
+<svelte:options immutable />
+
 <script lang="ts" context="module">
 	import 'katex/dist/katex.min.css';
 	import type { IBaseElement } from './Element.svelte';

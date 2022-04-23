@@ -1,3 +1,5 @@
+<svelte:options immutable />
+
 <script lang="ts">
 	import FlashCard from './FlashCard.svelte';
 	import Input from './Input.svelte';

@@ -1,3 +1,5 @@
+<svelte:options immutable />
+
 <script lang="ts" context="module">
 	import type { IBaseElement } from './Element.svelte';
 
@@ -34,7 +36,7 @@
 						reader.readAsDataURL(file);
 					}
 				}
-			} else if (isImageUrl(text)) {
+			} else if (isUrl(text)) {
 				insertImage(editor, text);
 			} else {
 				insertData(data);
@@ -47,17 +49,6 @@
 	export function insertImage(editor: Editor, url: string | ArrayBuffer) {
 		const image = { type: 'image', url, children: [{ text: '' }] };
 		Transforms.insertNodes(editor, image);
-	}
-
-	export function isImageUrl(url: string): boolean {
-		if (!url) {
-			return false;
-		}
-		if (!isUrl(url)) {
-			return false;
-		}
-		const ext = new URL(url).pathname.split('.').pop();
-		return imageExtensions.includes(ext);
 	}
 </script>
 
@@ -73,7 +64,6 @@
 	import { Editor, Transforms } from 'slate';
 	import Button from './Button.svelte';
 	import isUrl from 'is-url';
-	import imageExtensions from 'image-extensions';
 
 	export let element: IImageElement;
 	export let isInline: boolean;

@@ -94,7 +94,6 @@
 		"cookie": "^0.5.0",
 		"date-fns": "^2.28.0",
 		"eventemitter3": "^4.0.7",
-		"image-extensions": "^1.1.0",
 		"is-url": "^1.2.4",
 		"js-cookie": "^3.0.1",
 		"jsonwebtoken": "^8.5.1",

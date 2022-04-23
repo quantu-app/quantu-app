@@ -1,3 +1,5 @@
+<svelte:options immutable />
+
 <script lang="ts">
 	import Notifications from '$lib/components/Notifications.svelte';
 	import { loading } from '$lib/state/loading';

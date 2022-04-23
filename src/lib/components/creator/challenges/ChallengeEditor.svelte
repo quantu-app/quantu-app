@@ -2,7 +2,7 @@
 	import type { StateChallenge } from '$lib/state/creator/challenges';
 	import PromptEditor from '../prompts/PromptEditor.svelte';
 	import RichEditor from '$lib/components/editor/RichEditor.svelte';
-	import DateTimeInput from '../../DateTimeInput.svelte';
+	import DateTimeInput from '../../ui/DateTimeInput.svelte';
 	import { isUrlSafe } from '../../../utils';
 	import SelectAsset from '../assets/SelectAsset.svelte';
 

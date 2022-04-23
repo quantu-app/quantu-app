@@ -1,3 +1,5 @@
+<svelte:options immutable />
+
 <script lang="ts">
 	import Robots, { type TagDirective } from './Robots.svelte';
 	import OpenGraph from './OpenGraph.svelte';

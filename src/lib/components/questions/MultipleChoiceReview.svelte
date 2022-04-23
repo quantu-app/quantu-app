@@ -1,3 +1,5 @@
+<svelte:options immutable />
+
 <script lang="ts">
 	import MultipleChoiceInput from './MultipleChoiceInput.svelte';
 	import MultipleChoiceContent from './MultipleChoiceContent.svelte';

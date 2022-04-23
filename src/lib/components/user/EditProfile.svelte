@@ -1,3 +1,5 @@
+<svelte:options immutable />
+
 <script lang="ts">
 	import countries from '$lib/data/countries';
 	import { goto } from '$app/navigation';

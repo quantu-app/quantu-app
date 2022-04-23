@@ -13,7 +13,8 @@
 		return {
 			props: {
 				departmentUrl: input.params.departmentUrl,
-				url: input.params.url
+				url: input.params.url,
+				solutionId: input.params.solutionId
 			}
 		};
 	}
@@ -23,11 +24,10 @@
 	import UserLayout from '$lib/components/layouts/UserLayout.svelte';
 	import { page } from '$app/stores';
 	import { challengesByDepartmentUrl, showChallengeByUrl } from '$lib/state/challenges';
-	import ReviewChallenge from '$lib/components/questions/ReviewChallenge.svelte';
+	import CreateSolution from '$lib/components/challenges/solutions/CreateSolution.svelte';
 	import SEO from '$lib/components/SEO/index.svelte';
 	import { onMount } from 'svelte';
 	import ChallengeWrapper from '$lib/components/challenges/ChallengeWrapper.svelte';
-	import { base } from '$app/paths';
 
 	export let departmentUrl: string;
 	export let url: string;
@@ -41,14 +41,14 @@
 
 {#if challenge}
 	<SEO
-		title={challenge.name}
+		title={`${challenge.name} New Solution`}
 		openGraph={{
-			title: challenge.name,
+			title: `${challenge.name} New Solution`,
 			url: $page.url.toString(),
 			type: 'website'
 		}}
 		twitter={{
-			title: challenge.name,
+			title: `${challenge.name} New Solution`,
 			card: 'summary'
 		}}
 		robotsDirectives={['all']}
@@ -58,23 +58,7 @@
 <UserLayout>
 	{#if challenge}
 		<ChallengeWrapper {challenge}>
-			<h2>{challenge.name}</h2>
-			{#if challenge.result}
-				<ReviewChallenge result={challenge.result}>
-					<div slot="extra">
-						<a role="button" class="btn btn-outline-primary mt-2" href={`${base}/challenges`}>
-							Return to Challenges
-						</a>
-						<a
-							role="button"
-							class="btn btn-outline-primary mt-2"
-							href={`${base}/challenges/${challenge.department.url}/${challenge.url}/solutions`}
-						>
-							Solutions
-						</a>
-					</div>
-				</ReviewChallenge>
-			{/if}
+			<CreateSolution {challenge} />
 		</ChallengeWrapper>
 	{/if}
 </UserLayout>

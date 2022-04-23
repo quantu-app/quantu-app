@@ -1,5 +1,6 @@
+<svelte:options immutable />
+
 <script lang="ts">
-	import type { IElement, IText } from '$lib/components/editor';
 	import RichViewer from '$lib/components/editor/RichViewer.svelte';
 	import type { Input } from '$lib/types';
 

@@ -34,6 +34,7 @@ export async function getSolutions(
 		include: {
 			challenge: {
 				select: {
+					name: true,
 					url: true,
 					department: {
 						select: {
@@ -114,6 +115,7 @@ export async function createSolution(
 		include: {
 			challenge: {
 				select: {
+					name: true,
 					url: true,
 					department: {
 						select: {

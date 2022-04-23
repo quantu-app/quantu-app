@@ -1,3 +1,5 @@
+<svelte:options immutable />
+
 <script lang="ts">
 	import type { Result } from '@prisma/client';
 	import FlashCardReview from './FlashCardReview.svelte';

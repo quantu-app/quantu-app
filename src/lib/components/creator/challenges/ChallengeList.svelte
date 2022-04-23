@@ -1,3 +1,5 @@
+<svelte:options immutable />
+
 <script lang="ts">
 	import DeleteChallenge from './DeleteChallenge.svelte';
 	import ChallengeListItem from './ChallengeListItem.svelte';

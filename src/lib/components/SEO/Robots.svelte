@@ -1,3 +1,5 @@
+<svelte:options immutable />
+
 <script context="module" lang="ts">
 	// see: https://developers.google.com/search/docs/advanced/robots/robots_meta_tag
 	// currently we don't support or care about parameterized directives so they are not included.

@@ -1,3 +1,5 @@
+<svelte:options immutable />
+
 <script lang="ts">
 	import RichViewer from '$lib/components/editor/RichViewer.svelte';
 	import type { MultipleChoice } from '$lib/types';
@@ -19,7 +21,7 @@
 			if (prompt.singleAnswer) {
 				checked = { [key]: true };
 			} else {
-				checked[key] = !checked[key];
+				checked = { ...checked, [key]: !checked[key] };
 			}
 		};
 	};

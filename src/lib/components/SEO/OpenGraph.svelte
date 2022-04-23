@@ -1,3 +1,5 @@
+<svelte:options immutable />
+
 <script context="module" lang="ts">
 	// see: https://ogp.me/#no_vertical
 	export type ObjectTypeValue = 'article' | 'book' | 'profile' | 'website';

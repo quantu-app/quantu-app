@@ -1,46 +1,37 @@
 <svelte:options immutable />
 
 <script lang="ts">
+	import { base } from '$app/paths';
 	import Challenge from '$lib/components/questions/Challenge.svelte';
 	import type { StateChallenge } from '$lib/state/challenges';
 	import type { StateChallengeSolution } from '$lib/state/challengeSolutions';
-	import { createChallengeSolution } from '$lib/state/challengeSolutions';
-	import SolutionEditor from './SolutionEditor.svelte';
+	import { currentUser } from '$lib/state/user';
 	import SolutionList from './SolutionList.svelte';
 
 	export let challenge: StateChallenge;
 	export let solutions: StateChallengeSolution[];
 
-	let solution: Partial<StateChallengeSolution> = {};
-	let creatingSolution = false;
-	let submitingSolution = false;
-
-	function onToggleSolution() {
-		creatingSolution = !creatingSolution;
-	}
-	async function onSubmitSolution() {
-		submitingSolution = false;
-		try {
-			await createChallengeSolution(challenge.department.url, challenge.url, solution);
-			creatingSolution = false;
-		} finally {
-			submitingSolution = false;
-		}
-	}
+	$: userSolution = solutions.find((solution) => solution.userId === $currentUser?.id);
 </script>
+
+<a
+	role="button"
+	class="btn btn-ghost"
+	href={`${base}/challenges/${challenge.department.url}/${challenge.url}/review`}
+	><i class="bi bi-chevron-left" /> {challenge.name}</a
+>
 
 <Challenge {challenge} disabled={true} />
 
-{#if creatingSolution}
-	<SolutionEditor bind:solution />
+{#if !userSolution}
 	<div class="d-flex">
-		<button class="btn btn-primary ms-auto" on:click={onSubmitSolution} disabled={submitingSolution}
-			>Submit</button
+		<a
+			role="button"
+			class="btn btn-primary ms-auto"
+			href={`${base}/challenges/${challenge.department.url}/${challenge.url}/solutions/new`}
+			>Add Solution</a
 		>
-		<button class="btn btn-secondary" on:click={onToggleSolution}>Cancel</button>
 	</div>
-{:else}
-	<button class="btn btn-primary" on:click={onToggleSolution}>Add Solution</button>
 {/if}
 
 <hr />

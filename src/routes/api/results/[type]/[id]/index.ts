@@ -53,11 +53,9 @@ export async function answer(
 
 	const data = {
 		answer,
-		challengeId,
 		prompt: question.prompt,
 		type: question.type,
-		value: getResult(question.type, question.prompt as unknown as PromptPrivate, answer),
-		userId
+		value: getResult(question.type, question.prompt as unknown as PromptPrivate, answer)
 	};
 	return client.result.upsert({
 		where: {
@@ -67,7 +65,11 @@ export async function answer(
 			}
 		},
 		update: data,
-		create: data
+		create: {
+			...data,
+			challengeId,
+			userId
+		}
 	});
 }
 
@@ -78,13 +80,16 @@ function getResult(type: QuestionType, prompt: PromptPrivate, answer: Answer): n
 			const multipleChoiceAnswer = answer as MultipleChoiceAnswer;
 			const correctChoices = multipleChoicePrompt.choices.filter((choice) => choice.correct);
 
-			const correct = correctChoices.reduce(
-				(result, choice) =>
-					choice.correct && multipleChoiceAnswer.includes(choice.id) ? result + 1 : result,
-				0
-			);
-
-			return correct / correctChoices.length;
+			if (!correctChoices.length) {
+				return 1;
+			} else {
+				const correct = correctChoices.reduce(
+					(result, choice) =>
+						choice.correct && multipleChoiceAnswer.includes(choice.id) ? result + 1 : result,
+					0
+				);
+				return correct / correctChoices.length;
+			}
 		}
 		case 'INPUT': {
 			const inputPrompt = prompt as InputPrivate;

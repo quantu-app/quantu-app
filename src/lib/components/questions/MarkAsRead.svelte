@@ -1,3 +1,5 @@
+<svelte:options immutable />
+
 <script lang="ts">
 	import Prompt from './Prompt.svelte';
 	import MarkAsReadContent from './MarkAsReadContent.svelte';
@@ -5,8 +7,8 @@
 	import type { Answer, MarkAsRead, MarkAsReadAnswer } from '$lib/types';
 
 	export let type: QuestionType;
-	export let input: MarkAsReadAnswer;
 	export let prompt: MarkAsRead;
+	export let input: MarkAsReadAnswer = undefined;
 	export let result: Result = undefined;
 	export let onExplain: () => Promise<Result>;
 	export let onSubmit: (answer: Answer) => Promise<Result>;

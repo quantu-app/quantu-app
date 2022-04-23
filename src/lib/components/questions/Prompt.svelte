@@ -1,3 +1,5 @@
+<svelte:options immutable />
+
 <script lang="ts">
 	import type { Answer } from '$lib/types';
 	import { isEmpty } from '$lib/utils';

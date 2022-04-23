@@ -1,3 +1,5 @@
+<svelte:options immutable />
+
 <script lang="ts">
 	export let filter: string;
 	export let placeholder = 'Filter...';

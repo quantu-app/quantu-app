@@ -11,8 +11,8 @@
 
 {#if !solutions.length}
 	<div class="alert alert-info">No solutions yet.</div>
+{:else}
+	{#each solutions as solution (solution.id)}
+		<SolutionListItem {challenge} {solution} />
+	{/each}
 {/if}
-
-{#each solutions as solution (solution.id)}
-	<SolutionListItem {challenge} {solution} />
-{/each}

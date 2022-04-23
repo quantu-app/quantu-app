@@ -1,17 +1,16 @@
+<svelte:options immutable />
+
 <script lang="ts">
-	import type {
-		QuestionResult,
-		FlashCardAnswer,
-		QuestionFlashCardPrivate
-	} from '$lib/api/quantu-app-api';
 	import FlashCardInput from './FlashCardInput.svelte';
 	import FlashCardContent from './FlashCardContent.svelte';
 	import Review from './Review.svelte';
+	import type { Result } from '@prisma/client';
+	import type { FlashCard, FlashCardAnswer } from '$lib/types';
 
-	export let result: QuestionResult;
+	export let result: Result;
 
-	$: prompt = result.prompt as QuestionFlashCardPrivate;
-	$: input = result.answer.input as FlashCardAnswer;
+	$: prompt = result.prompt as unknown as FlashCard;
+	$: input = result.answer as FlashCardAnswer;
 </script>
 
 <Review>

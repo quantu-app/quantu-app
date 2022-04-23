@@ -1,3 +1,5 @@
+<svelte:options immutable />
+
 <script lang="ts">
 	import type { MarkAsReadPrivate } from '$lib/types';
 	import type { Result } from '@prisma/client';

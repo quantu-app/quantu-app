@@ -1,3 +1,5 @@
+<svelte:options immutable />
+
 <script lang="ts">
 	import Prompt from './Prompt.svelte';
 	import InputContent from './InputContent.svelte';
@@ -7,8 +9,8 @@
 	import RichViewer from '$lib/components/editor/RichViewer.svelte';
 
 	export let type: QuestionType;
-	export let input: InputAnswer;
 	export let prompt: Input;
+	export let input: InputAnswer = undefined;
 	export let result: Result = undefined;
 	export let onExplain: () => Promise<Result>;
 	export let onSubmit: (answer: Answer) => Promise<Result>;

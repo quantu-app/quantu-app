@@ -25,6 +25,7 @@ export async function getSolutionById(client: PrismaClient, solutionId: string, 
 		include: {
 			challenge: {
 				select: {
+					name: true,
 					url: true,
 					department: {
 						select: {
@@ -72,14 +73,13 @@ export async function updateSolution(
 	client: PrismaClient,
 	deparementUrl: string,
 	challengeUrl: string,
-	solutionId: string,
+	_solutionId: string,
 	userId: string,
 	data: any,
 	depth?: number
 ) {
 	const solution = await client.challengeSolution.update({
 		where: {
-			id: solutionId,
 			userId_challengeId: {
 				userId,
 				challengeId: (
@@ -103,6 +103,7 @@ export async function updateSolution(
 		include: {
 			challenge: {
 				select: {
+					name: true,
 					url: true,
 					department: {
 						select: {

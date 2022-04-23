@@ -27,6 +27,7 @@
 	import { onMount } from 'svelte';
 	import SEO from '$lib/components/SEO/index.svelte';
 	import ChallengeWrapper from '$lib/components/challenges/ChallengeWrapper.svelte';
+	import { base } from '$app/paths';
 
 	export let departmentUrl: string;
 	export let url: string;
@@ -57,10 +58,20 @@
 <UserLayout>
 	{#if challenge}
 		<ChallengeWrapper {challenge}>
+			<h2>{challenge.name}</h2>
 			<Challenge {challenge}>
-				<a slot="extra" role="button" class="btn btn-outline-primary mt-2" href={`/challenges`}>
-					Return to Challenges
-				</a>
+				<div slot="extra">
+					<a role="button" class="btn btn-outline-primary mt-2" href={`${base}/challenges`}>
+						Return to Challenges
+					</a>
+					<a
+						role="button"
+						class="btn btn-outline-primary mt-2"
+						href={`${base}/challenges/${challenge.department.url}/${challenge.url}/solutions`}
+					>
+						Solutions
+					</a>
+				</div>
 			</Challenge>
 		</ChallengeWrapper>
 	{/if}

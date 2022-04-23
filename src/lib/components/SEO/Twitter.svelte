@@ -1,3 +1,5 @@
+<svelte:options immutable />
+
 <script context="module" lang="ts">
 	export type CardType = 'summary' | 'summary_large_image' | 'app' | 'player';
 </script>

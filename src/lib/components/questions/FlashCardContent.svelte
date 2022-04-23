@@ -1,3 +1,5 @@
+<svelte:options immutable />
+
 <script lang="ts">
 	import RichViewer from '$lib/components/editor/RichViewer.svelte';
 	import type { FlashCard } from '$lib/types';

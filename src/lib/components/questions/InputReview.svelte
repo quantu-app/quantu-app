@@ -1,3 +1,5 @@
+<svelte:options immutable />
+
 <script lang="ts">
 	import InputInput from './InputInput.svelte';
 	import InputContent from './InputContent.svelte';

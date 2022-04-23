@@ -1,3 +1,5 @@
+<svelte:options immutable />
+
 <script lang="ts">
 	import AssetManager from './AssetManager.svelte';
 

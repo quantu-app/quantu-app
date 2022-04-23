@@ -1,3 +1,5 @@
+<svelte:options immutable />
+
 <script lang="ts">
 	import { uploadAsset } from '$lib/state/creator/assets';
 

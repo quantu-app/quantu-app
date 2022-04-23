@@ -1,3 +1,5 @@
+<svelte:options immutable />
+
 <script context="module" lang="ts">
 	import { writable } from 'svelte/store';
 

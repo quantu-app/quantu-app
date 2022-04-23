@@ -1,3 +1,5 @@
+<svelte:options immutable />
+
 <script lang="ts">
 	export let disabled: boolean = false;
 	export let checked: boolean = false;

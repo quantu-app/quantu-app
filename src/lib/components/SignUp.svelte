@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { base } from '$app/paths';
 
-	import Quote from './Quote.svelte';
+	import Quote from './ui/Quote.svelte';
 </script>
 
 <div class="col-12">

@@ -1,3 +1,5 @@
+<svelte:options immutable />
+
 <script lang="ts">
 	export let count = 0;
 	export let onVote: (vote: boolean | null) => void;

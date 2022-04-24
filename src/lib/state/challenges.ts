@@ -11,7 +11,7 @@ export type StateChallenge = Challenge & {
 
 export const challengesWritable = writable<Array<StateChallenge>>([]);
 
-export const challenges = derived(challengesWritable, (challenges) => challenges);
+export const challenges = derived(challengesWritable, (challenges) => challenges.slice());
 export const challengesById = derived(challengesWritable, (challenges) =>
 	challenges.reduce((byId, challenge) => {
 		byId[challenge.id] = challenge;

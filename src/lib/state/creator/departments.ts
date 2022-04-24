@@ -4,7 +4,7 @@ import { base } from '$app/paths';
 
 const departmentsWritable = writable<Department[]>([]);
 
-export const departments = derived(departmentsWritable, (departments) => departments);
+export const departments = derived(departmentsWritable, (departments) => departments.slice());
 
 export const departmentsById = derived(departmentsWritable, (departments) =>
 	departments.reduce((byId, department) => {
@@ -28,7 +28,8 @@ export async function showDepartments() {
 	if (!res.ok) {
 		throw await res.json();
 	}
-	const departments: Department[] = (await res.json()).map(departmentFromJSON);
+	const rawDepartments: Department[] = await res.json();
+	const departments: Department[] = rawDepartments.map(departmentFromJSON);
 	departmentsWritable.update((state) =>
 		departments.reduce((state, department) => addOrUpdate(state, department), state)
 	);

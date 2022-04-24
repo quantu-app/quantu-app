@@ -4,6 +4,8 @@ import { base } from '$app/paths';
 
 const departmentsWritable = writable<Department[]>([]);
 
+export const departments = derived(departmentsWritable, (departments) => departments);
+
 export const departmentsById = derived(departmentsWritable, (departments) =>
 	departments.reduce((byId, department) => {
 		byId[department.id] = department;

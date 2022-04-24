@@ -1,5 +1,3 @@
-<svelte:options immutable />
-
 <script lang="ts">
 	import type { AssetTree } from '$lib/state/creator/assets';
 	import type { Asset } from '@prisma/client';

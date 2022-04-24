@@ -19,6 +19,8 @@ export interface StateCommentTree {
 
 export const commentsWritable = writable<Array<StateComment>>([]);
 
+export const comments = derived(commentsWritable, (comments) => comments.slice());
+
 export const commentsById = derived(commentsWritable, (comments) =>
 	comments.reduce((byId, comment) => {
 		byId[comment.id] = comment;

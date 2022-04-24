@@ -23,7 +23,7 @@ export interface FacebookOAuth2ProviderConfig extends IOAuth2ProviderConfig {
 
 const DEFAULT_CONFIG: Partial<FacebookOAuth2ProviderConfig> = {
 	id: 'facebook',
-	scope: ['email', 'public_profile', 'user_link'],
+	scope: ['email', 'public_profile'],
 	userProfileFields: [
 		'id',
 		'name',

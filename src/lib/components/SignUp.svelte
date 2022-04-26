@@ -5,19 +5,17 @@
 </script>
 
 <div class="col-12">
-	<Quote author="Lao Tzu">The journey of a thousand miles begins with a single step.</Quote>
+	<div class="row justify-content-md-center mb-4">
+		<div class="col-md-10">
+			<h2>Speak Friend &amp; Enter</h2>
+			<Quote author="Lao Tzu">The journey of a thousand miles begins with a single step.</Quote>
+		</div>
+	</div>
 </div>
 
 <div class="col-12 py-4">
-	<div class="row">
-		<div class="col-md-7">
-			<img
-				class="sign-in-image"
-				src="https://github.com/quantu-app/design-platform/raw/master/app/resources/sign_up_and_login/1x/Journey-Man.png"
-				alt="Taking the first step"
-			/>
-		</div>
-		<div class="col-md-5">
+	<div class="row justify-content-md-center">
+		<div class="col-md-10">
 			<slot />
 			<div class="mt-4">
 				<p>

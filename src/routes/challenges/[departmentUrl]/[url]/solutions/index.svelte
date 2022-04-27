@@ -28,6 +28,7 @@
 	import { onMount } from 'svelte';
 	import { challengeSolutionsByUrl, showChallengeSolutions } from '$lib/state/challengeSolutions';
 	import ChallengeWrapper from '$lib/components/challenges/ChallengeWrapper.svelte';
+	import { base } from '$app/paths';
 
 	export let departmentUrl: string;
 	export let url: string;
@@ -60,6 +61,19 @@
 <UserLayout>
 	{#if challenge}
 		<ChallengeWrapper {challenge}>
+			<svelte:fragment slot="sidebar">
+				<a
+					role="button"
+					class="list-group-item list-group-item-action"
+					href={`${base}/challenges/${challenge.department.url}/${challenge.url}/review`}>Review</a
+				>
+				<a
+					role="button"
+					class="list-group-item list-group-item-action active"
+					href={`${base}/challenges/${challenge.department.url}/${challenge.url}/solutions`}
+					>Solutions</a
+				>
+			</svelte:fragment>
 			<Solutions {challenge} {solutions} />
 		</ChallengeWrapper>
 	{/if}

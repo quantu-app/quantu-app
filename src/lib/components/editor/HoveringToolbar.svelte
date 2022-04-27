@@ -15,7 +15,11 @@
 		const domRange = domSelection.getRangeAt(0);
 		const rect = domRange.getBoundingClientRect();
 		const viewRect = container.getBoundingClientRect();
-		ref.style.left = `${rect.left + window.pageXOffset - ref.offsetWidth / 2 + rect.width / 2}px`;
+		if (rect.left + window.pageXOffset - ref.offsetWidth / 2 < viewRect.left) {
+			ref.style.left = `${viewRect.left + window.pageXOffset}px`;
+		} else {
+			ref.style.left = `${rect.left + window.pageXOffset - ref.offsetWidth / 2 + rect.width / 2}px`;
+		}
 		if (rect.top + window.pageYOffset - ref.offsetHeight < viewRect.top) {
 			ref.style.top = `${rect.bottom + window.pageYOffset + 4}px`;
 		} else {

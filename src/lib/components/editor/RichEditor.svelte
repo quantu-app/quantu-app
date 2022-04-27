@@ -13,6 +13,7 @@
 	export let selection: Selection | null = null;
 	export let placeholder = 'Type...';
 	export let editor: ISvelteEditor | BaseEditor | HistoryEditor = undefined;
+	export let showHelper = false;
 
 	$: if (!value || value.length === 0) {
 		value = [{ type: 'paragraph', children: [{ text: '' }] }];
@@ -20,5 +21,9 @@
 </script>
 
 <div {id} class="border p-2">
+	{#if showHelper}
+		<span>Click and hold to pull up toolbar.</span>
+		<hr />
+	{/if}
 	<Editor bind:value bind:editor bind:selection readOnly={false} {placeholder} />
 </div>

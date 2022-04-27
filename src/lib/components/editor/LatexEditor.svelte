@@ -19,6 +19,7 @@
 		inline = !inline;
 	}
 
+	let textarea: HTMLTextAreaElement;
 	let latexDisplayElement: HTMLElement;
 	$: if (open && latexDisplayElement) {
 		katex.render(latex, latexDisplayElement, {
@@ -27,6 +28,9 @@
 			throwOnError: false
 		});
 	}
+	$: if (open && textarea) {
+		textarea.focus();
+	}
 </script>
 
 <Modal bind:open>
@@ -34,7 +38,7 @@
 		<div class="editor">
 			<div class="latex">
 				<div>
-					<textarea bind:value={latex} />
+					<textarea bind:this={textarea} bind:value={latex} />
 				</div>
 				<div>
 					<span bind:this={latexDisplayElement} />

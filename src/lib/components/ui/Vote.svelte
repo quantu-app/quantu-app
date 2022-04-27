@@ -1,6 +1,7 @@
 <svelte:options immutable />
 
 <script lang="ts">
+	export let vote: boolean | null = null;
 	export let count = 0;
 	export let onVote: (vote: boolean | null) => void;
 	export let disabled = false;
@@ -18,12 +19,12 @@
 
 <div class="d-flex flex-column">
 	<button class="btn btn-ghost" {disabled} on:click={onVoteUp}>
-		<i class="bi bi-chevron-up" />
+		<i class="bi bi-chevron-up" class:text-success={vote === true} />
 	</button>
 	<button class="btn btn-ghost" {disabled} on:click={onVoteDelete}>
-		{count}
+		<span class:text-success={vote === true} class:text-danger={vote === false}>{count}</span>
 	</button>
 	<button class="btn btn-ghost" {disabled} on:click={onVoteDown}>
-		<i class="bi bi-chevron-down" />
+		<i class="bi bi-chevron-down" class:text-danger={vote === false} />
 	</button>
 </div>

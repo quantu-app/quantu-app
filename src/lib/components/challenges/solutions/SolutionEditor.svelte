@@ -5,4 +5,4 @@
 	export let solution: Partial<StateChallengeSolution> = {};
 </script>
 
-<RichEditor bind:value={solution.solution} placeholder="Type Solution..." />
+<RichEditor bind:value={solution.solution} placeholder="Type Your Solution..." showHelper />

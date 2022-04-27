@@ -8,8 +8,8 @@
 	<div class="row min-vh-100">
 		<div id="challenge--sidebar" class="col-auto px-sm-2 px-0">
 			<div class="d-flex flex-column mt-3" id="challenge--sidebarContent">
-				<ul class="nav nav-pills flex-column align-items-center align-items-sm-start">
-					<li class="nav-item mx-3">
+				<ul class="list-group list-group-flush">
+					<li class="list-group-item">
 						{#if challenge && challenge.department}
 							<a
 								href="/challenges"
@@ -24,6 +24,7 @@
 							</a>
 						{/if}
 					</li>
+					<slot name="sidebar" />
 				</ul>
 			</div>
 		</div>

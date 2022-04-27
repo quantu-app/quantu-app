@@ -15,7 +15,7 @@
 	role="button"
 	class="btn btn-ghost"
 	href={`${base}/challenges/${challenge.department.url}/${challenge.url}/solutions`}
-	><i class="bi bi-chevron-left" /> {solution.challenge.name}</a
+	><i class="bi bi-chevron-left" /> {challenge.name}</a
 >
 
 <Challenge {challenge} disabled={true} />

@@ -17,6 +17,8 @@
 		const viewRect = container.getBoundingClientRect();
 		if (rect.left + window.pageXOffset - ref.offsetWidth / 2 < viewRect.left) {
 			ref.style.left = `${viewRect.left + window.pageXOffset}px`;
+		} else if (rect.right + window.pageXOffset + ref.offsetWidth / 2 > viewRect.right) {
+			ref.style.left = `${viewRect.right + window.pageXOffset - ref.offsetWidth}px`;
 		} else {
 			ref.style.left = `${rect.left + window.pageXOffset - ref.offsetWidth / 2 + rect.width / 2}px`;
 		}

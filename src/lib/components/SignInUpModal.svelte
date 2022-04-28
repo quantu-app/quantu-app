@@ -89,7 +89,7 @@
 			</div>
 			<div class="modal-body">
 				<div class="container">
-					<div class="row mb-4 p-4 wrapper">
+					<div class="row p-4 pt-0 wrapper">
 						<div class="col">
 							<svelte:component this={SignInUpComponent}>
 								<button
@@ -143,7 +143,7 @@
 			border-bottom: none;
 		}
 		.btn-close {
-			margin-left: 0;
+			margin: 0;
 			outline: none;
 			box-shadow: none;
 		}
@@ -155,12 +155,4 @@
 		position: relative;
 		top: 2px;
 	}
-	// .google {
-	// 	font-weight: bold;
-	// }
-	// .facebook {
-	// 	font-weight: bold;
-	// 	border: 1px solid #707070;
-	// 	border-radius: 4px;
-	// }
 </style>

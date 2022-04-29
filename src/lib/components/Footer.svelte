@@ -2,7 +2,7 @@
 	import { base } from '$app/paths';
 </script>
 
-<footer class="px-4 py-2 bg-dark">
+<footer class="py-2 bg-dark">
 	<div class="container py-4">
 		<div class="row">
 			<div class="col-md-6">

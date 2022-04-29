@@ -82,28 +82,36 @@
 	role="dialog"
 	bind:this={modalElement}
 >
-	<div class="modal-dialog modal-fullscreen" role="document">
+	<div class="modal-dialog" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" />
 			</div>
 			<div class="modal-body">
 				<div class="container">
-					<div class="row mb-4 p-4 wrapper">
-						<svelte:component this={SignInUpComponent}>
-							<button
-								type="button"
-								disabled={loading}
-								on:click={() => signInWith('google')}
-								class="btn btn-primary google w-100 oauth mb-4 mt-md-0 mt-4">Google</button
-							>
-							<button
-								type="button"
-								disabled={loading}
-								on:click={() => signInWith('facebook')}
-								class="btn btn-primary facebook w-100 oauth">Facebook</button
-							>
-						</svelte:component>
+					<div class="row p-4 pt-0 wrapper">
+						<div class="col">
+							<svelte:component this={SignInUpComponent}>
+								<button
+									type="button"
+									disabled={loading}
+									on:click={() => signInWith('google')}
+									class="btn btn-outline-primary google w-100 oauth mb-4 mt-md-0 mt-4 text-start"
+								>
+									<span class="btn-login--icon me-3"><i class="fs-4 bi-google" /></span>
+									<span class="btn-login--text">Continue with Google</span>
+								</button>
+								<button
+									type="button"
+									disabled={loading}
+									on:click={() => signInWith('facebook')}
+									class="btn btn-outline-primary facebook w-100 oauth text-start"
+								>
+									<span class="btn-login--icon me-3"><i class="fs-4 bi-facebook" /></span>
+									<span class="btn-login--text"> Continue with Facebook </span>
+								</button>
+							</svelte:component>
+						</div>
 					</div>
 					<div class="row">
 						<div class="text-center">
@@ -131,14 +139,11 @@
 
 <style lang="scss">
 	#sign-in-up-modal {
-		.wrapper {
-			border: 1px solid #707070;
-		}
 		.modal-header {
 			border-bottom: none;
 		}
 		.btn-close {
-			margin-left: 0;
+			margin: 0;
 			outline: none;
 			box-shadow: none;
 		}
@@ -146,17 +151,8 @@
 			cursor: pointer;
 		}
 	}
-
-	.google {
-		font-family: Roboto, arial, sans-serif;
-		font-weight: bold;
-		letter-spacing: 0.21px;
-		color: #fff !important;
-		background-color: #f00 !important;
-	}
-	.facebook {
-		font-weight: bold;
-		color: #fff !important;
-		background-color: #3578e5 !important;
+	.btn-login--icon {
+		position: relative;
+		top: 2px;
 	}
 </style>

@@ -30,20 +30,104 @@
 <SEO title={pageTitle} robotsDirectives={['all']} />
 
 <PublicLayout>
+	<div class="container-full-bg bg-dark">
+		<div class="container">
+			<div class="row align-items-md-stretch py-5 text-white">
+				<div class="col-md-6">
+					<h1 class="display-5 fw-bold">Master Mathematics.</h1>
+					<p class="fs-4 py-3">
+						Learn advanced mathematics using the best methods proven by learning science.
+					</p>
+					{#if $currentUser}
+						<a
+							type="button"
+							role="button"
+							class="btn btn-primary btn-lg"
+							href={`${base}/challenges`}>Challenges</a
+						>
+					{:else}
+						<button
+							type="button"
+							data-bs-toggle="modal"
+							data-bs-target="#sign-in-up-modal"
+							data-signup="true"
+							class="btn btn-primary"
+						>
+							Get Started
+						</button>
+					{/if}
+				</div>
+				<div class="col-md-6 text-center">
+					<img
+						src="https://github.com/quantu-app/design-platform/raw/master/app/resources/homepage/vitruve-man2-davinci.png"
+						alt="Vitruve Man by Davinci"
+					/>
+				</div>
+			</div>
+		</div>
+	</div>
 	<div class="container">
 		<div class="row py-4 my-4">
-			<div class="col-md-6 px-4 pb-4">
-				<h1 class="fw-bold">Master Mathematics.</h1>
-				<p>
-					Learn using the best methods in learning science. Complete, enjoy, and become part of an
-					open education community for life-long learners, autodidacts and math &amp; science
-					lovers.
+			<div class="col-12 my-5">
+				<h2 class="display-5 fw-bold text-center">Advanced Math Made Simple</h2>
+			</div>
+			<div class="col-md-4 offset-md-2 text-center">
+				<img
+					class="img-fluid mx-auto d-block "
+					src="https://github.com/quantu-app/design-platform/raw/master/app/resources/homepage/hand-crafted.png"
+					alt="Hand Crafted"
+				/>
+				<h2 class="fw-bold mt-5">Hand-crafted to build mastery</h2>
+				<p class="mb-5">
+					Quantu uses state-of-the-art research in learning science to craft lessons that stick deep
+					in your memory.
 				</p>
-				{#if $currentUser}
-					<a type="button" role="button" class="btn btn-primary" href={`${base}/challenges`}
-						>Challenges</a
-					>
-				{:else}
+			</div>
+			<div class="col-md-4 text-center">
+				<img
+					class="img-fluid mx-auto d-block "
+					src="https://github.com/quantu-app/design-platform/raw/master/app/resources/homepage/for-learners.png"
+					alt="For Learners"
+				/>
+				<h2 class="fw-bold mt-5">For learners by learners</h2>
+				<p class="mb-5">
+					Our community of volunteers design and develop lessons that make it easier for you to
+					understand complex topics.
+				</p>
+			</div>
+			<hr />
+			<div class="col-12 pb-5 my-5">
+				<h2 class="display-5 fw-bold ">Build Expertise Easily</h2>
+			</div>
+			<div class="col-md-6 px-4 text-center">
+				<img
+					src="https://github.com/quantu-app/design-platform/raw/master/app/resources/homepage/decision_tree.png"
+					alt="Decision Tree"
+				/>
+			</div>
+			<div class="col-md-6 px-4">
+				<h2 class="fw-bold">Make Math Stick</h2>
+				<p class="mb-5">Learn advanced math concepts and anchor them deep in your memory.</p>
+
+				<h2 class="fw-bold pt-4">Refine Your Skills</h2>
+				<p class="mb-5">Develop your abilities in math through guided and interactive lessons.</p>
+
+				<h2 class="fw-bold pt-4">Learn On Your Terms</h2>
+				<p>Master any topic at your own pace, fast or slow, no deadlines, no pressure.</p>
+			</div>
+		</div>
+		<hr class="my-5" />
+		<div class="row py-4 my-4">
+			<div class="col-md-6 d-flex align-items-center">
+				<img
+					src="https://github.com/quantu-app/design-platform/raw/master/app/resources/homepage/circle_and_line.png"
+					alt="Circle and Line"
+				/>
+			</div>
+			<div class="col-md-6 ">
+				<h2 class="display-5 fw-bold ">Become a Prodigy with Quantu</h2>
+				<p class="fs-4 py-3">Join and become a part of Quantu's community of lifelong-learners.</p>
+				{#if !$currentUser}
 					<button
 						type="button"
 						data-bs-toggle="modal"
@@ -54,53 +138,6 @@
 						Get Started
 					</button>
 				{/if}
-			</div>
-			<div class="col-md-6 px-4 text-center">
-				<img
-					src="https://github.com/quantu-app/design-platform/raw/master/app/resources/homepage/law-of-large-numbers.png"
-					alt="The Law of Large Numbers"
-				/>
-			</div>
-		</div>
-		<hr />
-		<div class="row py-4 my-4">
-			<div class="col-md-6 px-4 text-center">
-				<img
-					src="https://github.com/quantu-app/design-platform/raw/master/app/resources/homepage/circle_and_line.png"
-					alt="Circle and Line"
-				/>
-			</div>
-			<div class="col-md-6 px-4">
-				<h3 class="fw-bold">Learn concepts through guided and interactive lessons</h3>
-				<p>
-					Content creators design and develop lessons so you can learn and master any department at
-					your own pace. Lessons are hand-crafted to build mastery and intuition.
-				</p>
-			</div>
-		</div>
-		<hr />
-		<div class="row py-4 my-4">
-			<div class="col-md-6 px-4">
-				<h3 class="fw-bold">Your blueprint for building intuition and expertise</h3>
-				<p>
-					We use state-of-the-art research in learning science to craft interactive, problem solving
-					based approaches to learning, which anchor the concepts deep into your long-term memory
-					building out your knowledge tree.
-				</p>
-				<h3 class="fw-bold pt-4">For everyone young and old alike</h3>
-				<p>
-					We believe learning advanced science &amp; mathemetics can and should be lifelong,
-					community based, and most importantly, an enjoyable and rewarding experience. Whether you
-					want to learn group theory, classical mechanics or just solve logic puzzles and compete
-					with other autodidacts, our educational platform for quantitative learning is designed
-					with you in mind.
-				</p>
-			</div>
-			<div class="col-md-6 px-4 text-center">
-				<img
-					src="https://github.com/quantu-app/design-platform/raw/master/app/resources/homepage/decision_tree.png"
-					alt="Decision Tree"
-				/>
 			</div>
 		</div>
 	</div>

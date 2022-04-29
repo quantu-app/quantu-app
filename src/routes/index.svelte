@@ -68,7 +68,35 @@
 	</div>
 	<div class="container">
 		<div class="row py-4 my-4">
-			<div class="col-12 pb-5">
+			<div class="col-12 my-5">
+				<h2 class="display-5 fw-bold text-center">Advanced Math Made Simple</h2>
+			</div>
+			<div class="col-md-4 offset-md-2 text-center">
+				<img
+					class="img-fluid mx-auto d-block "
+					src="https://github.com/quantu-app/design-platform/raw/master/app/resources/homepage/hand-crafted.png"
+					alt="Hand Crafted"
+				/>
+				<h2 class="fw-bold mt-5">Hand-crafted to build mastery</h2>
+				<p class="mb-5">
+					Quantu uses state-of-the-art research in learning science to craft lessons that stick deep
+					in your memory.
+				</p>
+			</div>
+			<div class="col-md-4 text-center">
+				<img
+					class="img-fluid mx-auto d-block "
+					src="https://github.com/quantu-app/design-platform/raw/master/app/resources/homepage/for-learners.png"
+					alt="For Learners"
+				/>
+				<h2 class="fw-bold mt-5">For learners by learners</h2>
+				<p class="mb-5">
+					Our community of volunteers design and develop lessons that make it easier for you to
+					understand complex topics.
+				</p>
+			</div>
+			<hr />
+			<div class="col-12 pb-5 my-5">
 				<h2 class="display-5 fw-bold ">Build Expertise Easily</h2>
 			</div>
 			<div class="col-md-6 px-4 text-center">

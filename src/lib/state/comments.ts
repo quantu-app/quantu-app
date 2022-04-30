@@ -1,5 +1,5 @@
 import type { Comment, CommentVote } from '@prisma/client';
-import { writable, derived } from 'svelte/store';
+import { writable, derived, get } from 'svelte/store';
 import { base } from '$app/paths';
 
 export type StateComment = Comment & {
@@ -13,7 +13,7 @@ export type StateCommentWithChildren = StateComment & {
 
 export interface StateCommentTree {
 	[referenceType: string]: {
-		[referenceId: string]: StateCommentWithChildren[];
+		[referenceId: string]: { [commentId: string]: StateCommentWithChildren };
 	};
 }
 
@@ -33,24 +33,27 @@ export const commentsTree = derived(commentsWritable, (comments) => {
 		return byId;
 	}, {} as { [id: string]: StateCommentWithChildren });
 
-	Object.values(commentsById).reduce((commentTree, comment) => {
+	return Object.values(commentsById).reduce((commentTree, comment) => {
 		const referenceType =
 			commentTree[comment.referenceType] || (commentTree[comment.referenceType] = {});
 		const referenceComments =
-			referenceType[comment.referenceId] || (referenceType[comment.referenceId] = []);
+			referenceType[comment.referenceId] || (referenceType[comment.referenceId] = {});
 		if (comment.commentId) {
 			const parentComment = commentsById[comment.commentId];
 			if (parentComment) {
 				parentComment.children.push(comment);
 			}
-		} else {
-			referenceComments.push(comment);
 		}
+		referenceComments[comment.id] = comment;
 		return commentTree;
 	}, {} as StateCommentTree);
 });
 
 export async function showCommentById(referenceType: string, referenceId: string, id: string) {
+	const cachedComment = get(commentsById)[id];
+	if (cachedComment) {
+		return cachedComment;
+	}
 	const res = await fetch(`${base}/api/comments/${referenceType}/${referenceId}/${id}`);
 	if (!res.ok) {
 		throw await res.json();
@@ -60,7 +63,27 @@ export async function showCommentById(referenceType: string, referenceId: string
 	return comment;
 }
 
+export async function showCommentsById(referenceType: string, referenceId: string, id: string) {
+	const cachedComment = ((get(commentsTree)[referenceType] || {})[referenceId] || {})[id];
+	if (cachedComment && cachedComment.children.length) {
+		return cachedComment.children;
+	}
+	const res = await fetch(`${base}/api/comments/${referenceType}/${referenceId}/${id}/children`);
+	if (!res.ok) {
+		throw await res.json();
+	}
+	const comments: Array<StateComment> = (await res.json()).map(commentFromJSON);
+	addComments(comments);
+	return comments;
+}
+
 export async function showComments(referenceType: string, referenceId: string) {
+	const cachedComments = Object.values(
+		(get(commentsTree)[referenceType] || {})[referenceId] || {}
+	).filter((comment) => comment.commentId === null);
+	if (cachedComments.length) {
+		return cachedComments;
+	}
 	const res = await fetch(`${base}/api/comments/${referenceType}/${referenceId}`);
 	if (!res.ok) {
 		throw await res.json();
@@ -120,14 +143,17 @@ export async function voteOnComment(
 	}
 	const commentVote: CommentVote = commentVoteFromJSON(await res.json());
 	commentsWritable.update((state) => {
-		const comment = state.find((c) => c.id === commentVote.commentId);
+		const index = state.findIndex((c) => c.id === commentVote.commentId);
+		const comment = state[index];
+
 		if (comment) {
-			const index = comment.votes.findIndex((v) => v.id === comment.id);
+			const index = comment.votes.findIndex((v) => v.id === commentVote.id);
 			if (index === -1) {
 				comment.votes.push(commentVote);
 			} else {
 				comment.votes[index] = commentVote;
 			}
+			state[index] = { ...comment };
 		}
 		return state;
 	});

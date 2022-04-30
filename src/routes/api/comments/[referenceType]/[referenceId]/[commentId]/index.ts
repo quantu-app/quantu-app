@@ -1,6 +1,7 @@
 import { authenticated } from '$lib/api/auth';
 import { run } from '$lib/prisma';
 import type { PrismaClient, CommentReferenceType } from '@prisma/client';
+import { createNestedIncludeRecur } from '../';
 
 export const get = authenticated(async (event) => ({
 	body: await run((client) =>
@@ -22,13 +23,11 @@ export async function getCommentById(
 	commentId: string,
 	depth = 3
 ) {
-	return await client.comment.findUnique({
+	return await client.comment.findFirst({
 		where: {
-			referenceType_referenceId_commentId: {
-				referenceType,
-				referenceId,
-				commentId
-			}
+			referenceType,
+			referenceId,
+			id: commentId
 		},
 		include: {
 			comments: createNestedIncludeRecur(depth),

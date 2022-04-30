@@ -4,6 +4,7 @@
 	import Button from './Button.svelte';
 	import katex from 'katex';
 	import Modal from './Modal.svelte';
+	import { tick } from 'svelte';
 
 	export let open = false;
 	export let latex: string = '';
@@ -29,7 +30,9 @@
 		});
 	}
 	$: if (open && textarea) {
-		textarea.focus();
+		tick().then(() => {
+			textarea.focus();
+		});
 	}
 </script>
 

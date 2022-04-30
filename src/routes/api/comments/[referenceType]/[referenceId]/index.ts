@@ -21,7 +21,8 @@ export async function getCommentsByReferenceId(
 	depth = 3
 ) {
 	const where = {
-		referenceType
+		referenceType,
+		commentId: null
 	} as any;
 	if (Array.isArray(referenceId)) {
 		where.referenceId = { in: referenceId };
@@ -45,8 +46,8 @@ export async function getCommentsByReferenceId(
 	return comments;
 }
 
-function createNestedIncludeRecur(depth: number) {
-	if (depth < 0) {
+export function createNestedIncludeRecur(depth: number) {
+	if (depth <= 0) {
 		return true;
 	} else {
 		return {
@@ -68,6 +69,7 @@ export const post = authenticated(async (event) => ({
 	body: await run(async (client) =>
 		createComment(
 			client,
+			event.locals.token.userId,
 			event.params.referenceType as CommentReferenceType,
 			event.params.referenceId,
 			await event.request.json()
@@ -78,6 +80,7 @@ export const post = authenticated(async (event) => ({
 
 export async function createComment(
 	client: PrismaClient,
+	userId: string,
 	referenceType: CommentReferenceType,
 	referenceId: string,
 	data: any
@@ -85,6 +88,7 @@ export async function createComment(
 	const comment = await client.comment.create({
 		data: {
 			...data,
+			userId,
 			referenceType,
 			referenceId
 		},

@@ -30,32 +30,36 @@
 <SEO title={pageTitle} robotsDirectives={['all']} />
 
 <PublicLayout>
-	<div class="container-full-bg bg-dark">
+	<div class="container-full-bg bg-dark py-5">
 		<div class="container">
-			<div class="row align-items-md-stretch py-5 text-white">
+			<div class="row my-5 py-5 text-white">
 				<div class="col-md-6">
-					<h1 class="display-5 fw-bold">Master Mathematics.</h1>
-					<p class="fs-4 py-3">
-						Learn advanced mathematics using the best methods proven by learning science.
-					</p>
-					{#if $currentUser}
-						<a
-							type="button"
-							role="button"
-							class="btn btn-primary btn-lg"
-							href={`${base}/challenges`}>Challenges</a
-						>
-					{:else}
-						<button
-							type="button"
-							data-bs-toggle="modal"
-							data-bs-target="#sign-in-up-modal"
-							data-signup="true"
-							class="btn btn-primary"
-						>
-							Get Started
-						</button>
-					{/if}
+					<div class="d-flex align-items-center h-100">
+						<div class="col-12">
+							<h1 class="display-5 fw-bold d-block">Master Mathematics.</h1>
+							<p class="fs-4 py-3 d-block">
+								Learn advanced mathematics using the best methods proven by learning science.
+							</p>
+							{#if $currentUser}
+								<a
+									type="button"
+									role="button"
+									class="btn btn-primary btn-lg"
+									href={`${base}/challenges`}>Challenges</a
+								>
+							{:else}
+								<button
+									type="button"
+									data-bs-toggle="modal"
+									data-bs-target="#sign-in-up-modal"
+									data-signup="true"
+									class="btn btn-primary"
+								>
+									Get Started
+								</button>
+							{/if}
+						</div>
+					</div>
 				</div>
 				<div class="col-md-6 text-center">
 					<img

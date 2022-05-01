@@ -9,7 +9,8 @@
 }
 
 $enable-cssgrid: true;
-$enable-rounded: false;
+$enable-rounded: true;
+$btn-border-radius: 3px;
 $font-family-base: 'Computer Modern';
 
 $primary: #1b72b3; // $primary: #202020;

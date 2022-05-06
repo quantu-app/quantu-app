@@ -48,7 +48,7 @@
 <div class="container my-4">
 	{#if latestChallenge}
 		<div class="row">
-			<h2>Latest Challenge</h2>
+			<h2>Newest Challenges</h2>
 
 			<ChallengeList challenges={[latestChallenge]} />
 		</div>

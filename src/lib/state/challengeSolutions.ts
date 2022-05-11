@@ -1,7 +1,7 @@
 import type { ChallengeSolution, ChallengeSolutionVote } from '@prisma/client';
 import { writable, derived } from 'svelte/store';
 import { base } from '$app/paths';
-import { addComments } from './comments';
+import { addComments, commentFromJSON } from './comments';
 
 export type StateChallengeSolution = ChallengeSolution & {
 	user: { id: string; username: string };
@@ -158,7 +158,7 @@ function addOrUpdate(
 	delete (challengeSolution as any).comments;
 	challengeSolution.commentCount = comments.length;
 	if (comments.length) {
-		addComments(comments);
+		addComments(comments.map(commentFromJSON));
 	}
 
 	if (index === -1) {

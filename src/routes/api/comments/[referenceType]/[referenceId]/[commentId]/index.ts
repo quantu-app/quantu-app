@@ -42,28 +42,9 @@ export async function getCommentById(
 	});
 }
 
-function createNestedIncludeRecur(depth: number) {
-	if (depth < 0) {
-		return true;
-	} else {
-		return {
-			include: {
-				comments: createNestedIncludeRecur(depth - 1),
-				votes: true,
-				user: {
-					select: {
-						id: true,
-						username: true
-					}
-				}
-			}
-		};
-	}
-}
-
 export const patch = authenticated(async (event) => ({
 	body: await run(async (client) =>
-		getCommentById(
+		updateComment(
 			client,
 			event.params.referenceType as CommentReferenceType,
 			event.params.referenceId,

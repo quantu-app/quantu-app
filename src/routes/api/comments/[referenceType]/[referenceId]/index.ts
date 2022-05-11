@@ -88,6 +88,7 @@ export async function createComment(
 	const comment = await client.comment.create({
 		data: {
 			...data,
+			commentId: data.commentId || null,
 			userId,
 			referenceType,
 			referenceId

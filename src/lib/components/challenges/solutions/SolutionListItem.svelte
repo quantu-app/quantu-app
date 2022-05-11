@@ -10,6 +10,7 @@
 	import { base } from '$app/paths';
 	import Vote from '$lib/components/ui/Vote.svelte';
 	import { currentUser } from '$lib/state/user';
+	import TimeDisplay from '$lib/components/ui/TimeDisplay.svelte';
 
 	export let challenge: StateChallenge;
 	export let solution: StateChallengeSolution;
@@ -47,6 +48,11 @@
 		</div>
 		<div class="d-flex flex-grow-0 justify-content-between">
 			<div>
+				<a href={`${base}/user/profile/${solution.user.username}`}>{solution.user.username}</a>
+				|
+				<TimeDisplay value={solution.createdAt} />
+			</div>
+			<div>
 				{#if $currentUser?.id === solution.user.id}
 					<a
 						role="button"
@@ -55,12 +61,11 @@
 						>Edit</a
 					>
 				{/if}
-				<a href={`${base}/user/profile/${solution.user.username}`}>{solution.user.username}</a>
+				<a
+					href={`${base}/challenges/${solution.challenge.department.url}/${solution.challenge.url}/solutions/${solution.id}`}
+					>View Thread ({solution.commentCount})</a
+				>
 			</div>
-			<a
-				href={`${base}/challenges/${solution.challenge.department.url}/${solution.challenge.url}/solutions/${solution.id}`}
-				>View Thread ({solution.commentCount})</a
-			>
 		</div>
 	</div>
 </div>

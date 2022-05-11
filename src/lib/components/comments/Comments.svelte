@@ -42,8 +42,8 @@
 </script>
 
 <ul class="list-group list-group-flush">
-	{#each comments as comment}
-		<li class="list-group-item">
+	{#each comments as comment (comment.id)}
+		<li class="list-group-item px-0 py-2">
 			<Comment {referenceId} {referenceType} {comment} />
 		</li>
 	{/each}

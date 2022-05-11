@@ -59,7 +59,7 @@ export async function showCommentById(referenceType: string, referenceId: string
 		throw await res.json();
 	}
 	const comment: StateComment = commentFromJSON(await res.json());
-	commentsWritable.update((comments) => addOrUpdate(comments, comment));
+	commentsWritable.update((comments) => addOrUpdate(comments.slice(), comment));
 	return comment;
 }
 
@@ -106,7 +106,7 @@ export async function createComment(
 		throw await res.json();
 	}
 	const comment: StateComment = commentFromJSON(await res.json());
-	commentsWritable.update((comments) => addOrUpdate(comments, comment));
+	commentsWritable.update((comments) => addOrUpdate(comments.slice(), comment));
 	return comment;
 }
 
@@ -124,7 +124,7 @@ export async function updateComment(
 		throw await res.json();
 	}
 	const comment: StateComment = commentFromJSON(await res.json());
-	commentsWritable.update((comments) => addOrUpdate(comments, comment));
+	commentsWritable.update((comments) => addOrUpdate(comments.slice(), comment));
 	return comment;
 }
 
@@ -143,17 +143,19 @@ export async function voteOnComment(
 	}
 	const commentVote: CommentVote = commentVoteFromJSON(await res.json());
 	commentsWritable.update((state) => {
-		const index = state.findIndex((c) => c.id === commentVote.commentId);
-		const comment = state[index];
+		const commentIndex = state.findIndex((comment) => comment.id === commentVote.commentId);
+		const comment = state[commentIndex];
 
 		if (comment) {
-			const index = comment.votes.findIndex((v) => v.id === commentVote.id);
-			if (index === -1) {
-				comment.votes.push(commentVote);
+			const commentVoteIndex = comment.votes.findIndex((v) => v.id === commentVote.id);
+			const votes = comment.votes.slice();
+			if (commentVoteIndex === -1) {
+				votes.push(commentVote);
 			} else {
-				comment.votes[index] = commentVote;
+				votes[commentVoteIndex] = commentVote;
 			}
-			state[index] = { ...comment };
+			state = state.slice();
+			state[commentIndex] = { ...comment, votes };
 		}
 		return state;
 	});
@@ -162,7 +164,7 @@ export async function voteOnComment(
 
 export function addComments(comments: Array<StateComment>) {
 	commentsWritable.update((state) =>
-		comments.reduce((state, comment) => addOrUpdate(state, comment), state)
+		comments.reduce((state, comment) => addOrUpdate(state, comment), state.slice())
 	);
 }
 
@@ -176,7 +178,7 @@ function addOrUpdate(state: Array<StateComment>, comment: StateComment): Array<S
 	return state;
 }
 
-function commentFromJSON(comment: StateComment): StateComment {
+export function commentFromJSON(comment: StateComment): StateComment {
 	return {
 		...comment,
 		votes: comment.votes.map(commentVoteFromJSON),

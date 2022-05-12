@@ -1,7 +1,7 @@
 import type { ChallengeSolution, ChallengeSolutionVote } from '@prisma/client';
 import { writable, derived } from 'svelte/store';
 import { base } from '$app/paths';
-import { addComments } from './comments';
+import { addComments, commentFromJSON } from './comments';
 
 export type StateChallengeSolution = ChallengeSolution & {
 	user: { id: string; username: string };
@@ -12,8 +12,9 @@ export type StateChallengeSolution = ChallengeSolution & {
 
 export const challengeSolutionsWritable = writable<Array<StateChallengeSolution>>([]);
 
-export const challengeSolutions = derived(challengeSolutionsWritable, (challengeSolutions) =>
-	challengeSolutions.slice()
+export const challengeSolutions = derived(
+	challengeSolutionsWritable,
+	(challengeSolutions) => challengeSolutions
 );
 
 export const challengeSolutionsById = derived(challengeSolutionsWritable, (challengeSolutions) =>
@@ -44,7 +45,7 @@ export async function showChallengeSolutionById(departmentUrl: string, url: stri
 	}
 	const challengeSolution: StateChallengeSolution = challengeSolutionFromJSON(await res.json());
 	challengeSolutionsWritable.update((challengeSolutions) =>
-		addOrUpdate(challengeSolutions, challengeSolution)
+		addOrUpdate(challengeSolutions.slice(), challengeSolution)
 	);
 	return challengeSolution;
 }
@@ -62,7 +63,7 @@ export async function showChallengeSolutions(departmentUrl: string, challengeUrl
 	challengeSolutionsWritable.update((state) =>
 		challengeSolutions.reduce(
 			(state, challengeSolution) => addOrUpdate(state, challengeSolution),
-			state
+			state.slice()
 		)
 	);
 	return challengeSolutions;
@@ -82,7 +83,7 @@ export async function createChallengeSolution(
 	}
 	const challengeSolution: StateChallengeSolution = challengeSolutionFromJSON(await res.json());
 	challengeSolutionsWritable.update((challengeSolutions) =>
-		addOrUpdate(challengeSolutions, challengeSolution)
+		addOrUpdate(challengeSolutions.slice(), challengeSolution)
 	);
 	return challengeSolution;
 }
@@ -105,7 +106,7 @@ export async function updateChallengeSolution(
 	}
 	const challengeSolution: StateChallengeSolution = challengeSolutionFromJSON(await res.json());
 	challengeSolutionsWritable.update((challengeSolutions) =>
-		addOrUpdate(challengeSolutions, challengeSolution)
+		addOrUpdate(challengeSolutions.slice(), challengeSolution)
 	);
 	return challengeSolution;
 }
@@ -135,13 +136,15 @@ export async function voteOnChallengeSolution(
 
 		if (challengeSolution) {
 			const voteIndex = challengeSolution.votes.findIndex((v) => v.id === challengeSolutionVote.id);
-			if (voteIndex === -1) {
-				challengeSolution.votes.push(challengeSolutionVote);
-			} else {
-				challengeSolution.votes[voteIndex] = challengeSolutionVote;
-			}
+			const votes = challengeSolution.votes.slice();
 
-			state[index] = { ...challengeSolution };
+			if (voteIndex === -1) {
+				votes.push(challengeSolutionVote);
+			} else {
+				votes[voteIndex] = challengeSolutionVote;
+			}
+			state = state.slice();
+			state[index] = { ...challengeSolution, votes };
 		}
 		return state;
 	});
@@ -158,7 +161,7 @@ function addOrUpdate(
 	delete (challengeSolution as any).comments;
 	challengeSolution.commentCount = comments.length;
 	if (comments.length) {
-		addComments(comments);
+		addComments(comments.map(commentFromJSON));
 	}
 
 	if (index === -1) {

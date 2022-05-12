@@ -1,3 +1,5 @@
+<svelte:options immutable />
+
 <script lang="ts">
 	import Cookies from 'js-cookie';
 	import { onMount } from 'svelte';

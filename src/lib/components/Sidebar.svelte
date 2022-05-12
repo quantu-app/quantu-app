@@ -1,3 +1,5 @@
+<svelte:options immutable />
+
 <script lang="ts" context="module">
 	export let active = writable(false);
 
@@ -14,7 +16,6 @@
 </script>
 
 <script lang="ts">
-	import { page } from '$app/stores';
 	import { writable } from 'svelte/store';
 </script>
 

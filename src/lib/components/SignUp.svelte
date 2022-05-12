@@ -1,6 +1,7 @@
+<svelte:options immutable />
+
 <script lang="ts">
 	import { base } from '$app/paths';
-
 	import Quote from './ui/Quote.svelte';
 </script>
 

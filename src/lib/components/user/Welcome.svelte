@@ -1,3 +1,5 @@
+<svelte:options immutable />
+
 <script lang="ts">
 	import { updateUser } from '$lib/state/user';
 	import countries from '$lib/data/countries';

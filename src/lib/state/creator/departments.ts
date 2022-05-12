@@ -4,7 +4,7 @@ import { base } from '$app/paths';
 
 const departmentsWritable = writable<Department[]>([]);
 
-export const departments = derived(departmentsWritable, (departments) => departments.slice());
+export const departments = derived(departmentsWritable, (departments) => departments);
 
 export const departmentsById = derived(departmentsWritable, (departments) =>
 	departments.reduce((byId, department) => {
@@ -19,7 +19,7 @@ export async function showDepartmentsById(id: string) {
 		throw await res.json();
 	}
 	const department: Department = departmentFromJSON(await res.json());
-	departmentsWritable.update((state) => addOrUpdate(state, department));
+	departmentsWritable.update((state) => addOrUpdate(state.slice(), department));
 	return department;
 }
 
@@ -28,10 +28,9 @@ export async function showDepartments() {
 	if (!res.ok) {
 		throw await res.json();
 	}
-	const rawDepartments: Department[] = await res.json();
-	const departments: Department[] = rawDepartments.map(departmentFromJSON);
+	const departments: Department[] = (await res.json()).map(departmentFromJSON);
 	departmentsWritable.update((state) =>
-		departments.reduce((state, department) => addOrUpdate(state, department), state)
+		departments.reduce((state, department) => addOrUpdate(state, department), state.slice())
 	);
 	return departments;
 }
@@ -45,7 +44,7 @@ export async function createDepartment(body: Partial<Department>) {
 		throw await res.json();
 	}
 	const department: Department = departmentFromJSON(await res.json());
-	departmentsWritable.update((state) => addOrUpdate(state, department));
+	departmentsWritable.update((state) => addOrUpdate(state.slice(), department));
 	return department;
 }
 
@@ -58,7 +57,7 @@ export async function updateDepartment(id: string, body: Partial<Department>) {
 		throw await res.json();
 	}
 	const department: Department = departmentFromJSON(await res.json());
-	departmentsWritable.update((departments) => addOrUpdate(departments, department));
+	departmentsWritable.update((state) => addOrUpdate(state.slice(), department));
 	return department;
 }
 
@@ -69,12 +68,13 @@ export async function deleteDepartment(id: string) {
 	if (!res.ok) {
 		throw await res.json();
 	}
-	departmentsWritable.update((departments) => {
-		const index = departments.findIndex((department) => department.id === id);
+	departmentsWritable.update((state) => {
+		const index = state.findIndex((department) => department.id === id);
 		if (index !== -1) {
-			departments.splice(index, 1);
+			state = state.slice();
+			state.splice(index, 1);
 		}
-		return departments;
+		return state;
 	});
 }
 

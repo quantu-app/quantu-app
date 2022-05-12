@@ -18,13 +18,13 @@
 </script>
 
 <div class="d-flex flex-column">
-	<button class="btn btn-ghost" {disabled} on:click={onVoteUp}>
+	<button class="btn btn-sm btn-ghost" disabled={disabled || vote === true} on:click={onVoteUp}>
 		<i class="bi bi-chevron-up" class:text-success={vote === true} />
 	</button>
-	<button class="btn btn-ghost" {disabled} on:click={onVoteDelete}>
+	<button class="btn btn-sm btn-ghost" disabled={disabled || vote === null} on:click={onVoteDelete}>
 		<span class:text-success={vote === true} class:text-danger={vote === false}>{count}</span>
 	</button>
-	<button class="btn btn-ghost" {disabled} on:click={onVoteDown}>
+	<button class="btn btn-sm btn-ghost" disabled={disabled || vote === false} on:click={onVoteDown}>
 		<i class="bi bi-chevron-down" class:text-danger={vote === false} />
 	</button>
 </div>

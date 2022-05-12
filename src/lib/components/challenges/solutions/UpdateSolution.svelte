@@ -27,8 +27,7 @@
 </script>
 
 <a
-	role="button"
-	class="btn btn-ghost"
+	class="link-dark"
 	href={`${base}/challenges/${challenge.department.url}/${challenge.url}/solutions`}
 	><i class="bi bi-chevron-left" /> {challenge.name}</a
 >

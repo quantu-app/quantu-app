@@ -1,5 +1,5 @@
 import { v4 } from 'uuid';
-import { writable } from 'svelte/store';
+import { derived, writable } from 'svelte/store';
 
 export enum NotificationType {
 	Primary = 'primary',
@@ -26,6 +26,10 @@ export interface INotification {
 	description: string;
 }
 
+const notificationWritable = writable<INotification[]>([]);
+
+export const notifications = derived(notificationWritable, (notifications) => notifications);
+
 function createNotification(options: INotificationOptions) {
 	return {
 		id: v4(),
@@ -35,39 +39,25 @@ function createNotification(options: INotificationOptions) {
 	};
 }
 
-function createStore() {
-	const { update, subscribe } = writable<INotification[]>([]);
+export function addNotification(options: INotificationOptions) {
+	const timeout =
+			typeof options.timeout === 'number' && options.timeout > 0 ? options.timeout : 5000,
+		notification = createNotification(options);
 
-	const notifications = { subscribe };
-
-	function addNotification(options: INotificationOptions) {
-		const timeout =
-				typeof options.timeout === 'number' && options.timeout > 0 ? options.timeout : 5000,
-			notification = createNotification(options);
-
-		update((state) => [...state, notification]);
-		setTimeout(() => removeNotification(notification.id), timeout);
-	}
-
-	function removeNotification(id: string) {
-		update((state) => {
-			const index = state.findIndex((notification) => notification.id === id);
-
-			if (index === -1) {
-				return state;
-			} else {
-				const newState = [...state];
-				newState.splice(index, 1);
-				return newState;
-			}
-		});
-	}
-
-	return {
-		notifications,
-		addNotification,
-		removeNotification
-	};
+	notificationWritable.update((state) => [...state, notification]);
+	setTimeout(() => removeNotification(notification.id), timeout);
 }
 
-export const { notifications, addNotification, removeNotification } = createStore();
+export function removeNotification(id: string) {
+	notificationWritable.update((state) => {
+		const index = state.findIndex((notification) => notification.id === id);
+
+		if (index === -1) {
+			return state;
+		} else {
+			const newState = [...state];
+			newState.splice(index, 1);
+			return newState;
+		}
+	});
+}

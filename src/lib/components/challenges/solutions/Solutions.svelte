@@ -14,10 +14,7 @@
 	$: userSolution = solutions.find((solution) => solution.userId === $currentUser?.id);
 </script>
 
-<a
-	role="button"
-	class="btn btn-ghost"
-	href={`${base}/challenges/${challenge.department.url}/${challenge.url}/review`}
+<a class="link-dark" href={`${base}/challenges/${challenge.department.url}/${challenge.url}/review`}
 	><i class="bi bi-chevron-left" /> {challenge.name}</a
 >
 

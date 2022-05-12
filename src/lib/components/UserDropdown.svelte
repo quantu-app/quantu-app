@@ -1,6 +1,7 @@
+<svelte:options immutable />
+
 <script lang="ts">
 	import { base } from '$app/paths';
-
 	import { currentUser, signOut } from '$lib/state/user';
 </script>
 

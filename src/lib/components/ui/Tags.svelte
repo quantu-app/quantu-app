@@ -1,3 +1,5 @@
+<svelte:options immutable />
+
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
 
@@ -19,7 +21,7 @@
 			tags.push(tag);
 			tag = '';
 			dispatch('change', tags);
-			tags = tags;
+			tags = tags.slice();
 			input?.select();
 		}
 	};

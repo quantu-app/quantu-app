@@ -1,3 +1,5 @@
+<svelte:options immutable />
+
 <script lang="ts">
 	import UserDropdown from './UserDropdown.svelte';
 	import { base } from '$app/paths';

@@ -1,3 +1,5 @@
+<svelte:options immutable />
+
 <script lang="ts">
 	import { slide } from 'svelte/transition';
 	import { notifications, removeNotification } from '$lib/state/notifications';

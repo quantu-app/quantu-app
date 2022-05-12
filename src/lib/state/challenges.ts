@@ -33,7 +33,7 @@ export async function showChallengeByUrl(departmentUrl: string, url: string) {
 		throw await res.json();
 	}
 	const challenge: StateChallenge = challengeFromJSON(await res.json());
-	challengesWritable.update((challenges) => addOrUpdate(challenges, challenge));
+	challengesWritable.update((challenges) => addOrUpdate(challenges.slice(), challenge));
 	return challenge;
 }
 
@@ -44,7 +44,7 @@ export async function showChallenges(departmentUrl: string) {
 	}
 	const challenges: Array<StateChallenge> = (await res.json()).map(challengeFromJSON);
 	challengesWritable.update((state) =>
-		challenges.reduce((state, challenge) => addOrUpdate(state, challenge), state)
+		challenges.reduce((state, challenge) => addOrUpdate(state, challenge), state.slice())
 	);
 	return challenges;
 }
@@ -56,7 +56,7 @@ export async function showAllChallenges() {
 	}
 	const challenges: Array<StateChallenge> = (await res.json()).map(challengeFromJSON);
 	challengesWritable.update((state) =>
-		challenges.reduce((state, challenge) => addOrUpdate(state, challenge), state)
+		challenges.reduce((state, challenge) => addOrUpdate(state, challenge), state.slice())
 	);
 	return challenges;
 }
@@ -70,12 +70,14 @@ export async function answer(challengeId: string, answer: Answer) {
 		throw await res.json();
 	}
 	const result: Result = resultFromJSON(await res.json());
-	challengesWritable.update((challenges) => {
-		const challenge = challenges.find((c) => c.id === result.challengeId);
+	challengesWritable.update((state) => {
+		const index = state.findIndex((c) => c.id === result.challengeId);
+		const challenge = state[index];
 		if (challenge) {
-			challenge.result = result;
+			state = state.slice();
+			state[index] = { ...challenge, result };
 		}
-		return challenges;
+		return state;
 	});
 	return result;
 }
@@ -88,12 +90,14 @@ export async function explain(challengeId: string) {
 		throw await res.json();
 	}
 	const result: Result = resultFromJSON(await res.json());
-	challengesWritable.update((challenges) => {
-		const challenge = challenges.find((c) => c.id === result.challengeId);
+	challengesWritable.update((state) => {
+		const index = state.findIndex((c) => c.id === result.challengeId);
+		const challenge = state[index];
 		if (challenge) {
-			challenge.result = result;
+			state = state.slice();
+			state[index] = { ...challenge, result };
 		}
-		return challenges;
+		return state;
 	});
 	return result;
 }

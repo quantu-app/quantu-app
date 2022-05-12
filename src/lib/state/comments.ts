@@ -5,15 +5,12 @@ import { base } from '$app/paths';
 export type StateComment = Comment & {
 	user: { id: string; username: string };
 	votes: CommentVote[];
-};
-
-export type StateCommentWithChildren = StateComment & {
-	children: StateCommentWithChildren[];
+	children: StateComment[];
 };
 
 export interface StateCommentTree {
 	[referenceType: string]: {
-		[referenceId: string]: { [commentId: string]: StateCommentWithChildren };
+		[referenceId: string]: { [commentId: string]: StateComment };
 	};
 }
 
@@ -23,17 +20,14 @@ export const comments = derived(commentsWritable, (comments) => comments.slice()
 
 export const commentsById = derived(commentsWritable, (comments) =>
 	comments.reduce((byId, comment) => {
+		comment.children = [];
 		byId[comment.id] = comment;
 		return byId;
 	}, {} as { [id: string]: StateComment })
 );
-export const commentsTree = derived(commentsWritable, (comments) => {
-	const commentsById = comments.reduce((byId, comment) => {
-		byId[comment.id] = { ...comment, children: [] } as StateCommentWithChildren;
-		return byId;
-	}, {} as { [id: string]: StateCommentWithChildren });
-
+export const commentsTree = derived(commentsById, (commentsById) => {
 	return Object.values(commentsById).reduce((commentTree, comment) => {
+		comment = { ...comment };
 		const referenceType =
 			commentTree[comment.referenceType] || (commentTree[comment.referenceType] = {});
 		const referenceComments =
@@ -181,6 +175,7 @@ function addOrUpdate(state: Array<StateComment>, comment: StateComment): Array<S
 export function commentFromJSON(comment: StateComment): StateComment {
 	return {
 		...comment,
+		children: [],
 		votes: comment.votes.map(commentVoteFromJSON),
 		createdAt: new Date(comment.createdAt),
 		updatedAt: new Date(comment.updatedAt)

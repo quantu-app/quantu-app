@@ -1,3 +1,5 @@
+<svelte:options immutable />
+
 <script lang="ts" context="module">
 	export function closeModal() {
 		const modal = window.bootstrap.Modal.getOrCreateInstance(

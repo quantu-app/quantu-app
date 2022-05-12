@@ -5,7 +5,7 @@
 		commentsTree,
 		showComments,
 		showCommentsById,
-		type StateCommentWithChildren
+		type StateComment
 	} from '$lib/state/comments';
 	import { onMount } from 'svelte';
 	import Comment from './Comment.svelte';
@@ -14,12 +14,12 @@
 	export let referenceType: string;
 	export let commentId: string = null;
 
-	let comments: StateCommentWithChildren[] = [];
-	$: commentsById = ($commentsTree[referenceType] || {})[referenceId] || {};
+	let comments: StateComment[] = [];
+	$: commentsByReferenceId = ($commentsTree[referenceType] || {})[referenceId] || {};
 	$: if (commentId) {
-		comments = commentsById[commentId]?.children || [];
+		comments = commentsByReferenceId[commentId]?.children || [];
 	} else {
-		comments = Object.values(commentsById).filter((comment) => comment.commentId === null);
+		comments = Object.values(commentsByReferenceId).filter((comment) => comment.commentId === null);
 	}
 
 	let loading = false;

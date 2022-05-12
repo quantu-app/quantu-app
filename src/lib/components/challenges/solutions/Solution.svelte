@@ -8,7 +8,7 @@
 	import Challenge from '$lib/components/questions/Challenge.svelte';
 	import type { StateChallenge } from '$lib/state/challenges';
 	import type { StateChallengeSolution } from '$lib/state/challengeSolutions';
-	import { createComment } from '$lib/state/comments';
+	import { commentsTree, createComment } from '$lib/state/comments';
 
 	export let challenge: StateChallenge;
 	export let solution: StateChallengeSolution;

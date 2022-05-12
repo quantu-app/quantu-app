@@ -29,7 +29,13 @@
 </script>
 
 <script lang="ts">
+	import { now } from '$lib/state/now';
+
 	export let value: Date = new Date();
+
+	$: if ($now) {
+		value = value;
+	}
 </script>
 
 {timeSince(value)} ago

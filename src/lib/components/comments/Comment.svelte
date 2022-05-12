@@ -4,9 +4,10 @@
 	import { base } from '$app/paths';
 	import {
 		createComment,
+		showCommentsById,
 		updateComment,
 		voteOnComment,
-		type StateCommentWithChildren
+		type StateComment
 	} from '$lib/state/comments';
 	import { currentUser } from '$lib/state/user';
 	import RichEditor from '../editor/RichEditor.svelte';
@@ -17,7 +18,7 @@
 
 	export let referenceId: string;
 	export let referenceType: string;
-	export let comment: StateCommentWithChildren;
+	export let comment: StateComment;
 
 	let replyContent: any[] = [];
 	let commenting = false;
@@ -53,6 +54,16 @@
 		} finally {
 			updating = false;
 			editing = false;
+		}
+	}
+
+	let loadingMore = false;
+	async function loadMore() {
+		loadingMore = true;
+		try {
+			await showCommentsById(referenceType, referenceId, comment.id);
+		} finally {
+			loadingMore = false;
 		}
 	}
 
@@ -100,6 +111,10 @@
 				<TimeDisplay value={comment.createdAt} />
 			</div>
 			<div>
+				{#if !comment.children.length}
+					<a role="button" class="link-dark" on:click={loadMore} disabled={loadingMore}>Load More</a
+					>
+				{/if}
 				{#if !editing && !replying}
 					<a role="button" class="link-dark" on:click={toggleReply}>Reply to Comment</a>
 				{/if}

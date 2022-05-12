@@ -26,7 +26,7 @@ export async function showDepartmentsByUrl(url: string) {
 	}
 	const departments: Department[] = (await res.json()).map(departmentFromJSON);
 	departmentsWritable.update((state) =>
-		departments.reduce((state, department) => addOrUpdate(state, department), state)
+		departments.reduce((state, department) => addOrUpdate(state, department), state.slice())
 	);
 	return departments;
 }

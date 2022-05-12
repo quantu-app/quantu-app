@@ -4,6 +4,7 @@
 	import { base } from '$app/paths';
 	import {
 		createComment,
+		deleteComment,
 		showCommentsById,
 		updateComment,
 		voteOnComment,
@@ -19,6 +20,16 @@
 	export let referenceId: string;
 	export let referenceType: string;
 	export let comment: StateComment;
+
+	let deletingComment = false;
+	async function onDeleteComment() {
+		deletingComment = true;
+		try {
+			await deleteComment(referenceType, referenceId, comment.id);
+		} finally {
+			deletingComment = false;
+		}
+	}
 
 	let replyContent: any[] = [];
 	let commenting = false;
@@ -129,7 +140,14 @@
 					</div>
 				{/if}
 				{#if !editing && !replying && $currentUser?.id === comment.user.id}
-					<button class="btn btn-sm btn-primary" on:click={toggleEdit}>Edit</button>
+					<div class="btn-group" role="group">
+						<button
+							class="btn btn-sm btn-danger"
+							disabled={deletingComment}
+							on:click={onDeleteComment}>Delete</button
+						>
+						<button class="btn btn-sm btn-primary" on:click={toggleEdit}>Edit</button>
+					</div>
 				{/if}
 			</div>
 		</div>

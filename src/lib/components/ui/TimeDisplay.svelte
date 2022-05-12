@@ -33,9 +33,11 @@
 
 	export let value: Date = new Date();
 
+	let time = timeSince(value);
+
 	$: if ($now) {
-		value = value;
+		time = timeSince(value);
 	}
 </script>
 
-{timeSince(value)} ago
+{time} ago

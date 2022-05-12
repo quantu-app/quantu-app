@@ -122,6 +122,25 @@ export async function updateComment(
 	return comment;
 }
 
+export async function deleteComment(referenceType: string, referenceId: string, id: string) {
+	const res = await fetch(`${base}/api/comments/${referenceType}/${referenceId}/${id}`, {
+		method: 'DELETE'
+	});
+	if (!res.ok) {
+		throw await res.json();
+	}
+	const comment: StateComment = commentFromJSON(await res.json());
+	commentsWritable.update((state) => {
+		const index = state.findIndex((c) => c.id === comment.id);
+		if (index !== -1) {
+			state = state.slice();
+			state.splice(index, 1);
+		}
+		return state;
+	});
+	return comment;
+}
+
 export async function voteOnComment(
 	referenceType: string,
 	referenceId: string,

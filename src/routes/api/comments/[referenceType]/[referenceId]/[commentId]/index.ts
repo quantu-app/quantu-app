@@ -49,6 +49,7 @@ export const patch = authenticated(async (event) => ({
 			event.params.referenceType as CommentReferenceType,
 			event.params.referenceId,
 			event.params.commentId,
+			event.locals.token.userId,
 			await event.request.json()
 		)
 	),
@@ -60,20 +61,76 @@ export async function updateComment(
 	referenceType: CommentReferenceType,
 	referenceId: string,
 	commentId: string,
+	userId: string,
 	data: any
 ) {
+	const { id } = await client.comment.findFirst({
+		where: {
+			referenceType,
+			referenceId,
+			id: commentId,
+			userId
+		},
+		select: {
+			id: true
+		}
+	});
 	return await client.comment.update({
 		data: {
 			...data,
 			referenceType,
-			referenceId
+			referenceId,
+			userId
 		},
 		where: {
-			referenceType_referenceId_commentId: {
-				referenceType,
-				referenceId,
-				commentId
+			id
+		},
+		include: {
+			votes: true,
+			user: {
+				select: {
+					id: true,
+					username: true
+				}
 			}
+		}
+	});
+}
+
+export const del = authenticated(async (event) => ({
+	body: await run(async (client) =>
+		deleteComment(
+			client,
+			event.params.referenceType as CommentReferenceType,
+			event.params.referenceId,
+			event.params.commentId,
+			event.locals.token.userId
+		)
+	),
+	status: 200
+}));
+
+export async function deleteComment(
+	client: PrismaClient,
+	referenceType: CommentReferenceType,
+	referenceId: string,
+	commentId: string,
+	userId: string
+) {
+	const { id } = await client.comment.findFirst({
+		where: {
+			referenceType,
+			referenceId,
+			id: commentId,
+			userId
+		},
+		select: {
+			id: true
+		}
+	});
+	return await client.comment.delete({
+		where: {
+			id
 		},
 		include: {
 			votes: true,

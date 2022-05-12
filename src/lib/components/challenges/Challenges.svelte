@@ -11,7 +11,6 @@
 <script lang="ts">
 	import ChallengeList from '$lib/components/challenges/ChallengeList.svelte';
 	import { fuzzyEquals } from '@aicacia/string-fuzzy_equals';
-	import Search from '$lib/components/Search.svelte';
 	import type { StateChallenge } from '$lib/state/challenges';
 
 	export let challenges: Array<StateChallenge>;

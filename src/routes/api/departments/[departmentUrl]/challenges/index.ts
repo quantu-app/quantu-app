@@ -4,14 +4,21 @@ import type { Prompt, PromptPrivate } from '$lib/types';
 import { isMultipleChoicePrivate, isInputPrivate } from '$lib/types';
 import type { Challenge, PrismaClient, QuestionType, Result } from '@prisma/client';
 
+const DEFAULT_PAGINATION_SIZE = 25;
+
 export const get = authenticated(async (event) => ({
 	body: await run((client) =>
-		getChallenges(client, event.locals.token.userId, event.params.departmentUrl)
+		getChallenges(client, event.locals.token.userId, undefined, undefined, event.params.departmentUrl)
 	),
 	status: 200
 }));
 
-export async function getChallenges(client: PrismaClient, userId: string, departmentUrl?: string) {
+export async function getChallenges(client: PrismaClient, userId: string, page?: number, size?: number, departmentId?: string) {
+	page = page ? page : 0;
+	size = size ? size : DEFAULT_PAGINATION_SIZE;
+
+	console.log(departmentId, page, size);
+
 	const where = {
 		visible: true,
 		NOT: [{ releasedAt: null }],
@@ -20,11 +27,14 @@ export async function getChallenges(client: PrismaClient, userId: string, depart
 			lte: new Date()
 		}
 	};
-	if (departmentUrl) {
-		(where as any).department = { url: departmentUrl };
+	if (departmentId) {
+		(where as any).departmentId = departmentId;
 	}
+	console.log(where);
 	const challenges = await client.challenge.findMany({
 		where,
+		skip: page * size,
+		take: size,
 		include: {
 			department: {
 				select: {

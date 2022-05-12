@@ -19,13 +19,11 @@
 
 	export let challenge: StateChallenge;
 
-	$: date = format(new Date(challenge.releasedAt || challenge.createdAt), 'PPPP');
-
 	const rng = XorShiftRng.fromSeed(new Date(challenge.createdAt).getTime());
 	const image = rng.fromArray(IMAGES).unwrap();
 </script>
 
-<div class="card">
+<div class={challenge.result ? 'card solved' : 'card'}>
 	<img
 		src={challenge.logoId ? `${base}/api/assets/${challenge.logoId}` : image}
 		alt={challenge.name}
@@ -33,30 +31,31 @@
 	/>
 	<div class="card-body">
 		<h5 class="card-title mt-4 mt-lg-0">{challenge.name}</h5>
-		<!--<p class="card-text"><RichViewer value={challenge.description} /></p>-->
 		<div class="text-end">
 			{#if challenge.result}
 				<a
 					role="button"
-					class="btn btn-primary stretched-link"
+					aria-label="review"
+					class="text-success stretched-link"
 					href={`${base}/challenges/${challenge.department.url}/${challenge.url}/review`}
-				>
-					<i class="bi bi-check-circle-fill" />
-					Solved</a
-				>
+				/>
 			{:else}
 				<a
 					role="button"
-					class="btn btn-primary stretched-link"
-					href={`${base}/challenges/${challenge.department.url}/${challenge.url}`}>Solve</a
-				>
+					aria-label="solve"
+					class="stretched-link"
+					href={`${base}/challenges/${challenge.department.url}/${challenge.url}`}
+				/>
 			{/if}
 		</div>
 	</div>
 	<div class="card-footer">
-		<div class="text-muted mt-3">
+		<div class="text-muted card-footer-info">
 			<span class="text-uppercase">{challenge.department.name}</span> |
 			<span>{challenge.solvers == 1 ? `1 Solver` : `${challenge.solvers} Solvers`} </span>
+			{#if challenge.result}
+				<i class="bi fs-4 bi-check-circle-fill text-success solved-check" />
+			{/if}
 		</div>
 	</div>
 </div>
@@ -67,8 +66,26 @@
 		transition: all 0.2s ease;
 		cursor: pointer;
 	}
+	.card.solved {
+		border: 1px solid #42d12a;
+	}
+	.card.solved:hover {
+		box-shadow: 2px 3px 3px 1px rgb(197, 228, 197);
+	}
 	.card:hover {
 		box-shadow: 2px 3px 3px 1px #e0e0e0;
 		transform: scale(1.02);
+	}
+	.card-footer {
+		background-color: white;
+		border: none;
+	}
+	.card-footer-info {
+		font-size: 13px;
+	}
+	.solved-check {
+		position: absolute;
+		right: 15px;
+		bottom: 0px;
 	}
 </style>

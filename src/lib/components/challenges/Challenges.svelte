@@ -14,6 +14,14 @@
 	import type { StateChallenge } from '$lib/state/challenges';
 
 	export let challenges: Array<StateChallenge>;
+	export let topChallenges: Array<StateChallenge>;
+	export let challengesByDepartments: Array<{
+		url: string;
+		name: string;
+		challenges: StateChallenge[];
+	}>;
+
+	$: console.log(topChallenges, challengesByDepartments);
 
 	let latestChallenge: StateChallenge;
 	let previousChallenges: Array<StateChallenge> = [];

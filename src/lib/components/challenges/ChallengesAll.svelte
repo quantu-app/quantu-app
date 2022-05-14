@@ -14,14 +14,6 @@
 	import type { StateChallenge } from '$lib/state/challenges';
 
 	export let challenges: Array<StateChallenge>;
-	export let topChallenges: Array<StateChallenge>;
-	export let challengesByDepartments: Array<{
-		url: string;
-		name: string;
-		challenges: StateChallenge[];
-	}>;
-
-	$: console.log(topChallenges, challengesByDepartments);
 
 	let latestChallenge: StateChallenge;
 	let previousChallenges: Array<StateChallenge> = [];
@@ -53,17 +45,11 @@
 </script>
 
 <div class="container my-4">
-	{#if latestChallenge}
+	{#if challenges.length}
 		<div class="row">
-			<h2>Newest Challenges</h2>
+			<h2>All Challenges</h2>
 
-			<ChallengeList challenges={[latestChallenge]} />
-		</div>
-	{/if}
-	{#if previousChallenges.length}
-		<div class="row mt-4">
-			<h2>Previous Challenges</h2>
-			<ChallengeList challenges={previousChallenges} />
+			<ChallengeList {challenges} />
 		</div>
 	{/if}
 </div>

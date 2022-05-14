@@ -12,6 +12,5 @@ export const get = authenticated(async (event) => ({
 export async function getTopChallenges(client: PrismaClient, userId: string, size: number) {
 	const departments = await getDepartments(client);
 	const challengesByDepartment = await Promise.all(departments.map(department => getChallenges(client, userId, 0, size, department.id)));
-	console.log(challengesByDepartment);
 	return challengesByDepartment.flat(1);
 }

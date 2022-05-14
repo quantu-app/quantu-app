@@ -13,9 +13,7 @@
 	import { base } from '$app/paths';
 	import type { StateChallenge } from '$lib/state/challenges';
 	import { XorShiftRng } from '@aicacia/rand';
-	import { format } from 'date-fns';
-	import RichViewer from '$lib/components/editor/RichViewer.svelte';
-	import Asset from '../creator/assets/Asset.svelte';
+	import { compareAsc, formatDistanceToNowStrict, isBefore, isSameDay } from 'date-fns';
 
 	export let challenge: StateChallenge;
 
@@ -30,7 +28,7 @@
 		class="card-img-top"
 	/>
 	<div class="card-body">
-		<h5 class="card-title mt-4 mt-lg-0">{challenge.name}</h5>
+		<h5 class="card-title mt-4 mt-lg-0 mb-0">{challenge.name}</h5>
 		<div class="text-end">
 			{#if challenge.result}
 				<a
@@ -51,8 +49,16 @@
 	</div>
 	<div class="card-footer">
 		<div class="text-muted card-footer-info">
-			<span class="text-uppercase">{challenge.department.name}</span> |
+			<span class="text-uppercase">{challenge.department.name}</span><br />
 			<span>{challenge.solvers == 1 ? `1 Solver` : `${challenge.solvers} Solvers`} </span>
+			<span class="releasedAt">
+				<span class="dot-block" />{formatDistanceToNowStrict(new Date(challenge.releasedAt), {
+					addSuffix: false
+				})}
+				{#if !isSameDay(challenge.releasedAt, new Date()) && isBefore(new Date(challenge.releasedAt), new Date())}
+					ago
+				{/if}
+			</span>
 			{#if challenge.result}
 				<i class="bi fs-4 bi-check-circle-fill text-success solved-check" />
 			{/if}
@@ -62,7 +68,7 @@
 
 <style>
 	.card {
-		height: 380px;
+		height: 300px;
 		transition: all 0.2s ease;
 		cursor: pointer;
 	}
@@ -87,5 +93,10 @@
 		position: absolute;
 		right: 15px;
 		bottom: 0px;
+	}
+
+	.dot-block:after {
+		content: '•';
+		margin: 0 4px;
 	}
 </style>

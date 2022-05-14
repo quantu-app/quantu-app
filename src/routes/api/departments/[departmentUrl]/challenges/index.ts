@@ -17,8 +17,6 @@ export async function getChallenges(client: PrismaClient, userId: string, page?:
 	page = page ? page : 0;
 	size = size ? size : DEFAULT_PAGINATION_SIZE;
 
-	console.log(departmentId, page, size);
-
 	const where = {
 		visible: true,
 		NOT: [{ releasedAt: null }],
@@ -30,7 +28,7 @@ export async function getChallenges(client: PrismaClient, userId: string, page?:
 	if (departmentId) {
 		(where as any).departmentId = departmentId;
 	}
-	console.log(where);
+
 	const challenges = await client.challenge.findMany({
 		where,
 		skip: page * size,

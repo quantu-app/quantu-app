@@ -13,7 +13,6 @@
 
 <script lang="ts">
 	import UserLayout from '$lib/components/layouts/UserLayout.svelte';
-	import ChallengesMain from '$lib/components/challenges/ChallengesMain.svelte';
 	import { browser } from '$app/env';
 	import {
 		showAllChallenges,
@@ -22,6 +21,7 @@
 		type StateChallenge
 	} from '$lib/state/challenges';
 	import SEO from '$lib/components/SEO/index.svelte';
+	import ChallengesAll from '$lib/components/challenges/ChallengesAll.svelte';
 
 	$: topChallenges = $challenges.sort(sortByDate).slice(0, 4);
 	$: challengesByDepartments = Object.values($challengesByDepartment);
@@ -39,5 +39,5 @@
 />
 
 <UserLayout>
-	<ChallengesMain challenges={$challenges} {topChallenges} {challengesByDepartments} />
+	<ChallengesAll challenges={$challenges} {topChallenges} {challengesByDepartments} />
 </UserLayout>

@@ -86,7 +86,7 @@
 </script>
 
 <Portal>
-	<div bind:this={ref} class="menu">
+	<div bind:this={ref} class="menu border p-1">
 		<Buttons />
 	</div>
 </Portal>
@@ -94,8 +94,6 @@
 <style>
 	.menu {
 		background-color: #fff;
-		border: 1px solid #888;
-		padding: 0.25rem;
 		position: absolute;
 		z-index: 10000;
 		top: -10000px;

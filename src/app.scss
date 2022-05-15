@@ -13,3 +13,7 @@ img {
 .katex-display {
 	margin: 0 !important;
 }
+
+.editor-with-helper div[role="textbox"] {
+	min-height: 128px;
+}

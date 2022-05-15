@@ -21,9 +21,12 @@
 </script>
 
 <div {id} class="border p-2">
-	{#if showHelper}
-		<span>Click and hold to pull up toolbar.</span>
-		<hr />
-	{/if}
-	<Editor bind:value bind:editor bind:selection readOnly={false} {placeholder} />
+	<Editor
+		bind:value
+		bind:editor
+		bind:selection
+		readOnly={false}
+		{placeholder}
+		hoveringToolbar={!showHelper}
+	/>
 </div>

@@ -3,8 +3,10 @@
 <script lang="ts">
 	import type { StateChallenge } from '$lib/state/challenges';
 	import RichViewer from '$lib/components/editor/RichViewer.svelte';
+	import RichEditor from '$lib/components/editor/RichEditor.svelte';
 	import {
 		voteOnChallengeSolution,
+		updateChallengeSolution,
 		type StateChallengeSolution
 	} from '$lib/state/challengeSolutions';
 	import { base } from '$app/paths';
@@ -14,6 +16,23 @@
 
 	export let challenge: StateChallenge;
 	export let solution: StateChallengeSolution;
+
+	let editing = false;
+	function toggleEdit() {
+		editing = !editing;
+	}
+	let updating = false;
+	async function onUpdate() {
+		updating = false;
+		try {
+			await updateChallengeSolution(challenge.department.url, challenge.url, solution.id, {
+				solution: solution.solution
+			});
+			editing = false;
+		} finally {
+			updating = false;
+		}
+	}
 
 	let voting = false;
 
@@ -44,7 +63,11 @@
 	</div>
 	<div class="flex-grow-1 d-flex flex-column">
 		<div class="flex-grow-1">
-			<RichViewer value={solution.solution} />
+			{#if editing}
+				<RichEditor bind:value={solution.solution} placeholder="Type Your Solution..." showHelper />
+			{:else}
+				<RichViewer value={solution.solution} />
+			{/if}
 		</div>
 		<div class="d-flex flex-grow-0 justify-content-between">
 			<div>
@@ -53,13 +76,17 @@
 				<TimeDisplay value={solution.createdAt} />
 			</div>
 			<div>
-				{#if $currentUser?.id === solution.user.id}
-					<a
-						role="button"
-						class="btn btn-sm btn-primary"
-						href={`${base}/challenges/${solution.challenge.department.url}/${solution.challenge.url}/solutions/${solution.id}/edit`}
-						>Edit</a
-					>
+				{#if !editing && $currentUser?.id === solution.user.id}
+					<button class="btn btn-sm btn-primary" on:click={toggleEdit}>Edit</button>
+				{:else if editing}
+					<div class="btn-group" role="group">
+						<button class="btn btn-sm btn-primary" disabled={updating} on:click={onUpdate}
+							>Update</button
+						>
+						<button class="btn btn-sm btn-danger" disabled={updating} on:click={toggleEdit}
+							>Cancel</button
+						>
+					</div>
 				{/if}
 				<a
 					href={`${base}/challenges/${solution.challenge.department.url}/${solution.challenge.url}/solutions/${solution.id}`}

@@ -20,6 +20,7 @@
 	import type { IText } from './Leaf.svelte';
 	import Leaf from './Leaf.svelte';
 	import HoveringToolbar from './HoveringToolbar.svelte';
+	import Toolbar from './Toolbar.svelte';
 	import { withImages } from './ImageElement.svelte';
 	import { longpress } from './longpress';
 	import { withLatex } from './LatexElement.svelte';
@@ -35,6 +36,7 @@
 	export let readOnly = false;
 	export let placeholder = 'Type...';
 	export let editor = withHistory(withLatex(withImages(withSvelte(createEditor()))));
+	export let hoveringToolbar = true;
 
 	let open = false;
 	let ref: HTMLDivElement;
@@ -65,8 +67,12 @@
 </script>
 
 <Slate bind:editor bind:selection bind:value>
-	<HoveringToolbar container={ref} bind:open />
-	<div use:longpress on:longpress={onLongPress}>
+	{#if hoveringToolbar}
+		<HoveringToolbar container={ref} bind:open />
+	{:else}
+		<Toolbar />
+	{/if}
+	<div use:longpress on:longpress={onLongPress} class:editor-with-helper={!hoveringToolbar}>
 		<Editable bind:ref {readOnly} {Element} {Leaf} {onKeyDown} {placeholder} />
 	</div>
 </Slate>

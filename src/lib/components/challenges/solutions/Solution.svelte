@@ -24,7 +24,7 @@
 		deleting = true;
 		try {
 			await deleteChallengeSolutionById(challenge.department.url, challenge.url, solution.id);
-			await goto(`${base}/challenges/${challenge.department.url}/${challenge.url}/review`);
+			await goto(`${base}/challenges/${challenge.department.url}/${challenge.url}/solutions`);
 		} finally {
 			deleting = false;
 		}

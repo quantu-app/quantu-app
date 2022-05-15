@@ -2,7 +2,6 @@
 
 <script lang="ts">
 	import { goto } from '$app/navigation';
-
 	import { base } from '$app/paths';
 	import Comments from '$lib/components/comments/Comments.svelte';
 	import RichEditor from '$lib/components/editor/RichEditor.svelte';
@@ -25,7 +24,7 @@
 		deleting = true;
 		try {
 			await deleteChallengeSolutionById(challenge.department.url, challenge.url, solution.id);
-			await goto(`${base}/challenges/${challenge.department.url}/${challenge.url}`);
+			await goto(`${base}/challenges/${challenge.department.url}/${challenge.url}/review`);
 		} finally {
 			deleting = false;
 		}

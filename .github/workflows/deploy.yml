@@ -1,13 +1,25 @@
 name: Deploy
 
 on:
-  workflow_run:
-    workflows: ['Test']
+  push:
     branches: [main]
-    types:
-      - completed
 
 jobs:
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 16.x
+
+      - run: npm install -g npm@8.5.3
+      - run: npm ci
+      - run: npx playwright install
+      - env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          CI: true
+        run: npm test
   build:
     runs-on: ubuntu-latest
     steps:

@@ -103,7 +103,7 @@
 
 <div class="d-flex flex-row">
 	<div class="flex-grow-0">
-		<Vote vote={yourVote} count={voteCount} {onVote} disabled={voting} />
+		<Vote vote={yourVote} count={voteCount} {onVote} disabled={comment.deleted || voting} />
 	</div>
 	<div class="flex-grow-1 d-flex flex-column">
 		<div class="flex-grow-1">

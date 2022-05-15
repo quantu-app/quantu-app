@@ -8,3 +8,6 @@ dependencies:
 - name: mongodb
   version: 11.1.0
   repository: https://charts.bitnami.com/bitnami
+- name: mongo-express
+  version: 2.6.5
+  repository: https://cowboysysop.github.io/charts/

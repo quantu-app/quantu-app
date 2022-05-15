@@ -38,6 +38,8 @@
 	$: challenge = ($challengesByDepartmentUrl[departmentUrl] || {})[url];
 	$: solution = $challengeSolutionsById[solutionId];
 
+	$: console.log($challengeSolutionsById);
+
 	onMount(async () => {
 		await showChallengeByUrl(departmentUrl, url);
 		await showChallengeSolutionById(departmentUrl, url, solutionId);

@@ -1,6 +1,7 @@
 import { authenticated } from '$lib/api/auth';
 import { run } from '$lib/prisma';
 import { CommentReferenceType, type PrismaClient } from '@prisma/client';
+import { deleteComments } from '../../../../../../comments/[referenceType]/[referenceId]/[commentId]';
 import { getCommentsByReferenceId } from '../../../../../../comments/[referenceType]/[referenceId]';
 
 export const get = authenticated(async (event) => {
@@ -78,23 +79,22 @@ export async function updateSolution(
 	data: any,
 	depth?: number
 ) {
+	const { id: challengeId } = await client.challenge.findFirst({
+		where: {
+			url: challengeUrl,
+			department: {
+				url: deparementUrl
+			}
+		},
+		select: {
+			id: true
+		}
+	});
 	const solution = await client.challengeSolution.update({
 		where: {
 			userId_challengeId: {
 				userId,
-				challengeId: (
-					await client.challenge.findFirst({
-						where: {
-							url: challengeUrl,
-							department: {
-								url: deparementUrl
-							}
-						},
-						select: {
-							id: true
-						}
-					})
-				).id
+				challengeId
 			}
 		},
 		data: {
@@ -129,5 +129,71 @@ export async function updateSolution(
 			depth
 		);
 	}
+	return solution;
+}
+
+export const del = authenticated(async (event) => {
+	const solution = await run((client) =>
+		deleteSolutionById(
+			client,
+			event.params.deparementUrl,
+			event.params.challengeUrl,
+			event.params.solutionId,
+			event.locals.token.userId
+		)
+	);
+	return {
+		body: solution,
+		status: solution ? 200 : 404
+	};
+});
+
+export async function deleteSolutionById(
+	client: PrismaClient,
+	deparementUrl: string,
+	challengeUrl: string,
+	solutionId: string,
+	userId: string
+) {
+	const { id: challengeId } = await client.challenge.findFirst({
+		where: {
+			url: challengeUrl,
+			department: {
+				url: deparementUrl
+			}
+		},
+		select: {
+			id: true
+		}
+	});
+	const solution = await client.challengeSolution.delete({
+		where: {
+			userId_challengeId: {
+				userId,
+				challengeId
+			}
+		},
+		include: {
+			challenge: {
+				select: {
+					name: true,
+					url: true,
+					department: {
+						select: {
+							url: true
+						}
+					}
+				}
+			},
+			votes: true,
+			user: {
+				select: {
+					id: true,
+					username: true
+				}
+			}
+		}
+	});
+	await deleteComments(client, CommentReferenceType.CHALLENGE_SOLUTION, solutionId);
 	return solution;
 }

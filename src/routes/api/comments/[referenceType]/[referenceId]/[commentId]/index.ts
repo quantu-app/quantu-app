@@ -128,10 +128,34 @@ export async function deleteComment(
 			id: true
 		}
 	});
-	return await client.comment.delete({
+	return deleteCommentRecur(client, id);
+}
+
+export function deleteComments(
+	client: PrismaClient,
+	referenceType: CommentReferenceType,
+	referenceId: string
+) {
+	return client.comment.deleteMany({
 		where: {
-			id
+			referenceType,
+			referenceId
+		}
+	});
+}
+
+export async function deleteCommentRecur(client: PrismaClient, commentId: string) {
+	const { comments } = await client.comment.findUnique({
+		where: {
+			id: commentId
 		},
+		include: {
+			comments: true
+		}
+	});
+	await Promise.all(comments.map((comment) => deleteCommentRecur(client, comment.id)));
+	return client.comment.delete({
+		where: { id: commentId },
 		include: {
 			votes: true,
 			user: {

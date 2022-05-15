@@ -1,7 +1,7 @@
 import type { ChallengeSolution, ChallengeSolutionVote } from '@prisma/client';
 import { writable, derived } from 'svelte/store';
 import { base } from '$app/paths';
-import { addComments, commentFromJSON } from './comments';
+import { addComments, commentFromJSON, deleteCommentsByReference } from './comments';
 
 export type StateChallengeSolution = ChallengeSolution & {
 	user: { id: string; username: string };
@@ -149,6 +149,31 @@ export async function voteOnChallengeSolution(
 		return state;
 	});
 	return challengeSolutionVote;
+}
+
+export async function deleteChallengeSolutionById(departmentUrl: string, url: string, id: string) {
+	const res = await fetch(
+		`${base}/api/departments/${departmentUrl}/challenges/${url}/solutions/${id}`,
+		{
+			method: 'DELETE'
+		}
+	);
+	if (!res.ok) {
+		throw await res.json();
+	}
+	const challengeSolution: StateChallengeSolution = challengeSolutionFromJSON(await res.json());
+	challengeSolutionsWritable.update((state) => {
+		const index = state.findIndex((c) => c.id === id);
+		if (index === -1) {
+			return state;
+		} else {
+			state = state.slice();
+			state.splice(index, 1);
+			return state;
+		}
+	});
+	deleteCommentsByReference('CHALLENGE_SOLUTION', id);
+	return challengeSolution;
 }
 
 function addOrUpdate(

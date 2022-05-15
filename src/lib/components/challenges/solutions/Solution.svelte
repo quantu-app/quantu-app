@@ -1,6 +1,8 @@
 <svelte:options immutable />
 
 <script lang="ts">
+	import { goto } from '$app/navigation';
+
 	import { base } from '$app/paths';
 	import Comments from '$lib/components/comments/Comments.svelte';
 	import RichEditor from '$lib/components/editor/RichEditor.svelte';
@@ -8,6 +10,7 @@
 	import Challenge from '$lib/components/questions/Challenge.svelte';
 	import type { StateChallenge } from '$lib/state/challenges';
 	import {
+		deleteChallengeSolutionById,
 		updateChallengeSolution,
 		type StateChallengeSolution
 	} from '$lib/state/challengeSolutions';
@@ -16,6 +19,17 @@
 
 	export let challenge: StateChallenge;
 	export let solution: StateChallengeSolution;
+
+	let deleting = false;
+	async function onDelete() {
+		deleting = true;
+		try {
+			await deleteChallengeSolutionById(challenge.department.url, challenge.url, solution.id);
+			await goto(`${base}/challenges/${challenge.department.url}/${challenge.url}`);
+		} finally {
+			deleting = false;
+		}
+	}
 
 	let editing = false;
 	let updating = false;
@@ -26,7 +40,7 @@
 		updating = true;
 		try {
 			await updateChallengeSolution(challenge.department.url, challenge.url, solution.id, {
-				content: solution.solution
+				solution: solution.solution
 			});
 		} finally {
 			updating = false;
@@ -68,6 +82,18 @@
 	{:else}
 		<RichViewer bind:value={solution.solution} />
 	{/if}
+	{#if editing && !replying}
+		<div class="d-flex flex-row-reverse">
+			<div class="btn-group" role="group">
+				<button class="btn btn-sm btn-primary" disabled={updating} on:click={onUpdate}
+					>Update</button
+				>
+				<button class="btn btn-sm btn-secondary" disabled={updating} on:click={toggleEdit}
+					>Cancel</button
+				>
+			</div>
+		</div>
+	{/if}
 </div>
 
 <div class="d-flex justify-content-between align-items-end">
@@ -76,21 +102,10 @@
 		{#if !replying && !editing}
 			<a role="button" class="link-dark" on:click={toggleReply}>Reply to Solution</a>
 		{/if}
-		{#if editing && !replying}
-			<div class="btn-group" role="group">
-				<button class="btn btn-sm btn-primary" disabled={updating} on:click={onUpdate}
-					>Update</button
-				>
-				<button class="btn btn-sm btn-danger" disabled={updating} on:click={toggleEdit}
-					>Cancel</button
-				>
-			</div>
-		{/if}
 		{#if !editing && !replying && $currentUser?.id === solution.user.id}
 			<div class="btn-group" role="group">
-				<!-- <button class="btn btn-sm btn-danger" disabled={deletingComment} on:click={onDeleteComment}
-					>Delete</button
-				> -->
+				<button class="btn btn-sm btn-danger" disabled={deleting} on:click={onDelete}>Delete</button
+				>
 				<button class="btn btn-sm btn-primary" on:click={toggleEdit}>Edit</button>
 			</div>
 		{/if}
@@ -106,7 +121,7 @@
 	{#if replying}
 		<div class="btn-group" role="group">
 			<button class="btn btn-sm btn-primary" disabled={commenting} on:click={onReply}>Reply</button>
-			<button class="btn btn-sm btn-danger" disabled={commenting} on:click={toggleReply}
+			<button class="btn btn-sm btn-secondary" disabled={commenting} on:click={toggleReply}
 				>Cancel</button
 			>
 		</div>

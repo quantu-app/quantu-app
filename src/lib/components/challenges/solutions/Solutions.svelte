@@ -50,7 +50,7 @@
 				<button class="btn btn-sm btn-primary" disabled={creating} on:click={onCreate}
 					>Create</button
 				>
-				<button class="btn btn-sm btn-danger" disabled={creating} on:click={toggleAdd}
+				<button class="btn btn-sm btn-secondary" disabled={creating} on:click={toggleAdd}
 					>Cancel</button
 				>
 			</div>

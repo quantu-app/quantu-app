@@ -7,7 +7,8 @@
 	import {
 		voteOnChallengeSolution,
 		updateChallengeSolution,
-		type StateChallengeSolution
+		type StateChallengeSolution,
+		deleteChallengeSolutionById
 	} from '$lib/state/challengeSolutions';
 	import { base } from '$app/paths';
 	import Vote from '$lib/components/ui/Vote.svelte';
@@ -16,6 +17,16 @@
 
 	export let challenge: StateChallenge;
 	export let solution: StateChallengeSolution;
+
+	let deleting = false;
+	async function onDelete() {
+		deleting = true;
+		try {
+			await deleteChallengeSolutionById(challenge.department.url, challenge.url, solution.id);
+		} finally {
+			deleting = false;
+		}
+	}
 
 	let editing = false;
 	function toggleEdit() {
@@ -77,13 +88,18 @@
 			</div>
 			<div>
 				{#if !editing && $currentUser?.id === solution.user.id}
-					<button class="btn btn-sm btn-primary" on:click={toggleEdit}>Edit</button>
+					<div class="btn-group" role="group">
+						<button class="btn btn-sm btn-primary" on:click={toggleEdit}>Edit</button>
+						<button class="btn btn-sm btn-danger" disabled={deleting} on:click={onDelete}
+							>Delete</button
+						>
+					</div>
 				{:else if editing}
 					<div class="btn-group" role="group">
 						<button class="btn btn-sm btn-primary" disabled={updating} on:click={onUpdate}
 							>Update</button
 						>
-						<button class="btn btn-sm btn-danger" disabled={updating} on:click={toggleEdit}
+						<button class="btn btn-sm btn-secondary" disabled={updating} on:click={toggleEdit}
 							>Cancel</button
 						>
 					</div>

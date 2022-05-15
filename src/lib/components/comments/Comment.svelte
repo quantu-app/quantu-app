@@ -134,7 +134,7 @@
 						<button class="btn btn-sm btn-primary" disabled={updating} on:click={onUpdate}
 							>Update</button
 						>
-						<button class="btn btn-sm btn-danger" disabled={updating} on:click={toggleEdit}
+						<button class="btn btn-sm btn-secondary" disabled={updating} on:click={toggleEdit}
 							>Cancel</button
 						>
 					</div>
@@ -159,7 +159,7 @@
 	<div class="d-flex flex-row-reverse">
 		<div class="btn-group" role="group">
 			<button class="btn btn-sm btn-primary" disabled={commenting} on:click={onReply}>Reply</button>
-			<button class="btn btn-sm btn-danger" disabled={commenting} on:click={toggleReply}
+			<button class="btn btn-sm btn-secondary" disabled={commenting} on:click={toggleReply}
 				>Cancel</button
 			>
 		</div>

@@ -130,15 +130,30 @@ export async function deleteComment(referenceType: string, referenceId: string, 
 		throw await res.json();
 	}
 	const comment: StateComment = commentFromJSON(await res.json());
-	commentsWritable.update((state) => {
-		const index = state.findIndex((c) => c.id === comment.id);
-		if (index !== -1) {
-			state = state.slice();
-			state.splice(index, 1);
-		}
-		return state;
-	});
+	commentsWritable.update((state) => deleteCommentRecur(state.slice(), comment.id));
 	return comment;
+}
+
+export function deleteCommentsByReference(referenceType: string, referenceId: string) {
+	commentsWritable.update((state) =>
+		state.filter(
+			(comment) => comment.referenceType !== referenceType || comment.referenceId !== referenceId
+		)
+	);
+}
+
+function deleteCommentRecur(state: StateComment[], id: string): StateComment[] {
+	const index = state.findIndex((c) => c.id === id);
+	const comment = state[index];
+
+	if (comment) {
+		state.splice(index, 1);
+		for (const child of state.filter((c) => c.commentId !== id)) {
+			deleteCommentRecur(state, child.id);
+		}
+	}
+
+	return state;
 }
 
 export async function voteOnComment(

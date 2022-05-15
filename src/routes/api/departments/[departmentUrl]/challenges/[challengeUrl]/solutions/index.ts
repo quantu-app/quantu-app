@@ -1,7 +1,7 @@
 import { authenticated } from '$lib/api/auth';
 import { run } from '$lib/prisma';
 import type { Comment, PrismaClient } from '@prisma/client';
-import { CommentReferenceType } from '@prisma/client';
+import type { CommentReferenceType } from '@prisma/client';
 import { getCommentsByReferenceId } from '../../../../../comments/[referenceType]/[referenceId]';
 
 export const get = authenticated(async (event) => ({
@@ -54,7 +54,7 @@ export async function getSolutions(
 	});
 	const comments = await getCommentsByReferenceId(
 		client,
-		CommentReferenceType.CHALLENGE_SOLUTION,
+		'CHALLENGE_SOLUTION' as CommentReferenceType,
 		solutions.map((s) => s.id),
 		depth
 	);

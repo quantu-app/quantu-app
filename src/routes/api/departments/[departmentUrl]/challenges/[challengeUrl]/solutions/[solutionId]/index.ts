@@ -1,6 +1,6 @@
 import { authenticated } from '$lib/api/auth';
 import { run } from '$lib/prisma';
-import { CommentReferenceType, type PrismaClient } from '@prisma/client';
+import type { CommentReferenceType, PrismaClient } from '@prisma/client';
 import { deleteComments } from '../../../../../../comments/[referenceType]/[referenceId]/[commentId]';
 import { getCommentsByReferenceId } from '../../../../../../comments/[referenceType]/[referenceId]';
 
@@ -47,7 +47,7 @@ export async function getSolutionById(client: PrismaClient, solutionId: string, 
 	if (solution) {
 		(solution as any).comments = await getCommentsByReferenceId(
 			client,
-			CommentReferenceType.CHALLENGE_SOLUTION,
+			'CHALLENGE_SOLUTION' as CommentReferenceType,
 			solution.id,
 			depth
 		);
@@ -124,7 +124,7 @@ export async function updateSolution(
 	if (solution) {
 		(solution as any).comments = await getCommentsByReferenceId(
 			client,
-			CommentReferenceType.CHALLENGE_SOLUTION,
+			'CHALLENGE_SOLUTION' as CommentReferenceType,
 			solution.id,
 			depth
 		);
@@ -194,6 +194,6 @@ export async function deleteSolutionById(
 			}
 		}
 	});
-	await deleteComments(client, CommentReferenceType.CHALLENGE_SOLUTION, solutionId);
+	await deleteComments(client, 'CHALLENGE_SOLUTION' as CommentReferenceType, solutionId);
 	return solution;
 }

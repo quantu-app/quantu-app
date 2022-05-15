@@ -13,7 +13,7 @@ export const get = authenticated(async (event) => ({
 	status: 200
 }));
 
-export async function getChallenges(client: PrismaClient, userId: string, page?: number, size?: number, departmentId?: string) {
+export async function getChallenges(client: PrismaClient, userId: string, page?: number, size?: number, departmentUrl?: string) {
 	page = page ? page : 0;
 	size = size ? size : DEFAULT_PAGINATION_SIZE;
 
@@ -25,8 +25,8 @@ export async function getChallenges(client: PrismaClient, userId: string, page?:
 			lte: new Date()
 		}
 	};
-	if (departmentId) {
-		(where as any).departmentId = departmentId;
+	if (departmentUrl) {
+		(where as any).department = { url: departmentUrl };
 	}
 
 	const challenges = await client.challenge.findMany({

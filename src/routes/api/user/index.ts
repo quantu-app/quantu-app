@@ -7,8 +7,20 @@ export const get = authenticated((event) =>
 			where: {
 				id: event.locals.token.userId
 			},
-			include: {
-				emails: true
+			select: {
+				id: true,
+				username: true,
+				creator: true,
+				active: true,
+				emails: true,
+				confirmed: true,
+				firstName: true,
+				lastName: true,
+				birthday: true,
+				country: true,
+				bio: true,
+				createdAt: true,
+				updatedAt: true
 			}
 		})
 	).then((user) =>
@@ -29,8 +41,20 @@ export const patch = authenticated((event) =>
 				where: {
 					id: event.locals.token.userId
 				},
-				include: {
-					emails: true
+				select: {
+					id: true,
+					username: true,
+					creator: true,
+					active: true,
+					emails: true,
+					confirmed: true,
+					firstName: true,
+					lastName: true,
+					birthday: true,
+					country: true,
+					bio: true,
+					createdAt: true,
+					updatedAt: true
 				}
 			})
 		).then((user) =>

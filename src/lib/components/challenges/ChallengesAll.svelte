@@ -15,33 +15,9 @@
 
 	export let challenges: Array<StateChallenge>;
 
-	let latestChallenge: StateChallenge;
-	let previousChallenges: Array<StateChallenge> = [];
-
 	$: isFiltered = !!$state.challengeNameFilter;
 	$: filter = (challenge: StateChallenge) =>
 		$state.challengeNameFilter ? fuzzyEquals($state.challengeNameFilter, challenge.name) : true;
-
-	$: if (!isFiltered) {
-		let maxDate = new Date(null);
-		let challengeIndex = -1;
-		for (let i = 0; i < challenges.length; i++) {
-			const challengeDate = new Date(challenges[i].createdAt);
-			if (challengeDate > maxDate) {
-				maxDate = challengeDate;
-				challengeIndex = i;
-			}
-		}
-		if (challengeIndex !== -1) {
-			latestChallenge = challenges[challengeIndex];
-			const tmp = challenges.slice();
-			tmp.splice(challengeIndex, 1);
-			previousChallenges = tmp;
-		} else {
-			latestChallenge = null;
-			previousChallenges = [];
-		}
-	}
 </script>
 
 <div class="container my-4">

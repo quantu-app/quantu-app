@@ -2,6 +2,7 @@ import type { ChallengeSolution, ChallengeSolutionVote } from '@prisma/client';
 import { writable, derived } from 'svelte/store';
 import { base } from '$app/paths';
 import { addComments, commentFromJSON, deleteCommentsByReference } from './comments';
+import type { IFetch } from '$lib/utils';
 
 export type StateChallengeSolution = ChallengeSolution & {
 	user: { id: string; username: string };
@@ -36,9 +37,19 @@ export const challengeSolutionsByUrl = derived(challengeSolutionsWritable, (chal
 	}, {} as { [departmentUrl: string]: { [challengeUrl: string]: StateChallengeSolution[] } })
 );
 
-export async function showChallengeSolutionById(departmentUrl: string, url: string, id: string) {
-	const res = await fetch(
-		`${base}/api/departments/${departmentUrl}/challenges/${url}/solutions/${id}`
+export async function showChallengeSolutionById(
+	departmentUrl: string,
+	url: string,
+	id: string,
+	fetchFn: IFetch = fetch
+) {
+	const res = await fetchFn(
+		`${base}/api/departments/${departmentUrl}/challenges/${url}/solutions/${id}`,
+		{
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		}
 	);
 	if (!res.ok) {
 		throw await res.json();
@@ -50,9 +61,18 @@ export async function showChallengeSolutionById(departmentUrl: string, url: stri
 	return challengeSolution;
 }
 
-export async function showChallengeSolutions(departmentUrl: string, challengeUrl: string) {
-	const res = await fetch(
-		`${base}/api/departments/${departmentUrl}/challenges/${challengeUrl}/solutions`
+export async function showChallengeSolutions(
+	departmentUrl: string,
+	challengeUrl: string,
+	fetchFn: IFetch = fetch
+) {
+	const res = await fetchFn(
+		`${base}/api/departments/${departmentUrl}/challenges/${challengeUrl}/solutions`,
+		{
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		}
 	);
 	if (!res.ok) {
 		throw await res.json();
@@ -76,7 +96,10 @@ export async function createChallengeSolution(
 ) {
 	const res = await fetch(`${base}/api/departments/${departmentUrl}/challenges/${url}/solutions`, {
 		method: 'POST',
-		body: JSON.stringify(data)
+		body: JSON.stringify(data),
+		headers: {
+			'Content-Type': 'application/json'
+		}
 	});
 	if (!res.ok) {
 		throw await res.json();

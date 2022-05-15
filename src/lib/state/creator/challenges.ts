@@ -1,6 +1,7 @@
 import type { Challenge } from '@prisma/client';
 import { writable, derived } from 'svelte/store';
 import { base } from '$app/paths';
+import type { IFetch } from '$lib/utils';
 
 export type StateChallenge = Challenge & { department: { url: string; name: string } };
 
@@ -23,8 +24,12 @@ export const challengesByDepartmentId = derived(challengesWritable, (challenges)
 	}, {} as { [departmentId: string]: Array<StateChallenge> })
 );
 
-export async function showChallengeById(departmentId: string, id: string) {
-	const res = await fetch(`${base}/api/creator/departments/${departmentId}/challenges/${id}`);
+export async function showChallengeById(departmentId: string, id: string, fetchFn: IFetch = fetch) {
+	const res = await fetchFn(`${base}/api/creator/departments/${departmentId}/challenges/${id}`, {
+		headers: {
+			'Content-Type': 'application/json'
+		}
+	});
 	if (!res.ok) {
 		throw await res.json();
 	}
@@ -33,8 +38,12 @@ export async function showChallengeById(departmentId: string, id: string) {
 	return challenge;
 }
 
-export async function showChallenges(departmentId: string) {
-	const res = await fetch(`${base}/api/creator/departments/${departmentId}/challenges`);
+export async function showChallenges(departmentId: string, fetchFn: IFetch = fetch) {
+	const res = await fetchFn(`${base}/api/creator/departments/${departmentId}/challenges`, {
+		headers: {
+			'Content-Type': 'application/json'
+		}
+	});
 	if (!res.ok) {
 		throw await res.json();
 	}

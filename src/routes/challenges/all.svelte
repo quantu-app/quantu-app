@@ -2,8 +2,13 @@
 	import { authGuard } from '$lib/guard/authGuard';
 	import type { Load } from '@sveltejs/kit';
 
-	export const load: Load = (input) => {
-		return authGuard(input);
+	export const load: Load = async (input) => {
+		const response = authGuard(input);
+		if (!isValidStatus(response)) {
+			return response;
+		}
+		await showAllChallenges(input.fetch);
+		return response;
 	};
 
 	function sortByDate(a: StateChallenge, b: StateChallenge) {
@@ -13,22 +18,10 @@
 
 <script lang="ts">
 	import UserLayout from '$lib/components/layouts/UserLayout.svelte';
-	import { browser } from '$app/env';
-	import {
-		showAllChallenges,
-		challenges,
-		challengesByDepartment,
-		type StateChallenge
-	} from '$lib/state/challenges';
+	import { showAllChallenges, challenges, type StateChallenge } from '$lib/state/challenges';
 	import SEO from '$lib/components/SEO/index.svelte';
 	import ChallengesAll from '$lib/components/challenges/ChallengesAll.svelte';
-
-	$: topChallenges = $challenges.sort(sortByDate).slice(0, 4);
-	$: challengesByDepartments = Object.values($challengesByDepartment);
-
-	if (browser) {
-		showAllChallenges();
-	}
+	import { isValidStatus } from '$lib/guard/isValidStatus';
 </script>
 
 <SEO
@@ -39,5 +32,5 @@
 />
 
 <UserLayout>
-	<ChallengesAll challenges={$challenges} {topChallenges} {challengesByDepartments} />
+	<ChallengesAll challenges={$challenges} />
 </UserLayout>

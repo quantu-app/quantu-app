@@ -1,6 +1,8 @@
 import { random } from '@aicacia/rand';
 import { range } from '@aicacia/range';
 
+export type IFetch = (info: RequestInfo, init?: RequestInit) => Promise<Response>;
+
 function checkPrototypeProperty(obj: Record<string, unknown>) {
 	for (const key in obj) {
 		if (!Object.prototype.hasOwnProperty.call(obj, key)) {

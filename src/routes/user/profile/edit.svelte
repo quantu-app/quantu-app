@@ -2,8 +2,7 @@
 	import { authGuard } from '$lib/guard/authGuard';
 
 	export async function load(input) {
-		const response = authGuard(input);
-		return response;
+		return authGuard(input);
 	}
 </script>
 
@@ -18,7 +17,5 @@
 </svelte:head>
 
 <UserLayout>
-	{#if $currentUser}
-		<EditProfile user={$currentUser} />
-	{/if}
+	<EditProfile user={$currentUser} />
 </UserLayout>

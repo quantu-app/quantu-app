@@ -1,6 +1,7 @@
 import type { Comment, CommentVote } from '@prisma/client';
 import { writable, derived, get } from 'svelte/store';
 import { base } from '$app/paths';
+import type { IFetch } from '$lib/utils';
 
 export type StateComment = Comment & {
 	loaded: boolean;
@@ -31,12 +32,21 @@ export const commentsByReference = derived(commentsById, (commentsById) =>
 	}, {} as { [referenceType: string]: { [referenceId: string]: StateComment[] } })
 );
 
-export async function showCommentById(referenceType: string, referenceId: string, id: string) {
+export async function showCommentById(
+	referenceType: string,
+	referenceId: string,
+	id: string,
+	fetchFn: IFetch = fetch
+) {
 	const cachedComment = get(commentsById)[id];
 	if (cachedComment) {
 		return cachedComment;
 	}
-	const res = await fetch(`${base}/api/comments/${referenceType}/${referenceId}/${id}`);
+	const res = await fetchFn(`${base}/api/comments/${referenceType}/${referenceId}/${id}`, {
+		headers: {
+			'Content-Type': 'application/json'
+		}
+	});
 	if (!res.ok) {
 		throw await res.json();
 	}
@@ -45,12 +55,21 @@ export async function showCommentById(referenceType: string, referenceId: string
 	return comment;
 }
 
-export async function showCommentsById(referenceType: string, referenceId: string, id: string) {
+export async function showCommentsById(
+	referenceType: string,
+	referenceId: string,
+	id: string,
+	fetchFn: IFetch = fetch
+) {
 	const cachedComment = get(commentsById)[id];
 	if (cachedComment && cachedComment.loaded && cachedComment.comments.length) {
 		return cachedComment.comments;
 	}
-	const res = await fetch(`${base}/api/comments/${referenceType}/${referenceId}/${id}/comments`);
+	const res = await fetchFn(`${base}/api/comments/${referenceType}/${referenceId}/${id}/comments`, {
+		headers: {
+			'Content-Type': 'application/json'
+		}
+	});
 	if (!res.ok) {
 		throw await res.json();
 	}
@@ -67,17 +86,22 @@ export async function showCommentsById(referenceType: string, referenceId: strin
 	return comments;
 }
 
-export async function showComments(referenceType: string, referenceId: string) {
-	const cachedComments = get(commentsWritable).filter(
-		(comment) =>
-			comment.referenceType === referenceType &&
-			comment.referenceId === referenceId &&
-			comment.commentId === null
-	);
+export async function showComments(
+	referenceType: string,
+	referenceId: string,
+	fetchFn: IFetch = fetch
+) {
+	const cachedComments = (
+		(get(commentsByReference)[referenceType] || {})[referenceId] || []
+	).filter((comment) => comment.commentId === null);
 	if (cachedComments.length) {
 		return cachedComments;
 	}
-	const res = await fetch(`${base}/api/comments/${referenceType}/${referenceId}`);
+	const res = await fetchFn(`${base}/api/comments/${referenceType}/${referenceId}`, {
+		headers: {
+			'Content-Type': 'application/json'
+		}
+	});
 	if (!res.ok) {
 		throw await res.json();
 	}
@@ -93,7 +117,10 @@ export async function createComment(
 ) {
 	const res = await fetch(`${base}/api/comments/${referenceType}/${referenceId}`, {
 		method: 'POST',
-		body: JSON.stringify(data)
+		body: JSON.stringify(data),
+		headers: {
+			'Content-Type': 'application/json'
+		}
 	});
 	if (!res.ok) {
 		throw await res.json();

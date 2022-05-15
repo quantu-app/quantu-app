@@ -64,7 +64,7 @@ export async function updateUser(updateUser: Partial<User>) {
 	}
 }
 
-function userFromJSON(user: User): User {
+export function userFromJSON(user: User): User {
 	return {
 		...user,
 		birthday: new Date(user.birthday),

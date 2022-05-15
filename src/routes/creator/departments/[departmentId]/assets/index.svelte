@@ -1,16 +1,19 @@
 <script context="module" lang="ts">
 	import type { Load } from '@sveltejs/kit';
 
-	export const load: Load = (input) => {
+	export const load: Load = async (input) => {
 		const response = creatorGuard(input);
 
 		if (!isValidStatus(response)) {
 			return response;
 		}
+		const departmentId = input.params.departmentId;
+		const department = await showDepartmentsById(departmentId, input.fetch);
+		showChallenges(department.id, input.fetch);
 
 		return {
 			props: {
-				departmentId: input.params.departmentId
+				departmentId
 			}
 		};
 	};

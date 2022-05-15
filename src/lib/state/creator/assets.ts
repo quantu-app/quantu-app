@@ -2,7 +2,7 @@ import type { Asset } from '@prisma/client';
 import { writable, derived, get } from 'svelte/store';
 import { base } from '$app/paths';
 import mime from 'mime';
-import { readFileToArrayBuffer } from '$lib/utils';
+import { readFileToArrayBuffer, type IFetch } from '$lib/utils';
 
 interface IAssetList {
 	folders: Array<string>;
@@ -116,12 +116,16 @@ const assetsWritable = writable(new DepartmentAssetTrees());
 
 export const assets = derived(assetsWritable, (assetsWritable) => assetsWritable);
 
-export async function showAssetById(departmentId: string, id: string): Promise<Asset> {
+export async function showAssetById(
+	departmentId: string,
+	id: string,
+	fetchFn: IFetch = fetch
+): Promise<Asset> {
 	const cachedAsset = get(assetsWritable).get(departmentId).byId[id];
 	if (cachedAsset) {
 		return cachedAsset;
 	}
-	const res = await fetch(`${base}/api/creator/departments/${departmentId}/assets/crud/${id}`);
+	const res = await fetchFn(`${base}/api/creator/departments/${departmentId}/assets/crud/${id}`);
 	if (!res.ok) {
 		throw await res.json();
 	}
@@ -137,9 +141,10 @@ export async function showAssetById(departmentId: string, id: string): Promise<A
 export async function showAssets(
 	departmentId: string,
 	folder = '',
-	type?: string
+	type?: string,
+	fetchFn: IFetch = fetch
 ): Promise<Asset[]> {
-	const res = await fetch(
+	const res = await fetchFn(
 		`${base}/api/creator/departments/${departmentId}/assets/fs${folder ? `/${folder}` : folder}${
 			type ? `?type=${type}` : ''
 		}`

@@ -2,8 +2,18 @@
 	import type { LoadInput } from '@sveltejs/kit';
 
 	export async function load(input: LoadInput) {
+		const username = input.params.username;
+		const res = await input.fetch(`${base}/api/user/${username}`);
+		if (!res.ok) {
+			return {
+				status: 404
+			};
+		}
+		const user = userFromJSON(await res.json());
+
 		return {
 			props: {
+				user,
 				username: input.params.username
 			}
 		};
@@ -15,22 +25,10 @@
 	import { base } from '$app/paths';
 	import type { User } from '@prisma/client';
 	import Profile from '$lib/components/user/Profile.svelte';
-	import { onMount } from 'svelte';
+	import { userFromJSON } from '$lib/state/user';
 
 	export let username: string;
-
-	let user: User;
-	let loaded = false;
-
-	onMount(async () => {
-		user = await fetch(`${base}/api/user/${username}`).then((res) => {
-			loaded = true;
-			if (!res.ok) {
-				return null;
-			}
-			return res.json();
-		});
-	});
+	export let user: User;
 </script>
 
 <svelte:head>
@@ -38,12 +36,5 @@
 </svelte:head>
 
 <UserLayout>
-	{#if user && loaded}
-		<Profile {user} />
-	{/if}
-	{#if !user && loaded}
-		<div class="container mt-4">
-			<h1>User {username} not found.</h1>
-		</div>
-	{/if}
+	<Profile {user} />
 </UserLayout>

@@ -9,12 +9,18 @@
 		if (!isValidStatus(response)) {
 			return response;
 		}
+		const departmentUrl = input.params.departmentUrl;
+		const url = input.params.url;
+		const solutionId = input.params.solutionId;
+
+		await showChallengeByUrl(departmentUrl, url);
+		await showChallengeSolutionById(departmentUrl, url, solutionId);
 
 		return {
 			props: {
-				departmentUrl: input.params.departmentUrl,
-				url: input.params.url,
-				solutionId: input.params.solutionId
+				departmentUrl,
+				url,
+				solutionId
 			}
 		};
 	}
@@ -26,7 +32,6 @@
 	import { challengesByDepartmentUrl, showChallengeByUrl } from '$lib/state/challenges';
 	import Solution from '$lib/components/challenges/solutions/Solution.svelte';
 	import SEO from '$lib/components/SEO/index.svelte';
-	import { onMount } from 'svelte';
 	import { challengeSolutionsById, showChallengeSolutionById } from '$lib/state/challengeSolutions';
 	import ChallengeWrapper from '$lib/components/challenges/ChallengeWrapper.svelte';
 	import { base } from '$app/paths';
@@ -37,11 +42,6 @@
 
 	$: challenge = ($challengesByDepartmentUrl[departmentUrl] || {})[url];
 	$: solution = $challengeSolutionsById[solutionId];
-
-	onMount(async () => {
-		await showChallengeByUrl(departmentUrl, url);
-		await showChallengeSolutionById(departmentUrl, url, solutionId);
-	});
 </script>
 
 {#if challenge && solution}

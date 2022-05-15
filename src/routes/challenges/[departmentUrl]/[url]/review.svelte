@@ -9,11 +9,15 @@
 		if (!isValidStatus(response)) {
 			return response;
 		}
+		const departmentUrl = input.params.departmentUrl;
+		const url = input.params.url;
+
+		await showChallengeByUrl(departmentUrl, url, input.fetch);
 
 		return {
 			props: {
-				departmentUrl: input.params.departmentUrl,
-				url: input.params.url
+				departmentUrl,
+				url
 			}
 		};
 	}
@@ -25,7 +29,6 @@
 	import { challengesByDepartmentUrl, showChallengeByUrl } from '$lib/state/challenges';
 	import ReviewChallenge from '$lib/components/questions/ReviewChallenge.svelte';
 	import SEO from '$lib/components/SEO/index.svelte';
-	import { onMount } from 'svelte';
 	import ChallengeWrapper from '$lib/components/challenges/ChallengeWrapper.svelte';
 	import { base } from '$app/paths';
 
@@ -33,10 +36,6 @@
 	export let url: string;
 
 	$: challenge = ($challengesByDepartmentUrl[departmentUrl] || {})[url];
-
-	onMount(async () => {
-		await showChallengeByUrl(departmentUrl, url);
-	});
 </script>
 
 {#if challenge}

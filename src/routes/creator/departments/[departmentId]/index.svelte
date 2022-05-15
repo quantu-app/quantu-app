@@ -1,16 +1,19 @@
 <script context="module" lang="ts">
 	import type { Load } from '@sveltejs/kit';
 
-	export const load: Load = (input) => {
+	export const load: Load = async (input) => {
 		const response = creatorGuard(input);
 
 		if (!isValidStatus(response)) {
 			return response;
 		}
+		const departmentId = input.params.departmentId;
+		const department = await showDepartmentsById(departmentId, input.fetch);
+		await showChallenges(department.id, input.fetch);
 
 		return {
 			props: {
-				departmentId: input.params.departmentId
+				departmentId
 			}
 		};
 	};
@@ -23,17 +26,11 @@
 	import { isValidStatus } from '$lib/guard/isValidStatus';
 	import { departmentsById, showDepartmentsById } from '$lib/state/creator/departments';
 	import { base } from '$app/paths';
-	import { onMount } from 'svelte';
 	import { showChallenges } from '$lib/state/creator/challenges';
 
 	export let departmentId: string;
 
 	$: department = $departmentsById[departmentId];
-
-	onMount(async () => {
-		const department = await showDepartmentsById(departmentId);
-		showChallenges(department.id);
-	});
 </script>
 
 <svelte:head>

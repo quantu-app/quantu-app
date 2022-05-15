@@ -5,12 +5,14 @@ import { getChallenges } from '../departments/[departmentUrl]/challenges';
 import { getDepartments } from '../departments';
 
 export const get = authenticated(async (event) => ({
-	body: await run((client) => getTopChallenges(client, event.locals.token.userId, 4)),
+	body: await run((client) => getTopChallenges(client, event.locals.token.userId)),
 	status: 200
 }));
 
-export async function getTopChallenges(client: PrismaClient, userId: string, size: number) {
+export async function getTopChallenges(client: PrismaClient, userId: string, size = 4) {
 	const departments = await getDepartments(client);
-	const challengesByDepartment = await Promise.all(departments.map(department => getChallenges(client, userId, 0, size, department.url)));
+	const challengesByDepartment = await Promise.all(
+		departments.map((department) => getChallenges(client, userId, 0, size, department.url))
+	);
 	return challengesByDepartment.flat(1);
 }

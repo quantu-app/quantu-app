@@ -13,16 +13,13 @@
 	import { base } from '$app/paths';
 	import type { StateChallenge } from '$lib/state/challenges';
 	import { XorShiftRng } from '@aicacia/rand';
-	import { compareAsc, formatDistanceToNowStrict, isBefore, isSameDay, parseISO } from 'date-fns';
+	import { formatDistanceToNowStrict, isBefore, isSameDay } from 'date-fns';
 
 	export let challenge: StateChallenge;
-	let releasedAt: Date;
 	let today: Date = new Date();
 
 	const rng = XorShiftRng.fromSeed(new Date(challenge.createdAt).getTime());
 	const image = rng.fromArray(IMAGES).unwrap();
-
-	$: releasedAt = parseISO(challenge.releasedAt);
 </script>
 
 <div class={challenge.result ? 'card solved' : 'card'}>
@@ -56,10 +53,10 @@
 			<span class="text-uppercase">{challenge.department.name}</span><br />
 			<span>{challenge.solvers == 1 ? `1 Solver` : `${challenge.solvers} Solvers`} </span>
 			<span class="releasedAt">
-				<span class="dot-block" />{formatDistanceToNowStrict(releasedAt, {
+				<span class="dot-block" />{formatDistanceToNowStrict(challenge.releasedAt, {
 					addSuffix: false
 				})}
-				{#if !isSameDay(releasedAt, today) && isBefore(releasedAt, today)}
+				{#if !isSameDay(challenge.releasedAt, today) && isBefore(challenge.releasedAt, today)}
 					ago
 				{/if}
 			</span>

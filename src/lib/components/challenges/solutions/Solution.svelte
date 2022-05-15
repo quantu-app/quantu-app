@@ -13,14 +13,12 @@
 		updateChallengeSolution,
 		type StateChallengeSolution
 	} from '$lib/state/challengeSolutions';
-	import { comments, createComment } from '$lib/state/comments';
+	import { createComment } from '$lib/state/comments';
 	import { currentUser } from '$lib/state/user';
 	import DeleteSolution from './DeleteSolution.svelte';
 
 	export let challenge: StateChallenge;
 	export let solution: StateChallengeSolution;
-
-	$: console.log($comments);
 
 	let deleting = false;
 	async function onDelete() {

@@ -1,6 +1,7 @@
 import type { Department } from '@prisma/client';
 import { writable, derived } from 'svelte/store';
 import { base } from '$app/paths';
+import type { IFetch } from '$lib/utils';
 
 const departmentsWritable = writable<Department[]>([]);
 
@@ -19,8 +20,12 @@ export const departmentsByUrl = derived(departmentsWritable, (departments) =>
 	}, {} as { [url: string]: Department })
 );
 
-export async function showDepartmentsByUrl(url: string) {
-	const res = await fetch(`${base}/api/departments/${url}`);
+export async function showDepartmentsByUrl(url: string, fetchFn: IFetch = fetch) {
+	const res = await fetchFn(`${base}/api/departments/${url}`, {
+		headers: {
+			'Content-Type': 'application/json'
+		}
+	});
 	if (!res.ok) {
 		throw await res.json();
 	}
@@ -31,8 +36,12 @@ export async function showDepartmentsByUrl(url: string) {
 	return departments;
 }
 
-export async function showDepartments() {
-	const res = await fetch(`${base}/api/departments`);
+export async function showDepartments(fetchFn: IFetch = fetch) {
+	const res = await fetchFn(`${base}/api/departments`, {
+		headers: {
+			'Content-Type': 'application/json'
+		}
+	});
 	if (!res.ok) {
 		throw await res.json();
 	}

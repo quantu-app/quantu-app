@@ -2,6 +2,7 @@ import type { Challenge, Result } from '@prisma/client';
 import { writable, derived } from 'svelte/store';
 import { base } from '$app/paths';
 import type { Answer } from '$lib/types';
+import type { IFetch } from '../utils';
 
 export type StateChallenge = Challenge & {
 	department: { url: string; name: string };
@@ -40,8 +41,16 @@ export const challengesByDepartment = derived(challengesWritable, (challenges) =
 	}, {} as { [departmentUrl: string]: { url: string; name: string; challenges: StateChallenge[] } })
 );
 
-export async function showChallengeByUrl(departmentUrl: string, url: string) {
-	const res = await fetch(`${base}/api/departments/${departmentUrl}/challenges/${url}`);
+export async function showChallengeByUrl(
+	departmentUrl: string,
+	url: string,
+	fetchFn: IFetch = fetch
+) {
+	const res = await fetchFn(`${base}/api/departments/${departmentUrl}/challenges/${url}`, {
+		headers: {
+			'Content-Type': 'application/json'
+		}
+	});
 	if (!res.ok) {
 		throw await res.json();
 	}
@@ -50,8 +59,12 @@ export async function showChallengeByUrl(departmentUrl: string, url: string) {
 	return challenge;
 }
 
-export async function showChallenges(departmentUrl: string) {
-	const res = await fetch(`${base}/api/departments/${departmentUrl}/challenges`);
+export async function showChallenges(departmentUrl: string, fetchFn: IFetch = fetch) {
+	const res = await fetchFn(`${base}/api/departments/${departmentUrl}/challenges`, {
+		headers: {
+			'Content-Type': 'application/json'
+		}
+	});
 	if (!res.ok) {
 		throw await res.json();
 	}
@@ -62,8 +75,12 @@ export async function showChallenges(departmentUrl: string) {
 	return challenges;
 }
 
-export async function showAllChallenges() {
-	const res = await fetch(`${base}/api/challenges`);
+export async function showAllChallenges(fetchFn: IFetch = fetch) {
+	const res = await fetchFn(`${base}/api/challenges`, {
+		headers: {
+			'Content-Type': 'application/json'
+		}
+	});
 	if (!res.ok) {
 		throw await res.json();
 	}
@@ -128,7 +145,7 @@ function addOrUpdate(
 	return state;
 }
 
-function resultFromJSON(result: Result): Result {
+export function resultFromJSON(result: Result): Result {
 	return {
 		...result,
 		createdAt: new Date(result.createdAt),
@@ -136,9 +153,10 @@ function resultFromJSON(result: Result): Result {
 	};
 }
 
-function challengeFromJSON(challenge: StateChallenge): StateChallenge {
+export function challengeFromJSON(challenge: StateChallenge): StateChallenge {
 	return {
 		...challenge,
+		releasedAt: new Date(challenge.releasedAt),
 		createdAt: new Date(challenge.createdAt),
 		updatedAt: new Date(challenge.updatedAt)
 	};

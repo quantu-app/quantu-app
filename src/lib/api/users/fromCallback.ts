@@ -21,8 +21,20 @@ export async function fromCallback(prisma: PrismaClient, params: IFromCallbackPa
 				where: {
 					id: email.userId
 				},
-				include: {
-					emails: true
+				select: {
+					id: true,
+					username: true,
+					creator: true,
+					active: true,
+					emails: true,
+					confirmed: true,
+					firstName: true,
+					lastName: true,
+					birthday: true,
+					country: true,
+					bio: true,
+					createdAt: true,
+					updatedAt: true
 				}
 		  })
 		: null;
@@ -45,8 +57,20 @@ export async function fromCallback(prisma: PrismaClient, params: IFromCallbackPa
 					}
 				}
 			},
-			include: {
-				emails: true
+			select: {
+				id: true,
+				username: true,
+				creator: true,
+				active: true,
+				emails: true,
+				confirmed: true,
+				firstName: true,
+				lastName: true,
+				birthday: true,
+				country: true,
+				bio: true,
+				createdAt: true,
+				updatedAt: true
 			}
 		});
 	}

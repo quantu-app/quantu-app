@@ -1,9 +1,12 @@
 <script context="module" lang="ts">
-	import type { LoadInput, LoadOutput } from '@sveltejs/kit/types/internal';
-
-	export function load(input: LoadInput): LoadOutput {
-		return creatorGuard(input);
-	}
+	export const load: Load = async (input) => {
+		const response = creatorGuard(input);
+		if (!isValidStatus(response)) {
+			return response;
+		}
+		await showDepartments(input.fetch);
+		return response;
+	};
 </script>
 
 <script lang="ts">
@@ -11,9 +14,8 @@
 	import { creatorGuard } from '$lib/guard/creatorGuard';
 	import Departments from '$lib/components/creator/departments/Departments.svelte';
 	import { departments, showDepartments } from '$lib/state/creator/departments';
-	import { onMount } from 'svelte';
-
-	onMount(showDepartments);
+	import { isValidStatus } from '$lib/guard/isValidStatus';
+	import type { Load } from '@sveltejs/kit';
 </script>
 
 <svelte:head>

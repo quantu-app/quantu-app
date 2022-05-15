@@ -3,8 +3,7 @@
 	import type { LoadInput } from '@sveltejs/kit';
 
 	export async function load(input: LoadInput) {
-		const response = authGuard(input);
-		return response;
+		return authGuard(input);
 	}
 </script>
 
@@ -19,7 +18,5 @@
 </svelte:head>
 
 <UserLayout>
-	{#if $currentUser}
-		<Welcome user={$currentUser} />
-	{/if}
+	<Welcome user={$currentUser} />
 </UserLayout>

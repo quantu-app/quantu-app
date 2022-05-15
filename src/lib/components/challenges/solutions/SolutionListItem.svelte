@@ -7,8 +7,7 @@
 	import {
 		voteOnChallengeSolution,
 		updateChallengeSolution,
-		type StateChallengeSolution,
-		deleteChallengeSolutionById
+		type StateChallengeSolution
 	} from '$lib/state/challengeSolutions';
 	import { base } from '$app/paths';
 	import Vote from '$lib/components/ui/Vote.svelte';
@@ -17,15 +16,10 @@
 
 	export let challenge: StateChallenge;
 	export let solution: StateChallengeSolution;
+	export let onDelete: (solution: StateChallengeSolution) => void;
 
-	let deleting = false;
-	async function onDelete() {
-		deleting = true;
-		try {
-			await deleteChallengeSolutionById(challenge.department.url, challenge.url, solution.id);
-		} finally {
-			deleting = false;
-		}
+	function internalOnDelete() {
+		onDelete(solution);
 	}
 
 	let editing = false;
@@ -90,9 +84,7 @@
 				{#if !editing && $currentUser?.id === solution.user.id}
 					<div class="btn-group" role="group">
 						<button class="btn btn-sm btn-primary" on:click={toggleEdit}>Edit</button>
-						<button class="btn btn-sm btn-danger" disabled={deleting} on:click={onDelete}
-							>Delete</button
-						>
+						<button class="btn btn-sm btn-danger" on:click={internalOnDelete}>Delete</button>
 					</div>
 				{:else if editing}
 					<div class="btn-group" role="group">

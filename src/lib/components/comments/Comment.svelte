@@ -110,7 +110,7 @@
 			{#if editing}
 				<RichEditor bind:value={comment.content} showHelper placeholder="Type comment..." />
 			{:else}
-				<RichViewer bind:value={comment.content} />
+				<RichViewer bind:value={comment.content} placeholder={comment.deleted ? 'Deleted' : ''} />
 			{/if}
 		</div>
 		<div class="d-flex flex-grow-0 justify-content-between">
@@ -142,11 +142,13 @@
 				{/if}
 				{#if !editing && !replying && $currentUser?.id === comment.user.id}
 					<div class="btn-group" role="group">
-						<button
-							class="btn btn-sm btn-danger"
-							disabled={deletingComment}
-							on:click={onDeleteComment}>Delete</button
-						>
+						{#if !comment.deleted}
+							<button
+								class="btn btn-sm btn-danger"
+								disabled={deletingComment}
+								on:click={onDeleteComment}>Delete</button
+							>
+						{/if}
 						<button class="btn btn-sm btn-primary" on:click={toggleEdit}>Edit</button>
 					</div>
 				{/if}
@@ -168,5 +170,6 @@
 {/if}
 
 <div class="ps-4">
+	<hr class="mt-0" />
 	<Comments {referenceType} {referenceId} commentId={comment.id} />
 </div>

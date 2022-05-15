@@ -7,15 +7,38 @@
 	import type { StateChallenge } from '$lib/state/challenges';
 	import {
 		createChallengeSolution,
+		deleteChallengeSolutionById,
 		type StateChallengeSolution
 	} from '$lib/state/challengeSolutions';
 	import { currentUser } from '$lib/state/user';
+	import DeleteSolution from './DeleteSolution.svelte';
 	import SolutionList from './SolutionList.svelte';
 
 	export let challenge: StateChallenge;
 	export let solutions: StateChallengeSolution[];
 
 	$: userSolution = solutions.find((solution) => solution.userId === $currentUser?.id);
+
+	let deleting = false;
+	let solutionToDelete: StateChallengeSolution | undefined;
+	function setSolutionToDelete(solution: StateChallengeSolution) {
+		solutionToDelete = solution;
+		window.bootstrap.Modal.getOrCreateInstance('#delete-solution').show();
+	}
+	async function onDelete() {
+		deleting = true;
+		try {
+			await deleteChallengeSolutionById(
+				challenge.department.url,
+				challenge.url,
+				solutionToDelete.id
+			);
+			solutionToDelete = undefined;
+			window.bootstrap.Modal.getOrCreateInstance('#delete-solution').hide();
+		} finally {
+			deleting = false;
+		}
+	}
 
 	let adding = false;
 	function toggleAdd() {
@@ -24,9 +47,10 @@
 	let solution: any[] = [];
 	let creating = false;
 	async function onCreate() {
-		creating = false;
+		creating = true;
 		try {
 			await createChallengeSolution(challenge.department.url, challenge.url, { solution });
+			solution = [];
 			adding = false;
 		} finally {
 			creating = false;
@@ -62,4 +86,5 @@
 
 <hr />
 
-<SolutionList {challenge} {solutions} />
+<SolutionList {challenge} {solutions} onDelete={setSolutionToDelete} />
+<DeleteSolution {onDelete} />

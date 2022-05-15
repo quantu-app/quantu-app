@@ -99,7 +99,7 @@ export async function createComment(
 		throw await res.json();
 	}
 	const comment: StateComment = commentFromJSON(await res.json());
-	commentsWritable.update((comments) => addOrUpdate(comments.slice(), comment));
+	commentsWritable.update((state) => addOrUpdate(state.slice(), comment));
 	return comment;
 }
 
@@ -129,7 +129,7 @@ export async function deleteComment(referenceType: string, referenceId: string, 
 		throw await res.json();
 	}
 	const comment: StateComment = commentFromJSON(await res.json());
-	commentsWritable.update((state) => deleteCommentRecur(state.slice(), comment.id));
+	commentsWritable.update((state) => addOrUpdate(state.slice(), comment));
 	return comment;
 }
 
@@ -139,20 +139,6 @@ export function deleteCommentsByReference(referenceType: string, referenceId: st
 			(comment) => comment.referenceType !== referenceType || comment.referenceId !== referenceId
 		)
 	);
-}
-
-function deleteCommentRecur(state: StateComment[], id: string): StateComment[] {
-	const index = state.findIndex((c) => c.id === id);
-	const comment = state[index];
-
-	if (comment) {
-		state.splice(index, 1);
-		for (const child of state.filter((c) => c.commentId !== id)) {
-			deleteCommentRecur(state, child.id);
-		}
-	}
-
-	return state;
 }
 
 export async function voteOnComment(
@@ -195,12 +181,24 @@ export function addComments(comments: Array<StateComment>) {
 	);
 }
 
-function addOrUpdate(state: Array<StateComment>, comment: StateComment): Array<StateComment> {
-	const index = state.findIndex((c) => c.id === comment.id);
-	if (index === -1) {
-		state.push(comment);
-	} else {
-		state[index] = comment;
+function addOrUpdate(
+	state: Array<StateComment>,
+	comment: StateComment,
+	isTopLevel = true
+): Array<StateComment> {
+	if (comment.commentId) {
+		const parentIndex = state.findIndex((c) => c.id === comment.commentId);
+		if (parentIndex !== -1) {
+			const parent = state[parentIndex];
+			const parentComments = parent.comments.slice();
+			const commentParentIndex = parentComments.findIndex((c) => c.id === comment.id);
+			if (commentParentIndex === -1) {
+				parentComments.push(comment);
+			} else {
+				parentComments[commentParentIndex] = comment;
+			}
+			state[parentIndex] = { ...parent, comments: parentComments };
+		}
 	}
 	const comments = state.filter((c) => c.commentId === comment.id);
 	if (comments.length || comment.comments.length) {
@@ -211,10 +209,19 @@ function addOrUpdate(state: Array<StateComment>, comment: StateComment): Array<S
 			} else {
 				comments[childIndex] = child;
 			}
-			addOrUpdate(state, child);
+			addOrUpdate(state, child, false);
 		}
 		comment.comments = comments;
 		comment.loaded = true;
+	}
+	if (isTopLevel) {
+		comment.loaded = true;
+	}
+	const index = state.findIndex((c) => c.id === comment.id);
+	if (index === -1) {
+		state.push(comment);
+	} else {
+		state[index] = comment;
 	}
 	return state;
 }

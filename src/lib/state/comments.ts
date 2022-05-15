@@ -3,8 +3,10 @@ import { writable, derived, get } from 'svelte/store';
 import { base } from '$app/paths';
 
 export type StateComment = Comment & {
+	loaded: boolean;
 	user: { id: string; username: string };
 	votes: CommentVote[];
+	comments: StateComment[];
 	children: StateComment[];
 };
 
@@ -67,7 +69,15 @@ export async function showCommentsById(referenceType: string, referenceId: strin
 		throw await res.json();
 	}
 	const comments: Array<StateComment> = (await res.json()).map(commentFromJSON);
-	addComments(comments);
+	commentsWritable.update((state) => {
+		const index = state.findIndex((c) => c.id === id);
+		const comment = state[index];
+		if (comment) {
+			state[index] = { ...comment, loaded: true };
+		}
+		state = comments.reduce((state, comment) => addOrUpdate(state, comment), state.slice());
+		return state;
+	});
 	return comments;
 }
 
@@ -203,13 +213,19 @@ function addOrUpdate(state: Array<StateComment>, comment: StateComment): Array<S
 	} else {
 		state[index] = comment;
 	}
+	for (const child of comment.comments) {
+		addOrUpdate(state, child);
+	}
 	return state;
 }
 
 export function commentFromJSON(comment: StateComment): StateComment {
+	const comments = (comment.comments || []).map(commentFromJSON);
 	return {
 		...comment,
 		children: [],
+		loaded: !!comments.length,
+		comments,
 		votes: comment.votes.map(commentVoteFromJSON),
 		createdAt: new Date(comment.createdAt),
 		updatedAt: new Date(comment.updatedAt)

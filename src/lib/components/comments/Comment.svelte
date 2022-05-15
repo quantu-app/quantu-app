@@ -122,9 +122,10 @@
 				<TimeDisplay value={comment.createdAt} />
 			</div>
 			<div>
-				{#if !comment.children.length}
+				{#if !comment.loaded}
 					<a role="button" class="link-dark" on:click={loadMore} disabled={loadingMore}>Load More</a
 					>
+					{#if !editing && !replying} |{/if}
 				{/if}
 				{#if !editing && !replying}
 					<a role="button" class="link-dark" on:click={toggleReply}>Reply to Comment</a>

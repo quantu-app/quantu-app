@@ -10,7 +10,7 @@ export const get = authenticated(async (event) => ({
 			event.params.referenceType as CommentReferenceType,
 			event.params.referenceId,
 			event.params.commentId,
-			parseInt(event.url.searchParams.get('depth') || '3')
+			parseInt(event.url.searchParams.get('depth') || '2')
 		)
 	),
 	status: 200

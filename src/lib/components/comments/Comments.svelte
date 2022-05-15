@@ -1,13 +1,7 @@
 <svelte:options immutable />
 
 <script lang="ts">
-	import {
-		commentsTree,
-		showComments,
-		showCommentsById,
-		type StateComment
-	} from '$lib/state/comments';
-	import { onMount } from 'svelte';
+	import { commentsTree, type StateComment } from '$lib/state/comments';
 	import Comment from './Comment.svelte';
 
 	export let referenceId: string;
@@ -21,24 +15,6 @@
 	} else {
 		comments = Object.values(commentsByReferenceId).filter((comment) => comment.commentId === null);
 	}
-
-	let loading = false;
-	async function getComments() {
-		if (loading) {
-			return;
-		}
-		loading = true;
-		try {
-			if (commentId) {
-				await showCommentsById(referenceType, referenceId, commentId);
-			} else {
-				await showComments(referenceType, referenceId);
-			}
-		} finally {
-			loading = false;
-		}
-	}
-	onMount(getComments);
 </script>
 
 <ul class="list-group list-group-flush">

@@ -8,7 +8,7 @@ export const get = authenticated(async (event) => ({
 			client,
 			event.params.referenceType as CommentReferenceType,
 			event.params.referenceId,
-			parseInt(event.url.searchParams.get('depth') || '3')
+			parseInt(event.url.searchParams.get('depth') || '2')
 		)
 	),
 	status: 200
@@ -48,7 +48,17 @@ export async function getCommentsByReferenceId(
 
 export function createNestedIncludeRecur(depth: number) {
 	if (depth <= 0) {
-		return true;
+		return {
+			include: {
+				votes: true,
+				user: {
+					select: {
+						id: true,
+						username: true
+					}
+				}
+			}
+		};
 	} else {
 		return {
 			include: {

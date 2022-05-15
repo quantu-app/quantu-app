@@ -9,7 +9,7 @@ export const get = authenticated(async (event) => {
 		getSolutionById(
 			client,
 			event.params.solutionId,
-			parseInt(event.url.searchParams.get('depth') || '3')
+			parseInt(event.url.searchParams.get('depth') || '2')
 		)
 	);
 	return {
@@ -64,7 +64,7 @@ export const patch = authenticated(async (event) => ({
 			event.params.solutionId,
 			event.locals.token.userId,
 			await event.request.json(),
-			parseInt(event.url.searchParams.get('depth') || '3')
+			parseInt(event.url.searchParams.get('depth') || '2')
 		)
 	),
 	status: 200

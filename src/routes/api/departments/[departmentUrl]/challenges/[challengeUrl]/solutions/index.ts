@@ -10,7 +10,7 @@ export const get = authenticated(async (event) => ({
 			client,
 			event.params.departmentUrl,
 			event.params.challengeUrl,
-			parseInt(event.url.searchParams.get('depth') || '3')
+			parseInt(event.url.searchParams.get('depth') || '2')
 		)
 	),
 	status: 200

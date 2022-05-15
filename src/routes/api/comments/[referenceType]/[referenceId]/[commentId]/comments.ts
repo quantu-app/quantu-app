@@ -1,7 +1,7 @@
 import { authenticated } from '$lib/api/auth';
 import { run } from '$lib/prisma';
 import type { PrismaClient, CommentReferenceType } from '@prisma/client';
-import { createNestedIncludeRecur } from '../';
+import { createNestedIncludeRecur } from '..';
 
 export const get = authenticated(async (event) => ({
 	body: await run((client) =>

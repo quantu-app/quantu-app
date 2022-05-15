@@ -1,20 +1,15 @@
 <svelte:options immutable />
 
 <script lang="ts">
-	import { commentsTree, type StateComment } from '$lib/state/comments';
+	import { commentsByReference } from '$lib/state/comments';
 	import Comment from './Comment.svelte';
 
 	export let referenceId: string;
 	export let referenceType: string;
 	export let commentId: string = null;
 
-	let comments: StateComment[] = [];
-	$: commentsByReferenceId = ($commentsTree[referenceType] || {})[referenceId] || {};
-	$: if (commentId) {
-		comments = commentsByReferenceId[commentId]?.children || [];
-	} else {
-		comments = Object.values(commentsByReferenceId).filter((comment) => comment.commentId === null);
-	}
+	$: byReference = ($commentsByReference[referenceType] || {})[referenceId] || [];
+	$: comments = byReference.filter((comment) => comment.commentId === commentId);
 </script>
 
 <ul class="list-group list-group-flush">

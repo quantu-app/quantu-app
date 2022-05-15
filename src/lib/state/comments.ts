@@ -7,43 +7,29 @@ export type StateComment = Comment & {
 	user: { id: string; username: string };
 	votes: CommentVote[];
 	comments: StateComment[];
-	children: StateComment[];
 };
-
-export interface StateCommentTree {
-	[referenceType: string]: {
-		[referenceId: string]: { [commentId: string]: StateComment };
-	};
-}
 
 export const commentsWritable = writable<Array<StateComment>>([]);
 
-export const comments = derived(commentsWritable, (comments) => comments.slice());
+export const comments = derived(commentsWritable, (comments) => comments);
 
 export const commentsById = derived(commentsWritable, (comments) =>
 	comments.reduce((byId, comment) => {
-		comment.children = [];
 		byId[comment.id] = comment;
 		return byId;
 	}, {} as { [id: string]: StateComment })
 );
-export const commentsTree = derived(commentsById, (commentsById) => {
-	return Object.values(commentsById).reduce((commentTree, comment) => {
-		comment = { ...comment };
-		const referenceType =
-			commentTree[comment.referenceType] || (commentTree[comment.referenceType] = {});
-		const referenceComments =
-			referenceType[comment.referenceId] || (referenceType[comment.referenceId] = {});
-		if (comment.commentId) {
-			const parentComment = commentsById[comment.commentId];
-			if (parentComment) {
-				parentComment.children.push(comment);
-			}
-		}
-		referenceComments[comment.id] = comment;
-		return commentTree;
-	}, {} as StateCommentTree);
-});
+
+export const commentsByReference = derived(commentsById, (commentsById) =>
+	Object.values(commentsById).reduce((byReference, comment) => {
+		const byReferenceType =
+			byReference[comment.referenceType] || (byReference[comment.referenceType] = {});
+		const byReferenceId =
+			byReferenceType[comment.referenceId] || (byReferenceType[comment.referenceId] = []);
+		byReferenceId.push(comment);
+		return byReference;
+	}, {} as { [referenceType: string]: { [referenceId: string]: StateComment[] } })
+);
 
 export async function showCommentById(referenceType: string, referenceId: string, id: string) {
 	const cachedComment = get(commentsById)[id];
@@ -60,11 +46,11 @@ export async function showCommentById(referenceType: string, referenceId: string
 }
 
 export async function showCommentsById(referenceType: string, referenceId: string, id: string) {
-	const cachedComment = ((get(commentsTree)[referenceType] || {})[referenceId] || {})[id];
-	if (cachedComment && cachedComment.children.length) {
-		return cachedComment.children;
+	const cachedComment = get(commentsById)[id];
+	if (cachedComment && cachedComment.loaded && cachedComment.comments.length) {
+		return cachedComment.comments;
 	}
-	const res = await fetch(`${base}/api/comments/${referenceType}/${referenceId}/${id}/children`);
+	const res = await fetch(`${base}/api/comments/${referenceType}/${referenceId}/${id}/comments`);
 	if (!res.ok) {
 		throw await res.json();
 	}
@@ -82,9 +68,12 @@ export async function showCommentsById(referenceType: string, referenceId: strin
 }
 
 export async function showComments(referenceType: string, referenceId: string) {
-	const cachedComments = Object.values(
-		(get(commentsTree)[referenceType] || {})[referenceId] || {}
-	).filter((comment) => comment.commentId === null);
+	const cachedComments = get(commentsWritable).filter(
+		(comment) =>
+			comment.referenceType === referenceType &&
+			comment.referenceId === referenceId &&
+			comment.commentId === null
+	);
 	if (cachedComments.length) {
 		return cachedComments;
 	}
@@ -213,19 +202,28 @@ function addOrUpdate(state: Array<StateComment>, comment: StateComment): Array<S
 	} else {
 		state[index] = comment;
 	}
-	for (const child of comment.comments) {
-		addOrUpdate(state, child);
+	const comments = state.filter((c) => c.commentId === comment.id);
+	if (comments.length || comment.comments.length) {
+		for (const child of comment.comments) {
+			const childIndex = comments.findIndex((c) => c.id === child.id);
+			if (childIndex === -1) {
+				comments.push(child);
+			} else {
+				comments[childIndex] = child;
+			}
+			addOrUpdate(state, child);
+		}
+		comment.comments = comments;
+		comment.loaded = true;
 	}
 	return state;
 }
 
 export function commentFromJSON(comment: StateComment): StateComment {
-	const comments = (comment.comments || []).map(commentFromJSON);
 	return {
 		...comment,
-		children: [],
-		loaded: !!comments.length,
-		comments,
+		loaded: false,
+		comments: (comment.comments || []).map(commentFromJSON),
 		votes: comment.votes.map(commentVoteFromJSON),
 		createdAt: new Date(comment.createdAt),
 		updatedAt: new Date(comment.updatedAt)

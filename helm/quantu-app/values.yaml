@@ -47,3 +47,10 @@ mongodb:
   persistence:
     enabled: true
     storageClass: linode-block-storage-retain
+  externalAccess:
+    enabled: true
+    create: true
+    service.type: LoadBalancer
+    service.port: 27017
+    autoDiscovery:
+      enabled: true

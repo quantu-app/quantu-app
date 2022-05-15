@@ -26,6 +26,19 @@ export const challengesByDepartmentUrl = derived(challengesWritable, (challenges
 		return byDepartmentUrl;
 	}, {} as { [departmentUrl: string]: { [url: string]: StateChallenge } })
 );
+export const challengesByDepartment = derived(challengesWritable, (challenges) =>
+	challenges.reduce((state, challenge) => {
+		const byDepartmentUrl =
+			state[challenge.department.url] ||
+			(state[challenge.department.url] = {
+				url: challenge.department.url,
+				name: challenge.department.name,
+				challenges: []
+			});
+		byDepartmentUrl.challenges.push(challenge);
+		return state;
+	}, {} as { [departmentUrl: string]: { url: string; name: string; challenges: StateChallenge[] } })
+);
 
 export async function showChallengeByUrl(departmentUrl: string, url: string) {
 	const res = await fetch(`${base}/api/departments/${departmentUrl}/challenges/${url}`);

@@ -13,78 +13,90 @@
 	import { base } from '$app/paths';
 	import type { StateChallenge } from '$lib/state/challenges';
 	import { XorShiftRng } from '@aicacia/rand';
-	import { format } from 'date-fns';
-	import RichViewer from '$lib/components/editor/RichViewer.svelte';
-	import Asset from '../creator/assets/Asset.svelte';
+	import { compareAsc, formatDistanceToNowStrict, isBefore, isSameDay } from 'date-fns';
 
 	export let challenge: StateChallenge;
-
-	$: date = format(new Date(challenge.releasedAt || challenge.createdAt), 'PPPP');
 
 	const rng = XorShiftRng.fromSeed(new Date(challenge.createdAt).getTime());
 	const image = rng.fromArray(IMAGES).unwrap();
 </script>
 
-<div class="row my-4 px-4">
-	<p class="text-center">{date}</p>
-	<div class="challenge-card col-12 border p-4">
-		<div class="row">
-			<div class="col-lg-6 text-center">
-				<img
-					src={challenge.logoId ? `${base}/api/assets/${challenge.logoId}` : image}
-					alt={challenge.name}
-					class="img-fluid"
+<div class={challenge.result ? 'card solved' : 'card'}>
+	<img
+		src={challenge.logoId ? `${base}/api/assets/${challenge.logoId}` : image}
+		alt={challenge.name}
+		class="card-img-top"
+	/>
+	<div class="card-body">
+		<h5 class="card-title mt-4 mt-lg-0 mb-0">{challenge.name}</h5>
+		<div class="text-end">
+			{#if challenge.result}
+				<a
+					role="button"
+					aria-label="review"
+					class="text-success stretched-link"
+					href={`${base}/challenges/${challenge.department.url}/${challenge.url}/review`}
 				/>
-			</div>
-			<div class="col-lg-6">
-				<h2 class="challenge-name mt-4 mt-lg-0">{challenge.name}</h2>
-				<p class="challenge-description"><RichViewer value={challenge.description} /></p>
-			</div>
-		</div>
-		<div class="row">
-			<div class="col-6">
-				<div class="text-muted mt-3">
-					<span class="text-uppercase">{challenge.department.name}</span> |
-					<span>{challenge.solvers == 1 ? `1 Solver` : `${challenge.solvers} Solvers`} </span>
-				</div>
-			</div>
-
-			<div class="col-6 text-end">
-				{#if challenge.result}
-					<a
-						role="button"
-						class="btn btn-primary"
-						href={`${base}/challenges/${challenge.department.url}/${challenge.url}/review`}
-						>Solved</a
-					>
-				{:else}
-					<a
-						role="button"
-						class="btn btn-primary"
-						href={`${base}/challenges/${challenge.department.url}/${challenge.url}`}>Solve</a
-					>
-				{/if}
-			</div>
+			{:else}
+				<a
+					role="button"
+					aria-label="solve"
+					class="stretched-link"
+					href={`${base}/challenges/${challenge.department.url}/${challenge.url}`}
+				/>
+			{/if}
 		</div>
 	</div>
-	{#if challenge.result}
-		<div class="col-12 completion-bar" />
-	{/if}
+	<div class="card-footer">
+		<div class="text-muted card-footer-info">
+			<span class="text-uppercase">{challenge.department.name}</span><br />
+			<span>{challenge.solvers == 1 ? `1 Solver` : `${challenge.solvers} Solvers`} </span>
+			<span class="releasedAt">
+				<span class="dot-block" />{formatDistanceToNowStrict(new Date(challenge.releasedAt), {
+					addSuffix: false
+				})}
+				{#if !isSameDay(challenge.releasedAt, new Date()) && isBefore(new Date(challenge.releasedAt), new Date())}
+					ago
+				{/if}
+			</span>
+			{#if challenge.result}
+				<i class="bi fs-4 bi-check-circle-fill text-success solved-check" />
+			{/if}
+		</div>
+	</div>
 </div>
 
 <style>
-	.challenge-name {
-		font-size: 32px;
-		font-weight: bold;
+	.card {
+		height: 300px;
+		transition: all 0.2s ease;
+		cursor: pointer;
 	}
-	.challenge-description {
-		font-size: 20px;
-		line-height: 1.2em;
-		text-overflow: ellipsis;
+	.card.solved {
+		border: 1px solid #42d12a;
 	}
-	.completion-bar {
-		background: #8be59c;
-		height: 12px;
-		border: 1px solid #707070;
+	.card.solved:hover {
+		box-shadow: 2px 3px 3px 1px rgb(197, 228, 197);
+	}
+	.card:hover {
+		box-shadow: 2px 3px 3px 1px #e0e0e0;
+		transform: scale(1.02);
+	}
+	.card-footer {
+		background-color: white;
+		border: none;
+	}
+	.card-footer-info {
+		font-size: 13px;
+	}
+	.solved-check {
+		position: absolute;
+		right: 15px;
+		bottom: 0px;
+	}
+
+	.dot-block:after {
+		content: '•';
+		margin: 0 4px;
 	}
 </style>

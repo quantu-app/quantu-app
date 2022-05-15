@@ -11,7 +11,6 @@
 <script lang="ts">
 	import ChallengeList from '$lib/components/challenges/ChallengeList.svelte';
 	import { fuzzyEquals } from '@aicacia/string-fuzzy_equals';
-	import Search from '$lib/components/Search.svelte';
 	import type { StateChallenge } from '$lib/state/challenges';
 
 	export let challenges: Array<StateChallenge>;
@@ -46,17 +45,11 @@
 </script>
 
 <div class="container my-4">
-	{#if latestChallenge}
+	{#if challenges.length}
 		<div class="row">
-			<h2>Latest Challenge</h2>
+			<h2>All Challenges</h2>
 
-			<ChallengeList challenges={[latestChallenge]} />
-		</div>
-	{/if}
-	{#if previousChallenges.length}
-		<div class="row mt-4">
-			<h2>Previous Challenges</h2>
-			<ChallengeList challenges={previousChallenges} />
+			<ChallengeList {challenges} />
 		</div>
 	{/if}
 </div>

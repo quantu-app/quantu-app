@@ -118,8 +118,6 @@
 	</div>
 </div>
 
-<hr class="mt-0" />
-
 {#if replying}
 	<RichEditor bind:value={comment} showHelper />
 {/if}

@@ -44,6 +44,19 @@ export async function showDepartments(fetchFn: IFetch = fetch) {
 	return departments;
 }
 
+export async function validDepartmentUrl(url: string) {
+	const res = await fetch(`${base}/api/creator/departments/by-url/${url}`, {
+		headers: {
+			'Content-Type': 'application/json'
+		}
+	});
+	if (!res.ok) {
+		return true;
+	} else {
+		return false;
+	}
+}
+
 export async function createDepartment(body: Partial<Department>) {
 	const res = await fetch(`${base}/api/creator/departments`, {
 		method: 'POST',

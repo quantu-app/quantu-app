@@ -38,6 +38,22 @@ export async function showChallengeById(departmentId: string, id: string, fetchF
 	return challenge;
 }
 
+export async function validChallengeUrl(departmentId: string, url: string) {
+	const res = await fetch(
+		`${base}/api/creator/departments/${departmentId}/challenges/by-url/${url}`,
+		{
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		}
+	);
+	if (!res.ok) {
+		return true;
+	} else {
+		return false;
+	}
+}
+
 export async function showChallenges(departmentId: string, fetchFn: IFetch = fetch) {
 	const res = await fetchFn(`${base}/api/creator/departments/${departmentId}/challenges`, {
 		headers: {

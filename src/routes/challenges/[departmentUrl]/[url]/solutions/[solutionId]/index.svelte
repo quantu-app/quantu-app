@@ -13,8 +13,8 @@
 		const url = input.params.url;
 		const solutionId = input.params.solutionId;
 
-		await showChallengeByUrl(departmentUrl, url);
-		await showChallengeSolutionById(departmentUrl, url, solutionId);
+		await showChallengeByUrl(departmentUrl, url, input.fetch);
+		await showChallengeSolutionById(departmentUrl, url, solutionId, input.fetch);
 
 		return {
 			props: {

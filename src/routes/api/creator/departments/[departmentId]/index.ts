@@ -12,7 +12,7 @@ export const get = isCreator((event) => {
 		})
 	).then((department) => ({
 		body: department,
-		status: 200
+		status: department ? 200 : 404
 	}));
 });
 
@@ -29,7 +29,7 @@ export const patch = isCreator(async (event) => {
 		})
 	).then((department) => ({
 		body: department,
-		status: 200
+		status: department ? 200 : 400
 	}));
 });
 
@@ -42,7 +42,8 @@ export const del = isCreator((event) => {
 				id: departmentId
 			}
 		})
-	).then(() => ({
-		status: 204
+	).then((department) => ({
+		body: department,
+		status: 200
 	}));
 });

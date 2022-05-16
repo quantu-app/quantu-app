@@ -1,5 +1,6 @@
 <script lang="ts">
-	import type { StateChallenge } from '$lib/state/creator/challenges';
+	import { debounce } from '@aicacia/debounce';
+	import { validChallengeUrl, type StateChallenge } from '$lib/state/creator/challenges';
 	import PromptEditor from '../prompts/PromptEditor.svelte';
 	import RichEditor from '$lib/components/editor/RichEditor.svelte';
 	import DateTimeInput from '../../ui/DateTimeInput.svelte';
@@ -11,11 +12,26 @@
 
 	const MAX_NAME_LEN: number = 50;
 
+	let challengeUrl = challenge.url;
 	let validUrl: boolean = false;
 
 	$: prompt = challenge.prompt as any;
 	$: validUrl = isUrlSafe(challenge.url);
 	$: nameTooLong = (challenge.name || '').length > MAX_NAME_LEN;
+
+	let validatingUrl = false;
+	async function onUrlChange() {
+		if (!validUrl || validatingUrl || challengeUrl === challenge.url) {
+			return;
+		}
+		validatingUrl = true;
+		try {
+			validUrl = await validChallengeUrl(challenge.departmentId, challenge.url);
+		} finally {
+			validatingUrl = false;
+		}
+	}
+	const debouncedOnUrlChange = debounce(onUrlChange, 300);
 </script>
 
 <div class="row">
@@ -24,7 +40,8 @@
 		<input
 			id="challenge-name"
 			type="text"
-			class={`form-control${nameTooLong ? ' is-invalid' : ''}`}
+			class="form-control"
+			class:is-invalid={nameTooLong}
 			placeholder="Challenge Name"
 			{disabled}
 			bind:value={challenge.name}
@@ -40,10 +57,12 @@
 		<input
 			id="challenge-url"
 			type="text"
-			class={`form-control${validUrl ? '' : ' is-invalid'}`}
+			class="form-control"
+			class:is-invalid={!validUrl}
 			placeholder="Challenge Url"
 			{disabled}
 			bind:value={challenge.url}
+			on:input={debouncedOnUrlChange}
 		/>
 	</div>
 	<div class="col-md">

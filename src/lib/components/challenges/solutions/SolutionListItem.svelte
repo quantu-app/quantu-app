@@ -48,10 +48,6 @@
 			yourVote = vote.vote;
 		}
 	}
-	$: voteCount = solution.votes.reduce(
-		(acc, vote) => acc + (vote.vote === true ? 1 : vote.vote === false ? -1 : 0),
-		0
-	);
 	async function onVote(vote: boolean | null) {
 		voting = true;
 		try {
@@ -64,7 +60,7 @@
 
 <div class="d-flex flex-row">
 	<div class="flex-grow-0">
-		<Vote vote={yourVote} count={voteCount} {onVote} disabled={voting} />
+		<Vote vote={yourVote} votes={solution.votes} {onVote} disabled={voting} />
 	</div>
 	<div class="flex-grow-1 d-flex flex-column">
 		<div class="flex-grow-1">

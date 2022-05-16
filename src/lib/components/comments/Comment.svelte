@@ -87,10 +87,6 @@
 			yourVote = vote.vote;
 		}
 	}
-	$: voteCount = comment.votes.reduce(
-		(acc, vote) => acc + (vote.vote === true ? 1 : vote.vote === false ? -1 : 0),
-		0
-	);
 	async function onVote(vote: boolean | null) {
 		voting = true;
 		try {
@@ -103,7 +99,7 @@
 
 <div class="d-flex flex-row">
 	<div class="flex-grow-0">
-		<Vote vote={yourVote} count={voteCount} {onVote} disabled={comment.deleted || voting} />
+		<Vote vote={yourVote} votes={comment.votes} {onVote} disabled={comment.deleted || voting} />
 	</div>
 	<div class="flex-grow-1 d-flex flex-column">
 		<div class="flex-grow-1">
@@ -170,6 +166,5 @@
 {/if}
 
 <div class="ps-4">
-	<hr class="mt-0" />
 	<Comments {referenceType} {referenceId} commentId={comment.id} />
 </div>

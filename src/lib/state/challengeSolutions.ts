@@ -157,7 +157,7 @@ export async function voteOnChallengeSolution(
 		const index = state.findIndex((c) => c.id === challengeSolutionVote.challengeSolutionId);
 		const challengeSolution = state[index];
 
-		if (challengeSolution) {
+		if (index !== -1) {
 			const voteIndex = challengeSolution.votes.findIndex((v) => v.id === challengeSolutionVote.id);
 			const votes = challengeSolution.votes.slice();
 

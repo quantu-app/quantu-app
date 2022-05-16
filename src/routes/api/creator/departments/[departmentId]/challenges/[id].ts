@@ -18,8 +18,8 @@ export const get = isCreator((event) => {
 				}
 			}
 		})
-	).then((department) => ({
-		body: department,
+	).then((challenge) => ({
+		body: challenge,
 		status: 200
 	}));
 });
@@ -43,8 +43,8 @@ export const patch = isCreator(async (event) => {
 				}
 			}
 		})
-	).then((department) => ({
-		body: department,
+	).then((challenge) => ({
+		body: challenge,
 		status: 200
 	}));
 });
@@ -66,7 +66,8 @@ export const del = isCreator((event) => {
 				}
 			}
 		})
-	).then(() => ({
-		status: 204
+	).then((challenge) => ({
+		body: challenge,
+		status: 200
 	}));
 });

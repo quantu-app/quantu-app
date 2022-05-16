@@ -73,11 +73,11 @@
 			<h2>{challenge.name}</h2>
 			{#if challenge.result}
 				<ReviewChallenge result={challenge.result}>
-					<div slot="extra">
-						<a role="button" class="btn btn-outline-primary mt-2" href={`${base}/challenges`}>
+					<svelte:fragment slot="extra">
+						<a role="button" class="btn btn-outline-primary" href={`${base}/challenges`}>
 							Return to Challenges
 						</a>
-					</div>
+					</svelte:fragment>
 				</ReviewChallenge>
 			{/if}
 		</ChallengeWrapper>

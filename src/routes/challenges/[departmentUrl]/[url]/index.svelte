@@ -60,18 +60,18 @@
 		<ChallengeWrapper {challenge}>
 			<h2>{challenge.name}</h2>
 			<Challenge {challenge}>
-				<div slot="extra">
-					<a role="button" class="btn btn-outline-primary mt-2" href={`${base}/challenges`}>
+				<svelte:fragment slot="extra">
+					<a role="button" class="btn btn-outline-primary" href={`${base}/challenges`}>
 						Return to Challenges
 					</a>
 					<a
 						role="button"
-						class="btn btn-outline-primary mt-2"
+						class="btn btn-outline-primary"
 						href={`${base}/challenges/${challenge.department.url}/${challenge.url}/solutions`}
 					>
 						Solutions
 					</a>
-				</div>
+				</svelte:fragment>
 			</Challenge>
 		</ChallengeWrapper>
 	{/if}

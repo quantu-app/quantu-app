@@ -38,7 +38,7 @@
 	}
 </script>
 
-<div class="container my-4">
+<div class="container my-4 mb-8">
 	{#if topChallenges.length}
 		<div class="row">
 			<h2>Newest Challenges</h2>

@@ -20,7 +20,7 @@
 		$state.challengeNameFilter ? fuzzyEquals($state.challengeNameFilter, challenge.name) : true;
 </script>
 
-<div class="container my-4">
+<div class="container my-4 mb-8">
 	{#if challenges.length}
 		<div class="row">
 			<h2>All Challenges</h2>

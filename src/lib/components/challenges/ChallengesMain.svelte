@@ -46,7 +46,10 @@
 			<ChallengeList challenges={topChallenges} />
 		</div>
 		<div class="row mt-3 text-end">
-			<a href="/challenges/all">View All Challenges</a>
+			<a class="viewAllChallenges" href="/challenges/all">
+				<span class="linkText">View All Challenges</span>
+				<span class="linkArrow"> &gt; </span>
+			</a>
 		</div>
 	{/if}
 	<hr />
@@ -59,3 +62,16 @@
 		{/each}
 	{/if}
 </div>
+
+<style>
+	a.viewAllChallenges {
+		color: black;
+		text-decoration: none;
+	}
+	a.viewAllChallenges .linkText {
+		text-decoration: underline;
+	}
+	a.viewAllChallenges .linkArrow {
+		text-decoration: none;
+	}
+</style>

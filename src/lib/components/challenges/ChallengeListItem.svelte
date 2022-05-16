@@ -73,12 +73,6 @@
 		transition: all 0.2s ease;
 		cursor: pointer;
 	}
-	.card.solved {
-		border: 1px solid #42d12a;
-	}
-	.card.solved:hover {
-		box-shadow: 2px 3px 3px 1px rgb(197, 228, 197);
-	}
 	.card:hover {
 		box-shadow: 2px 3px 3px 1px #e0e0e0;
 		transform: scale(1.02);

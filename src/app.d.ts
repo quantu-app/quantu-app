@@ -6,7 +6,6 @@ import type { ITokenValue } from '$lib/api/auth';
 import type { IJwtString } from '$lib/api/jwt';
 import type { User } from '@prisma/client';
 import type bootstrap from 'bootstrap';
-import type HLJSApi from 'highlight.js';
 import type katex from 'katex';
 
 declare namespace MathQuill {
@@ -29,7 +28,6 @@ declare namespace MathQuill {
 declare global {
 	interface Window {
 		katex: katex;
-		hljs: HLJSApi;
 		bootstrap: bootstrap;
 		MathQuill: MathQuill;
 		gtag(type: string, id: string, config?: any): void;
@@ -41,7 +39,7 @@ declare global {
 			token?: ITokenValue;
 		}
 		interface Session {
-			user: User;
+			user: Omit<User, 'encryptedPassword'>;
 		}
 	}
 }

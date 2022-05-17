@@ -1,41 +1,16 @@
-<script context="module" lang="ts">
-	import { writable } from 'svelte/store';
-	interface IState {
-		challengeNameFilter: string | undefined;
-	}
-	const state = writable<IState>({
-		challengeNameFilter: undefined
-	});
-</script>
+<svelte:options immutable />
 
 <script lang="ts">
 	import ChallengeList from '$lib/components/challenges/ChallengeList.svelte';
-	import { fuzzyEquals } from '@aicacia/string-fuzzy_equals';
 	import type { StateChallenge } from '$lib/state/challenges';
 
-	export let challenges: Array<StateChallenge>;
-	export let topChallenges: Array<StateChallenge>;
-	export let challengesByDepartments: Array<{
+	export let challenges: StateChallenge[];
+	export let topChallenges: StateChallenge[];
+	export let challengesByDepartments: {
 		url: string;
 		name: string;
 		challenges: StateChallenge[];
-	}>;
-
-	$: isFiltered = !!$state.challengeNameFilter;
-	$: filter = (challenge: StateChallenge) =>
-		$state.challengeNameFilter ? fuzzyEquals($state.challengeNameFilter, challenge.name) : true;
-
-	$: if (!isFiltered) {
-		let maxDate = new Date(null);
-		let challengeIndex = -1;
-		for (let i = 0; i < challenges.length; i++) {
-			const challengeDate = new Date(challenges[i].createdAt);
-			if (challengeDate > maxDate) {
-				maxDate = challengeDate;
-				challengeIndex = i;
-			}
-		}
-	}
+	}[];
 </script>
 
 <div class="container my-4 mb-8">

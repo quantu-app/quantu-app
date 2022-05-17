@@ -39,28 +39,15 @@
 		}
 	}
 
-	let voting = false;
-
-	let yourVote: boolean | null = null;
-	$: {
-		const vote = solution.votes.find((v) => v.userId === $currentUser.id);
-		if (vote) {
-			yourVote = vote.vote;
-		}
-	}
+	$: yourVote = solution.votes.find((v) => v.userId === $currentUser.id)?.vote;
 	async function onVote(vote: boolean | null) {
-		voting = true;
-		try {
-			await voteOnChallengeSolution(challenge.department.url, challenge.url, solution.id, vote);
-		} finally {
-			voting = false;
-		}
+		await voteOnChallengeSolution(challenge.department.url, challenge.url, solution.id, vote);
 	}
 </script>
 
 <div class="d-flex flex-row">
 	<div class="flex-grow-0">
-		<Vote vote={yourVote} votes={solution.votes} {onVote} disabled={voting} />
+		<Vote vote={yourVote} votes={solution.votes} {onVote} />
 	</div>
 	<div class="flex-grow-1 d-flex flex-column">
 		<div class="flex-grow-1">

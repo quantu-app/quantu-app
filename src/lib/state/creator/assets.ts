@@ -5,15 +5,15 @@ import mime from 'mime';
 import { readFileToArrayBuffer, type IFetch } from '$lib/utils';
 
 interface IAssetList {
-	folders: Array<string>;
-	assets: Array<Asset>;
+	folders: string[];
+	assets: Asset[];
 }
 
 export class AssetTree {
 	folder = '';
 	parent: AssetTree | undefined = undefined;
 	children: Record<string, AssetTree> = {};
-	assets: Array<Asset> = [];
+	assets: Asset[] = [];
 	byId: Record<string, Asset> = {};
 
 	constructor(folder = '', parent?: AssetTree) {

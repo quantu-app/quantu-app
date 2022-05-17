@@ -55,16 +55,17 @@ model User {
 }
 
 model Department {
-  id          String      @id @default(auto()) @map("_id") @db.ObjectId
-  name        String      @unique
-  url         String      @unique
-  logo        Asset?      @relation(name: "DepartmentLogo", fields: [logoId], references: [id])
-  logoId      String?     @db.ObjectId
-  description Json
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
-  challenges  Challenge[]
-  assets      Asset[]
+  id              String           @id @default(auto()) @map("_id") @db.ObjectId
+  name            String           @unique
+  url             String           @unique
+  logo            Asset?           @relation(name: "DepartmentLogo", fields: [logoId], references: [id])
+  logoId          String?          @db.ObjectId
+  description     Json
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  challenges      Challenge[]
+  assets          Asset[]
+  challengeDrafts ChallengeDraft[]
 }
 
 enum QuestionType {
@@ -75,24 +76,44 @@ enum QuestionType {
 }
 
 model Challenge {
-  id           String              @id @default(auto()) @map("_id") @db.ObjectId
-  name         String
-  url          String
-  logo         Asset?              @relation(name: "ChallengeLogo", fields: [logoId], references: [id])
-  logoId       String?             @db.ObjectId
-  description  Json
-  department   Department          @relation(fields: [departmentId], references: [id])
-  departmentId String              @db.ObjectId
-  results      Result[]
-  solutions    ChallengeSolution[]
-  type         QuestionType        @default(MULTIPLE_CHOICE)
-  prompt       Json
-  visible      Boolean             @default(false)
-  releasedAt   DateTime?
-  createdAt    DateTime            @default(now())
-  updatedAt    DateTime            @updatedAt
+  id              String              @id @default(auto()) @map("_id") @db.ObjectId
+  name            String
+  url             String
+  logo            Asset?              @relation(name: "ChallengeLogo", fields: [logoId], references: [id])
+  logoId          String?             @db.ObjectId
+  description     Json
+  department      Department          @relation(fields: [departmentId], references: [id])
+  departmentId    String              @db.ObjectId
+  results         Result[]
+  solutions       ChallengeSolution[]
+  challengeDrafts ChallengeDraft[]
+  type            QuestionType        @default(MULTIPLE_CHOICE)
+  prompt          Json
+  visible         Boolean             @default(false)
+  releasedAt      DateTime?
+  createdAt       DateTime            @default(now())
+  updatedAt       DateTime            @updatedAt
 
   @@unique([departmentId, url])
+}
+
+model ChallengeDraft {
+  id           String       @id @default(auto()) @map("_id") @db.ObjectId
+  name         String
+  url          String
+  logo         Asset?       @relation(name: "ChallengeDraftLogo", fields: [logoId], references: [id])
+  logoId       String?      @db.ObjectId
+  challenge    Challenge?   @relation(fields: [challengeId], references: [id])
+  challengeId  String?      @db.ObjectId
+  description  Json
+  department   Department   @relation(fields: [departmentId], references: [id])
+  departmentId String       @db.ObjectId
+  type         QuestionType @default(MULTIPLE_CHOICE)
+  prompt       Json
+  visible      Boolean      @default(false)
+  releasedAt   DateTime?
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
 }
 
 model ChallengeSolution {
@@ -125,6 +146,8 @@ model ChallengeSolutionVote {
 
 enum CommentReferenceType {
   CHALLENGE_SOLUTION
+  CHALLENGE_DRAFT
+  CHALLENGE
 }
 
 model Comment {
@@ -191,8 +214,9 @@ model Asset {
   createdAt    DateTime   @default(now())
   updatedAt    DateTime   @updatedAt
 
-  challengeLogos  Challenge[]  @relation(name: "ChallengeLogo")
-  departmentLogos Department[] @relation(name: "DepartmentLogo")
+  challengeLogos      Challenge[]      @relation(name: "ChallengeLogo")
+  challengeDraftLogos ChallengeDraft[] @relation(name: "ChallengeDraftLogo")
+  departmentLogos     Department[]     @relation(name: "DepartmentLogo")
 
   @@unique([departmentId, folder, name])
 }

@@ -78,28 +78,15 @@
 		}
 	}
 
-	let voting = false;
-
-	let yourVote: boolean | null = null;
-	$: {
-		const vote = comment.votes.find((v) => v.userId === $currentUser.id);
-		if (vote) {
-			yourVote = vote.vote;
-		}
-	}
+	$: yourVote = comment.votes.find((v) => v.userId === $currentUser.id)?.vote;
 	async function onVote(vote: boolean | null) {
-		voting = true;
-		try {
-			await voteOnComment(referenceType, referenceId, comment.id, vote);
-		} finally {
-			voting = false;
-		}
+		await voteOnComment(referenceType, referenceId, comment.id, vote);
 	}
 </script>
 
 <div class="d-flex flex-row">
 	<div class="flex-grow-0">
-		<Vote vote={yourVote} votes={comment.votes} {onVote} disabled={comment.deleted || voting} />
+		<Vote vote={yourVote} votes={comment.votes} {onVote} disabled={comment.deleted} />
 	</div>
 	<div class="flex-grow-1 d-flex flex-column">
 		<div class="flex-grow-1">

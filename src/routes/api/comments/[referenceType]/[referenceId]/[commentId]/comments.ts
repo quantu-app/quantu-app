@@ -21,7 +21,7 @@ export async function getCommentsById(
 	referenceType: CommentReferenceType,
 	referenceId: string,
 	commentId: string,
-	depth = 3
+	depth = 2
 ) {
 	return await client.comment.findMany({
 		where: {

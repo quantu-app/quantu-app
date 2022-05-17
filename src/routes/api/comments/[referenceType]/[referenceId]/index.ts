@@ -18,7 +18,7 @@ export async function getCommentsByReferenceId(
 	client: PrismaClient,
 	referenceType: CommentReferenceType,
 	referenceId: string | string[],
-	depth = 3
+	depth = 2
 ) {
 	const where = {
 		referenceType,

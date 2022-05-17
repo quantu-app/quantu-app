@@ -13,29 +13,52 @@
 <script lang="ts">
 	export let vote: boolean | null = null;
 	export let votes: IVote[] = [];
-	export let onVote: (vote: boolean | null) => void;
+	export let onVote: (vote: boolean | null) => Promise<void>;
 	export let disabled = false;
 
 	$: count = votes.reduce(countVotes, 0);
 
-	$: onVoteUp = () => onVote(vote === false ? null : true);
-	$: onVoteDown = () => onVote(vote === true ? null : false);
+	let voting = false;
+	$: onVoteUp = async () => {
+		voting = true;
+		try {
+			await onVote(vote === false ? null : true);
+		} finally {
+			voting = false;
+		}
+	};
+	$: onVoteDown = async () => {
+		voting = true;
+		try {
+			await onVote(vote === true ? null : false);
+		} finally {
+			voting = false;
+		}
+	};
 </script>
 
 <div class="d-flex flex-column">
-	<button class="btn btn-sm btn-ghost" disabled={disabled || vote === true} on:click={onVoteUp}>
+	<button
+		class="btn btn-sm btn-ghost"
+		disabled={voting || disabled || vote === true}
+		on:click={onVoteUp}
+	>
 		<i class="bi bi-chevron-up" class:text-success={vote === true} />
 	</button>
 	<button class="btn btn-sm btn-ghost" disabled>
 		<span class:text-success={vote === true} class:text-danger={vote === false}>
-			{#if disabled}
+			{#if voting}
 				<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" />
 			{:else}
 				{count}
 			{/if}
 		</span>
 	</button>
-	<button class="btn btn-sm btn-ghost" disabled={disabled || vote === false} on:click={onVoteDown}>
+	<button
+		class="btn btn-sm btn-ghost"
+		disabled={voting || disabled || vote === false}
+		on:click={onVoteDown}
+	>
 		<i class="bi bi-chevron-down" class:text-danger={vote === false} />
 	</button>
 </div>

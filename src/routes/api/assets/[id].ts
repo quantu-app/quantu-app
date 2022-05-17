@@ -5,18 +5,31 @@ import type { RequestEvent } from '@sveltejs/kit/types/internal';
 import { run } from '$lib/prisma';
 import type { PrismaClient } from '@prisma/client';
 
+const ONE_MONTH_IN_SECONDS = 60 * 60 * 24 * 30;
+
 export async function get(event: RequestEvent) {
 	return run((client) => getAssetById(client, event.params.id))
 		.then((asset) =>
 			asset
-				? s3Get([asset.departmentId, asset.folder].join('/'), asset.name).then((result) => ({
-						status: 200,
-						header: {
+				? s3Get([asset.departmentId, asset.folder].join('/'), asset.name).then((result) => {
+						const maxage = result.Expires
+							? Math.round(result.Expires.getTime() - Date.now() / 1000)
+							: ONE_MONTH_IN_SECONDS;
+						const header = {
 							'Content-Type': mime.getType(extname(asset.name)),
-							ETag: result.ETag
-						},
-						body: result.Body
-				  }))
+							'Content-Length': result.ContentLength,
+							'Cache-Control': `public, max-age=${maxage}`
+						};
+						if (result.ETag) {
+							header['ETag'] = result.ETag;
+						}
+						return {
+							status: 200,
+							header,
+							maxage,
+							body: result.Body
+						};
+				  })
 				: {
 						status: 404
 				  }

@@ -1,8 +1,10 @@
+<svelte:options immutable />
+
 <script lang="ts">
 	import ChallengeListItem from '$lib/components/challenges/ChallengeListItem.svelte';
 	import type { StateChallenge } from '$lib/state/challenges';
 
-	export let challenges: Array<StateChallenge>;
+	export let challenges: StateChallenge[];
 </script>
 
 <div class="container">

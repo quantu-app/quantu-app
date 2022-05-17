@@ -70,7 +70,7 @@
 <a
 	class="link-dark"
 	href={`${base}/challenges/${challenge.department.url}/${challenge.url}/solutions`}
-	><i class="bi bi-chevron-left" /> {challenge.name}</a
+	><i class="bi bi-chevron-left" /> {challenge.name} Solutions</a
 >
 
 <Challenge {challenge} disabled={true} />

@@ -1,3 +1,5 @@
+<svelte:options immutable />
+
 <script lang="ts" context="module">
 	const IMAGES = [
 		'https://raw.githubusercontent.com/quantu-app/design-platform/c8023510d3491c97da21e0a5dc167456573ee4ac/app/resources/challenges/no_image_placeholder_imgs/Parallelogram.png',
@@ -7,6 +9,7 @@
 		'https://github.com/quantu-app/design-platform/raw/master/app/resources/challenges/no_image_placeholder_imgs/Single%20Triangle%20Touching%20Edges.png',
 		'https://raw.githubusercontent.com/quantu-app/design-platform/c8023510d3491c97da21e0a5dc167456573ee4ac/app/resources/challenges/no_image_placeholder_imgs/Parallelogram%20Blue%20Tilt.png'
 	];
+	const TODAY: Date = new Date();
 </script>
 
 <script lang="ts">
@@ -16,7 +19,6 @@
 	import { formatDistanceToNowStrict, isBefore, isSameDay } from 'date-fns';
 
 	export let challenge: StateChallenge;
-	let today: Date = new Date();
 
 	const rng = XorShiftRng.fromSeed(new Date(challenge.createdAt).getTime());
 	const image = rng.fromArray(IMAGES).unwrap();
@@ -56,7 +58,7 @@
 				<span class="dot-block" />{formatDistanceToNowStrict(challenge.releasedAt, {
 					addSuffix: false
 				})}
-				{#if !isSameDay(challenge.releasedAt, today) && isBefore(challenge.releasedAt, today)}
+				{#if !isSameDay(challenge.releasedAt, TODAY) && isBefore(challenge.releasedAt, TODAY)}
 					ago
 				{/if}
 			</span>

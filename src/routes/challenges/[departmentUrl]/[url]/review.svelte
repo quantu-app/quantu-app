@@ -60,6 +60,12 @@
 			<svelte:fragment slot="sidebar">
 				<a
 					role="button"
+					class="list-group-item list-group-item-action"
+					href={`${base}/challenges/${challenge.department.url}/${challenge.url}`}
+					>{challenge.name}</a
+				>
+				<a
+					role="button"
 					class="list-group-item list-group-item-action active"
 					href={`${base}/challenges/${challenge.department.url}/${challenge.url}/review`}>Review</a
 				>

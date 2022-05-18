@@ -156,7 +156,7 @@ export function resultFromJSON(result: Result): Result {
 export function challengeFromJSON(challenge: StateChallenge): StateChallenge {
 	return {
 		...challenge,
-		releasedAt: new Date(challenge.releasedAt),
+		releasedAt: challenge.releasedAt ? new Date(challenge.releasedAt) : challenge.releasedAt,
 		createdAt: new Date(challenge.createdAt),
 		updatedAt: new Date(challenge.updatedAt)
 	};

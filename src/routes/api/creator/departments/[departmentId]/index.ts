@@ -8,6 +8,13 @@ export const get = isCreator((event) => {
 		client.department.findUnique({
 			where: {
 				id: departmentId
+			},
+			include: {
+				logo: {
+					select: {
+						name: true
+					}
+				}
 			}
 		})
 	).then((department) => ({
@@ -25,25 +32,17 @@ export const patch = isCreator(async (event) => {
 			where: {
 				id: departmentId
 			},
+			include: {
+				logo: {
+					select: {
+						name: true
+					}
+				}
+			},
 			data
 		})
 	).then((department) => ({
 		body: department,
 		status: department ? 200 : 400
-	}));
-});
-
-export const del = isCreator((event) => {
-	const departmentId = event.params.departmentId;
-
-	return run((client) =>
-		client.department.delete({
-			where: {
-				id: departmentId
-			}
-		})
-	).then((department) => ({
-		body: department,
-		status: 200
 	}));
 });

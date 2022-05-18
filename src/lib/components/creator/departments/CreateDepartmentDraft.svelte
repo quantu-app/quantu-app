@@ -3,24 +3,26 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { base } from '$app/paths';
-	import { createDepartment } from '$lib/state/creator/departments';
-	import type { Department } from '@prisma/client';
-	import DepartmentEditor from './DepartmentEditor.svelte';
+	import {
+		createDepartmentDraft,
+		type StateDepartmentDraft
+	} from '$lib/state/creator/departmentDrafts';
+	import DepartmentDraftEditor from './DepartmentDraftEditor.svelte';
 
 	let editorKey = Math.random();
-	let creatingDepartment = false;
 
-	let department: Partial<Department> = {};
+	let departmentDraft: Partial<StateDepartmentDraft> = {};
 
+	let creatingDepartmentDraft = false;
 	async function onCreateDepartment() {
-		creatingDepartment = true;
+		creatingDepartmentDraft = true;
 		try {
-			const { id } = await createDepartment(department);
+			const { id } = await createDepartmentDraft(departmentDraft);
 			window.bootstrap.Modal.getOrCreateInstance('#create-department').hide();
-			await goto(`${base}/creator/departments/${id}`);
-			department = {};
+			await goto(`${base}/creator/departments/drafts/${id}`);
+			departmentDraft = {};
 		} finally {
-			creatingDepartment = false;
+			creatingDepartmentDraft = false;
 			editorKey = Math.random();
 		}
 	}
@@ -31,7 +33,7 @@
 	class="btn btn-primary"
 	data-bs-toggle="modal"
 	data-bs-target="#create-department"
-	aria-label="Create Department">Create Department</button
+	aria-label="Create Department">Draft a new Department</button
 >
 
 <div
@@ -44,22 +46,22 @@
 	<div class="modal-dialog modal-lg">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h5 id="create-department-label" class="modal-title">Create Department</h5>
+				<h5 id="create-department-label" class="modal-title">Draft a new Department</h5>
 				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" />
 			</div>
 			<div class="modal-body">
 				{#key editorKey}
-					<DepartmentEditor bind:department />
+					<DepartmentDraftEditor bind:departmentDraft />
 				{/key}
 			</div>
 			<div class="modal-footer">
 				<button
 					type="button"
 					on:click={onCreateDepartment}
-					disabled={creatingDepartment}
+					disabled={creatingDepartmentDraft}
 					class="btn btn-primary"
 				>
-					{#if creatingDepartment}
+					{#if creatingDepartmentDraft}
 						<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" />
 					{/if}
 					Create

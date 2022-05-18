@@ -1,27 +1,27 @@
 <script lang="ts">
 	import RichEditor from '$lib/components/editor/RichEditor.svelte';
+	import type { StateDepartmentDraft } from '$lib/state/creator/departmentDrafts';
 	import { validDepartmentUrl } from '$lib/state/creator/departments';
 	import { isUrlSafe } from '$lib/utils';
 	import { debounce } from '@aicacia/debounce';
-	import type { Department } from '@prisma/client';
 	import SelectAsset from '../assets/SelectAsset.svelte';
 
-	export let department: Partial<Department>;
+	export let departmentDraft: Partial<StateDepartmentDraft>;
 	export let disabled = false;
 
-	let departmentUrl = department.url;
+	let departmentUrl = departmentDraft.url;
 	let validUrl: boolean = false;
 
-	$: validUrl = isUrlSafe(department.url);
+	$: validUrl = isUrlSafe(departmentDraft.url);
 
 	let validatingUrl = false;
 	async function onUrlChange() {
-		if (!validUrl || validatingUrl || departmentUrl === department.url) {
+		if (!validUrl || validatingUrl || departmentUrl === departmentDraft.url) {
 			return;
 		}
 		validatingUrl = true;
 		try {
-			validUrl = await validDepartmentUrl(department.url);
+			validUrl = await validDepartmentUrl(departmentDraft.url);
 		} finally {
 			validatingUrl = false;
 		}
@@ -38,7 +38,7 @@
 			class="form-control"
 			placeholder="Department Name"
 			{disabled}
-			bind:value={department.name}
+			bind:value={departmentDraft.name}
 		/>
 	</div>
 	<div class="col-md">
@@ -50,28 +50,28 @@
 			placeholder="Department URL"
 			class:is-invalid={!validUrl}
 			{disabled}
-			bind:value={department.url}
+			bind:value={departmentDraft.url}
 			on:change={debouncedOnUrlChange}
 		/>
 	</div>
 </div>
 <hr />
 <div class="row">
-	{#if department.id}
+	{#if departmentDraft.id}
 		<div class="col-md-3">
 			<div class="form-control">
 				<label for="department-logo" class="form-label">Logo</label>
 				<SelectAsset
 					id="department-logo"
-					departmentId={department.id}
-					bind:assetId={department.logoId}
+					departmentId={departmentDraft.id}
+					bind:assetId={departmentDraft.logoId}
 					type="IMAGE"
 				/>
 			</div>
 		</div>
 	{/if}
-	<div class="col-md-9">
+	<div class="col">
 		<label for="department-description" class="form-label">Description</label>
-		<RichEditor id="department-description" bind:value={department.description} />
+		<RichEditor id="department-description" bind:value={departmentDraft.description} />
 	</div>
 </div>

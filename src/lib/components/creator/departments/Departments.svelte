@@ -14,24 +14,33 @@
 
 <script lang="ts">
 	import DepartmentList from './DepartmentList.svelte';
-	import CreateDepartment from './CreateDepartment.svelte';
+	import CreateDepartmentDraft from './CreateDepartmentDraft.svelte';
 	import { fuzzyEquals } from '@aicacia/string-fuzzy_equals';
 	import Search from '$lib/components/Search.svelte';
-	import type { Department } from '@prisma/client';
+	import type { StateDepartment } from '$lib/state/creator/departments';
+	import { base } from '$app/paths';
 
-	export let departments: Department[];
+	export let departments: StateDepartment[];
 
-	$: filter = (department: Department) =>
-		$state.departmentNameFilter ? fuzzyEquals($state.departmentNameFilter, department.name) : true;
+	function onChange(departmentNameFilter: string) {
+		state.update((state) => ({
+			...state,
+			departmentNameFilter
+		}));
+	}
+	$: departmentNameFilter = $state.departmentNameFilter;
+	$: filter = (department: StateDepartment) =>
+		departmentNameFilter ? fuzzyEquals(departmentNameFilter, department.name) : true;
+	$: filteredDepartments = departments.filter(filter);
 </script>
 
-<div class="container">
-	<div class="d-flex justify-content-end mt-2">
-		<CreateDepartment />
+<div class="container mb-8">
+	<div class="d-flex align-items-center justify-content-end mt-2">
+		<a class="link-dark me-2" href={`${base}/creator/departments/drafts`}
+			>Drafts <i class="bi bi-chevron-right" /></a
+		>
+		<CreateDepartmentDraft />
 	</div>
-	<Search bind:filter={$state.departmentNameFilter} />
-</div>
-
-<div class="container">
-	<DepartmentList departments={departments.filter(filter)} />
+	<Search filter={departmentNameFilter} {onChange} />
+	<DepartmentList departments={filteredDepartments} />
 </div>

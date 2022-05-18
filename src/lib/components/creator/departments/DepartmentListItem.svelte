@@ -1,63 +1,52 @@
 <svelte:options immutable />
 
 <script lang="ts">
-	import { base } from '$app/paths';
-	import type { Department } from '@prisma/client';
+	import { goto } from '$app/navigation';
 
-	export let department: Department;
-	export let onUpdate: () => void;
-	export let onDelete: () => void;
+	import { base } from '$app/paths';
+	import RichViewer from '$lib/components/editor/RichViewer.svelte';
+	import { createDepartmentDraftFromRef } from '$lib/state/creator/departmentDrafts';
+	import type { StateDepartment } from '$lib/state/creator/departments';
+
+	export let department: StateDepartment;
+
+	let creatingDraft = false;
+	async function onCreateDraft() {
+		creatingDraft = true;
+		try {
+			const departmentDraft = await createDepartmentDraftFromRef(department.id);
+			await goto(`${base}/creator/drafts/departments/${department.id}/${departmentDraft.id}`);
+		} finally {
+			creatingDraft = false;
+		}
+	}
 </script>
 
-<div class="list-group-item">
-	<div class="d-flex w-100 justify-content-between">
-		<h4>
-			<a
-				href={`${base}/creator/departments/${department.id}`}
-				type="button"
-				class="btn btn-link"
-				on:click={onUpdate}>{department.name} - {department.url}</a
-			>
-		</h4>
-		<div class="d-flex">
-			<div class="dropdown">
-				<button
-					id={`department-dropdown-${department.id}`}
-					class="btn btn-ghost dropdown-toggle"
-					type="button"
-					data-bs-toggle="dropdown"
-					aria-expanded="false"
+<div class="col-6 col-md-3 mt-4">
+	<div class="card">
+		{#if department.logoId}
+			<img
+				class="card-img-top"
+				src={`${base}/api/assets/${department.logoId}`}
+				alt={department.logo.name}
+			/>
+		{/if}
+		<div class="card-body">
+			<h4 class="card-title">
+				<a class="link-dark" href={`${base}/creator/departments/${department.id}`}
+					>{department.name} - {department.url}</a
 				>
-					<i class="bi bi-three-dots-vertical" />
-				</button>
-				<ul
-					class="dropdown-menu dropdown-menu-end"
-					aria-labelledby={`department-dropdown-${department.id}`}
-				>
-					<slot name="dropdown" {department} {onUpdate} {onDelete}>
-						<li>
-							<button
-								type="button"
-								class="dropdown-item justify-content-between"
-								data-bs-toggle="modal"
-								data-bs-target="#update-department"
-								aria-label="Update"
-								on:click={onUpdate}>Update</button
-							>
-						</li>
-						<li>
-							<button
-								type="button"
-								class="dropdown-item justify-content-between"
-								data-bs-toggle="modal"
-								data-bs-target="#delete-department"
-								aria-label="Delete"
-								on:click={onDelete}>Delete</button
-							>
-						</li>
-					</slot>
-				</ul>
+			</h4>
+			<div class="card-text">
+				<RichViewer value={department.description} />
 			</div>
+			<button
+				type="button"
+				class="btn btn-sm btn-primary"
+				aria-label="Create Draft"
+				disabled={creatingDraft}
+				on:click={onCreateDraft}>Create Draft</button
+			>
 		</div>
 	</div>
 </div>

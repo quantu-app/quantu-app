@@ -26,7 +26,7 @@
 		}
 		validatingUrl = true;
 		try {
-			validUrl = await validChallengeUrl(challenge.departmentId, challenge.url);
+			validUrl = await validChallengeUrl(challenge.department.url, challenge.url);
 		} finally {
 			validatingUrl = false;
 		}

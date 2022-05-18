@@ -38,15 +38,12 @@ export async function showChallengeById(departmentId: string, id: string, fetchF
 	return challenge;
 }
 
-export async function validChallengeUrl(departmentId: string, url: string) {
-	const res = await fetch(
-		`${base}/api/creator/departments/${departmentId}/challenges/by-url/${url}`,
-		{
-			headers: {
-				'Content-Type': 'application/json'
-			}
+export async function validChallengeUrl(departmentUrl: string, url: string) {
+	const res = await fetch(`${base}/api/departments/${departmentUrl}/challenges/${url}`, {
+		headers: {
+			'Content-Type': 'application/json'
 		}
-	);
+	});
 	if (!res.ok) {
 		return true;
 	} else {
@@ -130,6 +127,7 @@ function addOrUpdate(challenges: StateChallenge[], challenge: StateChallenge): S
 function challengeFromJSON(challenge: StateChallenge): StateChallenge {
 	return {
 		...challenge,
+		releasedAt: challenge.releasedAt ? new Date(challenge.releasedAt) : null,
 		createdAt: new Date(challenge.createdAt),
 		updatedAt: new Date(challenge.updatedAt)
 	};

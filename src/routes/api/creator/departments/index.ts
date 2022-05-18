@@ -8,7 +8,15 @@ export const get = isCreator(async () => ({
 }));
 
 export function getDepartments(client: PrismaClient) {
-	return client.department.findMany();
+	return client.department.findMany({
+		include: {
+			logo: {
+				select: {
+					name: true
+				}
+			}
+		}
+	});
 }
 
 export const post = isCreator(async (event) => ({
@@ -18,6 +26,13 @@ export const post = isCreator(async (event) => ({
 
 export function createDepartment(client: PrismaClient, data: any) {
 	return client.department.create({
+		include: {
+			logo: {
+				select: {
+					name: true
+				}
+			}
+		},
 		data
 	});
 }

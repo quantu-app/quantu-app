@@ -7,13 +7,12 @@
 		if (!isValidStatus(response)) {
 			return response;
 		}
-		const departmentId = input.params.departmentId;
-		const department = await showDepartmentById(departmentId, input.fetch);
-		await showChallenges(department.id, input.fetch);
+		const departmentDraftId = input.params.departmentDraftId;
+		await showDepartmentDraftById(departmentDraftId, input.fetch);
 
 		return {
 			props: {
-				departmentId
+				departmentDraftId
 			}
 		};
 	};
@@ -22,16 +21,17 @@
 <script lang="ts">
 	import StudioLayout from '$lib/components/layouts/StudioLayout.svelte';
 	import { creatorGuard } from '$lib/guard/creatorGuard';
-	import Department from '$lib/components/creator/departments/Department.svelte';
+	import DepartmentDraft from '$lib/components/creator/departments/DepartmentDraft.svelte';
 	import { isValidStatus } from '$lib/guard/isValidStatus';
-	import { departmentsById, showDepartmentById } from '$lib/state/creator/departments';
+	import {
+		departmentDraftsById,
+		showDepartmentDraftById
+	} from '$lib/state/creator/departmentDrafts';
 	import { base } from '$app/paths';
-	import { showChallenges, challengesByDepartmentId } from '$lib/state/creator/challenges';
 
-	export let departmentId: string;
+	export let departmentDraftId: string;
 
-	$: department = $departmentsById[departmentId];
-	$: challenges = $challengesByDepartmentId[department.id] || [];
+	$: departmentDraft = $departmentDraftsById[departmentDraftId];
 </script>
 
 <svelte:head>
@@ -49,10 +49,14 @@
 			href: `${base}/creator`
 		},
 		{
-			title: department?.name,
-			href: `${base}/creator/departments/${departmentId}`
+			title: 'Department Drafts',
+			href: `${base}/creator/departments/drafts`
+		},
+		{
+			title: departmentDraft.name,
+			href: `${base}/creator/department/drafts/${departmentDraftId}`
 		}
 	]}
 >
-	<Department {department} {challenges} />
+	<DepartmentDraft {departmentDraft} />
 </StudioLayout>

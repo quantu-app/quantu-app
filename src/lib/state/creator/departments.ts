@@ -3,7 +3,13 @@ import { writable, derived } from 'svelte/store';
 import { base } from '$app/paths';
 import type { IFetch } from '$lib/utils';
 
-const departmentsWritable = writable<Department[]>([]);
+export type StateDepartment = Department & {
+	logo?: {
+		name: string;
+	};
+};
+
+const departmentsWritable = writable<StateDepartment[]>([]);
 
 export const departments = derived(departmentsWritable, (departments) => departments);
 
@@ -11,10 +17,10 @@ export const departmentsById = derived(departmentsWritable, (departments) =>
 	departments.reduce((byId, department) => {
 		byId[department.id] = department;
 		return byId;
-	}, {} as { [id: string]: Department })
+	}, {} as { [id: string]: StateDepartment })
 );
 
-export async function showDepartmentsById(id: string, fetchFn: IFetch = fetch) {
+export async function showDepartmentById(id: string, fetchFn: IFetch = fetch) {
 	const res = await fetchFn(`${base}/api/creator/departments/${id}`, {
 		headers: {
 			'Content-Type': 'application/json'
@@ -23,7 +29,7 @@ export async function showDepartmentsById(id: string, fetchFn: IFetch = fetch) {
 	if (!res.ok) {
 		throw await res.json();
 	}
-	const department: Department = departmentFromJSON(await res.json());
+	const department: StateDepartment = departmentFromJSON(await res.json());
 	departmentsWritable.update((state) => addOrUpdate(state.slice(), department));
 	return department;
 }
@@ -37,7 +43,7 @@ export async function showDepartments(fetchFn: IFetch = fetch) {
 	if (!res.ok) {
 		throw await res.json();
 	}
-	const departments: Department[] = (await res.json()).map(departmentFromJSON);
+	const departments: StateDepartment[] = (await res.json()).map(departmentFromJSON);
 	departmentsWritable.update((state) =>
 		departments.reduce((state, department) => addOrUpdate(state, department), state.slice())
 	);
@@ -45,7 +51,7 @@ export async function showDepartments(fetchFn: IFetch = fetch) {
 }
 
 export async function validDepartmentUrl(url: string) {
-	const res = await fetch(`${base}/api/creator/departments/by-url/${url}`, {
+	const res = await fetch(`${base}/api/departments/${url}`, {
 		headers: {
 			'Content-Type': 'application/json'
 		}
@@ -57,7 +63,7 @@ export async function validDepartmentUrl(url: string) {
 	}
 }
 
-export async function createDepartment(body: Partial<Department>) {
+export async function createDepartment(body: Partial<StateDepartment>) {
 	const res = await fetch(`${base}/api/creator/departments`, {
 		method: 'POST',
 		body: JSON.stringify(body)
@@ -65,12 +71,12 @@ export async function createDepartment(body: Partial<Department>) {
 	if (!res.ok) {
 		throw await res.json();
 	}
-	const department: Department = departmentFromJSON(await res.json());
+	const department: StateDepartment = departmentFromJSON(await res.json());
 	departmentsWritable.update((state) => addOrUpdate(state.slice(), department));
 	return department;
 }
 
-export async function updateDepartment(id: string, body: Partial<Department>) {
+export async function updateDepartment(id: string, body: Partial<StateDepartment>) {
 	const res = await fetch(`${base}/api/creator/departments/${id}`, {
 		method: 'PATCH',
 		body: JSON.stringify(body)
@@ -78,7 +84,7 @@ export async function updateDepartment(id: string, body: Partial<Department>) {
 	if (!res.ok) {
 		throw await res.json();
 	}
-	const department: Department = departmentFromJSON(await res.json());
+	const department: StateDepartment = departmentFromJSON(await res.json());
 	departmentsWritable.update((state) => addOrUpdate(state.slice(), department));
 	return department;
 }
@@ -100,7 +106,14 @@ export async function deleteDepartment(id: string) {
 	});
 }
 
-function addOrUpdate(departments: Department[], department: Department): Department[] {
+export function addDepartment(department: StateDepartment) {
+	departmentsWritable.update((state) => addOrUpdate(state.slice(), department));
+}
+
+function addOrUpdate(
+	departments: StateDepartment[],
+	department: StateDepartment
+): StateDepartment[] {
 	const index = departments.findIndex((t) => t.id === department.id);
 	if (index === -1) {
 		departments.push(department);
@@ -110,7 +123,7 @@ function addOrUpdate(departments: Department[], department: Department): Departm
 	return departments;
 }
 
-function departmentFromJSON(department: Department): Department {
+export function departmentFromJSON(department: StateDepartment): StateDepartment {
 	return {
 		...department,
 		createdAt: new Date(department.createdAt),

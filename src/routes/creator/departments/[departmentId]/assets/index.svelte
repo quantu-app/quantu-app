@@ -8,7 +8,7 @@
 			return response;
 		}
 		const departmentId = input.params.departmentId;
-		const department = await showDepartmentsById(departmentId, input.fetch);
+		const department = await showDepartmentById(departmentId, input.fetch);
 		showChallenges(department.id, input.fetch);
 
 		return {
@@ -24,7 +24,7 @@
 	import { creatorGuard } from '$lib/guard/creatorGuard';
 	import Assets from '$lib/components/creator/assets/Assets.svelte';
 	import { isValidStatus } from '$lib/guard/isValidStatus';
-	import { departmentsById, showDepartmentsById } from '$lib/state/creator/departments';
+	import { departmentsById, showDepartmentById } from '$lib/state/creator/departments';
 	import { base } from '$app/paths';
 	import { onMount } from 'svelte';
 	import { showChallenges } from '$lib/state/creator/challenges';
@@ -34,7 +34,7 @@
 	$: department = $departmentsById[departmentId];
 
 	onMount(async () => {
-		const department = await showDepartmentsById(departmentId);
+		const department = await showDepartmentById(departmentId);
 		showChallenges(department.id);
 	});
 </script>
@@ -50,7 +50,8 @@
 			href: `${base}/creator`
 		},
 		{
-			title: 'Departments'
+			title: 'Departments',
+			href: `${base}/creator`
 		},
 		{
 			title: department?.name,

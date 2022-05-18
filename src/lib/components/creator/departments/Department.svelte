@@ -15,18 +15,22 @@
 <script lang="ts">
 	import { fuzzyEquals } from '@aicacia/string-fuzzy_equals';
 	import Search from '$lib/components/Search.svelte';
-	import type { Challenge, Department } from '@prisma/client';
 	import ChallengeList from '$lib/components/creator/challenges/ChallengeList.svelte';
-	import { challengesByDepartmentId } from '$lib/state/creator/challenges';
 	import CreateChallenge from '../challenges/CreateChallenge.svelte';
 	import { base } from '$app/paths';
+	import type { StateChallenge } from '$lib/state/creator/challenges';
+	import type { StateDepartment } from '$lib/state/creator/departments';
 
-	export let department: Department;
+	export let department: StateDepartment;
+	export let challenges: StateChallenge[];
 
-	$: challenges = $challengesByDepartmentId[department.id] || [];
-
-	$: filterChallenges = (challenge: Challenge) =>
-		$state.nameFilter ? fuzzyEquals($state.nameFilter, challenge.name) : true;
+	function onChange(nameFilter) {
+		state.update((state) => ({ ...state, nameFilter }));
+	}
+	$: nameFilter = $state.nameFilter;
+	$: filterChallenges = (challenge: StateChallenge) =>
+		nameFilter ? fuzzyEquals(nameFilter, challenge.name) : true;
+	$: filteredChallenges = challenges.filter(filterChallenges);
 </script>
 
 <div class="container">
@@ -38,10 +42,10 @@
 			<CreateChallenge departmentId={department.id} />
 		</div>
 	</div>
-	<Search bind:filter={$state.nameFilter} />
+	<Search filter={nameFilter} {onChange} />
 </div>
 
 <div class="container">
 	<hr />
-	<ChallengeList challenges={challenges.filter(filterChallenges)} />
+	<ChallengeList challenges={filteredChallenges} />
 </div>

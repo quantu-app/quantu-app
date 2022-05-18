@@ -3,10 +3,21 @@
 <script lang="ts">
 	export let filter: string;
 	export let placeholder = 'Filter...';
+	export let onChange: (value: string) => void;
+
+	function internalOnChange(e: Event & { currentTarget: HTMLInputElement }) {
+		onChange(e.currentTarget.value);
+	}
 </script>
 
 <form on:submit|preventDefault class="mt-2">
 	<div class="input-group">
-		<input type="text" class="form-control" {placeholder} bind:value={filter} />
+		<input
+			type="text"
+			class="form-control"
+			{placeholder}
+			bind:value={filter}
+			on:input={internalOnChange}
+		/>
 	</div>
 </form>

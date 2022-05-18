@@ -50,12 +50,9 @@ export async function mergeDepartmentDraft(client: PrismaClient, departmentDraft
 				}
 		  });
 
-	await client.departmentDraft.update({
+	await client.departmentDraft.delete({
 		where: {
 			id: departmentDraftId
-		},
-		data: {
-			merged: true
 		}
 	});
 

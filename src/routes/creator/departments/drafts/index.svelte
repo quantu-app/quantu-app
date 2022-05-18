@@ -4,7 +4,7 @@
 		if (!isValidStatus(response)) {
 			return response;
 		}
-		await showDepartmentDrafts(false, input.fetch);
+		await showDepartmentDrafts(input.fetch);
 		return response;
 	};
 </script>
@@ -17,10 +17,6 @@
 	import type { Load } from '@sveltejs/kit';
 	import { departmentDrafts, showDepartmentDrafts } from '$lib/state/creator/departmentDrafts';
 	import { base } from '$app/paths';
-
-	$: mergedDepartmentDrafts = $departmentDrafts.filter(
-		(departmentDraft) => departmentDraft.merged === false
-	);
 </script>
 
 <svelte:head>
@@ -43,5 +39,5 @@
 		}
 	]}
 >
-	<DepartmentDrafts departmentDrafts={mergedDepartmentDrafts} />
+	<DepartmentDrafts departmentDrafts={$departmentDrafts} />
 </StudioLayout>

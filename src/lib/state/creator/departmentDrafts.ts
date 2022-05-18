@@ -1,11 +1,12 @@
-import type { DepartmentDraft } from '@prisma/client';
+import type { DepartmentDraft, DepartmentDraftApproval } from '@prisma/client';
 import { writable, derived } from 'svelte/store';
 import { base } from '$app/paths';
 import type { IFetch } from '$lib/utils';
 import { addDepartment, departmentFromJSON, type StateDepartment } from './departments';
 
 export type StateDepartmentDraft = DepartmentDraft & {
-	creator: {
+	approvals: DepartmentDraftApproval[];
+	user: {
 		id: string;
 		username: string;
 	};
@@ -16,7 +17,7 @@ export type StateDepartmentDraft = DepartmentDraft & {
 	};
 };
 
-const departmentDraftsWritable = writable<DepartmentDraft[]>([]);
+const departmentDraftsWritable = writable<StateDepartmentDraft[]>([]);
 
 export const departmentDrafts = derived(
 	departmentDraftsWritable,
@@ -27,7 +28,7 @@ export const departmentDraftsById = derived(departmentDraftsWritable, (departmen
 	departmentDrafts.reduce((byId, departmentDraft) => {
 		byId[departmentDraft.id] = departmentDraft;
 		return byId;
-	}, {} as { [id: string]: DepartmentDraft })
+	}, {} as { [id: string]: StateDepartmentDraft })
 );
 
 export const departmentDraftsByReferenceId = derived(departmentDraftsWritable, (departmentDrafts) =>
@@ -36,7 +37,7 @@ export const departmentDraftsByReferenceId = derived(departmentDraftsWritable, (
 			byReferenceId[departmentDraft.departmentRefId] = departmentDraft;
 		}
 		return byReferenceId;
-	}, {} as { [departmentRefId: string]: DepartmentDraft })
+	}, {} as { [departmentRefId: string]: StateDepartmentDraft })
 );
 
 export async function showDepartmentDraftById(id: string, fetchFn: IFetch = fetch) {
@@ -48,28 +49,21 @@ export async function showDepartmentDraftById(id: string, fetchFn: IFetch = fetc
 	if (!res.ok) {
 		throw await res.json();
 	}
-	const departmentDraft: DepartmentDraft = departmentDraftFromJSON(await res.json());
+	const departmentDraft: StateDepartmentDraft = departmentDraftFromJSON(await res.json());
 	departmentDraftsWritable.update((state) => addOrUpdate(state.slice(), departmentDraft));
 	return departmentDraft;
 }
 
-export async function showDepartmentDrafts(
-	merged: boolean | null = false,
-	fetchFn: IFetch = fetch
-) {
-	console.log('state', merged);
-	const res = await fetchFn(
-		`${base}/api/creator/drafts/departments${merged === null ? '' : `?merged=${merged}`}`,
-		{
-			headers: {
-				'Content-Type': 'application/json'
-			}
+export async function showDepartmentDrafts(fetchFn: IFetch = fetch) {
+	const res = await fetchFn(`${base}/api/creator/drafts/departments`, {
+		headers: {
+			'Content-Type': 'application/json'
 		}
-	);
+	});
 	if (!res.ok) {
 		throw await res.json();
 	}
-	const departmentDrafts: DepartmentDraft[] = (await res.json()).map(departmentDraftFromJSON);
+	const departmentDrafts: StateDepartmentDraft[] = (await res.json()).map(departmentDraftFromJSON);
 	departmentDraftsWritable.update((state) =>
 		departmentDrafts.reduce(
 			(state, departmentDraft) => addOrUpdate(state, departmentDraft),
@@ -87,7 +81,7 @@ export async function createDepartmentDraft(body: Partial<DepartmentDraft>) {
 	if (!res.ok) {
 		throw await res.json();
 	}
-	const departmentDraft: DepartmentDraft = departmentDraftFromJSON(await res.json());
+	const departmentDraft: StateDepartmentDraft = departmentDraftFromJSON(await res.json());
 	departmentDraftsWritable.update((state) => addOrUpdate(state.slice(), departmentDraft));
 	return departmentDraft;
 }
@@ -99,7 +93,7 @@ export async function createDepartmentDraftFromRef(departmentId: string) {
 	if (!res.ok) {
 		throw await res.json();
 	}
-	const departmentDraft: DepartmentDraft = departmentDraftFromJSON(await res.json());
+	const departmentDraft: StateDepartmentDraft = departmentDraftFromJSON(await res.json());
 	departmentDraftsWritable.update((state) => addOrUpdate(state.slice(), departmentDraft));
 	return departmentDraft;
 }
@@ -112,7 +106,7 @@ export async function updateDepartmentDraft(id: string, body: Partial<Department
 	if (!res.ok) {
 		throw await res.json();
 	}
-	const departmentDraft: DepartmentDraft = departmentDraftFromJSON(await res.json());
+	const departmentDraft: StateDepartmentDraft = departmentDraftFromJSON(await res.json());
 	departmentDraftsWritable.update((state) => addOrUpdate(state.slice(), departmentDraft));
 	return departmentDraft;
 }
@@ -124,17 +118,50 @@ export async function mergeDepartmentDraft(id: string) {
 	if (!res.ok) {
 		throw await res.json();
 	}
-	const department: StateDepartment = departmentFromJSON(await res.json());
 	departmentDraftsWritable.update((state) => {
-		const index = state.findIndex((t) => t.id === id);
-		const departmentDraft = state[index];
-		if (departmentDraft) {
+		const index = state.findIndex((departmentDraft) => departmentDraft.id === id);
+		if (index !== -1) {
 			state = state.slice();
-			state[index] = { ...departmentDraft, merged: true };
+			state.splice(index, 1);
 		}
 		return state;
 	});
+	const department: StateDepartment = departmentFromJSON(await res.json());
 	addDepartment(department);
+	return department;
+}
+
+export async function approveDepartmentDraft(id: string) {
+	const res = await fetch(`${base}/api/creator/drafts/departments/${id}/approve`, {
+		method: 'PATCH'
+	});
+	if (!res.ok) {
+		throw await res.json();
+	}
+	const departmentDraftApproval: DepartmentDraftApproval = departmentDraftApprovalFromJSON(
+		await res.json()
+	);
+	departmentDraftsWritable.update((state) => {
+		const index = state.findIndex(
+			(departmentDraft) => departmentDraft.id === departmentDraftApproval.departmentDraftId
+		);
+		const departmentDraft = state[index];
+		if (departmentDraft) {
+			const approvals = departmentDraft.approvals.slice();
+			const approvalIndex = approvals.findIndex(
+				(approval) => approval.id === departmentDraftApproval.id
+			);
+			if (approvalIndex === -1) {
+				approvals.push(departmentDraftApproval);
+			} else {
+				approvals[approvalIndex] = departmentDraftApproval;
+			}
+			state = state.slice();
+			state[index] = { ...departmentDraft, approvals };
+		}
+		return state;
+	});
+	return departmentDraftApproval;
 }
 
 export async function deleteDepartmentDraft(id: string) {
@@ -155,9 +182,9 @@ export async function deleteDepartmentDraft(id: string) {
 }
 
 function addOrUpdate(
-	departmentDrafts: DepartmentDraft[],
-	departmentDraft: DepartmentDraft
-): DepartmentDraft[] {
+	departmentDrafts: StateDepartmentDraft[],
+	departmentDraft: StateDepartmentDraft
+): StateDepartmentDraft[] {
 	const index = departmentDrafts.findIndex((t) => t.id === departmentDraft.id);
 	if (index === -1) {
 		departmentDrafts.push(departmentDraft);
@@ -167,10 +194,21 @@ function addOrUpdate(
 	return departmentDrafts;
 }
 
-function departmentDraftFromJSON(departmentDraft: DepartmentDraft): DepartmentDraft {
+function departmentDraftFromJSON(departmentDraft: StateDepartmentDraft): StateDepartmentDraft {
 	return {
 		...departmentDraft,
+		approvals: departmentDraft.approvals.map(departmentDraftApprovalFromJSON),
 		createdAt: new Date(departmentDraft.createdAt),
 		updatedAt: new Date(departmentDraft.updatedAt)
+	};
+}
+
+function departmentDraftApprovalFromJSON(
+	departmentDraftApproval: DepartmentDraftApproval
+): DepartmentDraftApproval {
+	return {
+		...departmentDraftApproval,
+		createdAt: new Date(departmentDraftApproval.createdAt),
+		updatedAt: new Date(departmentDraftApproval.updatedAt)
 	};
 }

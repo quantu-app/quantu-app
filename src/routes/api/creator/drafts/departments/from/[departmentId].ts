@@ -12,7 +12,7 @@ export const post = isCreator(async (event) => ({
 export async function createDepartmentDraft(
 	client: PrismaClient,
 	departmentId: string,
-	creatorId: string
+	userId: string
 ) {
 	const department = await client.department.findUnique({
 		where: {
@@ -21,7 +21,7 @@ export async function createDepartmentDraft(
 	});
 	return client.departmentDraft.create({
 		data: {
-			creatorId,
+			userId,
 			departmentRefId: department.id,
 			name: department.name,
 			url: department.url,
@@ -29,7 +29,8 @@ export async function createDepartmentDraft(
 			description: department.description
 		},
 		include: {
-			creator: {
+			approvals: true,
+			user: {
 				select: {
 					id: true,
 					username: true

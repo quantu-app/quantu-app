@@ -1,6 +1,9 @@
 <svelte:options immutable />
 
 <script lang="ts">
+	import { goto } from '$app/navigation';
+	import { base } from '$app/paths';
+
 	import {
 		mergeDepartmentDraft,
 		updateDepartmentDraft,
@@ -29,7 +32,8 @@
 	async function onMerge() {
 		merging = true;
 		try {
-			await mergeDepartmentDraft(departmentDraft.id);
+			const department = await mergeDepartmentDraft(departmentDraft.id);
+			await goto(`${base}/creator/departments/${department.id}`);
 		} finally {
 			merging = false;
 		}
@@ -37,14 +41,19 @@
 </script>
 
 <div class="container mb-8">
-	<DepartmentDraftEditor {departmentDraft} />
-
-	<div class="mt-2">
-		<button type="button" on:click={onUpdate} class="btn btn-primary" disabled={updating}
-			>Save Draft</button
-		>
+	<div class="d-flex justify-content-end">
 		<button type="button" on:click={onMerge} class="btn btn-primary" disabled={updating || merging}
 			>Merge</button
+		>
+	</div>
+
+	<div class="my-2">
+		<DepartmentDraftEditor {departmentDraft} />
+	</div>
+
+	<div class="d-flex justify-content-end">
+		<button type="button" on:click={onUpdate} class="btn btn-primary" disabled={updating}
+			>Save Draft</button
 		>
 	</div>
 </div>

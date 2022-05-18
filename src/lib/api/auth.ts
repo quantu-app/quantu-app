@@ -12,19 +12,21 @@ export const authenticated = (handler: RequestHandler) => (event: RequestEvent) 
 				status: 401
 		  };
 
-export const isCreator = (handler: RequestHandler) => (event: RequestEvent) =>
-	run((client) =>
-		client.user
-			.findUnique({
-				where: {
-					id: event.locals.token.userId
-				}
-			})
-			.then((user) =>
-				user.creator
-					? handler(event)
-					: {
-							status: 403
-					  }
-			)
+export const isCreator = (handler: RequestHandler) =>
+	authenticated((event) =>
+		run((client) =>
+			client.user
+				.findUnique({
+					where: {
+						id: event.locals.token.userId
+					}
+				})
+				.then((user) =>
+					user.creator
+						? handler(event)
+						: {
+								status: 403
+						  }
+				)
+		)
 	);

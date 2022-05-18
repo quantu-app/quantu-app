@@ -2,24 +2,18 @@ import { isCreator } from '$lib/api/auth';
 import { run } from '$lib/prisma';
 import type { PrismaClient } from '@prisma/client';
 
-export const get = isCreator(async (event) => {
-	const mergedString = event.url.searchParams.get('merged');
-	const merged = mergedString === 'true' ? true : mergedString === 'false' ? false : null;
+export const get = isCreator(async () => {
 	return {
-		body: await run((client) => getDepartmentDrafts(client, merged)),
+		body: await run(getDepartmentDrafts),
 		status: 200
 	};
 });
 
-export function getDepartmentDrafts(client: PrismaClient, merged: boolean | null) {
-	const where: any = {};
-	if (merged !== null) {
-		where.merged = merged;
-	}
+export function getDepartmentDrafts(client: PrismaClient) {
 	return client.departmentDraft.findMany({
-		where,
 		include: {
-			creator: {
+			approvals: true,
+			user: {
 				select: {
 					id: true,
 					username: true
@@ -60,14 +54,15 @@ export async function createDepartmentDraft(client: PrismaClient, userId: string
 	return client.departmentDraft.create({
 		data: {
 			...data,
-			creator: {
+			user: {
 				connect: {
 					id: userId
 				}
 			}
 		},
 		include: {
-			creator: {
+			approvals: true,
+			user: {
 				select: {
 					id: true,
 					username: true

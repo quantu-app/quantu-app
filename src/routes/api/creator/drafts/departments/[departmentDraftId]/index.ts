@@ -10,7 +10,8 @@ export const get = isCreator((event) => {
 				id: departmentDraftId
 			},
 			include: {
-				creator: {
+				approvals: true,
+				user: {
 					select: {
 						id: true,
 						username: true
@@ -46,7 +47,8 @@ export const patch = isCreator(async (event) => {
 				id: departmentDraftId
 			},
 			include: {
-				creator: {
+				approvals: true,
+				user: {
 					select: {
 						id: true,
 						username: true
@@ -82,7 +84,8 @@ export const del = isCreator((event) => {
 				id: departmentDraftId
 			},
 			include: {
-				creator: {
+				approvals: true,
+				user: {
 					select: {
 						id: true,
 						username: true

@@ -7,8 +7,8 @@
 	import type { Result } from '@prisma/client';
 
 	export let type: QuestionType;
-	export let input: Answer;
-	export let result: Result = undefined;
+	export let input: Answer | undefined = undefined;
+	export let result: Result | undefined = undefined;
 	export let showExplanation = false;
 	export let onExplain: () => Promise<Result>;
 	export let onSubmit: (answer: Answer) => Promise<Result>;
@@ -45,45 +45,47 @@
 		<div class="d-flex flex-column flex-grow-1">
 			<slot name="input" />
 
-			<div class="d-flex mt-3">
-				{#if !disabled && result != null}
-					{#if !showExplanation && type !== 'MARK_AS_READ'}
-						<button
-							type="button"
-							class="btn btn-secondary text-white"
-							disabled={disabled || showExplanation}
-							on:click={() => (showExplanation = true)}
-						>
-							Show Explanation
-						</button>
-					{/if}
-					<slot name="extra" />
-				{:else if !disabled}
-					<button
+			<div class="row justify-content-between mt-4">
+				<div class="col">
+					<a
 						type="button"
-						class="btn btn-primary mt-2 me-4"
-						disabled={disabled || isEmpty(input) || !!result || answering || explaining}
-						on:click={onSubmitInternal}
+						class="link-dark"
+						disabled={disabled || explaining || answering}
+						on:click={onExplainInternal}
 					>
-						{#if answering}
+						{#if explaining}
 							<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" />
 						{/if}
-						Submit
-					</button>
-					{#if type !== 'MARK_AS_READ'}
+						Show Explanation
+					</a>
+				</div>
+				<div class="col text-end">
+					{#if !disabled && result != null}
+						{#if !showExplanation && type !== 'MARK_AS_READ'}
+							<button
+								type="button"
+								class="btn btn-secondary text-white"
+								disabled={disabled || showExplanation}
+								on:click={() => (showExplanation = true)}
+							>
+								Show Explanation
+							</button>
+						{/if}
+						<slot name="extra" />
+					{:else if !disabled}
 						<button
 							type="button"
-							class="btn btn-outline-primary mt-2"
-							disabled={disabled || explaining || answering}
-							on:click={onExplainInternal}
+							class="btn btn-primary mt-2 me-4"
+							disabled={disabled || isEmpty(input) || !!result || answering || explaining}
+							on:click={onSubmitInternal}
 						>
-							{#if explaining}
+							{#if answering}
 								<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" />
 							{/if}
-							Show Explanation
+							Submit
 						</button>
 					{/if}
-				{/if}
+				</div>
 			</div>
 			<div>
 				<slot name="explanation" />

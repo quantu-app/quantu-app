@@ -66,8 +66,9 @@ model User {
   mergeRequest           MergeRequest[]
   mergeRequestApprovals  MergeRequestApproval[]
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt           DateTime              @default(now())
+  updatedAt           DateTime              @updatedAt
+  ApplicationSettings ApplicationSettings[]
 }
 
 // Changes
@@ -305,4 +306,19 @@ model Asset {
   updatedAt DateTime @updatedAt
 
   @@unique([departmentId, folder, name])
+}
+
+// Application Settings
+model ApplicationSettings {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  // RELATIONS
+  user   User   @relation(fields: [userId], references: [id])
+  userId String @db.ObjectId
+
+  // PROPERTIES
+  settings Json
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

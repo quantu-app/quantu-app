@@ -2,38 +2,25 @@
 
 <script lang="ts">
 	export let disabled: boolean = false;
-	export let checked: boolean = false;
-	export let value: string = '';
-	export let onChange = undefined;
+	export let checked: boolean | undefined = undefined;
+	export let onChange: () => void = () => undefined;
+	export let status: 'error' | 'success' | undefined = undefined;
 </script>
 
-{#if onChange}
-	<input
-		class="qu-checkbox form-check-input"
-		type="checkbox"
-		{disabled}
-		{value}
-		{checked}
-		on:change={onChange}
-	/>
-{:else}
-	<input class="qu-checkbox form-check-input" type="checkbox" {disabled} {value} {checked} />
-{/if}
+<input
+	class="p-2 m-0 rounded-circle form-check-input border-2 border-dark"
+	class:bg-black={status == null && checked === true}
+	class:bg-danger={status == 'error'}
+	class:bg-success={status == 'success'}
+	type="checkbox"
+	{disabled}
+	value={checked != null ? checked.toString() : ''}
+	{checked}
+	on:change={onChange}
+/>
 
-<style lang="scss">
-	input.qu-checkbox[type='checkbox'] {
-		padding: 14px;
-		border-radius: 50%;
-		border: 2px solid #202020;
-
-		&:disabled {
-			opacity: 0.9;
-		}
-
-		&:checked {
-			&:hover {
-				background-color: black;
-			}
-		}
+<style>
+	input[type='checkbox']:focus {
+		outline: 0;
 	}
 </style>

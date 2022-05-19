@@ -10,8 +10,8 @@
 
 	export let type: QuestionType;
 	export let prompt: Input;
-	export let input: InputAnswer = undefined;
-	export let result: Result = undefined;
+	export let input: InputAnswer | undefined = undefined;
+	export let result: Result | undefined = undefined;
 	export let onExplain: () => Promise<Result>;
 	export let onSubmit: (answer: Answer) => Promise<Result>;
 	export let disabled = false;

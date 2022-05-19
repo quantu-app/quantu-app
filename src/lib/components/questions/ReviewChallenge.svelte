@@ -5,10 +5,10 @@
 	import FlashCardReview from './FlashCardReview.svelte';
 	import InputReview from './InputReview.svelte';
 	import MarkAsReadReview from './MarkAsReadReview.svelte';
-	import MultipleChoiceReview from './MultipleChoiceReview.svelte';
+	import MultipleChoiceReview from './multiple_choice/MultipleChoiceReview.svelte';
 
 	export let result: Result;
-	export let seed: number = undefined;
+	export let seed: number | undefined = undefined;
 </script>
 
 {#key result.id}

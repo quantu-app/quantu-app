@@ -2,7 +2,7 @@
 
 <script lang="ts">
 	import RichViewer from '$lib/components/editor/RichViewer.svelte';
-	import Prompt from './Prompt.svelte';
+	import Prompt from '../Prompt.svelte';
 	import MultipleChoiceContent from './MultipleChoiceContent.svelte';
 	import MultipleChoiceInput from './MultipleChoiceInput.svelte';
 	import type { QuestionType, Result } from '@prisma/client';

@@ -3,13 +3,13 @@
 <script lang="ts">
 	import MultipleChoiceInput from './MultipleChoiceInput.svelte';
 	import MultipleChoiceContent from './MultipleChoiceContent.svelte';
-	import Review from './Review.svelte';
+	import Review from '../Review.svelte';
 	import type { Result } from '@prisma/client';
 	import type { MultipleChoicePrivate, MultipleChoiceAnswer } from '$lib/types';
-	import RichViewer from '../editor/RichViewer.svelte';
+	import RichViewer from '../../editor/RichViewer.svelte';
 
 	export let result: Result;
-	export let seed: number = undefined;
+	export let seed: number | undefined = undefined;
 
 	$: prompt = result.prompt as unknown as MultipleChoicePrivate;
 	$: input = result.answer as MultipleChoiceAnswer;
@@ -23,15 +23,7 @@
 
 <Review>
 	<MultipleChoiceContent slot="content" {prompt} />
-	<MultipleChoiceInput
-		slot="input"
-		disabled={true}
-		{correct}
-		{seed}
-		{prompt}
-		{input}
-		reviewMode={true}
-	/>
+	<MultipleChoiceInput slot="input" disabled={true} {correct} {seed} {prompt} {input} />
 	<slot slot="extra" name="extra" />
 	<div name="explanation" slot="explanation">
 		{#if prompt.explanation && prompt.explanation.length}

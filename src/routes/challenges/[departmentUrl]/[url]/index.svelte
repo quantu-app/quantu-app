@@ -61,9 +61,6 @@
 			<h2>{challenge.name}</h2>
 			<Challenge {challenge}>
 				<svelte:fragment slot="extra">
-					<a role="button" class="btn btn-outline-primary" href={`${base}/challenges`}>
-						Return to Challenges
-					</a>
 					<a
 						role="button"
 						class="btn btn-outline-primary"

@@ -57,34 +57,9 @@
 <UserLayout>
 	{#if challenge}
 		<ChallengeWrapper {challenge}>
-			<svelte:fragment slot="sidebar">
-				<a
-					role="button"
-					class="list-group-item list-group-item-action"
-					href={`${base}/challenges/${challenge.department.url}/${challenge.url}`}
-					>{challenge.name}</a
-				>
-				<a
-					role="button"
-					class="list-group-item list-group-item-action active"
-					href={`${base}/challenges/${challenge.department.url}/${challenge.url}/review`}>Review</a
-				>
-				<a
-					role="button"
-					class="list-group-item list-group-item-action"
-					href={`${base}/challenges/${challenge.department.url}/${challenge.url}/solutions`}
-					>Solutions</a
-				>
-			</svelte:fragment>
 			<h2>{challenge.name}</h2>
 			{#if challenge.result}
-				<ReviewChallenge result={challenge.result}>
-					<svelte:fragment slot="extra">
-						<a role="button" class="btn btn-outline-primary" href={`${base}/challenges`}>
-							Return to Challenges
-						</a>
-					</svelte:fragment>
-				</ReviewChallenge>
+				<ReviewChallenge result={challenge.result} />
 			{/if}
 		</ChallengeWrapper>
 	{/if}

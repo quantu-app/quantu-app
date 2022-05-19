@@ -3,7 +3,7 @@
 <script lang="ts">
 	import FlashCard from './FlashCard.svelte';
 	import Input from './Input.svelte';
-	import MultipleChoice from './MultipleChoice.svelte';
+	import MultipleChoice from './multiple_choice/MultipleChoice.svelte';
 	import MarkAsRead from './MarkAsRead.svelte';
 	import type { StateChallenge } from '$lib/state/challenges';
 	import { answer, explain } from '$lib/state/challenges';
@@ -11,8 +11,8 @@
 	import type { Answer } from '$lib/types';
 
 	export let challenge: StateChallenge;
-	export let seed: number = undefined;
-	export let result: Result = undefined;
+	export let seed: number | undefined = undefined;
+	export let result: Result | undefined = undefined;
 	export let disabled = false;
 
 	let prevQuesion: StateChallenge;

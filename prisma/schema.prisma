@@ -13,93 +13,143 @@ datasource db {
 // User
 
 model Email {
-  id        String  @id @default(auto()) @map("_id") @db.ObjectId
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String @db.ObjectId
+
   email     String  @unique
-  user      User    @relation(fields: [userId], references: [id])
-  userId    String  @db.ObjectId
   primary   Boolean @default(false)
   confirmed Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model OldPasswords {
-  id                String @id @default(auto()) @map("_id") @db.ObjectId
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String @db.ObjectId
+
   encryptedPassword String
-  user              User   @relation(fields: [userId], references: [id])
-  userId            String @db.ObjectId
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@unique([userId, encryptedPassword])
 }
 
 model User {
-  id                String         @id @default(auto()) @map("_id") @db.ObjectId
-  username          String         @unique
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  username          String    @unique
   encryptedPassword String
-  emails            Email[]
-  oldPasswords      OldPasswords[]
-  creator           Boolean        @default(false)
-  active            Boolean        @default(true)
-  confirmed         Boolean        @default(false)
+  creator           Boolean   @default(false)
+  active            Boolean   @default(true)
+  confirmed         Boolean   @default(false)
   firstName         String?
   lastName          String?
   birthday          DateTime?
   country           String?
   bio               Json
-  createdAt         DateTime       @default(now())
-  updatedAt         DateTime       @updatedAt
 
-  results                 Result[]
-  solutions               ChallengeSolution[]
-  challengeSolutionVotes  ChallengeSolutionVote[]
-  comments                Comment[]
-  commentVotes            CommentVote[]
-  departmentDrafts        DepartmentDraft[]
-  challengeDrafts         ChallengeDraft[]
-  DepartmentDraftApproval DepartmentDraftApproval[]
+  emails       Email[]
+  oldPasswords OldPasswords[]
+
+  results                  Result[]
+  solutions                ChallengeSolution[]
+  challengeSolutionVotes   ChallengeSolutionVote[]
+  comments                 Comment[]
+  commentVotes             CommentVote[]
+  changes                  Change[]
+  departmentMerges         DepartmentMerge[]
+  departmentMergeApprovals DepartmentMergeApproval[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
+
+// Changes
+
+enum ChangeType {
+  DEPARTMENT
+}
+
+model Change {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  userId        String      @db.ObjectId
+  user          User        @relation(fields: [userId], references: [id])
+  prevChangeId  String?     @db.ObjectId
+  prevChange    Change?     @relation(name: "PrevChange", fields: [prevChangeId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  referenceId   String?     @db.ObjectId
+  referenceType ChangeType?
+
+  latest Boolean
+  value  Json
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  prevChanges      Change[]          @relation(name: "PrevChange")
+  departmentMerges DepartmentMerge[]
+
+  @@unique([userId, referenceType, referenceId, prevChangeId])
+}
+
+// Departments
 
 model Department {
-  id               String            @id @default(auto()) @map("_id") @db.ObjectId
-  name             String
-  url              String            @unique
-  logo             Asset?            @relation(name: "DepartmentLogo", fields: [logoId], references: [id])
-  logoId           String?           @db.ObjectId
-  description      Json
-  createdAt        DateTime          @default(now())
-  updatedAt        DateTime          @updatedAt
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  name        String
+  url         String  @unique
+  logo        Asset?  @relation(name: "DepartmentLogo", fields: [logoId], references: [id])
+  logoId      String? @db.ObjectId
+  description Json
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   challenges       Challenge[]
   assets           Asset[]
-  challengeDrafts  ChallengeDraft[]
-  departmentDrafts DepartmentDraft[] @relation(name: "DepartmentRef")
+  departmentMerges DepartmentMerge[]
 }
 
-model DepartmentDraft {
-  id              String                    @id @default(auto()) @map("_id") @db.ObjectId
-  user            User                      @relation(fields: [userId], references: [id])
-  userId          String                    @db.ObjectId
-  departmentRef   Department?               @relation(name: "DepartmentRef", fields: [departmentRefId], references: [id])
-  departmentRefId String?                   @db.ObjectId
-  name            String?
-  url             String?
-  logo            Asset?                    @relation(name: "DepartmentDraftLogo", fields: [logoId], references: [id])
-  logoId          String?                   @db.ObjectId
-  description     Json?
-  approvals       DepartmentDraftApproval[] @relation(name: "DepartmentDraft")
-  mergedAt        DateTime?
-  createdAt       DateTime                  @default(now())
-  updatedAt       DateTime                  @updatedAt
+model DepartmentMerge {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  user         User                      @relation(fields: [userId], references: [id])
+  userId       String                    @db.ObjectId
+  change       Change                    @relation(fields: [changeId], references: [id])
+  changeId     String                    @db.ObjectId
+  department   Department                @relation(fields: [departmentId], references: [id])
+  departmentId String                    @db.ObjectId
+  approvals    DepartmentMergeApproval[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, changeId, departmentId])
 }
 
-model DepartmentDraftApproval {
-  id                String          @id @default(auto()) @map("_id") @db.ObjectId
+model DepartmentMergeApproval {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
   user              User            @relation(fields: [userId], references: [id])
   userId            String          @db.ObjectId
-  departmentDraft   DepartmentDraft @relation(name: "DepartmentDraft", fields: [departmentDraftId], references: [id])
-  departmentDraftId String          @db.ObjectId
-  createdAt         DateTime        @default(now())
-  updatedAt         DateTime        @updatedAt
+  departmentMerge   DepartmentMerge @relation(fields: [departmentMergeId], references: [id])
+  departmentMergeId String          @db.ObjectId
+  approved          Boolean         @default(false)
 
-  @@unique([departmentDraftId, userId])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, departmentMergeId])
 }
+
+// Challenges
 
 enum QuestionType {
   MULTIPLE_CHOICE
@@ -109,57 +159,43 @@ enum QuestionType {
 }
 
 model Challenge {
-  id              String              @id @default(auto()) @map("_id") @db.ObjectId
-  name            String
-  url             String
-  logo            Asset?              @relation(name: "ChallengeLogo", fields: [logoId], references: [id])
-  logoId          String?             @db.ObjectId
-  description     Json
-  department      Department          @relation(fields: [departmentId], references: [id])
-  departmentId    String              @db.ObjectId
-  results         Result[]
-  solutions       ChallengeSolution[]
-  challengeDrafts ChallengeDraft[]
-  type            QuestionType        @default(MULTIPLE_CHOICE)
-  prompt          Json
-  visible         Boolean             @default(false)
-  releasedAt      DateTime?
-  createdAt       DateTime            @default(now())
-  updatedAt       DateTime            @updatedAt
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  logo         Asset?     @relation(name: "ChallengeLogo", fields: [logoId], references: [id])
+  logoId       String?    @db.ObjectId
+  department   Department @relation(fields: [departmentId], references: [id])
+  departmentId String     @db.ObjectId
+
+  name        String
+  url         String
+  description Json
+  type        QuestionType @default(MULTIPLE_CHOICE)
+  prompt      Json
+
+  results   Result[]
+  solutions ChallengeSolution[]
+
+  visible    Boolean   @default(false)
+  releasedAt DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@unique([departmentId, url])
 }
 
-model ChallengeDraft {
-  id           String       @id @default(auto()) @map("_id") @db.ObjectId
-  user         User         @relation(fields: [userId], references: [id])
-  userId       String       @db.ObjectId
-  department   Department   @relation(fields: [departmentId], references: [id])
-  departmentId String       @db.ObjectId
-  name         String
-  url          String
-  logo         Asset?       @relation(name: "ChallengeDraftLogo", fields: [logoId], references: [id])
-  logoId       String?      @db.ObjectId
-  challenge    Challenge?   @relation(fields: [challengeId], references: [id])
-  challengeId  String?      @db.ObjectId
-  description  Json
-  type         QuestionType @default(MULTIPLE_CHOICE)
-  prompt       Json
-  visible      Boolean      @default(false)
-  releasedAt   DateTime?
-  createdAt    DateTime     @default(now())
-  updatedAt    DateTime     @updatedAt
-}
-
 model ChallengeSolution {
-  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
   challengeId String    @db.ObjectId
   challenge   Challenge @relation(fields: [challengeId], references: [id])
   userId      String    @db.ObjectId
   user        User      @relation(fields: [userId], references: [id])
-  solution    Json
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+
+  solution Json
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   votes ChallengeSolutionVote[]
 
@@ -172,12 +208,16 @@ model ChallengeSolutionVote {
   challengeSolution   ChallengeSolution @relation(fields: [challengeSolutionId], references: [id])
   userId              String            @db.ObjectId
   user                User              @relation(fields: [userId], references: [id])
-  vote                Boolean?
-  createdAt           DateTime          @default(now())
-  updatedAt           DateTime          @updatedAt
+
+  vote Boolean?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@unique([userId, challengeSolutionId])
 }
+
+// Comments
 
 enum CommentReferenceType {
   CHALLENGE_SOLUTION
@@ -186,31 +226,37 @@ enum CommentReferenceType {
 }
 
 model Comment {
-  id            String               @id @default(auto()) @map("_id") @db.ObjectId
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
   referenceType CommentReferenceType @default(CHALLENGE_SOLUTION)
   referenceId   String               @db.ObjectId
   commentId     String?              @db.ObjectId
   comment       Comment?             @relation(name: "Comments", fields: [commentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   userId        String               @db.ObjectId
   user          User                 @relation(fields: [userId], references: [id])
-  content       Json
-  deleted       Boolean              @default(false)
-  createdAt     DateTime             @default(now())
-  updatedAt     DateTime             @updatedAt
+
+  content Json
+  deleted Boolean @default(false)
 
   votes    CommentVote[]
   comments Comment[]     @relation(name: "Comments")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@unique([referenceType, referenceId, commentId])
 }
 
 model CommentVote {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  commentId String   @db.ObjectId
-  comment   Comment  @relation(fields: [commentId], references: [id])
-  userId    String   @db.ObjectId
-  user      User     @relation(fields: [userId], references: [id])
-  vote      Boolean?
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  commentId String  @db.ObjectId
+  comment   Comment @relation(fields: [commentId], references: [id])
+  userId    String  @db.ObjectId
+  user      User    @relation(fields: [userId], references: [id])
+
+  vote Boolean?
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -218,20 +264,25 @@ model CommentVote {
 }
 
 model Result {
-  id          String       @id @default(auto()) @map("_id") @db.ObjectId
-  user        User         @relation(fields: [userId], references: [id])
-  userId      String       @db.ObjectId
-  type        QuestionType @default(MULTIPLE_CHOICE)
-  challenge   Challenge?   @relation(fields: [challengeId], references: [id])
-  challengeId String?      @unique @db.ObjectId
-  prompt      Json
-  answer      Json?
-  value       Float
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  user        User       @relation(fields: [userId], references: [id])
+  userId      String     @db.ObjectId
+  challenge   Challenge? @relation(fields: [challengeId], references: [id])
+  challengeId String?    @unique @db.ObjectId
+
+  type   QuestionType @default(MULTIPLE_CHOICE)
+  prompt Json
+  answer Json?
+  value  Float
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@unique([userId, challengeId])
 }
+
+// Assets
 
 enum AssetType {
   IMAGE
@@ -240,19 +291,20 @@ enum AssetType {
 }
 
 model Asset {
-  id           String     @id @default(auto()) @map("_id") @db.ObjectId
-  type         AssetType
-  name         String
-  folder       String
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
   department   Department @relation(fields: [departmentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   departmentId String     @unique @db.ObjectId
-  createdAt    DateTime   @default(now())
-  updatedAt    DateTime   @updatedAt
 
-  departmentLogos      Department[]      @relation(name: "DepartmentLogo")
-  departmentDraftLogos DepartmentDraft[] @relation(name: "DepartmentDraftLogo")
-  challengeLogos       Challenge[]       @relation(name: "ChallengeLogo")
-  challengeDraftLogos  ChallengeDraft[]  @relation(name: "ChallengeDraftLogo")
+  type   AssetType
+  name   String
+  folder String
+
+  departmentLogos Department[] @relation(name: "DepartmentLogo")
+  challengeLogos  Challenge[]  @relation(name: "ChallengeLogo")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@unique([departmentId, folder, name])
 }

@@ -7,12 +7,12 @@
 		if (!isValidStatus(response)) {
 			return response;
 		}
-		const departmentDraftId = input.params.departmentDraftId;
-		await showDepartmentDraftById(departmentDraftId, input.fetch);
+		const departmentChangeId = input.params.departmentChangeId;
+		await showDepartmentChangeById(departmentChangeId, input.fetch);
 
 		return {
 			props: {
-				departmentDraftId
+				departmentChangeId
 			}
 		};
 	};
@@ -21,17 +21,17 @@
 <script lang="ts">
 	import StudioLayout from '$lib/components/layouts/StudioLayout.svelte';
 	import { creatorGuard } from '$lib/guard/creatorGuard';
-	import DepartmentDraft from '$lib/components/creator/departments/DepartmentDraft.svelte';
+	import DepartmentChange from '$lib/components/creator/departments/DepartmentChange.svelte';
 	import { isValidStatus } from '$lib/guard/isValidStatus';
 	import {
-		departmentDraftsById,
-		showDepartmentDraftById
-	} from '$lib/state/creator/departmentDrafts';
+		departmentChangesById,
+		showDepartmentChangeById
+	} from '$lib/state/creator/departmentChanges';
 	import { base } from '$app/paths';
 
-	export let departmentDraftId: string;
+	export let departmentChangeId: string;
 
-	$: departmentDraft = $departmentDraftsById[departmentDraftId];
+	$: departmentChange = $departmentChangesById[departmentChangeId];
 </script>
 
 <svelte:head>
@@ -49,14 +49,14 @@
 			href: `${base}/creator`
 		},
 		{
-			title: 'Department Drafts',
-			href: `${base}/creator/departments/drafts`
+			title: 'Department Changes',
+			href: `${base}/creator/departments/changes`
 		},
 		{
-			title: departmentDraft.name,
-			href: `${base}/creator/department/drafts/${departmentDraftId}`
+			title: departmentChange.name,
+			href: `${base}/creator/department/changes/${departmentChangeId}`
 		}
 	]}
 >
-	<DepartmentDraft {departmentDraft} />
+	<DepartmentChange {departmentChange} />
 </StudioLayout>

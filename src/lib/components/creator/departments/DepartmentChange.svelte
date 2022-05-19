@@ -4,23 +4,23 @@
 	import { goto } from '$app/navigation';
 	import { base } from '$app/paths';
 	import {
-		mergeDepartmentDraft,
-		updateDepartmentDraft,
-		type StateDepartmentDraft
-	} from '$lib/state/creator/departmentDrafts';
-	import DepartmentDraftEditor from './DepartmentDraftEditor.svelte';
+		mergeDepartmentChange,
+		updateDepartmentChange,
+		type StateDepartmentChange
+	} from '$lib/state/creator/departmentChanges';
+	import DepartmentChangeEditor from './DepartmentChangeEditor.svelte';
 
-	export let departmentDraft: StateDepartmentDraft;
+	export let departmentChange: StateDepartmentChange;
 
 	let updating = false;
 	async function onUpdate() {
 		updating = true;
 		try {
-			await updateDepartmentDraft(departmentDraft.id, {
-				name: departmentDraft.name,
-				url: departmentDraft.url,
-				description: departmentDraft.description,
-				logoId: departmentDraft.logoId
+			await updateDepartmentChange(departmentChange.id, {
+				name: departmentChange.name,
+				url: departmentChange.url,
+				description: departmentChange.description,
+				logoId: departmentChange.logoId
 			});
 		} finally {
 			updating = false;
@@ -31,7 +31,7 @@
 	async function onMerge() {
 		merging = true;
 		try {
-			const { department } = await mergeDepartmentDraft(departmentDraft.id);
+			const { department } = await mergeDepartmentChange(departmentChange.id);
 			await goto(`${base}/creator/departments/${department.id}`);
 		} finally {
 			merging = false;
@@ -47,12 +47,12 @@
 	</div>
 
 	<div class="my-2">
-		<DepartmentDraftEditor {departmentDraft} />
+		<DepartmentChangeEditor {departmentChange} />
 	</div>
 
 	<div class="d-flex justify-content-end">
 		<button type="button" on:click={onUpdate} class="btn btn-primary" disabled={updating}
-			>Save Draft</button
+			>Save Change</button
 		>
 	</div>
 </div>

@@ -14,7 +14,7 @@
 
 <script lang="ts">
 	import DepartmentList from './DepartmentList.svelte';
-	import CreateDepartmentDraft from './CreateDepartmentDraft.svelte';
+	import CreateDepartmentChange from './CreateDepartmentChange.svelte';
 	import { fuzzyEquals } from '@aicacia/string-fuzzy_equals';
 	import Search from '$lib/components/Search.svelte';
 	import type { StateDepartment } from '$lib/state/creator/departments';
@@ -36,10 +36,10 @@
 
 <div class="container mb-8">
 	<div class="d-flex align-items-center justify-content-end mt-2">
-		<a class="link-dark me-2" href={`${base}/creator/departments/drafts`}
-			>Drafts <i class="bi bi-chevron-right" /></a
+		<a class="link-dark me-2" href={`${base}/creator/departments/changes`}
+			>Changes <i class="bi bi-chevron-right" /></a
 		>
-		<CreateDepartmentDraft />
+		<CreateDepartmentChange />
 	</div>
 	<Search filter={departmentNameFilter} {onChange} />
 	<DepartmentList departments={filteredDepartments} />

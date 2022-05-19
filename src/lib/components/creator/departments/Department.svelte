@@ -20,21 +20,21 @@
 	import { base } from '$app/paths';
 	import type { StateChallenge } from '$lib/state/creator/challenges';
 	import type { StateDepartment } from '$lib/state/creator/departments';
-	import { createDepartmentDraftFromRef } from '$lib/state/creator/departmentDrafts';
+	import { createDepartmentChangeFromRef } from '$lib/state/creator/departmentChanges';
 	import { goto } from '$app/navigation';
 	import RichViewer from '$lib/components/editor/RichViewer.svelte';
 
 	export let department: StateDepartment;
 	export let challenges: StateChallenge[];
 
-	let creatingDraft = false;
-	async function onCreateDraft() {
-		creatingDraft = true;
+	let creatingChange = false;
+	async function onCreateChange() {
+		creatingChange = true;
 		try {
-			const departmentDraft = await createDepartmentDraftFromRef(department.id);
-			await goto(`${base}/creator/departments/drafts/${departmentDraft.id}`);
+			const departmentChange = await createDepartmentChangeFromRef(department.id);
+			await goto(`${base}/creator/departments/changes/${departmentChange.id}`);
 		} finally {
-			creatingDraft = false;
+			creatingChange = false;
 		}
 	}
 
@@ -56,7 +56,7 @@
 <div class="container">
 	<div class="d-flex justify-content-between mt-2">
 		<div class="d-flex">
-			<button class="btn btn-primary" on:click={onCreateDraft} disabled={creatingDraft}
+			<button class="btn btn-primary" on:click={onCreateChange} disabled={creatingChange}
 				>Update</button
 			>
 		</div>

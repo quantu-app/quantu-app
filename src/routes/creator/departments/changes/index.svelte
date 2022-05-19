@@ -4,7 +4,7 @@
 		if (!isValidStatus(response)) {
 			return response;
 		}
-		await showDepartmentDrafts(input.fetch);
+		await showDepartmentChanges(input.fetch);
 		return response;
 	};
 </script>
@@ -12,15 +12,15 @@
 <script lang="ts">
 	import StudioLayout from '$lib/components/layouts/StudioLayout.svelte';
 	import { creatorGuard } from '$lib/guard/creatorGuard';
-	import DepartmentDrafts from '$lib/components/creator/departments/DepartmentDrafts.svelte';
+	import DepartmentChanges from '$lib/components/creator/departments/DepartmentChanges.svelte';
 	import { isValidStatus } from '$lib/guard/isValidStatus';
 	import type { Load } from '@sveltejs/kit';
-	import { departmentDrafts, showDepartmentDrafts } from '$lib/state/creator/departmentDrafts';
+	import { departmentChanges, showDepartmentChanges } from '$lib/state/creator/departmentChanges';
 	import { base } from '$app/paths';
 </script>
 
 <svelte:head>
-	<title>Creator Studio - Department Drafts</title>
+	<title>Creator Studio - Department Changes</title>
 </svelte:head>
 
 <StudioLayout
@@ -34,10 +34,10 @@
 			href: `${base}/creator`
 		},
 		{
-			title: 'Drafts',
-			href: `${base}/creator/departments/drafts`
+			title: 'Changes',
+			href: `${base}/creator/departments/changes`
 		}
 	]}
 >
-	<DepartmentDrafts departmentDrafts={$departmentDrafts} />
+	<DepartmentChanges departmentChanges={$departmentChanges} />
 </StudioLayout>

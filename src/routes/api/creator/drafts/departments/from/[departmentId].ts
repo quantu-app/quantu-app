@@ -22,11 +22,7 @@ export async function createDepartmentDraft(
 	return client.departmentDraft.create({
 		data: {
 			userId,
-			departmentRefId: department.id,
-			name: department.name,
-			url: department.url,
-			logoId: department.logoId,
-			description: department.description
+			departmentRefId: department.id
 		},
 		include: {
 			approvals: true,
@@ -45,7 +41,9 @@ export async function createDepartmentDraft(
 				select: {
 					id: true,
 					name: true,
-					url: true
+					url: true,
+					description: true,
+					logoId: true
 				}
 			}
 		}

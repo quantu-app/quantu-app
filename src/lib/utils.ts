@@ -138,3 +138,19 @@ export function readFileToArrayBuffer(file: File): Promise<ArrayBuffer> {
 		reader.readAsArrayBuffer(file);
 	});
 }
+
+export function filterObjectBy<T extends object = object>(
+	obj: T,
+	fn: (value: T[keyof T], key: keyof T) => boolean
+): T {
+	return Object.entries(obj).reduce((acc, [key, value]) => {
+		if (fn(value, key as keyof T)) {
+			acc[key] = value;
+		}
+		return acc;
+	}, {} as T);
+}
+
+export function filterObjectByNullOrUndefined<T extends object = object>(obj: T): T {
+	return filterObjectBy(obj, (value) => value != null);
+}

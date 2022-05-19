@@ -26,7 +26,9 @@ export const get = isCreator((event) => {
 					select: {
 						id: true,
 						name: true,
-						url: true
+						url: true,
+						description: true,
+						logoId: true
 					}
 				}
 			}
@@ -63,7 +65,9 @@ export const patch = isCreator(async (event) => {
 					select: {
 						id: true,
 						name: true,
-						url: true
+						url: true,
+						description: true,
+						logoId: true
 					}
 				}
 			},
@@ -100,7 +104,9 @@ export const del = isCreator((event) => {
 					select: {
 						id: true,
 						name: true,
-						url: true
+						url: true,
+						description: true,
+						logoId: true
 					}
 				}
 			}

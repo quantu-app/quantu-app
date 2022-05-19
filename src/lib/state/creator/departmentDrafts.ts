@@ -118,17 +118,12 @@ export async function mergeDepartmentDraft(id: string) {
 	if (!res.ok) {
 		throw await res.json();
 	}
-	departmentDraftsWritable.update((state) => {
-		const index = state.findIndex((departmentDraft) => departmentDraft.id === id);
-		if (index !== -1) {
-			state = state.slice();
-			state.splice(index, 1);
-		}
-		return state;
-	});
-	const department: StateDepartment = departmentFromJSON(await res.json());
+	const { department: departmentJSON, departmentDraft: departmentDraftJSON } = await res.json();
+	const department: StateDepartment = departmentFromJSON(departmentJSON);
+	const departmentDraft: StateDepartmentDraft = departmentDraftFromJSON(departmentDraftJSON);
 	addDepartment(department);
-	return department;
+	departmentDraftsWritable.update((state) => addOrUpdate(state.slice(), departmentDraft));
+	return { department, departmentDraft };
 }
 
 export async function approveDepartmentDraft(id: string) {

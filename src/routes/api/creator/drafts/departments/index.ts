@@ -28,7 +28,9 @@ export function getDepartmentDrafts(client: PrismaClient) {
 				select: {
 					id: true,
 					name: true,
-					url: true
+					url: true,
+					description: true,
+					logoId: true
 				}
 			}
 		}
@@ -77,7 +79,9 @@ export async function createDepartmentDraft(client: PrismaClient, userId: string
 				select: {
 					id: true,
 					name: true,
-					url: true
+					url: true,
+					description: true,
+					logoId: true
 				}
 			}
 		}

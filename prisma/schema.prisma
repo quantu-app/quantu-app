@@ -78,14 +78,15 @@ model DepartmentDraft {
   userId          String                    @db.ObjectId
   departmentRef   Department?               @relation(name: "DepartmentRef", fields: [departmentRefId], references: [id])
   departmentRefId String?                   @db.ObjectId
-  name            String
-  url             String
+  name            String?
+  url             String?
   logo            Asset?                    @relation(name: "DepartmentDraftLogo", fields: [logoId], references: [id])
   logoId          String?                   @db.ObjectId
-  description     Json
+  description     Json?
+  approvals       DepartmentDraftApproval[] @relation(name: "DepartmentDraft")
+  mergedAt        DateTime?
   createdAt       DateTime                  @default(now())
   updatedAt       DateTime                  @updatedAt
-  approvals       DepartmentDraftApproval[] @relation(name: "DepartmentDraft")
 }
 
 model DepartmentDraftApproval {

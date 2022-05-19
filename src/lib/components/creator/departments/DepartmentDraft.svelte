@@ -3,7 +3,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { base } from '$app/paths';
-
 	import {
 		mergeDepartmentDraft,
 		updateDepartmentDraft,
@@ -32,7 +31,7 @@
 	async function onMerge() {
 		merging = true;
 		try {
-			const department = await mergeDepartmentDraft(departmentDraft.id);
+			const { department } = await mergeDepartmentDraft(departmentDraft.id);
 			await goto(`${base}/creator/departments/${department.id}`);
 		} finally {
 			merging = false;

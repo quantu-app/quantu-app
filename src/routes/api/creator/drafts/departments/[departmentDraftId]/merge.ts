@@ -1,18 +1,19 @@
 import { isCreator } from '$lib/api/auth';
 import { run } from '$lib/prisma';
+import { filterObjectByNullOrUndefined } from '$lib/utils';
 import type { PrismaClient } from '@prisma/client';
 
 export const patch = isCreator(async (event) =>
 	run((client) => mergeDepartmentDraft(client, event.params.departmentDraftId)).then(
-		(departmentDraft) => ({
-			body: departmentDraft,
-			status: departmentDraft ? 200 : 400
+		(departmentAndDepartmentDraft) => ({
+			body: departmentAndDepartmentDraft,
+			status: departmentAndDepartmentDraft ? 200 : 400
 		})
 	)
 );
 
 export async function mergeDepartmentDraft(client: PrismaClient, departmentDraftId: string) {
-	const { departmentRefId, ...departmentDraft } = await client.departmentDraft.findUnique({
+	const { departmentRefId, ...departmentDraftChanges } = await client.departmentDraft.findUnique({
 		where: {
 			id: departmentDraftId
 		},
@@ -25,36 +26,63 @@ export async function mergeDepartmentDraft(client: PrismaClient, departmentDraft
 		}
 	});
 
-	const department = departmentRefId
-		? await client.department.update({
-				where: {
-					id: departmentRefId
+	const [department, departmentDraft] = await client.$transaction([
+		departmentRefId
+			? client.department.update({
+					where: {
+						id: departmentRefId
+					},
+					data: filterObjectByNullOrUndefined(departmentDraftChanges),
+					include: {
+						logo: {
+							select: {
+								name: true
+							}
+						}
+					}
+			  })
+			: client.department.create({
+					data: filterObjectByNullOrUndefined(departmentDraftChanges),
+					include: {
+						logo: {
+							select: {
+								name: true
+							}
+						}
+					}
+			  }),
+		client.departmentDraft.update({
+			where: {
+				id: departmentDraftId
+			},
+			data: {
+				mergedAt: new Date()
+			},
+			include: {
+				approvals: true,
+				user: {
+					select: {
+						id: true,
+						username: true
+					}
 				},
-				data: departmentDraft,
-				include: {
-					logo: {
-						select: {
-							name: true
-						}
+				logo: {
+					select: {
+						name: true
+					}
+				},
+				departmentRef: {
+					select: {
+						id: true,
+						name: true,
+						url: true,
+						description: true,
+						logoId: true
 					}
 				}
-		  })
-		: await client.department.create({
-				data: departmentDraft,
-				include: {
-					logo: {
-						select: {
-							name: true
-						}
-					}
-				}
-		  });
+			}
+		})
+	]);
 
-	await client.departmentDraft.delete({
-		where: {
-			id: departmentDraftId
-		}
-	});
-
-	return department;
+	return { department, departmentDraft };
 }

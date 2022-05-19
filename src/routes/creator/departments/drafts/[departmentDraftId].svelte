@@ -53,12 +53,10 @@
 			href: `${base}/creator/departments/drafts`
 		},
 		{
-			title: departmentDraft?.name,
+			title: departmentDraft.name,
 			href: `${base}/creator/department/drafts/${departmentDraftId}`
 		}
 	]}
 >
-	{#if departmentDraft}
-		<DepartmentDraft {departmentDraft} />
-	{/if}
+	<DepartmentDraft {departmentDraft} />
 </StudioLayout>

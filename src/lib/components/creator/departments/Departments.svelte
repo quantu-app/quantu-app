@@ -36,9 +36,8 @@
 
 <div class="container mb-8">
 	<div class="d-flex align-items-center justify-content-end mt-2">
-		<a class="link-dark me-2" href={`${base}/creator/departments/changes`}
-			>Changes <i class="bi bi-chevron-right" /></a
-		>
+		<a class="link-dark me-2" href={`${base}/creator/merge-requests`}>Merge Requests</a>
+		<a class="link-dark me-2" href={`${base}/creator/departments/changes`}>Changes</a>
 		<CreateDepartmentChange />
 	</div>
 	<Search filter={departmentNameFilter} {onChange} />

@@ -4,7 +4,11 @@
 		if (!isValidStatus(response)) {
 			return response;
 		}
-		await showMergeRequests(undefined, undefined, input.fetch);
+		const mergeRequests = await showMergeRequests(undefined, undefined, false, input.fetch);
+		await showChangesByIds(
+			mergeRequests.map((mergeRequest) => mergeRequest.changeId),
+			input.fetch
+		);
 		return response;
 	};
 </script>
@@ -17,6 +21,7 @@
 	import type { Load } from '@sveltejs/kit';
 	import { base } from '$app/paths';
 	import { showMergeRequests, mergeRequests } from '$lib/state/creator/mergeRequests';
+	import { showChangesByIds } from '$lib/state/creator/changes';
 </script>
 
 <svelte:head>

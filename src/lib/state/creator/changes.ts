@@ -74,6 +74,22 @@ export async function showChanges(
 	return changes;
 }
 
+export async function showChangesByIds(ids: string[], fetchFn: IFetch = fetch) {
+	const res = await fetchFn(`${base}/api/creator/changes${createQueryParams({ ids })}`, {
+		headers: {
+			'Content-Type': 'application/json'
+		}
+	});
+	if (!res.ok) {
+		throw await res.json();
+	}
+	const changes: StateChange[] = (await res.json()).map(changeFromJSON);
+	changesWritable.update((state) =>
+		changes.reduce((state, change) => addOrUpdate(state, change), state.slice())
+	);
+	return changes;
+}
+
 export async function createChange(
 	referenceType: ChangeType,
 	referenceId: string | null,

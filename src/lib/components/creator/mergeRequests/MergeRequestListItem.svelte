@@ -2,9 +2,12 @@
 
 <script lang="ts">
 	import { base } from '$app/paths';
+	import { changesById } from '$lib/state/creator/changes';
 	import type { StateMergeRequest } from '$lib/state/creator/mergeRequests';
 
 	export let mergeRequest: StateMergeRequest;
+
+	$: change = $changesById[mergeRequest.changeId];
 </script>
 
 <div class="col-6 col-md-3 mt-4">
@@ -12,7 +15,7 @@
 		<div class="card-body">
 			<h4 class="card-title">
 				<a class="link-dark" href={`${base}/creator/merge-requests/${mergeRequest.id}`}
-					>{mergeRequest.reference.name}</a
+					>{change.value['name'] || mergeRequest.reference?.name}</a
 				>
 			</h4>
 			<div class="card-text">

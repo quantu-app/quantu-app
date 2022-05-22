@@ -7,16 +7,13 @@
 		if (!isValidStatus(response)) {
 			return response;
 		}
-		const departmentChangeId = input.params.departmentChangeId;
-		const change = await showChangeById(departmentChangeId, input.fetch);
-		if (change.referenceId) {
-			await showDepartmentById(change.referenceId, input.fetch);
-		}
-		await showMergeRequestByChangeId(departmentChangeId, input.fetch).catch(() => {});
+		const mergeRequestId = input.params.mergeRequestId;
+		const mergeRequest = await showMergeRequestById(mergeRequestId, input.fetch);
+		await showChangeById(mergeRequest.changeId, input.fetch);
 
 		return {
 			props: {
-				departmentChangeId
+				mergeRequestId
 			}
 		};
 	};
@@ -25,21 +22,16 @@
 <script lang="ts">
 	import StudioLayout from '$lib/components/layouts/StudioLayout.svelte';
 	import { creatorGuard } from '$lib/guard/creatorGuard';
-	import DepartmentChange from '$lib/components/creator/departments/DepartmentChange.svelte';
+	import MergeRequest from '$lib/components/creator/mergeRequests/MergeRequest.svelte';
 	import { isValidStatus } from '$lib/guard/isValidStatus';
 	import { changesById, showChangeById } from '$lib/state/creator/changes';
 	import { base } from '$app/paths';
-	import { departmentsById, showDepartmentById } from '$lib/state/creator/departments';
-	import {
-		showMergeRequestByChangeId,
-		mergeRequestsByChangeId
-	} from '$lib/state/creator/mergeRequests';
+	import { showMergeRequestById, mergeRequestsById } from '$lib/state/creator/mergeRequests';
 
-	export let departmentChangeId: string;
+	export let mergeRequestId: string;
 
-	$: departmentChange = $changesById[departmentChangeId];
-	$: department = $departmentsById[departmentChange.referenceId];
-	$: mergeRequest = $mergeRequestsByChangeId[departmentChange.id];
+	$: mergeRequest = $mergeRequestsById[mergeRequestId];
+	$: change = $changesById[mergeRequest.changeId];
 </script>
 
 <svelte:head>
@@ -53,18 +45,14 @@
 			href: `${base}/creator`
 		},
 		{
-			title: 'Departments',
-			href: `${base}/creator`
+			title: 'Merge Requests',
+			href: `${base}/creator/merge-requests`
 		},
 		{
-			title: 'Department Changes',
-			href: `${base}/creator/departments/changes`
-		},
-		{
-			title: department?.name || departmentChange.value['name'],
-			href: `${base}/creator/department/changes/${departmentChangeId}`
+			title: mergeRequest.reference?.name || change.value['name'],
+			href: `${base}/creator/merge-requests/${mergeRequestId}`
 		}
 	]}
 >
-	<DepartmentChange {departmentChange} {mergeRequest} />
+	<MergeRequest {change} {mergeRequest} />
 </StudioLayout>

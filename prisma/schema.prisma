@@ -105,6 +105,7 @@ model MergeRequest {
   userId    String                 @db.ObjectId
   change    Change                 @relation(fields: [changeId], references: [id])
   changeId  String                 @db.ObjectId
+  merged    Boolean                @default(false)
   approvals MergeRequestApproval[]
 
   createdAt DateTime @default(now())

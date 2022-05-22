@@ -1,14 +1,17 @@
 import { isCreator } from '$lib/api/auth';
 import { run } from '$lib/prisma';
-import type { PrismaClient, ChangeType, MergeRequest, Change, Department } from '@prisma/client';
+import type { PrismaClient, ChangeType, MergeRequest, Department } from '@prisma/client';
 
 export const get = isCreator(async (event) => {
+	const mergedString = event.url.searchParams.get('merged');
+	const merged = mergedString === 'true' ? true : mergedString === 'false' ? false : undefined;
 	return {
 		body: await run((client) =>
 			getMergeRequests(
 				client,
 				event.url.searchParams.get('referenceType') as ChangeType,
-				event.url.searchParams.has('currentUser') ? event.locals.token.userId : undefined
+				event.url.searchParams.has('currentUser') ? event.locals.token.userId : undefined,
+				merged
 			)
 		),
 		status: 200
@@ -18,7 +21,8 @@ export const get = isCreator(async (event) => {
 export async function getMergeRequests(
 	client: PrismaClient,
 	referenceType?: ChangeType,
-	userId?: string
+	userId?: string,
+	merged?: boolean
 ) {
 	const mergeReqeusts = await client.mergeRequest.findMany({
 		where: {
@@ -27,7 +31,8 @@ export async function getMergeRequests(
 						referenceType
 				  }
 				: undefined,
-			userId
+			userId,
+			merged
 		},
 		include: {
 			approvals: true,
@@ -48,12 +53,18 @@ export async function getMergeRequests(
 	});
 
 	const references = await Promise.all(
-		mergeReqeusts.map((mergeRequest) => getReferenceType(client, mergeRequest))
+		mergeReqeusts.map(async (mergeRequest) => ({
+			mergeRequestId: mergeRequest.id,
+			reference: await getReferenceType(client, mergeRequest)
+		}))
 	);
-	const referencesByRequestId = references.reduce((referencesByRequestId, reference) => {
-		referencesByRequestId[reference.mergeRequestId] = reference.reference;
-		return referencesByRequestId;
-	}, {} as { [id: string]: Department });
+	const referencesByRequestId = references.reduce(
+		(referencesByRequestId, { mergeRequestId, reference }) => {
+			referencesByRequestId[mergeRequestId] = reference;
+			return referencesByRequestId;
+		},
+		{} as { [id: string]: Department }
+	);
 
 	return mergeReqeusts.map((mergeRequest) => {
 		(mergeRequest as any).reference = referencesByRequestId[mergeRequest.id];
@@ -67,13 +78,10 @@ export async function getReferenceType(
 ) {
 	switch (mergeRequest.change.referenceType) {
 		case 'DEPARTMENT':
-			return {
-				mergeRequestId: mergeRequest.id,
-				reference: await client.department.findUnique({
-					where: {
-						id: mergeRequest.change.referenceId
-					}
-				})
-			};
+			return client.department.findUnique({
+				where: {
+					id: mergeRequest.change.referenceId
+				}
+			});
 	}
 }

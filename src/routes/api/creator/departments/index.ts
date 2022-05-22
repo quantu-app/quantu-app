@@ -2,13 +2,22 @@ import { isCreator } from '$lib/api/auth';
 import { run } from '$lib/prisma';
 import type { PrismaClient } from '@prisma/client';
 
-export const get = isCreator(async () => ({
-	body: await run(getDepartments),
-	status: 200
-}));
+export const get = isCreator(async (event) => {
+	return {
+		body: await run((client) => getDepartments(client, event.url.searchParams.getAll('ids'))),
+		status: 200
+	};
+});
 
-export function getDepartments(client: PrismaClient) {
+export function getDepartments(client: PrismaClient, ids: string[]) {
+	const where: any = {};
+	if (ids.length) {
+		where.id = {
+			in: ids
+		};
+	}
 	return client.department.findMany({
+		where,
 		include: {
 			logo: {
 				select: {

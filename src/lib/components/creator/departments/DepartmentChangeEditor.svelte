@@ -1,12 +1,12 @@
 <script lang="ts">
 	import RichEditor from '$lib/components/editor/RichEditor.svelte';
-	import type { StateDepartmentChange } from '$lib/state/creator/departmentChanges';
 	import { validDepartmentUrl } from '$lib/state/creator/departments';
 	import { isUrlSafe } from '$lib/utils';
 	import { debounce } from '@aicacia/debounce';
+	import type { Department } from '@prisma/client';
 	import SelectAsset from '../assets/SelectAsset.svelte';
 
-	export let departmentChange: Partial<StateDepartmentChange>;
+	export let departmentChange: Partial<Department>;
 	export let disabled = false;
 
 	let departmentUrl = departmentChange.url;

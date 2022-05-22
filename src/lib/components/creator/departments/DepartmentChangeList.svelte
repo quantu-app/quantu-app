@@ -2,9 +2,9 @@
 
 <script lang="ts">
 	import DepartmentChangeListItem from './DepartmentChangeListItem.svelte';
-	import type { StateDepartmentChange } from '$lib/state/creator/departmentChanges';
+	import type { StateChange } from '$lib/state/creator/changes';
 
-	export let departmentChanges: StateDepartmentChange[];
+	export let departmentChanges: StateChange[];
 </script>
 
 <div class="container p-0">

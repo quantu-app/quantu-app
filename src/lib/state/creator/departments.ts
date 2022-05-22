@@ -1,7 +1,7 @@
 import type { Department } from '@prisma/client';
 import { writable, derived } from 'svelte/store';
 import { base } from '$app/paths';
-import type { IFetch } from '$lib/utils';
+import { createQueryParams, type IFetch } from '$lib/utils';
 
 export type StateDepartment = Department & {
 	logo?: {
@@ -34,8 +34,8 @@ export async function showDepartmentById(id: string, fetchFn: IFetch = fetch) {
 	return department;
 }
 
-export async function showDepartments(fetchFn: IFetch = fetch) {
-	const res = await fetchFn(`${base}/api/creator/departments`, {
+export async function showDepartments(ids: string[] = [], fetchFn: IFetch = fetch) {
+	const res = await fetchFn(`${base}/api/creator/departments${createQueryParams({ ids })}`, {
 		headers: {
 			'Content-Type': 'application/json'
 		}

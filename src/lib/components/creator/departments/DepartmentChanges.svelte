@@ -17,10 +17,9 @@
 	import CreateDepartmentChange from './CreateDepartmentChange.svelte';
 	import { fuzzyEquals } from '@aicacia/string-fuzzy_equals';
 	import Search from '$lib/components/Search.svelte';
-	import type { StateDepartment } from '$lib/state/creator/departments';
-	import type { StateDepartmentChange } from '$lib/state/creator/departmentChanges';
+	import type { StateChange } from '$lib/state/creator/changes';
 
-	export let departmentChanges: StateDepartmentChange[];
+	export let departmentChanges: StateChange[];
 
 	function onChange(departmentChangeNameFilter: string) {
 		state.update((state) => ({
@@ -29,8 +28,10 @@
 		}));
 	}
 	$: departmentChangeNameFilter = $state.departmentChangeNameFilter;
-	$: filter = (department: StateDepartment) =>
-		departmentChangeNameFilter ? fuzzyEquals(departmentChangeNameFilter, department.name) : true;
+	$: filter = (department: StateChange) =>
+		departmentChangeNameFilter
+			? fuzzyEquals(departmentChangeNameFilter, department.value['name'])
+			: true;
 	$: filteredDepartmentChanges = departmentChanges.filter(filter);
 </script>
 

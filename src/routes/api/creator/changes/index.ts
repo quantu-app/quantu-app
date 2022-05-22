@@ -1,6 +1,6 @@
 import { isCreator } from '$lib/api/auth';
 import { run } from '$lib/prisma';
-import type { PrismaClient, ChangeType, Prisma } from '@prisma/client';
+import type { PrismaClient, ChangeType, Change, Prisma } from '@prisma/client';
 
 export const get = isCreator(async (event) => {
 	return {
@@ -62,29 +62,34 @@ export async function createChange(
 	userId: string,
 	value: Prisma.InputJsonObject
 ) {
-	const { id: prevChangeId } = await client.change.findFirst({
+	const prevChange = await client.change.findFirst({
 		where: {
 			referenceType,
 			referenceId,
-			userId,
 			latest: true
 		},
-		select: {
-			id: true
+		include: {
+			user: {
+				select: {
+					id: true,
+					username: true
+				}
+			}
 		}
 	});
-
-	const runCreate = () =>
+	const runCreate = (prevChange?: Change) =>
 		client.change.create({
 			data: {
 				value,
 				referenceType,
 				referenceId,
-				prevChange: {
-					connect: {
-						id: prevChangeId
-					}
-				},
+				prevChange: prevChange
+					? {
+							connect: {
+								id: prevChange.id
+							}
+					  }
+					: undefined,
 				latest: true,
 				user: {
 					connect: {
@@ -102,20 +107,24 @@ export async function createChange(
 			}
 		});
 
-	if (prevChangeId) {
-		const [_prevChange, change] = await client.$transaction([
-			client.change.update({
-				where: {
-					id: prevChangeId
-				},
-				data: {
-					latest: false
-				}
-			}),
-			runCreate()
-		]);
+	if (prevChange) {
+		if (prevChange.latest) {
+			const [_prevChange, change] = await client.$transaction([
+				client.change.update({
+					where: {
+						id: prevChange.id
+					},
+					data: {
+						latest: false
+					}
+				}),
+				runCreate(prevChange)
+			]);
 
-		return change;
+			return change;
+		} else {
+			throw new Error('Cannot create a new change for a non-latest change');
+		}
 	} else {
 		return runCreate();
 	}

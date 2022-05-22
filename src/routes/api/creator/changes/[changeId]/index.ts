@@ -10,7 +10,7 @@ export const get = isCreator(async (event) => {
 });
 
 export function getChanges(client: PrismaClient, changeId: string) {
-	return client.change.findMany({
+	return client.change.findUnique({
 		where: {
 			id: changeId
 		},
@@ -59,11 +59,13 @@ export async function updateChange(
 			value,
 			referenceType: change.referenceType,
 			referenceId: change.referenceId,
-			prevChange: {
-				connect: {
-					id: change.prevChangeId
-				}
-			},
+			prevChange: change.prevChangeId
+				? {
+						connect: {
+							id: change.prevChangeId
+						}
+				  }
+				: undefined,
 			latest: change.latest,
 			user: {
 				connect: {

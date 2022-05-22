@@ -154,3 +154,16 @@ export function filterObjectBy<T extends object = object>(
 export function filterObjectByNullOrUndefined<T extends object = object>(obj: T): T {
 	return filterObjectBy(obj, (value) => value != null);
 }
+
+export function createQueryParams(params: Record<string, string | string[]>): string {
+	const queryParams = Object.entries(params)
+		.filter(([_key, value]) => value != null)
+		.map(([key, value]) => {
+			if (Array.isArray(value)) {
+				return value.map((v) => `${encodeURIComponent(key)}=${encodeURIComponent(v)}`).join('&');
+			}
+			return `${encodeURIComponent(key)}=${encodeURIComponent(value)}`;
+		})
+		.join('&');
+	return queryParams ? `?${queryParams}` : '';
+}

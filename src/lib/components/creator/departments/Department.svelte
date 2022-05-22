@@ -20,7 +20,7 @@
 	import { base } from '$app/paths';
 	import type { StateChallenge } from '$lib/state/creator/challenges';
 	import type { StateDepartment } from '$lib/state/creator/departments';
-	import { createDepartmentChangeFromRef } from '$lib/state/creator/departmentChanges';
+	import { createChange } from '$lib/state/creator/changes';
 	import { goto } from '$app/navigation';
 	import RichViewer from '$lib/components/editor/RichViewer.svelte';
 
@@ -31,7 +31,7 @@
 	async function onCreateChange() {
 		creatingChange = true;
 		try {
-			const departmentChange = await createDepartmentChangeFromRef(department.id);
+			const departmentChange = await createChange('DEPARTMENT', department.id, {});
 			await goto(`${base}/creator/departments/changes/${departmentChange.id}`);
 		} finally {
 			creatingChange = false;

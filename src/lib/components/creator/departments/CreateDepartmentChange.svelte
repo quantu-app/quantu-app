@@ -3,21 +3,19 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { base } from '$app/paths';
-	import {
-		createDepartmentChange,
-		type StateDepartmentChange
-	} from '$lib/state/creator/departmentChanges';
+	import { createChange } from '$lib/state/creator/changes';
+import type { Department } from '@prisma/client';
 	import DepartmentChangeEditor from './DepartmentChangeEditor.svelte';
 
 	let editorKey = Math.random();
 
-	let departmentChange: Partial<StateDepartmentChange> = {};
+	let departmentChange: Partial<Department> = {};
 
 	let creatingDepartmentChange = false;
 	async function onCreateDepartment() {
 		creatingDepartmentChange = true;
 		try {
-			const { id } = await createDepartmentChange(departmentChange);
+			const { id } = await createChange('DEPARTMENT', null, departmentChange as any);
 			window.bootstrap.Modal.getOrCreateInstance('#create-department').hide();
 			await goto(`${base}/creator/departments/changes/${id}`);
 			departmentChange = {};
@@ -33,7 +31,7 @@
 	class="btn btn-primary"
 	data-bs-toggle="modal"
 	data-bs-target="#create-department"
-	aria-label="Create Department">Change a new Department</button
+	aria-label="Create Department">Create a new Department</button
 >
 
 <div

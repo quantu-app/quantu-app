@@ -4,7 +4,7 @@
 		if (!isValidStatus(response)) {
 			return response;
 		}
-		await showDepartments(input.fetch);
+		await showDepartments([], input.fetch);
 		return response;
 	};
 </script>

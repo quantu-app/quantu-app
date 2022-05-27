@@ -76,6 +76,9 @@ export async function getReferenceType(
 	client: PrismaClient,
 	mergeRequest: MergeRequest & { change: { referenceType: string; referenceId: string } }
 ) {
+	if (!mergeRequest.change.referenceId) {
+		return null;
+	}
 	switch (mergeRequest.change.referenceType) {
 		case 'DEPARTMENT':
 			return client.department.findUnique({

@@ -10,23 +10,29 @@
 </script>
 
 <script lang="ts">
-	import { Slate, Editable, withSvelte, isHotkey, isReadOnly } from 'svelte-slate';
-	import { Editor, type Selection } from 'slate';
-	import { createEditor } from 'slate';
+	import { isHotkey, isReadOnly, withSvelte } from 'svelte-slate';
+	import Slate from 'svelte-slate/plugins/Slate.svelte';
+	import Editable from 'svelte-slate/plugins/Editable.svelte';
+	import { createEditor, Editor } from 'slate';
 	import { withHistory } from 'slate-history';
-	import { toggleMark } from './utils';
-	import type { IElement } from './Element.svelte';
-	import Element from './Element.svelte';
-	import type { IText } from './Leaf.svelte';
-	import Leaf from './Leaf.svelte';
-	import HoveringToolbar from './HoveringToolbar.svelte';
+	import { DEFAULT_PLUGINS } from 'svelte-slate/plugins/DEFAULT_PLUGINS';
+	import ImageElement, { IMAGE_TYPE, withImages } from 'svelte-slate/plugins/ImageElement.svelte';
+	import CheckListItemElement, {
+		CHECK_LIST_ITEM_TYPE
+	} from 'svelte-slate/plugins/CheckListItemElement.svelte';
+	import { longpress } from 'svelte-slate/plugins/longpress';
+	import CodeElement, {
+		CODE_TYPE,
+		isCodeElement,
+		withCode
+	} from 'svelte-slate/plugins/CodeElement.svelte';
+	import HoveringToolbar from 'svelte-slate/plugins/HoveringToolbar.svelte';
+	import { toggleMark } from 'svelte-slate/plugins/utils';
+	import MathElement, { MATH_TYPE, withMath } from 'svelte-slate/plugins/MathElement.svelte';
 	import Toolbar from './Toolbar.svelte';
-	import { withImages } from './ImageElement.svelte';
-	import { longpress } from './longpress';
-	import { withLatex } from './LatexElement.svelte';
-	import { isCodeElement } from './CodeElement.svelte';
+	import Buttons from './Buttons.svelte';
 
-	export let value: Array<IText | IElement> = [
+	export let value: any[] = [
 		{
 			type: 'paragraph',
 			children: [{ text: '' }]
@@ -35,7 +41,14 @@
 	export let selection: Selection | null = null;
 	export let readOnly = false;
 	export let placeholder = 'Type...';
-	export let editor = withHistory(withLatex(withImages(withSvelte(createEditor()))));
+	export let editor = withHistory(withSvelte(createEditor()));
+	let plugins = {
+		...DEFAULT_PLUGINS,
+		[IMAGE_TYPE]: [ImageElement, withImages],
+		[CHECK_LIST_ITEM_TYPE]: CheckListItemElement,
+		[CODE_TYPE]: [CodeElement, withCode],
+		[MATH_TYPE]: [MathElement, withMath]
+	};
 	export let hoveringToolbar = true;
 
 	let open = false;
@@ -66,13 +79,17 @@
 	}
 </script>
 
-<Slate bind:editor bind:selection bind:value>
+<Slate bind:editor bind:selection bind:value {plugins}>
 	{#if hoveringToolbar}
-		<HoveringToolbar container={ref} bind:open />
+		<HoveringToolbar container={ref} bind:open>
+			<div class="border p-1 mb-1 bg-white">
+				<Buttons container={ref} />
+			</div>
+		</HoveringToolbar>
 	{:else}
-		<Toolbar />
+		<Toolbar container={ref} />
 	{/if}
 	<div use:longpress on:longpress={onLongPress} class:editor-with-helper={!hoveringToolbar}>
-		<Editable bind:ref {readOnly} {Element} {Leaf} {onKeyDown} {placeholder} />
+		<Editable bind:ref {readOnly} {placeholder} {onKeyDown} />
 	</div>
 </Slate>

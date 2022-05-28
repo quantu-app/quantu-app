@@ -1,10 +1,11 @@
-<svelte:options immutable={true} />
+<svelte:options immutable />
 
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import Portal from 'svelte-portal/src/Portal.svelte';
 
 	export let open = false;
+	export let size: 'sm' | 'md' | 'lg' = 'lg';
 	export let onClose: () => void = () => undefined;
 
 	let prevOpen: boolean;
@@ -18,9 +19,6 @@
 		}
 	}
 
-	let modalElement: HTMLDivElement;
-	$: modal = modalElement && window.bootstrap.Modal.getOrCreateInstance(modalElement);
-
 	function onOpen() {
 		prevOpen = true;
 		open = true;
@@ -31,7 +29,12 @@
 		onClose();
 	}
 
+	let modalElement: HTMLDivElement;
+	let modal: bootstrap.Modal;
+
 	onMount(() => {
+		modal = window.bootstrap.Modal.getOrCreateInstance(modalElement);
+
 		modalElement.addEventListener('show.bs.modal', onOpen, false);
 		modalElement.addEventListener('hide.bs.modal', onCloseInternal, false);
 
@@ -43,14 +46,26 @@
 </script>
 
 <Portal>
-	<div bind:this={modalElement} class="modal" tabindex="-1">
-		<div class="modal-dialog">
+	<div
+		class="modal fade"
+		role="dialog"
+		tabindex="-1"
+		data-bs-focus="false"
+		aria-hidden="true"
+		bind:this={modalElement}
+	>
+		<div class="modal-dialog modal-{size}">
 			<div class="modal-content">
 				<div class="modal-header">
-					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" />
+					<h5 class="modal-title"><slot name="header" /></h5>
+					<button type="button" class="btn-close" aria-label="Close" data-bs-dismiss="modal" />
 				</div>
 				<div class="modal-body">
 					<slot />
+				</div>
+				<div class="modal-footer">
+					<slot name="footer" />
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
 				</div>
 			</div>
 		</div>

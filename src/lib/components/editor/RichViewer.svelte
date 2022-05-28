@@ -1,12 +1,10 @@
 <svelte:options immutable={true} />
 
 <script lang="ts">
-	import type { IElement } from './Element.svelte';
-	import type { IText } from './Leaf.svelte';
 	import Editor from './Editor.svelte';
 
 	export let id: string = undefined;
-	export let value: Array<IText | IElement>;
+	export let value: any[];
 	export let placeholder = '';
 
 	$: if (!value || value.length === 0) {

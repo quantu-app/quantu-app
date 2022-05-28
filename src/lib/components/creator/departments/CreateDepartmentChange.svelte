@@ -3,11 +3,13 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { base } from '$app/paths';
+	import Modal from '$lib/components/ui/Modal.svelte';
 	import { createChange } from '$lib/state/creator/changes';
-import type { Department } from '@prisma/client';
+	import type { Department } from '@prisma/client';
 	import DepartmentChangeEditor from './DepartmentChangeEditor.svelte';
 
 	let editorKey = Math.random();
+	let open = false;
 
 	let departmentChange: Partial<Department> = {};
 
@@ -29,45 +31,25 @@ import type { Department } from '@prisma/client';
 <button
 	type="button"
 	class="btn btn-primary"
-	data-bs-toggle="modal"
-	data-bs-target="#create-department"
+	on:click={() => (open = true)}
 	aria-label="Create Department">Create a new Department</button
 >
 
-<div
-	class="modal fade"
-	id="create-department"
-	tabindex="-1"
-	aria-labelledby="create-department-label"
-	aria-hidden="true"
->
-	<div class="modal-dialog modal-lg">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h5 id="create-department-label" class="modal-title">Change a new Department</h5>
-				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" />
-			</div>
-			<div class="modal-body">
-				{#key editorKey}
-					<DepartmentChangeEditor bind:departmentChange />
-				{/key}
-			</div>
-			<div class="modal-footer">
-				<button
-					type="button"
-					on:click={onCreateDepartment}
-					disabled={creatingDepartmentChange}
-					class="btn btn-primary"
-				>
-					{#if creatingDepartmentChange}
-						<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" />
-					{/if}
-					Create
-				</button>
-				<button type="button" class="btn btn-secondary text-white" data-bs-dismiss="modal"
-					>Close</button
-				>
-			</div>
-		</div>
-	</div>
-</div>
+<Modal bind:open>
+	<svelte:fragment slot="header">Change a new Department</svelte:fragment>
+	{#key editorKey}
+		<DepartmentChangeEditor bind:departmentChange />
+	{/key}
+	<button
+		slot="footer"
+		type="button"
+		on:click={onCreateDepartment}
+		disabled={creatingDepartmentChange}
+		class="btn btn-primary"
+	>
+		{#if creatingDepartmentChange}
+			<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" />
+		{/if}
+		Create
+	</button>
+</Modal>

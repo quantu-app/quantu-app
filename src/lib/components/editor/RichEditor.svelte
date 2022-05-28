@@ -3,13 +3,11 @@
 <script lang="ts">
 	import type { BaseEditor, Selection } from 'slate';
 	import type { ISvelteEditor } from 'svelte-slate';
-	import type { IElement } from './Element.svelte';
-	import type { IText } from './Leaf.svelte';
 	import Editor from './Editor.svelte';
 	import type { HistoryEditor } from 'slate-history';
 
 	export let id: string = undefined;
-	export let value: Array<IText | IElement>;
+	export let value: any[];
 	export let selection: Selection | null = null;
 	export let placeholder = 'Type...';
 	export let editor: ISvelteEditor | BaseEditor | HistoryEditor = undefined;

@@ -3,29 +3,31 @@
 	import { onMount } from 'svelte';
 	import { getEditorContext, getFocusedContext, isHotkey } from 'svelte-slate';
 	import Button from './Button.svelte';
-	import LatexEditor from './LatexEditor.svelte';
-	import { insertLatex } from './LatexElement.svelte';
-	import { isBlockActive } from './utils';
+	import MathEditor from 'svelte-slate/plugins/MathEditor.svelte';
+	import { insertMath, MATH_TYPE } from 'svelte-slate/plugins/MathElement.svelte';
+	import { isBlockActive } from 'svelte-slate/plugins/utils';
+
+	export let container: HTMLElement = undefined;
 
 	const editorContext = getEditorContext();
 	const focusedContext = getFocusedContext();
 
 	$: editor = $editorContext;
 	$: focused = $focusedContext;
-	$: active = isBlockActive(editor, 'latex');
+	$: active = isBlockActive(editor, MATH_TYPE);
 
 	let at: Location;
 	let open = false;
-	let latex = '';
+	let math = '';
 	let inline = true;
-	function onClick() {
+	function onMouseDown() {
 		at = editor.selection ? editor.selection.anchor || editor.selection.focus : undefined;
-		latex = '';
+		math = '';
 		inline = true;
 		open = !open;
 	}
-	function onDone(latex: string, inline: boolean) {
-		insertLatex(editor, latex, inline, at);
+	function onDone(math: string, inline: boolean) {
+		insertMath(editor, math, inline, at);
 	}
 
 	function onKeyDown(event: KeyboardEvent) {
@@ -33,7 +35,8 @@
 			event.preventDefault();
 
 			if (focused) {
-				latex = '';
+				at = editor.selection ? editor.selection.anchor || editor.selection.focus : undefined;
+				math = '';
 				inline = true;
 				open = true;
 			} else {
@@ -51,8 +54,8 @@
 	});
 </script>
 
-<LatexEditor bind:open bind:latex bind:inline {onDone} />
+<MathEditor bind:open bind:math bind:inline {container} {onDone} />
 
-<Button {active} {onClick}>
+<Button {active} {onMouseDown}>
 	<i class="bi bi-plus-slash-minus" />
 </Button>

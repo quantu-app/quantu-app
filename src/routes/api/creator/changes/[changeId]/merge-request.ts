@@ -36,7 +36,9 @@ export async function getMergeRequestByChangeId(client: PrismaClient, changeId: 
 			}
 		}
 	});
-	(mergeRequest as any).reference = await getReferenceType(client, mergeRequest);
+	if (mergeRequest) {
+		(mergeRequest as any).reference = await getReferenceType(client, mergeRequest);
+	}
 	return mergeRequest;
 }
 
@@ -77,6 +79,8 @@ export async function createMergeRequest(client: PrismaClient, changeId: string,
 			}
 		}
 	});
-	(mergeRequest as any).reference = await getReferenceType(client, mergeRequest);
+	if (mergeRequest) {
+		(mergeRequest as any).reference = await getReferenceType(client, mergeRequest);
+	}
 	return mergeRequest;
 }

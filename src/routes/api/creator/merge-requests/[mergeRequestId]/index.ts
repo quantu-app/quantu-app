@@ -31,6 +31,8 @@ export async function getMergeRequests(client: PrismaClient, mergeRequestId: str
 			}
 		}
 	});
-	(mergeRequest as any).reference = await getReferenceType(client, mergeRequest);
+	if (mergeRequest) {
+		(mergeRequest as any).reference = await getReferenceType(client, mergeRequest);
+	}
 	return mergeRequest;
 }

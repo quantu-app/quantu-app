@@ -14,12 +14,8 @@
 <div class="list-group-item">
 	<div class="d-flex w-100 justify-content-between">
 		<h4>
-			<button
-				type="button"
-				class="btn btn-link"
-				data-bs-toggle="modal"
-				data-bs-target="#update-challenge"
-				on:click={onUpdate}>{challenge.name || 'No Name'}</button
+			<button type="button" class="btn btn-link" on:click={onUpdate}
+				>{challenge.name || 'No Name'}</button
 			>
 			<h6 class="d-inline">
 				- {titleCase(challenge.type.replace(/\_/gim, ' '))}
@@ -44,28 +40,22 @@
 					class="dropdown-menu dropdown-menu-end"
 					aria-labelledby={`challenge-dropdown-${challenge.id}`}
 				>
-					<slot name="dropdown" {challenge} {onUpdate} {onDelete}>
-						<li>
-							<button
-								type="button"
-								class="dropdown-item justify-content-between"
-								data-bs-toggle="modal"
-								data-bs-target="#update-challenge"
-								aria-label="Update"
-								on:click={onUpdate}>Update</button
-							>
-						</li>
-						<li>
-							<button
-								type="button"
-								class="dropdown-item justify-content-between"
-								data-bs-toggle="modal"
-								data-bs-target="#delete-challenge"
-								aria-label="Delete"
-								on:click={onDelete}>Delete</button
-							>
-						</li>
-					</slot>
+					<li>
+						<button
+							type="button"
+							class="dropdown-item justify-content-between"
+							aria-label="Update"
+							on:click={onUpdate}>Update</button
+						>
+					</li>
+					<li>
+						<button
+							type="button"
+							class="dropdown-item justify-content-between"
+							aria-label="Delete"
+							on:click={onDelete}>Delete</button
+						>
+					</li>
 				</ul>
 			</div>
 		</div>

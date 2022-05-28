@@ -2,10 +2,10 @@
 
 <script lang="ts">
 	export let active = false;
-	export let onClick: (event: MouseEvent) => void;
+	export let onMouseDown: (event: MouseEvent) => void;
 </script>
 
-<button class={$$props['class']} class:active on:mousedown={onClick}>
+<button class={$$props['class']} class:active on:mousedown={onMouseDown}>
 	<div>
 		<slot />
 	</div>
@@ -14,14 +14,13 @@
 <style>
 	button {
 		cursor: pointer;
-		color: #333;
-		background: #fff;
-		border: 1px solid #888;
+		color: black;
+		background: white;
+		border: 1px solid black;
 		padding: 0.25rem;
 		margin: 0;
 	}
 	button.active {
-		color: #888;
 		background: #aaa;
 	}
 	div {

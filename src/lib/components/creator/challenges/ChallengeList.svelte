@@ -10,16 +10,20 @@
 	export let departmentId: string = undefined;
 	export let challenges: Array<StateChallenge>;
 
+	let updateOpen = false;
 	let challengeToUpdate: StateChallenge;
+	let deleteOpen = false;
 	let challengeToDelete: StateChallenge;
 
 	function createOnUpdate(q: StateChallenge) {
 		return function onUpdate() {
+			updateOpen = true;
 			challengeToUpdate = q;
 		};
 	}
 	function createOnDelete(q: StateChallenge) {
 		return function onDelete() {
+			deleteOpen = true;
 			challengeToDelete = q;
 		};
 	}
@@ -30,12 +34,14 @@
 
 			await updateChallenge(departmentId, challengeToUpdate.id, challengeBody);
 			challengeToUpdate = undefined;
+			updateOpen = false;
 		}
 	}
 	async function onDeleteChallenge() {
 		if (challengeToDelete) {
 			await deleteChallenge(departmentId, challengeToDelete.id);
 			challengeToDelete = undefined;
+			deleteOpen = false;
 		}
 	}
 </script>
@@ -46,38 +52,9 @@
 			{challenge}
 			onUpdate={createOnUpdate(challenge)}
 			onDelete={createOnDelete(challenge)}
-		>
-			<slot
-				slot="dropdown"
-				name="dropdown"
-				{challenge}
-				onUpdate={createOnUpdate(challenge)}
-				onDelete={createOnDelete(challenge)}
-			>
-				<li>
-					<button
-						type="button"
-						class="dropdown-item justify-content-between"
-						data-bs-toggle="modal"
-						data-bs-target="#update-challenge"
-						aria-label="Update"
-						on:click={createOnUpdate(challenge)}>Update</button
-					>
-				</li>
-				<li>
-					<button
-						type="button"
-						class="dropdown-item justify-content-between"
-						data-bs-toggle="modal"
-						data-bs-target="#delete-challenge"
-						aria-label="Delete"
-						on:click={createOnDelete(challenge)}>Delete</button
-					>
-				</li>
-			</slot>
-		</ChallengeListItem>
+		/>
 	{/each}
 </div>
 
-<UpdateChallenge challenge={challengeToUpdate} {onUpdateChallenge} />
-<DeleteChallenge challenge={challengeToDelete} {onDeleteChallenge} />
+<UpdateChallenge bind:open={updateOpen} challenge={challengeToUpdate} {onUpdateChallenge} />
+<DeleteChallenge bind:open={deleteOpen} challenge={challengeToDelete} {onDeleteChallenge} />

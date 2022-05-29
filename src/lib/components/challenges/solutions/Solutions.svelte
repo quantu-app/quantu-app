@@ -20,10 +20,11 @@
 	$: userSolution = solutions.find((solution) => solution.userId === $currentUser?.id);
 
 	let deleting = false;
+	let deleteOpen = false;
 	let solutionToDelete: StateChallengeSolution | undefined;
 	function setSolutionToDelete(solution: StateChallengeSolution) {
 		solutionToDelete = solution;
-		window.bootstrap.Modal.getOrCreateInstance('#delete-solution').show();
+		deleteOpen = true;
 	}
 	async function onDelete() {
 		deleting = true;
@@ -34,7 +35,7 @@
 				solutionToDelete.id
 			);
 			solutionToDelete = undefined;
-			window.bootstrap.Modal.getOrCreateInstance('#delete-solution').hide();
+			deleteOpen = false;
 		} finally {
 			deleting = false;
 		}
@@ -87,4 +88,4 @@
 <hr />
 
 <SolutionList {challenge} {solutions} onDelete={setSolutionToDelete} />
-<DeleteSolution {onDelete} />
+<DeleteSolution bind:open={deleteOpen} {onDelete} />

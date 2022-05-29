@@ -20,12 +20,14 @@
 	export let challenge: StateChallenge;
 	export let solution: StateChallengeSolution;
 
+	let deleteOpen = false;
+
 	let deleting = false;
 	async function onDelete() {
 		deleting = true;
 		try {
-			window.bootstrap.Modal.getOrCreateInstance('#delete-solution').hide();
 			await deleteChallengeSolutionById(challenge.department.url, challenge.url, solution.id);
+			deleteOpen = false;
 			await goto(`${base}/challenges/${challenge.department.url}/${challenge.url}/solutions`);
 		} finally {
 			deleting = false;
@@ -108,8 +110,6 @@
 				<button
 					class="btn btn-sm btn-danger"
 					disabled={deleting}
-					data-bs-toggle="modal"
-					data-bs-target="#delete-solution"
 					aria-label="Delete Solution">Delete</button
 				>
 				<button class="btn btn-sm btn-primary" on:click={toggleEdit}>Edit</button>
@@ -134,4 +134,4 @@
 
 <Comments referenceId={solution.id} referenceType="CHALLENGE_SOLUTION" />
 
-<DeleteSolution {onDelete} />
+<DeleteSolution bind:open={deleteOpen} {onDelete} />

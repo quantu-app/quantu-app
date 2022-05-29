@@ -35,6 +35,7 @@
 	$: state.update((state) => ({ ...state, folder }));
 	$: state.update((state) => ({ ...state, folder: tree.folder }));
 
+	let deleteOpen = false;
 	let loading = false;
 	async function loadAssets() {
 		if (!loading) {
@@ -54,6 +55,6 @@
 
 <hr />
 
-<AssetList bind:tree bind:selectAsset bind:assetToDelete {onSelect} />
+<AssetList bind:tree bind:selectAsset bind:assetToDelete bind:deleteOpen {onSelect} />
 
-<DeleteAsset bind:assetToDelete />
+<DeleteAsset bind:open={deleteOpen} bind:assetToDelete />

@@ -7,7 +7,7 @@
 	import type { HistoryEditor } from 'slate-history';
 
 	export let id: string = undefined;
-	export let value: any[];
+	export let value: any;
 	export let selection: Selection | null = null;
 	export let placeholder = 'Type...';
 	export let editor: ISvelteEditor | BaseEditor | HistoryEditor = undefined;

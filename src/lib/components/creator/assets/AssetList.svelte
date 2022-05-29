@@ -6,6 +6,7 @@
 	export let tree: AssetTree;
 	export let selectAsset: Asset = undefined;
 	export let assetToDelete: Asset = undefined;
+	export let deleteOpen: boolean;
 	export let onSelect: (asset?: Asset) => void = () => undefined;
 
 	function onSelectParent() {
@@ -21,6 +22,7 @@
 	function createOnDelete(asset: Asset) {
 		return () => {
 			assetToDelete = asset;
+			deleteOpen = true;
 		};
 	}
 	function createOnSelect(asset: Asset) {

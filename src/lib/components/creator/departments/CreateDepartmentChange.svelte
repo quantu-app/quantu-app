@@ -10,6 +10,9 @@
 
 	let editorKey = Math.random();
 	let open = false;
+	function onOpen() {
+		open = true;
+	}
 
 	let departmentChange: Partial<Department> = {};
 
@@ -18,7 +21,7 @@
 		creatingDepartmentChange = true;
 		try {
 			const { id } = await createChange('DEPARTMENT', null, departmentChange as any);
-			window.bootstrap.Modal.getOrCreateInstance('#create-department').hide();
+			open = false;
 			await goto(`${base}/creator/departments/changes/${id}`);
 			departmentChange = {};
 		} finally {
@@ -31,7 +34,7 @@
 <button
 	type="button"
 	class="btn btn-primary"
-	on:click={() => (open = true)}
+	on:click={onOpen}
 	aria-label="Create Department">Create a new Department</button
 >
 

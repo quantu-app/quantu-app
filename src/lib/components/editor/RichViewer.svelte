@@ -4,7 +4,7 @@
 	import Editor from './Editor.svelte';
 
 	export let id: string = undefined;
-	export let value: any[];
+	export let value: any;
 	export let placeholder = '';
 
 	$: if (!value || value.length === 0) {

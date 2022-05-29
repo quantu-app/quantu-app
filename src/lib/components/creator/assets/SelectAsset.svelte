@@ -1,11 +1,8 @@
 <svelte:options immutable />
 
-<script lang="ts" context="module">
-	let SELECT_ID = 0;
-</script>
-
 <script lang="ts">
 	import { browser } from '$app/env';
+	import Modal from '$lib/components/ui/Modal.svelte';
 	import { showAssetById } from '$lib/state/creator/assets';
 	import type { Asset } from '@prisma/client';
 	import AssetComponent from './Asset.svelte';
@@ -17,7 +14,11 @@
 	export let assetId: string = undefined;
 	export let type: string = undefined;
 
-	let ID = SELECT_ID++;
+	let open = false;
+	function onOpen() {
+		open = true;
+	}
+
 	let folder = '';
 	$: if (browser && assetId && !asset) {
 		showAssetById(departmentId, assetId).then((a) => {
@@ -30,13 +31,7 @@
 	}
 </script>
 
-<button
-	{id}
-	type="button"
-	data-bs-toggle="modal"
-	data-bs-target={`#select-asset-${ID}`}
-	class="btn btn-primary w-100 d-block"
->
+<button {id} type="button" class="btn btn-primary w-100 d-block" on:click={onOpen}>
 	{#if asset}
 		<AssetComponent {asset} />
 	{:else}
@@ -44,33 +39,14 @@
 	{/if}
 </button>
 
-<div
-	class="modal fade"
-	id={`select-asset-${ID}`}
-	tabindex="-1"
-	aria-labelledby={`select-asset-${ID}-label`}
-	aria-hidden="true"
->
-	<div class="modal-dialog modal-lg">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h5 id={`select-asset-${ID}-label`} class="modal-title">Select/Upload Asset</h5>
-				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" />
-			</div>
-			<div class="modal-body">
-				<AssetManager {departmentId} {type} bind:selectAsset={asset} bind:folder {onSelect} />
-			</div>
-			<div class="modal-footer">
-				<button
-					type="button"
-					class="btn btn-primary text-white"
-					disabled={!asset}
-					data-bs-dismiss="modal">Select</button
-				>
-				<button type="button" class="btn btn-secondary text-white" data-bs-dismiss="modal"
-					>Close</button
-				>
-			</div>
-		</div>
-	</div>
-</div>
+<Modal bind:open>
+	<svelte:fragment slot="header">Select/Upload Asset</svelte:fragment>
+	<AssetManager {departmentId} {type} bind:selectAsset={asset} bind:folder {onSelect} />
+	<button
+		slot="footer"
+		type="button"
+		class="btn btn-primary text-white"
+		disabled={!asset}
+		data-bs-dismiss="modal">Select</button
+	>
+</Modal>

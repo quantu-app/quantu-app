@@ -4,7 +4,7 @@
 		if (!isValidStatus(response)) {
 			return response;
 		}
-		const changes = await showChanges('DEPARTMENT', null, false, input.fetch);
+		const changes = await showChanges('DEPARTMENT', null, false, true, false, input.fetch);
 		await showDepartments(
 			changes.map((change) => change.referenceId).filter((referenceId) => !!referenceId),
 			input.fetch

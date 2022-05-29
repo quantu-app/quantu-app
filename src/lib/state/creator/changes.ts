@@ -49,13 +49,16 @@ export async function showChanges(
 	referenceType: ChangeType,
 	referenceId: string | null,
 	currentUser: boolean,
+	latest: boolean | null,
+	merged: boolean | null,
 	fetchFn: IFetch = fetch
 ) {
 	const res = await fetchFn(
 		`${base}/api/creator/changes${createQueryParams({
 			referenceType,
 			referenceId,
-			latest: 'true',
+			latest,
+			merged,
 			currentUser: currentUser ? 'true' : undefined
 		})}`,
 		{

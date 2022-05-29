@@ -4,6 +4,10 @@ import type { PrismaClient, ChangeType, Change, Prisma } from '@prisma/client';
 
 export const get = isCreator(async (event) => {
 	const ids = event.url.searchParams.getAll('ids');
+	const latestString = event.url.searchParams.get('latest');
+	const latest = latestString === 'true' ? true : latestString === 'false' ? false : undefined;
+	const mergedString = event.url.searchParams.get('merged');
+	const merged = mergedString === 'true' ? true : mergedString === 'false' ? false : undefined;
 	return {
 		body: await run((client) =>
 			ids.length
@@ -13,36 +17,66 @@ export const get = isCreator(async (event) => {
 						event.url.searchParams.get('referenceType') as ChangeType,
 						event.url.searchParams.get('referenceId') || null,
 						event.url.searchParams.has('currentUser') ? event.locals.token.userId : undefined,
-						event.url.searchParams.has('latest') ? true : undefined
+						latest,
+						merged
 				  )
 		),
 		status: 200
 	};
 });
 
-export function getChanges(
+export async function getChanges(
 	client: PrismaClient,
 	referenceType: ChangeType,
 	referenceId: string | null,
 	userId?: string,
-	latest?: boolean
+	latest?: boolean,
+	merged?: boolean
 ) {
-	return client.change.findMany({
-		where: {
-			referenceType,
-			referenceId,
-			userId,
-			latest
-		},
-		include: {
-			user: {
+	if (merged != null) {
+		return client.mergeRequest
+			.findMany({
+				where: {
+					change: {
+						referenceType,
+						referenceId,
+						userId,
+						latest
+					},
+					merged
+				},
 				select: {
-					id: true,
-					username: true
+					change: {
+						include: {
+							user: {
+								select: {
+									id: true,
+									username: true
+								}
+							}
+						}
+					}
+				}
+			})
+			.then((mergeRequests) => mergeRequests.map((mergeRequest) => mergeRequest.change));
+	} else {
+		return client.change.findMany({
+			where: {
+				referenceType,
+				referenceId,
+				userId,
+				latest
+			},
+			include: {
+				user: {
+					select: {
+						id: true,
+						username: true
+					}
 				}
 			}
-		}
-	});
+		});
+	}
 }
 
 export function getChangesByIds(client: PrismaClient, ids: string[]) {

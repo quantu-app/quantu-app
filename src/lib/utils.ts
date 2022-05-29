@@ -155,7 +155,9 @@ export function filterObjectByNullOrUndefined<T extends object = object>(obj: T)
 	return filterObjectBy(obj, (value) => value != null);
 }
 
-export function createQueryParams(params: Record<string, string | string[]>): string {
+type IPrimitive = number | string | boolean;
+
+export function createQueryParams(params: Record<string, IPrimitive | IPrimitive[]>): string {
 	const queryParams = Object.entries(params)
 		.filter(([_key, value]) => value != null)
 		.map(([key, value]) => {

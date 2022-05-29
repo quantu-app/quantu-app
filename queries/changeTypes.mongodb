@@ -1,0 +1,46 @@
+/**
+mongosh --tlsAllowInvalidHostnames --tlsAllowInvalidCertificates -f queries/changeTypes.mongodb "$DATABASE_URL"
+
+*/
+db.Challenge.find().forEach(challenge => {
+    console.log(challenge.name);
+});
+
+// db.Challenge.find().forEach(challenge => {
+//     db.Challenge.updateOne({_id: challenge._id}, {
+//         $set: {
+//             description: replace(challenge.description),
+//             prompt: replace(challenge.prompt)
+//         }
+//     })
+// });
+// db.Result.find().forEach(challenge => {
+//     db.Result.updateOne({_id: challenge._id}, {
+//         $set: {
+//             prompt: replace(challenge.prompt)
+//         }
+//     })
+// });
+
+// function replace(json) {
+//     if (Array.isArray(json)) {
+//         return json.map(replace);
+//     } else if (json !== null && typeof json === "object") {
+//         return Object.entries(json).reduce((acc, [key, value]) => {
+//             if (key === "latex") {
+//                 key = "math"
+//             }
+//             if (value === "latex") {
+//                 value = "math";
+//             } else if (Array.isArray(value)) {
+//                 value = value.map(replace);
+//             } else if (value !== null && typeof value === "object") {
+//                 value = replace(value);
+//             }
+//             acc[key] = value;
+//             return acc;
+//         }, {});
+//     } else {
+//         return json;
+//     }
+// }

@@ -19,7 +19,9 @@
 				>
 			</h4>
 			<div class="card-text">
-				<a href={`${base}/user/${mergeRequest.user.username}`}>{mergeRequest.user.username}</a>
+				<a href={`${base}/user/profile/${mergeRequest.user.username}`}
+					>{mergeRequest.user.username}</a
+				>
 			</div>
 		</div>
 	</div>

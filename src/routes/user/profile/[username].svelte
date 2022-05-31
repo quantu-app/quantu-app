@@ -1,7 +1,7 @@
 <script context="module" lang="ts">
-	import type { LoadInput } from '@sveltejs/kit';
+	import type { Load } from '@sveltejs/kit';
 
-	export async function load(input: LoadInput) {
+	export const load: Load = async (input) => {
 		const username = input.params.username;
 		const res = await input.fetch(`${base}/api/user/${username}`);
 		if (!res.ok) {
@@ -17,7 +17,7 @@
 				username: input.params.username
 			}
 		};
-	}
+	};
 </script>
 
 <script lang="ts">

@@ -2,12 +2,12 @@ import { isCreator } from '$lib/api/auth';
 import { run } from '$lib/prisma';
 import type { Prisma, PrismaClient } from '@prisma/client';
 
-export const get = isCreator(async (event) => {
-	return {
-		body: await run((client) => getChanges(client, event.params.changeId)),
-		status: 200
-	};
-});
+export const get = isCreator((event) =>
+	run((client) => getChanges(client, event.params.changeId)).then((change) => ({
+		body: change,
+		status: change ? 200 : 404
+	}))
+);
 
 export function getChanges(client: PrismaClient, changeId: string) {
 	return client.change.findUnique({
@@ -25,17 +25,19 @@ export function getChanges(client: PrismaClient, changeId: string) {
 	});
 }
 
-export const patch = isCreator(async (event) => ({
-	body: await run(async (client) =>
+export const patch = isCreator((event) =>
+	run(async (client) =>
 		updateChange(
 			client,
 			event.params.changeId,
 			event.locals.token.userId,
 			await event.request.json()
 		)
-	),
-	status: 200
-}));
+	).then((change) => ({
+		body: change,
+		status: change ? 200 : 404
+	}))
+);
 
 export async function updateChange(
 	client: PrismaClient,
@@ -50,6 +52,10 @@ export async function updateChange(
 			latest: true
 		}
 	});
+
+	if (!change) {
+		return null;
+	}
 
 	return client.change.update({
 		where: {

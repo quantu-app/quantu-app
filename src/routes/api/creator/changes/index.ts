@@ -1,5 +1,6 @@
 import { isCreator } from '$lib/api/auth';
 import { run } from '$lib/prisma';
+import { isEmpty } from '$lib/utils';
 import type { PrismaClient, ChangeType, Change, Prisma } from '@prisma/client';
 
 export const get = isCreator(async (event) => {
@@ -115,21 +116,29 @@ export async function createChange(
 	userId: string,
 	value: Prisma.InputJsonObject
 ) {
-	const prevChange = await client.change.findFirst({
+	const mergeRequest = await client.mergeRequest.findFirst({
 		where: {
-			referenceType,
-			referenceId,
-			latest: true
+			change: {
+				referenceType,
+				referenceId,
+				latest: true
+			}
 		},
-		include: {
-			user: {
-				select: {
-					id: true,
-					username: true
+		select: {
+			merged: true,
+			change: {
+				include: {
+					user: {
+						select: {
+							id: true,
+							username: true
+						}
+					}
 				}
 			}
 		}
 	});
+
 	const runCreate = (prevChange?: Change) =>
 		client.change.create({
 			data: {
@@ -160,23 +169,41 @@ export async function createChange(
 			}
 		});
 
-	if (prevChange) {
-		if (prevChange.latest) {
+	if (mergeRequest) {
+		if (mergeRequest.merged === true) {
 			const [_prevChange, change] = await client.$transaction([
 				client.change.update({
 					where: {
-						id: prevChange.id
+						id: mergeRequest.change.id
 					},
 					data: {
 						latest: false
 					}
 				}),
-				runCreate(prevChange)
+				runCreate(mergeRequest.change)
 			]);
-
 			return change;
 		} else {
-			throw new Error('Cannot create a new change for a non-latest change');
+			if (mergeRequest.change.userId === userId) {
+				return client.change.update({
+					where: {
+						id: mergeRequest.change.id
+					},
+					data: {
+						value: isEmpty(value) ? undefined : value
+					},
+					include: {
+						user: {
+							select: {
+								id: true,
+								username: true
+							}
+						}
+					}
+				});
+			} else {
+				return mergeRequest.change;
+			}
 		}
 	} else {
 		return runCreate();

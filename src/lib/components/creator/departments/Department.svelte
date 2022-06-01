@@ -38,10 +38,10 @@
 		}
 	}
 
-	function onChange(nameFilter) {
+	function onChange(nameFilter: string) {
 		state.update((state) => ({ ...state, nameFilter }));
 	}
-	$: nameFilter = $state.nameFilter;
+	$: nameFilter = $state.nameFilter || '';
 	$: filterChallenges = (challenge: StateChallenge) =>
 		nameFilter ? fuzzyEquals(nameFilter, challenge.name) : true;
 	$: filteredChallenges = challenges.filter(filterChallenges);

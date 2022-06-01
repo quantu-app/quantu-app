@@ -28,8 +28,8 @@ export function isEmptyArray(value: unknown) {
 	return (
 		value !== null &&
 		typeof value === 'object' &&
-		typeof value['length'] === 'number' &&
-		value['length'] === 0
+		typeof (value as any)['length'] === 'number' &&
+		(value as any)['length'] === 0
 	);
 }
 
@@ -132,7 +132,7 @@ export function readFileToArrayBuffer(file: File): Promise<ArrayBuffer> {
 	const reader = new FileReader();
 	return new Promise((resolve, reject) => {
 		reader.onload = async (e) => {
-			resolve(e.target.result as ArrayBuffer);
+			resolve((e.target as any).result as ArrayBuffer);
 		};
 		reader.onerror = reject;
 		reader.readAsArrayBuffer(file);
@@ -145,7 +145,7 @@ export function filterObjectBy<T extends object = object>(
 ): T {
 	return Object.entries(obj).reduce((acc, [key, value]) => {
 		if (fn(value, key as keyof T)) {
-			acc[key] = value;
+			(acc as any)[key] = value;
 		}
 		return acc;
 	}, {} as T);
@@ -162,9 +162,11 @@ export function createQueryParams(params: Record<string, IPrimitive | IPrimitive
 		.filter(([_key, value]) => value != null)
 		.map(([key, value]) => {
 			if (Array.isArray(value)) {
-				return value.map((v) => `${encodeURIComponent(key)}=${encodeURIComponent(v)}`).join('&');
+				return value
+					.map((v) => `${encodeURIComponent(key)}=${encodeURIComponent(v as string)}`)
+					.join('&');
 			}
-			return `${encodeURIComponent(key)}=${encodeURIComponent(value)}`;
+			return `${encodeURIComponent(key)}=${encodeURIComponent(value as string)}`;
 		})
 		.join('&');
 	return queryParams ? `?${queryParams}` : '';

@@ -8,7 +8,7 @@ import { render } from '@testing-library/svelte';
 
 describe('Test Footer', () => {
 	test('Footer renders', () => {
-		const component = render(Footer);
+		const component = render(Footer as any);
 		expect(component.queryAllByText('Open Source Projects').length).toBeGreaterThan(0);
 	});
 });

@@ -1,45 +1,25 @@
 /// <reference types="@sveltejs/kit" />
-/// <reference types="svelte" />
-/// <reference types="vite/client" />
 
 import type { ITokenValue } from '$lib/api/auth';
 import type { IJwtString } from '$lib/api/jwt';
 import type { User } from '@prisma/client';
-import type bootstrap from 'bootstrap';
-import type katex from 'katex';
+import type * as bootstrap from 'bootstrap';
 
-declare namespace MathQuill {
-	export class EditableField {
-		id: string;
-		latex(): string;
+declare namespace App {
+	interface Locals {
+		rawToken?: IJwtString<ITokenValue>;
+		token?: ITokenValue;
 	}
-	export class MathField extends EditableField {}
-	export interface IMathFieldOptions {
-		handlers?: {
-			edit?: (mathField: MathField) => void;
-		};
+	// interface Platform {}
+	interface Session {
+		user: Omit<User, 'encryptedPassword'>;
 	}
-	export class MathQuill {
-		MathField(element: HTMLElement, options: IMathFieldOptions = {}): MathField;
-	}
-	export function getInterface(value: number): MathQuill;
+	// interface Stuff {}
 }
 
 declare global {
 	interface Window {
-		katex: katex;
-		bootstrap: bootstrap;
-		MathQuill: MathQuill;
+		bootstrap: typeof bootstrap;
 		gtag(type: string, id: string, config?: any): void;
-	}
-
-	declare namespace App {
-		interface Locals {
-			rawToken?: IJwtString<ITokenValue>;
-			token?: ITokenValue;
-		}
-		interface Session {
-			user: Omit<User, 'encryptedPassword'>;
-		}
 	}
 }

@@ -49,10 +49,10 @@ mongodb:
     storageClass: linode-block-storage-retain
   rbac:
     create: true
-  externalAccess:
-    enabled: true
-    create: true
-    service.type: LoadBalancer
-    service.port: 27017
-    autoDiscovery:
-      enabled: true
+  # externalAccess:
+  #   enabled: true
+  #   create: true
+  #   service.type: LoadBalancer
+  #   service.port: 27017
+  #   autoDiscovery:
+  #     enabled: true

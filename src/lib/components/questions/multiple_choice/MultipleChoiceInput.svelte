@@ -51,7 +51,6 @@
 						{disabled}
 						status={isCorrect ? 'success' : isIncorrect ? 'error' : undefined}
 						checked={selected[choice.id]}
-						{onChange}
 					/>
 				</div>
 				<div class="flex-grow-1 pt-2">

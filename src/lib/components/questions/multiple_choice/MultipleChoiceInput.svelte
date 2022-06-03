@@ -40,9 +40,9 @@
 
 		<li
 			class="list-group-item list-group-item-action border-0 rounded-2"
-			class:list-group-item-success={isCorrect}
-			class:list-group-item-danger={isIncorrect}
-			class:list-group-item-secondary={selected[choice.id]}
+			class:list-group-item-correctAnswer={isCorrect}
+			class:list-group-item-incorrectAnswer={isIncorrect}
+			class:list-group-item-selectedAnswer={selected[choice.id]}
 			on:click={onChange}
 		>
 			<div class="d-flex">
@@ -61,3 +61,9 @@
 		</li>
 	{/each}
 </ul>
+
+<style>
+	li.list-group-item.list-group-item-action.list-group-item-selectedAnswer {
+		background-color: #f0f0f0;
+	}
+</style>

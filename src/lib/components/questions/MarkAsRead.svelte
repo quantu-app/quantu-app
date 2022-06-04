@@ -8,8 +8,8 @@
 
 	export let type: QuestionType;
 	export let prompt: MarkAsRead;
-	export let input: MarkAsReadAnswer = undefined;
-	export let result: Result = undefined;
+	export let input: MarkAsReadAnswer | undefined = undefined;
+	export let result: Result | undefined = undefined;
 	export let onExplain: () => Promise<Result>;
 	export let onSubmit: (answer: Answer) => Promise<Result>;
 	export let disabled = false;

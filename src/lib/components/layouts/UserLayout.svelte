@@ -2,7 +2,6 @@
 
 <script lang="ts">
 	import Notifications from '$lib/components/Notifications.svelte';
-	import SignInUpModal from '$lib/components/SignInUpModal.svelte';
 	import Nav from '../Nav.svelte';
 	import Footer from '../Footer.svelte';
 </script>
@@ -14,7 +13,6 @@
 		<Footer />
 	</div>
 	<Notifications />
-	<SignInUpModal />
 </div>
 
 <style lang="scss">

@@ -9,8 +9,8 @@
 
 	export let type: QuestionType;
 	export let prompt: FlashCard;
-	export let input: FlashCardAnswer = undefined;
-	export let result: Result = undefined;
+	export let input: FlashCardAnswer | undefined = undefined;
+	export let result: Result | undefined = undefined;
 	export let showExplanation = false;
 	export let onExplain: () => Promise<Result>;
 	export let onSubmit: (answer: Answer) => Promise<Result>;

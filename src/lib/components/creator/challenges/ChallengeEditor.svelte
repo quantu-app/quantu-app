@@ -46,7 +46,7 @@
 			{disabled}
 			bind:value={challenge.name}
 		/>
-		{#if nameTooLong}
+		{#if nameTooLong && challenge.name}
 			<div class="invalid-feedback">
 				Character Limit reached: {challenge.name.length - MAX_NAME_LEN} too many.
 			</div>

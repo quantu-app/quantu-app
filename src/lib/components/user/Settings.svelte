@@ -19,7 +19,7 @@
 
 	let data = fromUserSettings($currentUser.settings || {});
 	let result = settingsSuite(data);
-	$: disabled = !result.isValid();
+	$: disabled = submitting || !result.isValid();
 	$: formClassName = classnames(result, {
 		warning: 'warning',
 		invalid: 'is-invalid',

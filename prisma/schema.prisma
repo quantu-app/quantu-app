@@ -40,6 +40,18 @@ model OldPasswords {
   @@unique([userId, encryptedPassword])
 }
 
+model ApplicationSettings {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String @unique @db.ObjectId
+
+  lang String @default("en")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
 model User {
   id String @id @default(auto()) @map("_id") @db.ObjectId
 
@@ -56,6 +68,7 @@ model User {
 
   emails       Email[]
   oldPasswords OldPasswords[]
+  settings     ApplicationSettings?
 
   results                Result[]
   solutions              ChallengeSolution[]
@@ -66,9 +79,8 @@ model User {
   mergeRequest           MergeRequest[]
   mergeRequestApprovals  MergeRequestApproval[]
 
-  createdAt           DateTime              @default(now())
-  updatedAt           DateTime              @updatedAt
-  ApplicationSettings ApplicationSettings[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 // Changes
@@ -306,19 +318,4 @@ model Asset {
   updatedAt DateTime @updatedAt
 
   @@unique([departmentId, folder, name])
-}
-
-// Application Settings
-model ApplicationSettings {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
-
-  // RELATIONS
-  user   User   @relation(fields: [userId], references: [id])
-  userId String @db.ObjectId
-
-  // PROPERTIES
-  settings Json
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
 }

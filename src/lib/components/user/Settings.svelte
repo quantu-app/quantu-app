@@ -1,9 +1,49 @@
 <svelte:options immutable />
 
-<script lang="ts">
-	import languages from '$lib/data/languages';
+<script lang="ts" context="module">
+	import type { ApplicationSettings } from '@prisma/client';
 
-	let displayLanguage: string = 'en';
+	function fromUserSettings(settings: Partial<ApplicationSettings>) {
+		const data: Partial<ISettingsState> = {};
+		data.lang = settings.lang || 'en';
+		return data;
+	}
+</script>
+
+<script lang="ts">
+	import classnames from 'vest/classnames';
+	import languages from '$lib/data/languages';
+	import { currentUser, updateSettings } from '$lib/state/user';
+	import { settingsSuite, type ISettingsState } from './settingsSuite';
+	import InputMessages from '../ui/InputMessages.svelte';
+
+	let data = fromUserSettings($currentUser.settings || {});
+	let result = settingsSuite(data);
+	$: disabled = !result.isValid();
+	$: formClassName = classnames(result, {
+		warning: 'warning',
+		invalid: 'is-invalid',
+		valid: 'is-valid'
+	});
+	$: messageClassName = classnames(result, {
+		warning: 'warning-feedback',
+		invalid: 'invalid-feedback',
+		valid: 'valid-feedback'
+	});
+
+	function onChange(event: Event & { currentTarget: HTMLSelectElement | HTMLInputElement }) {
+		result = settingsSuite(data, event.currentTarget.name as keyof ISettingsState);
+	}
+
+	let submitting = false;
+	async function onSubmit() {
+		submitting = true;
+		try {
+			await updateSettings(data);
+		} finally {
+			submitting = false;
+		}
+	}
 </script>
 
 <div class="container">
@@ -12,7 +52,7 @@
 		<hr />
 	</div>
 
-	<form on:submit|preventDefault class="my-4">
+	<form on:submit|preventDefault={onSubmit} class="my-4">
 		<div class="row my-4">
 			<div class="col-12">
 				<label for="display-languange">Display Language</label>
@@ -23,18 +63,24 @@
 						interface languages in the future.</small
 					>
 				</p>
-				<div class="input-group">
-					<select id="display-languange" class="form-select" bind:value={displayLanguage}>
+				<div class="input-group has-validation">
+					<select
+						id="display-languange"
+						class="form-select {formClassName('lang')}"
+						bind:value={data.lang}
+						on:input={onChange}
+					>
 						{#each languages as language}
 							<option value={language.code}>{language.nativeName} | {language.name}</option>
 						{/each}
 					</select>
+					<InputMessages className={messageClassName('lang')} messages={result.getErrors('lang')} />
 				</div>
 			</div>
 		</div>
 		<div class="row my-4">
 			<div class="d-inline-block text-end">
-				<button type="submit" class="btn btn-primary">Update</button>
+				<input type="submit" class="btn btn-primary" {disabled} value="Update" />
 			</div>
 		</div>
 	</form>

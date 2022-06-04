@@ -1,4 +1,5 @@
 /// <reference types="@sveltejs/kit" />
+/// <reference types="@types/vite" />
 
 import type { ITokenValue } from '$lib/api/auth';
 import type { IJwtString } from '$lib/api/jwt';

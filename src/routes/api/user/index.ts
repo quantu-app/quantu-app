@@ -20,7 +20,8 @@ export const get = authenticated((event) =>
 				country: true,
 				bio: true,
 				createdAt: true,
-				updatedAt: true
+				updatedAt: true,
+				settings: true
 			}
 		})
 	).then((user) =>
@@ -54,7 +55,8 @@ export const patch = authenticated((event) =>
 					country: true,
 					bio: true,
 					createdAt: true,
-					updatedAt: true
+					updatedAt: true,
+					settings: true
 				}
 			})
 		).then((user) =>

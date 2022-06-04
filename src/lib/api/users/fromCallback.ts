@@ -33,6 +33,7 @@ export async function fromCallback(prisma: PrismaClient, params: IFromCallbackPa
 					birthday: true,
 					country: true,
 					bio: true,
+					settings: true,
 					createdAt: true,
 					updatedAt: true
 				}
@@ -69,6 +70,7 @@ export async function fromCallback(prisma: PrismaClient, params: IFromCallbackPa
 				birthday: true,
 				country: true,
 				bio: true,
+				settings: true,
 				createdAt: true,
 				updatedAt: true
 			}

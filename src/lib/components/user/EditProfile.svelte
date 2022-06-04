@@ -25,9 +25,9 @@
 		bio: user.bio
 	};
 
-	let result = validate.get();
-	let errors: Record<string, string[]> = { username: [], birthday: [] };
-	let warnings = {};
+	let result = validate(formState);
+	let errors: Record<string, string[]> = result.getErrors();
+	let warnings = result.getWarnings();
 
 	function runValidation(fieldname?: string) {
 		result = validate(formState, fieldname);
@@ -65,11 +65,11 @@
 
 	$: usernameError = errors.username && errors.username.length > 0;
 	$: birthdayError = errors.birthday && errors.birthday.length > 0;
-	$: disabled = result.hasErrors();
+	$: disabled = updating || !result.isValid();
 </script>
 
 <div class="container">
-	<form on:submit|preventDefault class="my-4">
+	<form on:submit|preventDefault={onUpdate} class="my-4">
 		<div class="row">
 			<h1>Profile Information</h1>
 			<hr />
@@ -196,7 +196,7 @@
 		</div>
 		<div class="row my-4">
 			<div class="d-inline-block text-end">
-				<button type="submit" {disabled} class="btn btn-primary" on:click={onUpdate}>Update</button>
+				<input type="submit" {disabled} class="btn btn-primary" value="Update" />
 			</div>
 		</div>
 	</form>

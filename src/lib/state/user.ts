@@ -3,20 +3,24 @@ import { get, writable, derived } from 'svelte/store';
 import EventEmitter from 'eventemitter3';
 import { session } from '$app/stores';
 import Cookies from 'js-cookie';
-import type { User } from '@prisma/client';
+import type { ApplicationSettings, User } from '@prisma/client';
 import { base } from '$app/paths';
 import { goto } from '$app/navigation';
 
-export const redirectPathWritable = writable<string>();
-export const currentUser: Readable<User> = derived(session, (session) => session?.user);
+export type StateUser = User & {
+	settings: ApplicationSettings;
+};
+
+export const redirectPathWritable = writable<string | undefined>();
+export const currentUser: Readable<StateUser> = derived(session, (session) => session?.user);
 export const signedIn = derived(currentUser, (currentUser) => !!currentUser);
 
 export const userEmitter = new EventEmitter<{
-	signIn: (user: User) => void;
+	signIn: (user: StateUser) => void;
 	signOut: () => void;
 }>();
 
-export function getCurrentUser(): User {
+export function getCurrentUser(): StateUser {
 	return get(currentUser);
 }
 
@@ -50,24 +54,38 @@ export function signOut() {
 	userEmitter.emit('signOut');
 }
 
-export async function updateUser(updateUser: Partial<User>) {
+export async function updateUser(data: Partial<User>) {
 	const res = await fetch(`${base}/api/user`, {
 		method: 'PATCH',
-		body: JSON.stringify(updateUser)
+		body: JSON.stringify(data)
 	});
 	if (res.ok) {
-		const body = userFromJSON(await res.json());
-		session.update((session) => ({ ...session, user: body }));
-		return body;
+		const user = userFromJSON(await res.json());
+		session.update((session) => ({ ...session, user }));
+		return user;
 	} else {
 		throw await res.json();
 	}
 }
 
-export function userFromJSON(user: User): User {
+export async function updateSettings(data: Partial<ApplicationSettings>) {
+	const res = await fetch(`${base}/api/user/settings`, {
+		method: 'PATCH',
+		body: JSON.stringify(data)
+	});
+	if (res.ok) {
+		const settings = userFromJSON(await res.json());
+		session.update((session) => ({ ...session, user: { ...session.user, settings } }));
+		return settings;
+	} else {
+		throw await res.json();
+	}
+}
+
+export function userFromJSON(user: any): StateUser {
 	return {
 		...user,
-		birthday: new Date(user.birthday),
+		birthday: user.birthday ? new Date(user.birthday) : new Date(Date.now() - 1000000000000),
 		updatedAt: new Date(user.updatedAt),
 		createdAt: new Date(user.createdAt)
 	};

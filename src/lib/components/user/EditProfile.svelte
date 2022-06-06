@@ -9,6 +9,7 @@
 	import { validate } from './userProfileSuite';
 	import { format, subYears, parseISO } from 'date-fns';
 	import RichEditor from '$lib/components/editor/RichEditor.svelte';
+	import { addNotification, NotificationType } from '$lib/state/notifications';
 
 	export let user: User;
 
@@ -56,6 +57,13 @@
 
 			const user = await updateUser(updateData);
 			await goto(`${base}/user/profile/${user.username}`);
+		} catch (e) {
+			console.error(e);
+			addNotification({
+				type: NotificationType.Danger,
+				heading: 'There was an error updating your profile',
+				description: (e as Error).message
+			});
 		} finally {
 			updating = false;
 		}

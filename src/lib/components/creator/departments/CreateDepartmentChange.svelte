@@ -5,6 +5,7 @@
 	import { base } from '$app/paths';
 	import Modal from '$lib/components/ui/Modal.svelte';
 	import { createChange } from '$lib/state/creator/changes';
+	import { addNotification, NotificationType } from '$lib/state/notifications';
 	import type { Department } from '@prisma/client';
 	import DepartmentChangeEditor from './DepartmentChangeEditor.svelte';
 
@@ -24,6 +25,13 @@
 			open = false;
 			await goto(`${base}/creator/departments/changes/${id}`);
 			departmentChange = {};
+		} catch (e) {
+			console.error(e);
+			addNotification({
+				type: NotificationType.Danger,
+				title: 'Error Creating',
+				description: (e as Error).message
+			});
 		} finally {
 			creatingDepartmentChange = false;
 			editorKey = Math.random();
@@ -31,11 +39,8 @@
 	}
 </script>
 
-<button
-	type="button"
-	class="btn btn-primary"
-	on:click={onOpen}
-	aria-label="Create Department">Create a new Department</button
+<button type="button" class="btn btn-primary" on:click={onOpen} aria-label="Create Department"
+	>Create a new Department</button
 >
 
 <Modal bind:open>

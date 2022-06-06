@@ -14,7 +14,7 @@ export enum NotificationType {
 
 export interface INotificationOptions {
 	type?: NotificationType;
-	heading?: string;
+	title?: string;
 	description: string;
 	timeout?: number;
 }
@@ -22,7 +22,7 @@ export interface INotificationOptions {
 export interface INotification {
 	id: string;
 	type: NotificationType;
-	heading?: string;
+	title?: string;
 	description: string;
 }
 
@@ -34,7 +34,7 @@ function createNotification(options: INotificationOptions) {
 	return {
 		id: v4(),
 		type: options.type || NotificationType.Primary,
-		heading: options.heading,
+		title: options.title,
 		description: options.description
 	};
 }

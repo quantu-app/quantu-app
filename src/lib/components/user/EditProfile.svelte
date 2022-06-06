@@ -36,7 +36,7 @@
 		warnings = result.getWarnings();
 	}
 
-	function check({ target: { name } }: Event & { target: { name?: string } }) {
+	function check({ currentTarget: { name } }: Event & { currentTarget: { name?: string } }) {
 		runValidation(name);
 	}
 
@@ -61,7 +61,7 @@
 			console.error(e);
 			addNotification({
 				type: NotificationType.Danger,
-				heading: 'There was an error updating your profile',
+				title: 'There was an error updating your profile',
 				description: (e as Error).message
 			});
 		} finally {

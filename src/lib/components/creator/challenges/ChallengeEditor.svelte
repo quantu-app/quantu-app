@@ -6,6 +6,7 @@
 	import DateTimeInput from '../../ui/DateTimeInput.svelte';
 	import { isUrlSafe } from '../../../utils';
 	import SelectAsset from '../assets/SelectAsset.svelte';
+	import { addNotification, NotificationType } from '$lib/state/notifications';
 
 	export let challenge: Partial<StateChallenge>;
 	export let disabled = false;
@@ -16,12 +17,18 @@
 	let validUrl: boolean = false;
 
 	$: prompt = challenge.prompt as any;
-	$: validUrl = isUrlSafe(challenge.url);
+	$: validUrl = !!challenge?.url && isUrlSafe(challenge.url);
 	$: nameTooLong = (challenge.name || '').length > MAX_NAME_LEN;
 
 	let validatingUrl = false;
 	async function onUrlChange() {
-		if (!validUrl || validatingUrl || challengeUrl === challenge.url) {
+		if (
+			!validUrl ||
+			!challenge?.department ||
+			!challenge.url ||
+			validatingUrl ||
+			challengeUrl === challenge.url
+		) {
 			return;
 		}
 		validatingUrl = true;

@@ -3,6 +3,7 @@
 <script lang="ts">
 	import type { StateChange } from '$lib/state/creator/changes';
 	import { mergeMergeRequest, type StateMergeRequest } from '$lib/state/creator/mergeRequests';
+	import { addNotification, NotificationType } from '$lib/state/notifications';
 	import Change from './Change.svelte';
 
 	export let mergeRequest: StateMergeRequest;
@@ -15,6 +16,13 @@
 		merging = true;
 		try {
 			await mergeMergeRequest(mergeRequest.id);
+		} catch (e) {
+			console.error(e);
+			addNotification({
+				type: NotificationType.Danger,
+				title: 'Error Merging',
+				description: (e as Error).message
+			});
 		} finally {
 			merging = false;
 		}

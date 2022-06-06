@@ -1,6 +1,7 @@
 <script lang="ts">
 	import RichEditor from '$lib/components/editor/RichEditor.svelte';
 	import { validDepartmentUrl } from '$lib/state/creator/departments';
+	import { addNotification, NotificationType } from '$lib/state/notifications';
 	import { isUrlSafe } from '$lib/utils';
 	import { debounce } from '@aicacia/debounce';
 	import type { Department } from '@prisma/client';
@@ -22,6 +23,13 @@
 		validatingUrl = true;
 		try {
 			validUrl = await validDepartmentUrl(departmentChange.url);
+		} catch (e) {
+			console.error(e);
+			addNotification({
+				type: NotificationType.Danger,
+				title: 'Error validating URL',
+				description: (e as Error).message
+			});
 		} finally {
 			validatingUrl = false;
 		}

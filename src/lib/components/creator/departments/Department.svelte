@@ -23,6 +23,7 @@
 	import { createChange } from '$lib/state/creator/changes';
 	import { goto } from '$app/navigation';
 	import RichViewer from '$lib/components/editor/RichViewer.svelte';
+	import { addNotification, NotificationType } from '$lib/state/notifications';
 
 	export let department: StateDepartment;
 	export let challenges: StateChallenge[];
@@ -33,6 +34,13 @@
 		try {
 			const departmentChange = await createChange('DEPARTMENT', department.id, {});
 			await goto(`${base}/creator/departments/changes/${departmentChange.id}`);
+		} catch (e) {
+			console.error(e);
+			addNotification({
+				type: NotificationType.Danger,
+				title: 'Error Creating',
+				description: (e as Error).message
+			});
 		} finally {
 			creatingChange = false;
 		}

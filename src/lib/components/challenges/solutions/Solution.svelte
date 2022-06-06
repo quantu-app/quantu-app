@@ -14,6 +14,7 @@
 		type StateChallengeSolution
 	} from '$lib/state/challengeSolutions';
 	import { createComment } from '$lib/state/comments';
+	import { addNotification, NotificationType } from '$lib/state/notifications';
 	import { currentUser } from '$lib/state/user';
 	import DeleteSolution from './DeleteSolution.svelte';
 
@@ -29,6 +30,13 @@
 			await deleteChallengeSolutionById(challenge.department.url, challenge.url, solution.id);
 			deleteOpen = false;
 			await goto(`${base}/challenges/${challenge.department.url}/${challenge.url}/solutions`);
+		} catch (e) {
+			console.error(e);
+			addNotification({
+				type: NotificationType.Danger,
+				title: 'Error Deleting Solution',
+				description: (e as Error).message
+			});
 		} finally {
 			deleting = false;
 		}
@@ -44,6 +52,13 @@
 		try {
 			await updateChallengeSolution(challenge.department.url, challenge.url, solution.id, {
 				solution: solution.solution
+			});
+		} catch (e) {
+			console.error(e);
+			addNotification({
+				type: NotificationType.Danger,
+				title: 'Error Updating Solution',
+				description: (e as Error).message
 			});
 		} finally {
 			updating = false;
@@ -63,6 +78,13 @@
 			await createComment('CHALLENGE_SOLUTION', solution.id, { content: comment });
 			comment = [];
 			replying = false;
+		} catch (e) {
+			console.error(e);
+			addNotification({
+				type: NotificationType.Danger,
+				title: 'Error Replying to Solution',
+				description: (e as Error).message
+			});
 		} finally {
 			commenting = false;
 		}
@@ -107,10 +129,8 @@
 		{/if}
 		{#if !editing && !replying && $currentUser?.id === solution.user.id}
 			<div class="btn-group" role="group">
-				<button
-					class="btn btn-sm btn-danger"
-					disabled={deleting}
-					aria-label="Delete Solution">Delete</button
+				<button class="btn btn-sm btn-danger" disabled={deleting} aria-label="Delete Solution"
+					>Delete</button
 				>
 				<button class="btn btn-sm btn-primary" on:click={toggleEdit}>Edit</button>
 			</div>

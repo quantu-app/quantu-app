@@ -11,6 +11,8 @@
 </script>
 
 <script lang="ts">
+	import { addNotification, NotificationType } from '$lib/state/notifications';
+
 	export let vote: boolean | null = null;
 	export let votes: IVote[] = [];
 	export let onVote: (vote: boolean | null) => Promise<void>;
@@ -23,6 +25,13 @@
 		voting = true;
 		try {
 			await onVote(vote === false ? null : true);
+		} catch (e) {
+			console.error(e);
+			addNotification({
+				type: NotificationType.Danger,
+				title: 'Error Voting',
+				description: (e as Error).message
+			});
 		} finally {
 			voting = false;
 		}
@@ -31,6 +40,13 @@
 		voting = true;
 		try {
 			await onVote(vote === true ? null : false);
+		} catch (e) {
+			console.error(e);
+			addNotification({
+				type: NotificationType.Danger,
+				title: 'Error Voting',
+				description: (e as Error).message
+			});
 		} finally {
 			voting = false;
 		}

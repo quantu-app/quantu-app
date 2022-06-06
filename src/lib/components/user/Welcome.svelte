@@ -6,6 +6,7 @@
 	import { goto } from '$app/navigation';
 	import { base } from '$app/paths';
 	import type { User } from '@prisma/client';
+	import { addNotification, NotificationType } from '$lib/state/notifications';
 
 	export let user: User;
 
@@ -33,6 +34,13 @@
 				country
 			});
 			await goto(`${base}/challenges`);
+		} catch (e) {
+			console.error(e);
+			addNotification({
+				type: NotificationType.Danger,
+				title: 'Error Confirming',
+				description: (e as Error).message
+			});
 		} finally {
 			updating = false;
 		}

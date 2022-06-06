@@ -6,6 +6,7 @@
 	import { updateChange, type StateChange } from '$lib/state/creator/changes';
 	import { departmentsById } from '$lib/state/creator/departments';
 	import { createMergeRequest, type StateMergeRequest } from '$lib/state/creator/mergeRequests';
+	import { addNotification, NotificationType } from '$lib/state/notifications';
 	import { filterObjectByNullOrUndefined } from '$lib/utils';
 	import DepartmentChangeEditor from './DepartmentChangeEditor.svelte';
 
@@ -25,6 +26,13 @@
 		try {
 			const mergeRequest = await createMergeRequest(departmentChange.id);
 			await goto(`${base}/creator/merge-requests/${mergeRequest.id}`);
+		} catch (e) {
+			console.error(e);
+			addNotification({
+				type: NotificationType.Danger,
+				title: 'Error Creating Merge',
+				description: (e as Error).message
+			});
 		} finally {
 			createMerge = false;
 		}

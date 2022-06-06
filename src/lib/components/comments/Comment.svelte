@@ -10,6 +10,7 @@
 		voteOnComment,
 		type StateComment
 	} from '$lib/state/comments';
+	import { addNotification, NotificationType } from '$lib/state/notifications';
 	import { currentUser } from '$lib/state/user';
 	import RichEditor from '../editor/RichEditor.svelte';
 	import RichViewer from '../editor/RichViewer.svelte';
@@ -26,6 +27,13 @@
 		deletingComment = true;
 		try {
 			await deleteComment(referenceType, referenceId, comment.id);
+		} catch (e) {
+			console.error(e);
+			addNotification({
+				type: NotificationType.Danger,
+				title: 'Error Deleting Solution',
+				description: (e as Error).message
+			});
 		} finally {
 			deletingComment = false;
 		}
@@ -46,6 +54,13 @@
 			});
 			replyContent = [];
 			replying = false;
+		} catch (e) {
+			console.error(e);
+			addNotification({
+				type: NotificationType.Danger,
+				title: 'Error Deleting Solution',
+				description: (e as Error).message
+			});
 		} finally {
 			commenting = false;
 		}
@@ -62,6 +77,13 @@
 			await updateComment(referenceType, referenceId, comment.id, {
 				content: comment.content
 			});
+		} catch (e) {
+			console.error(e);
+			addNotification({
+				type: NotificationType.Danger,
+				title: 'Error Deleting Solution',
+				description: (e as Error).message
+			});
 		} finally {
 			updating = false;
 			editing = false;
@@ -73,6 +95,13 @@
 		loadingMore = true;
 		try {
 			await showCommentsById(referenceType, referenceId, comment.id);
+		} catch (e) {
+			console.error(e);
+			addNotification({
+				type: NotificationType.Danger,
+				title: 'Error Deleting Solution',
+				description: (e as Error).message
+			});
 		} finally {
 			loadingMore = false;
 		}

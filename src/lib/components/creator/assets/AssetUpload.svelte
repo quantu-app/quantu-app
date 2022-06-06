@@ -2,6 +2,7 @@
 
 <script lang="ts">
 	import { uploadAsset } from '$lib/state/creator/assets';
+	import { addNotification, NotificationType } from '$lib/state/notifications';
 
 	export let departmentId: string;
 	export let folder: string;
@@ -23,6 +24,13 @@
 			await uploadAsset(departmentId, folder, file.name, file);
 			uploadFolder = '';
 			fileInput.value = '';
+		} catch (e) {
+			console.error(e);
+			addNotification({
+				type: NotificationType.Danger,
+				title: 'Error Upoading',
+				description: (e as Error).message
+			});
 		} finally {
 			uploading = false;
 		}

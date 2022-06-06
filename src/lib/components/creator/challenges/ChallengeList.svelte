@@ -6,14 +6,15 @@
 	import UpdateChallenge from './UpdateChallenge.svelte';
 	import type { StateChallenge } from '$lib/state/creator/challenges';
 	import { deleteChallenge, updateChallenge } from '$lib/state/creator/challenges';
+	import { addNotification, NotificationType } from '$lib/state/notifications';
 
 	export let departmentId: string = undefined;
 	export let challenges: Array<StateChallenge>;
 
 	let updateOpen = false;
-	let challengeToUpdate: StateChallenge;
+	let challengeToUpdate: StateChallenge | undefined;
 	let deleteOpen = false;
-	let challengeToDelete: StateChallenge;
+	let challengeToDelete: StateChallenge | undefined;
 
 	function createOnUpdate(q: StateChallenge) {
 		return function onUpdate() {
@@ -31,17 +32,34 @@
 	async function onUpdateChallenge() {
 		if (challengeToUpdate) {
 			const { id, department, ...challengeBody } = challengeToUpdate;
-
-			await updateChallenge(departmentId, challengeToUpdate.id, challengeBody);
-			challengeToUpdate = undefined;
-			updateOpen = false;
+			try {
+				await updateChallenge(departmentId, challengeToUpdate.id, challengeBody);
+				challengeToUpdate = undefined;
+				updateOpen = false;
+			} catch (e) {
+				console.error(e);
+				addNotification({
+					type: NotificationType.Danger,
+					title: 'Error Updating',
+					description: (e as Error).message
+				});
+			}
 		}
 	}
 	async function onDeleteChallenge() {
 		if (challengeToDelete) {
-			await deleteChallenge(departmentId, challengeToDelete.id);
-			challengeToDelete = undefined;
-			deleteOpen = false;
+			try {
+				await deleteChallenge(departmentId, challengeToDelete.id);
+				challengeToDelete = undefined;
+				deleteOpen = false;
+			} catch (e) {
+				console.error(e);
+				addNotification({
+					type: NotificationType.Danger,
+					title: 'Error Upoading',
+					description: (e as Error).message
+				});
+			}
 		}
 	}
 </script>

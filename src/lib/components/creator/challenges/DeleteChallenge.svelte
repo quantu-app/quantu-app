@@ -3,6 +3,7 @@
 <script lang="ts">
 	import Modal from '$lib/components/ui/Modal.svelte';
 	import type { StateChallenge } from '$lib/state/creator/challenges';
+	import { addNotification, NotificationType } from '$lib/state/notifications';
 	import { titleCase } from 'title-case';
 
 	export let open = false;
@@ -15,6 +16,13 @@
 		deletingChallenge = true;
 		try {
 			await onDeleteChallenge();
+		} catch (e) {
+			console.error(e);
+			addNotification({
+				type: NotificationType.Danger,
+				title: 'Error Deleting',
+				description: (e as Error).message
+			});
 		} finally {
 			deletingChallenge = false;
 		}

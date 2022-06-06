@@ -2,6 +2,7 @@
 
 <script lang="ts">
 	import Modal from '$lib/components/ui/Modal.svelte';
+	import { addNotification, NotificationType } from '$lib/state/notifications';
 
 	export let open: boolean;
 	export let onDelete: () => Promise<void>;
@@ -11,6 +12,13 @@
 		deleting = true;
 		try {
 			await onDelete();
+		} catch (e) {
+			console.error(e);
+			addNotification({
+				type: NotificationType.Danger,
+				title: 'Error Deleting Solution',
+				description: (e as Error).message
+			});
 		} finally {
 			deleting = false;
 		}

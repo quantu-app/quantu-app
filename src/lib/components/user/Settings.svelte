@@ -16,6 +16,7 @@
 	import { currentUser, updateSettings } from '$lib/state/user';
 	import { settingsSuite, type ISettingsState } from './settingsSuite';
 	import InputMessages from '../ui/InputMessages.svelte';
+	import { addNotification, NotificationType } from '$lib/state/notifications';
 
 	let data = fromUserSettings($currentUser.settings || {});
 	let result = settingsSuite(data);
@@ -40,6 +41,13 @@
 		submitting = true;
 		try {
 			await updateSettings(data);
+		} catch (e) {
+			console.error(e);
+			addNotification({
+				type: NotificationType.Danger,
+				title: "Error updating User's Settings",
+				description: (e as Error).message
+			});
 		} finally {
 			submitting = false;
 		}

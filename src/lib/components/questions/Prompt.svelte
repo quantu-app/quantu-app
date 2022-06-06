@@ -1,6 +1,8 @@
 <svelte:options immutable />
 
 <script lang="ts">
+	import { addNotification, NotificationType } from '$lib/state/notifications';
+
 	import type { Answer } from '$lib/types';
 	import { isEmpty } from '$lib/utils';
 	import type { QuestionType } from '@prisma/client';
@@ -21,6 +23,13 @@
 		try {
 			result = await onExplain();
 			showExplanation = true;
+		} catch (e) {
+			console.error(e);
+			addNotification({
+				type: NotificationType.Danger,
+				title: 'Error getting Explaination',
+				description: (e as Error).message
+			});
 		} finally {
 			explaining = false;
 		}
@@ -29,6 +38,13 @@
 		answering = true;
 		try {
 			result = await onSubmit(input);
+		} catch (e) {
+			console.error(e);
+			addNotification({
+				type: NotificationType.Danger,
+				title: 'Error Submitting',
+				description: (e as Error).message
+			});
 		} finally {
 			answering = false;
 		}

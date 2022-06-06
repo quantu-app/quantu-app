@@ -5,8 +5,9 @@
 	import type { StateChallenge } from '$lib/state/creator/challenges';
 	import ChallengeEditor from './ChallengeEditor.svelte';
 	import Modal from '$lib/components/ui/Modal.svelte';
+	import { addNotification, NotificationType } from '$lib/state/notifications';
 
-	export let departmentId: string = undefined;
+	export let departmentId: string | undefined = undefined;
 
 	let editorKey = Math.random();
 	let creatingChallenge = false;
@@ -14,11 +15,21 @@
 	let challenge: Partial<StateChallenge> = { departmentId, type: 'MULTIPLE_CHOICE', prompt: {} };
 
 	async function onCreateChallenge() {
+		if (!departmentId) {
+			return;
+		}
 		creatingChallenge = true;
 		try {
 			await createChallenge(departmentId, challenge);
 			open = false;
 			challenge = { departmentId, type: 'MULTIPLE_CHOICE', prompt: {} };
+		} catch (e) {
+			console.error(e);
+			addNotification({
+				type: NotificationType.Danger,
+				title: 'Error Upoading',
+				description: (e as Error).message
+			});
 		} finally {
 			creatingChallenge = false;
 			editorKey = Math.random();

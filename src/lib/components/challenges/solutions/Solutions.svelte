@@ -10,6 +10,7 @@
 		deleteChallengeSolutionById,
 		type StateChallengeSolution
 	} from '$lib/state/challengeSolutions';
+	import { addNotification, NotificationType } from '$lib/state/notifications';
 	import { currentUser } from '$lib/state/user';
 	import DeleteSolution from './DeleteSolution.svelte';
 	import SolutionList from './SolutionList.svelte';
@@ -27,6 +28,9 @@
 		deleteOpen = true;
 	}
 	async function onDelete() {
+		if (!solutionToDelete) {
+			return;
+		}
 		deleting = true;
 		try {
 			await deleteChallengeSolutionById(
@@ -36,6 +40,13 @@
 			);
 			solutionToDelete = undefined;
 			deleteOpen = false;
+		} catch (e) {
+			console.error(e);
+			addNotification({
+				type: NotificationType.Danger,
+				title: 'Error Deleting Solution',
+				description: (e as Error).message
+			});
 		} finally {
 			deleting = false;
 		}
@@ -53,6 +64,13 @@
 			await createChallengeSolution(challenge.department.url, challenge.url, { solution });
 			solution = [];
 			adding = false;
+		} catch (e) {
+			console.error(e);
+			addNotification({
+				type: NotificationType.Danger,
+				title: 'Error Creating Solution',
+				description: (e as Error).message
+			});
 		} finally {
 			creating = false;
 		}

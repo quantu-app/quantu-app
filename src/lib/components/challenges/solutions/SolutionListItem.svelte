@@ -13,6 +13,7 @@
 	import Vote from '$lib/components/ui/Vote.svelte';
 	import { currentUser } from '$lib/state/user';
 	import TimeDisplay from '$lib/components/ui/TimeDisplay.svelte';
+	import { addNotification, NotificationType } from '$lib/state/notifications';
 
 	export let challenge: StateChallenge;
 	export let solution: StateChallengeSolution;
@@ -34,6 +35,13 @@
 				solution: solution.solution
 			});
 			editing = false;
+		} catch (e) {
+			console.error(e);
+			addNotification({
+				type: NotificationType.Danger,
+				title: 'Error Updating Solution',
+				description: (e as Error).message
+			});
 		} finally {
 			updating = false;
 		}

@@ -2,7 +2,6 @@
 
 <script lang="ts">
 	import { addNotification, NotificationType } from '$lib/state/notifications';
-
 	import type { Answer } from '$lib/types';
 	import { isEmpty } from '$lib/utils';
 	import type { QuestionType } from '@prisma/client';
@@ -62,31 +61,23 @@
 			<slot name="input" />
 
 			<div class="row justify-content-between mt-4">
-				<div class="col">
-					<a
-						type="button"
-						class="link-dark"
-						disabled={disabled || explaining || answering}
-						on:click={onExplainInternal}
-					>
-						{#if explaining}
-							<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" />
-						{/if}
-						Show Explanation
-					</a>
-				</div>
+				{#if !disabled && !showExplanation && type !== 'MARK_AS_READ'}
+					<div class="col">
+						<a
+							type="button"
+							class="link-dark"
+							disabled={disabled || explaining || answering}
+							on:click={onExplainInternal}
+						>
+							{#if explaining}
+								<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" />
+							{/if}
+							Show Explanation
+						</a>
+					</div>
+				{/if}
 				<div class="col text-end">
 					{#if !disabled && result != null}
-						{#if !showExplanation && type !== 'MARK_AS_READ'}
-							<button
-								type="button"
-								class="btn btn-secondary text-white"
-								disabled={disabled || showExplanation}
-								on:click={() => (showExplanation = true)}
-							>
-								Show Explanation
-							</button>
-						{/if}
 						<slot name="extra" />
 					{:else if !disabled}
 						<button

@@ -65,8 +65,7 @@ export function timeSince(date: Date): string {
 		const minutes = Math.floor(interval);
 		return `${minutes} minute${minutes !== 1 ? 's' : ''} ago`;
 	}
-	seconds = Math.floor(seconds);
-	return `${seconds} second${seconds !== 1 ? 's' : ''} ago`;
+	return 'now';
 }
 
 export function toPercent(value: number): string {

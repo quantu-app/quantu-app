@@ -21,6 +21,7 @@ declare namespace App {
 declare global {
 	interface Window {
 		bootstrap: typeof bootstrap;
-		gtag(type: string, id: string, config?: any): void;
+		dataLayer: IArguments[];
+		gtag(type: string, ...args: any[]): void;
 	}
 }

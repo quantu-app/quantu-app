@@ -5,9 +5,10 @@
 
 <script lang="ts">
 	import { page } from '$app/stores';
-	import { browser } from '$app/env';
+	import { browser, dev } from '$app/env';
+	import GTag from '$lib/components/GTag.svelte';
 
-	$: if (browser) {
+	$: if (browser && !dev) {
 		if (typeof window.gtag !== 'undefined') {
 			window.gtag('config', 'G-8H9MTEL7XT', {
 				page_path: `${$page.url.pathname}${$page.url.search ? '?' + $page.url.search : ''}`
@@ -19,3 +20,4 @@
 <slot />
 
 <AcceptCookies />
+<GTag />

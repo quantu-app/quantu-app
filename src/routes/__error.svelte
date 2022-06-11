@@ -1,23 +1,24 @@
 <script context="module" lang="ts">
-	/** @type {import('@sveltejs/kit').ErrorLoad} */
-	export function load({ error, status }) {
+	export const load: Load = ({ error, status }) => {
 		return {
 			props: {
 				error,
 				status
 			}
 		};
-	}
+	};
 </script>
 
 <script lang="ts">
 	import { dev } from '$app/env';
+	import GTag from '$lib/components/GTag.svelte';
 	import PublicLayout from '$lib/components/layouts/PublicLayout.svelte';
+	import type { Load } from '@sveltejs/kit';
 
 	export let error: Error;
 	export let status: number;
 
-	let lines = error.stack.split('\n');
+	let lines = (error.stack || '').split('\n');
 	let firstLine = lines[0];
 	let rest = lines.slice(1);
 </script>
@@ -33,3 +34,5 @@
 		{/if}
 	</div>
 </PublicLayout>
+
+<GTag />

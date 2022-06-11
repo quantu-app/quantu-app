@@ -7,9 +7,6 @@ import type { GetSession, Handle, HandleError } from '@sveltejs/kit';
 import type { ITokenValue } from '$lib/api/auth';
 
 export const handle: Handle = async ({ event, resolve }) => {
-	if (!prerendering) {
-		console.log(event.clientAddress, event.url.pathname + event.url.search);
-	}
 	const rawToken = event.request.headers.has('cookie')
 		? cookie.parse(event.request.headers.get('cookie') || '').token
 		: 'undefined';

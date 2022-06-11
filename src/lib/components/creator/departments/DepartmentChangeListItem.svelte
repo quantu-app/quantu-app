@@ -9,7 +9,9 @@
 
 	export let departmentChange: StateChange;
 
-	$: department = $departmentsById[departmentChange.referenceId];
+	$: department = departmentChange.referenceId
+		? $departmentsById[departmentChange.referenceId]
+		: undefined;
 	$: value = Object.assign(
 		{},
 		department,
@@ -25,12 +27,13 @@
 		<div class="card-body">
 			<h4 class="card-title">
 				<a class="link-dark" href={`${base}/creator/departments/changes/${departmentChange.id}`}
-					>{value.name} - {value.url}</a
+					>{departmentChange?.name} - {value.name} {value.url}</a
 				>
 			</h4>
 			<div class="card-text">
 				<RichViewer value={value.description} />
 			</div>
+			<p class="m-0">{departmentChange.updatedAt.toLocaleString()}</p>
 		</div>
 	</div>
 </div>

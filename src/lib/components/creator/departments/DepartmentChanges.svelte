@@ -4,11 +4,11 @@
 	import { writable } from 'svelte/store';
 
 	interface IState {
-		departmentChangeNameFilter: string | undefined;
+		departmentChangeNameFilter: string;
 	}
 
 	const state = writable<IState>({
-		departmentChangeNameFilter: undefined
+		departmentChangeNameFilter: ''
 	});
 </script>
 
@@ -30,9 +30,11 @@
 	$: departmentChangeNameFilter = $state.departmentChangeNameFilter;
 	$: filter = (department: StateChange) =>
 		departmentChangeNameFilter
-			? fuzzyEquals(departmentChangeNameFilter, department.value['name'])
+			? fuzzyEquals(departmentChangeNameFilter, (department.value as any)?.name)
 			: true;
-	$: filteredDepartmentChanges = departmentChanges.filter(filter);
+	$: filteredDepartmentChanges = departmentChanges
+		.filter((changes) => changes.latest)
+		.filter(filter);
 </script>
 
 <div class="container mb-8">

@@ -4,25 +4,25 @@
 	import { goto } from '$app/navigation';
 	import { base } from '$app/paths';
 	import { updateChange, type StateChange } from '$lib/state/creator/changes';
-	import { departmentsById } from '$lib/state/creator/departments';
+	import type { StateDepartment } from '$lib/state/creator/departments';
 	import { createMergeRequest, type StateMergeRequest } from '$lib/state/creator/mergeRequests';
 	import { addNotification, NotificationType } from '$lib/state/notifications';
 	import { filterObjectByNullOrUndefined } from '$lib/utils';
 	import DepartmentChangeEditor from './DepartmentChangeEditor.svelte';
 
 	export let departmentChange: StateChange;
+	export let department: StateDepartment | undefined = undefined;
 	export let mergeRequest: StateMergeRequest | undefined = undefined;
 
-	$: department = $departmentsById[departmentChange.referenceId];
 	$: value = Object.assign(
 		{},
 		department,
 		filterObjectByNullOrUndefined(departmentChange.value as any)
 	);
 
-	let createMerge = false;
+	let creatingMerge = false;
 	async function onCreateMerge() {
-		createMerge = true;
+		creatingMerge = true;
 		try {
 			const mergeRequest = await createMergeRequest(departmentChange.id);
 			await goto(`${base}/creator/merge-requests/${mergeRequest.id}`);
@@ -34,7 +34,7 @@
 				description: (e as Error).message
 			});
 		} finally {
-			createMerge = false;
+			creatingMerge = false;
 		}
 	}
 
@@ -71,8 +71,11 @@
 				class="btn btn-primary">Merge Request</a
 			>
 		{:else}
-			<button type="button" on:click={onCreateMerge} class="btn btn-primary" disabled={updating}
-				>Create Merge Request</button
+			<button
+				type="button"
+				on:click={onCreateMerge}
+				class="btn btn-primary"
+				disabled={creatingMerge}>Create Merge Request</button
 			>
 		{/if}
 	</div>

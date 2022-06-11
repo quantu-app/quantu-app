@@ -22,7 +22,7 @@ export const isCreator = (handler: RequestHandler) =>
 					}
 				})
 				.then((user) =>
-					user.creator
+					user?.creator
 						? handler(event)
 						: {
 								status: 403

@@ -38,7 +38,9 @@
 	export let departmentChangeId: string;
 
 	$: departmentChange = $changesById[departmentChangeId];
-	$: department = $departmentsById[departmentChange.referenceId];
+	$: department = departmentChange.referenceId
+		? $departmentsById[departmentChange.referenceId]
+		: undefined;
 	$: mergeRequest = $mergeRequestsByChangeId[departmentChange.id];
 </script>
 
@@ -66,5 +68,5 @@
 		}
 	]}
 >
-	<DepartmentChange {departmentChange} {mergeRequest} />
+	<DepartmentChange {departmentChange} {department} {mergeRequest} />
 </StudioLayout>

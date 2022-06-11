@@ -30,15 +30,19 @@
 </script>
 
 <div class="container">
-	<div class="d-flex justify-content-end">
-		<button class="btn btn-primary" disabled={mergeRequest.merged || merging} on:click={onMerge}>
-			{#if mergeRequest.merged}
-				Merged
-			{:else}
-				Merge
-			{/if}
-		</button>
+	<div class="d-flex justify-between-end">
+		<h1 class="flex-grow-1 m-0">{mergeRequest.name}</h1>
+		<div class="flex-grow-0">
+			<button class="btn btn-primary" disabled={mergeRequest.merged || merging} on:click={onMerge}>
+				{#if mergeRequest.merged}
+					Merged
+				{:else}
+					Merge
+				{/if}
+			</button>
+		</div>
 	</div>
+	<hr />
 </div>
 <div class="container mb-8">
 	<div class="row">

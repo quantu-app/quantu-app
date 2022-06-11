@@ -158,7 +158,7 @@ type IPrimitive = number | string | boolean | null | undefined;
 
 export function createQueryParams(params: Record<string, IPrimitive | IPrimitive[]>): string {
 	const queryParams = Object.entries(params)
-		.filter(([_key, value]) => value != null)
+		.filter(([_key, value]) => value !== undefined)
 		.map(([key, value]) => {
 			if (Array.isArray(value)) {
 				return value

@@ -47,7 +47,7 @@ export async function showChangeById(id: string, fetchFn: IFetch = fetch) {
 
 export async function showChanges(
 	referenceType: ChangeType,
-	referenceId: string | null,
+	referenceId: string | null | undefined,
 	currentUser: boolean,
 	latest: boolean | null,
 	merged: boolean | null,
@@ -71,9 +71,7 @@ export async function showChanges(
 		throw await res.json();
 	}
 	const changes: StateChange[] = (await res.json()).map(changeFromJSON);
-	changesWritable.update((state) =>
-		changes.reduce((state, change) => addOrUpdate(state, change), state.slice())
-	);
+	changesWritable.update((state) => changes.reduce(addOrUpdate, state.slice()));
 	return changes;
 }
 
@@ -87,9 +85,7 @@ export async function showChangesByIds(ids: string[], fetchFn: IFetch = fetch) {
 		throw await res.json();
 	}
 	const changes: StateChange[] = (await res.json()).map(changeFromJSON);
-	changesWritable.update((state) =>
-		changes.reduce((state, change) => addOrUpdate(state, change), state.slice())
-	);
+	changesWritable.update((state) => changes.reduce(addOrUpdate, state.slice()));
 	return changes;
 }
 

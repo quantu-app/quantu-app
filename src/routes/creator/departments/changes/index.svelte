@@ -4,9 +4,11 @@
 		if (!isValidStatus(response)) {
 			return response;
 		}
-		const changes = await showChanges('DEPARTMENT', null, false, true, false, input.fetch);
+		const changes = await showChanges('DEPARTMENT', undefined, false, true, null, input.fetch);
 		await showDepartments(
-			changes.map((change) => change.referenceId).filter((referenceId) => !!referenceId),
+			changes
+				.map((change) => change.referenceId)
+				.filter((referenceId) => !!referenceId) as string[],
 			input.fetch
 		);
 		return response;

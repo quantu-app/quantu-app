@@ -3,13 +3,13 @@ import { run } from '$lib/prisma';
 import type { Prisma, PrismaClient } from '@prisma/client';
 
 export const get = isCreator((event) =>
-	run((client) => getChanges(client, event.params.changeId)).then((change) => ({
+	run((client) => getChange(client, event.params.changeId)).then((change) => ({
 		body: change,
 		status: change ? 200 : 404
 	}))
 );
 
-export function getChanges(client: PrismaClient, changeId: string) {
+export function getChange(client: PrismaClient, changeId: string) {
 	return client.change.findUnique({
 		where: {
 			id: changeId

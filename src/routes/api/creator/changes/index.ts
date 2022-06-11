@@ -9,6 +9,13 @@ export const get = isCreator(async (event) => {
 	const latest = latestString === 'true' ? true : latestString === 'false' ? false : undefined;
 	const mergedString = event.url.searchParams.get('merged');
 	const merged = mergedString === 'true' ? true : mergedString === 'false' ? false : undefined;
+	const referenceIdString = event.url.searchParams.get('referenceId');
+	const referenceId =
+		referenceIdString === null
+			? undefined
+			: referenceIdString === 'null'
+			? null
+			: referenceIdString;
 	return {
 		body: await run((client) =>
 			ids.length
@@ -16,7 +23,7 @@ export const get = isCreator(async (event) => {
 				: getChanges(
 						client,
 						event.url.searchParams.get('referenceType') as ChangeType,
-						event.url.searchParams.get('referenceId') || null,
+						referenceId,
 						event.url.searchParams.has('currentUser') ? event.locals.token.userId : undefined,
 						latest,
 						merged
@@ -29,7 +36,7 @@ export const get = isCreator(async (event) => {
 export async function getChanges(
 	client: PrismaClient,
 	referenceType: ChangeType,
-	referenceId: string | null,
+	referenceId: string | null | undefined,
 	userId?: string,
 	latest?: boolean,
 	merged?: boolean

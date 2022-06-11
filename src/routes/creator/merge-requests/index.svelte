@@ -4,7 +4,7 @@
 		if (!isValidStatus(response)) {
 			return response;
 		}
-		const mergeRequests = await showMergeRequests(undefined, undefined, false, input.fetch);
+		const mergeRequests = await showMergeRequests(undefined, undefined, undefined, input.fetch);
 		await showChangesByIds(
 			mergeRequests.map((mergeRequest) => mergeRequest.changeId),
 			input.fetch

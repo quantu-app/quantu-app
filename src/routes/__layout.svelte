@@ -7,6 +7,7 @@
 	import { page } from '$app/stores';
 	import { browser, dev } from '$app/env';
 	import GTag from '$lib/components/GTag.svelte';
+	import PageLoading from '$lib/components/ui/PageLoading.svelte';
 
 	$: if (browser && !dev) {
 		if (typeof window.gtag !== 'undefined') {
@@ -21,3 +22,4 @@
 
 <AcceptCookies />
 <GTag />
+<PageLoading />

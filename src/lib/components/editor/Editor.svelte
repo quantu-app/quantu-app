@@ -17,9 +17,6 @@
 	import { withHistory } from 'slate-history';
 	import { DEFAULT_PLUGINS } from 'svelte-slate/plugins/DEFAULT_PLUGINS';
 	import ImageElement, { IMAGE_TYPE, withImages } from 'svelte-slate/plugins/ImageElement.svelte';
-	import CheckListItemElement, {
-		CHECK_LIST_ITEM_TYPE
-	} from 'svelte-slate/plugins/CheckListItemElement.svelte';
 	import { longpress } from 'svelte-slate/plugins/longpress';
 	import CodeElement, {
 		CODE_TYPE,
@@ -44,10 +41,9 @@
 	export let editor = withHistory(withSvelte(createEditor()));
 	let plugins = {
 		...DEFAULT_PLUGINS,
-		[IMAGE_TYPE]: [ImageElement, withImages],
-		[CHECK_LIST_ITEM_TYPE]: CheckListItemElement,
-		[CODE_TYPE]: [CodeElement, withCode],
-		[MATH_TYPE]: [MathElement, withMath]
+		[IMAGE_TYPE]: { component: ImageElement, withFn: withImages },
+		[CODE_TYPE]: { component: CodeElement, withFn: withCode },
+		[MATH_TYPE]: { component: MathElement, withFn: withMath }
 	};
 	export let hoveringToolbar = true;
 

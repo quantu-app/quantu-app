@@ -101,7 +101,7 @@ export async function createComment(
 			commentId: data.commentId || null,
 			userId,
 			referenceType,
-			referenceId
+			referenceId: referenceId === '' ? null : referenceId
 		},
 		include: {
 			comments: true,

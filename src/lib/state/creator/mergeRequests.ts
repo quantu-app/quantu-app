@@ -13,6 +13,7 @@ export type StateMergeRequest = MergeRequest & {
 	change: {
 		referenceId: string;
 		referenceType: ChangeType;
+		prevChangeId: string;
 	};
 };
 

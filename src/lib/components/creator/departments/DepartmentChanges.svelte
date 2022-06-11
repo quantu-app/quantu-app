@@ -28,13 +28,9 @@
 		}));
 	}
 	$: departmentChangeNameFilter = $state.departmentChangeNameFilter;
-	$: filter = (department: StateChange) =>
-		departmentChangeNameFilter
-			? fuzzyEquals(departmentChangeNameFilter, (department.value as any)?.name)
-			: true;
-	$: filteredDepartmentChanges = departmentChanges
-		.filter((changes) => changes.latest)
-		.filter(filter);
+	$: filter = (change: StateChange) =>
+		departmentChangeNameFilter ? fuzzyEquals(departmentChangeNameFilter, change.name) : true;
+	$: filteredDepartmentChanges = departmentChanges.filter((change) => change.latest).filter(filter);
 </script>
 
 <div class="container mb-8">

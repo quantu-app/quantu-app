@@ -1,6 +1,6 @@
 import { isCreator } from '$lib/api/auth';
 import { run } from '$lib/prisma';
-import type { PrismaClient, MergeRequest, Change } from '@prisma/client';
+import type { PrismaClient, MergeRequest, Change, Prisma, Department } from '@prisma/client';
 
 export const post = isCreator(async (event) => {
 	return {
@@ -9,33 +9,40 @@ export const post = isCreator(async (event) => {
 	};
 });
 
-export async function mergeMergeRequest(client: PrismaClient, mergeRequestId: string) {
-	const mergeRequest = await client.mergeRequest.update({
-		where: {
-			id: mergeRequestId
-		},
-		data: {
-			merged: true
-		},
-		include: {
-			approvals: true,
-			user: {
-				select: {
-					id: true,
-					username: true
-				}
+export function mergeMergeRequest(client: PrismaClient, mergeRequestId: string) {
+	return client.$transaction(async (client) => {
+		const mergeRequest = await client.mergeRequest.update({
+			where: {
+				id: mergeRequestId
 			},
-			change: true
-		}
+			data: {
+				merged: true
+			},
+			include: {
+				approvals: true,
+				user: {
+					select: {
+						id: true,
+						username: true
+					}
+				},
+				change: true
+			}
+		});
+		const reference = await upsertReference(client, mergeRequest);
+		await client.change.update({
+			where: { id: mergeRequest.change.id },
+			data: { referenceId: reference.id }
+		});
+		(mergeRequest as any).reference = reference;
+		return mergeRequest;
 	});
-	(mergeRequest as any).reference = upsertReference(client, mergeRequest);
-	return mergeRequest;
 }
 
-export async function upsertReference(
-	client: PrismaClient,
+function upsertReference(
+	client: Prisma.TransactionClient,
 	mergeRequest: MergeRequest & { change: Change }
-) {
+): Promise<Department> {
 	switch (mergeRequest.change.referenceType) {
 		case 'DEPARTMENT':
 			return mergeRequest.change.referenceId
@@ -49,4 +56,5 @@ export async function upsertReference(
 						data: mergeRequest.change.value as any
 				  });
 	}
+	return null as any;
 }

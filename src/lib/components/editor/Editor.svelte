@@ -79,11 +79,11 @@
 	{#if hoveringToolbar}
 		<HoveringToolbar container={ref} bind:open>
 			<div class="border p-1 mb-1 bg-white">
-				<Buttons container={ref} />
+				<Buttons />
 			</div>
 		</HoveringToolbar>
 	{:else}
-		<Toolbar container={ref} />
+		<Toolbar />
 	{/if}
 	<div use:longpress on:longpress={onLongPress} class:editor-with-helper={!hoveringToolbar}>
 		<Editable bind:ref {readOnly} {placeholder} {onKeyDown} />

@@ -1,6 +1,6 @@
 import cookie from 'cookie';
 import { run } from '$lib/prisma';
-import { prerendering } from '$app/env';
+import { dev, prerendering } from '$app/env';
 import { decode } from '$lib/api/jwt';
 import type { IJwtString } from '$lib/api/jwt';
 import type { GetSession, Handle, HandleError } from '@sveltejs/kit';
@@ -20,11 +20,13 @@ export const handle: Handle = async ({ event, resolve }) => {
 	return resolve(event);
 };
 
-export const handleError: HandleError = ({ error, event }) => {
+const onError: HandleError = ({ error, event }) => {
 	if (!prerendering) {
 		console.error(event.clientAddress, event.url.pathname + event.url.search, error);
 	}
 };
+
+export const handleError = dev ? undefined : onError;
 
 export const getSession: GetSession = (request) =>
 	request.locals.token

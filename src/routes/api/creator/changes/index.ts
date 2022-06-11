@@ -4,30 +4,20 @@ import { isEmpty } from '$lib/utils';
 import type { PrismaClient, ChangeType, Change, Prisma } from '@prisma/client';
 
 export const get = isCreator(async (event) => {
-	const ids = event.url.searchParams.getAll('ids');
 	const latestString = event.url.searchParams.get('latest');
 	const latest = latestString === 'true' ? true : latestString === 'false' ? false : undefined;
 	const mergedString = event.url.searchParams.get('merged');
 	const merged = mergedString === 'true' ? true : mergedString === 'false' ? false : undefined;
-	const referenceIdString = event.url.searchParams.get('referenceId');
-	const referenceId =
-		referenceIdString === null
-			? undefined
-			: referenceIdString === 'null'
-			? null
-			: referenceIdString;
 	return {
 		body: await run((client) =>
-			ids.length
-				? getChangesByIds(client, ids)
-				: getChanges(
-						client,
-						event.url.searchParams.get('referenceType') as ChangeType,
-						referenceId,
-						event.url.searchParams.has('currentUser') ? event.locals.token.userId : undefined,
-						latest,
-						merged
-				  )
+			getChanges(
+				client,
+				event.url.searchParams.get('referenceType') as ChangeType,
+				event.url.searchParams.get('referenceId'),
+				event.url.searchParams.has('currentUser') ? event.locals.token.userId : undefined,
+				latest,
+				merged
+			)
 		),
 		status: 200
 	};
@@ -87,32 +77,18 @@ export async function getChanges(
 	}
 }
 
-export function getChangesByIds(client: PrismaClient, ids: string[]) {
-	return client.change.findMany({
-		where: {
-			id: { in: ids }
-		},
-		include: {
-			user: {
-				select: {
-					id: true,
-					username: true
-				}
-			}
-		}
-	});
-}
-
 export const post = isCreator(async (event) => ({
-	body: await run(async (client) =>
-		createChange(
+	body: await run(async (client) => {
+		const body = await event.request.json();
+		return createChange(
 			client,
 			event.url.searchParams.get('referenceType') as ChangeType,
-			event.url.searchParams.get('referenceId') || null,
+			event.url.searchParams.get('referenceId'),
 			event.locals.token.userId,
-			await event.request.json()
-		)
-	),
+			body.name,
+			body.value
+		);
+	}),
 	status: 201
 }));
 
@@ -121,8 +97,10 @@ export async function createChange(
 	referenceType: ChangeType,
 	referenceId: string | null,
 	userId: string,
+	name: string,
 	value: Prisma.InputJsonObject
 ) {
+	referenceId = referenceId === '' ? null : referenceId;
 	const mergeRequest = await client.mergeRequest.findFirst({
 		where: {
 			change: {
@@ -149,6 +127,7 @@ export async function createChange(
 	const runCreate = (prevChange?: Change) =>
 		client.change.create({
 			data: {
+				name,
 				value,
 				referenceType,
 				referenceId,

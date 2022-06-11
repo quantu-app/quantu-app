@@ -10,10 +10,14 @@
 		const mergeRequestId = input.params.mergeRequestId;
 		const mergeRequest = await showMergeRequestById(mergeRequestId, input.fetch);
 		await showChangeById(mergeRequest.changeId, input.fetch);
+		const prevChangeValue = mergeRequest.change.prevChangeId
+			? await showChangeAt(mergeRequest.change.prevChangeId, input.fetch)
+			: null;
 
 		return {
 			props: {
-				mergeRequestId
+				mergeRequestId,
+				prevChangeValue
 			}
 		};
 	};
@@ -24,11 +28,13 @@
 	import { creatorGuard } from '$lib/guard/creatorGuard';
 	import MergeRequest from '$lib/components/creator/mergeRequests/MergeRequest.svelte';
 	import { isValidStatus } from '$lib/guard/isValidStatus';
-	import { changesById, showChangeById } from '$lib/state/creator/changes';
+	import { changesById, showChangeAt, showChangeById } from '$lib/state/creator/changes';
 	import { base } from '$app/paths';
 	import { showMergeRequestById, mergeRequestsById } from '$lib/state/creator/mergeRequests';
+	import type { Prisma } from '@prisma/client';
 
 	export let mergeRequestId: string;
+	export let prevChangeValue: Prisma.JsonObject | null;
 
 	$: mergeRequest = $mergeRequestsById[mergeRequestId];
 	$: change = $changesById[mergeRequest.changeId];
@@ -49,10 +55,10 @@
 			href: `${base}/creator/merge-requests`
 		},
 		{
-			title: mergeRequest.reference?.name || change.value['name'],
+			title: change.name,
 			href: `${base}/creator/merge-requests/${mergeRequestId}`
 		}
 	]}
 >
-	<MergeRequest {change} {mergeRequest} />
+	<MergeRequest {change} {mergeRequest} {prevChangeValue} />
 </StudioLayout>

@@ -1,4 +1,4 @@
-import type { Change, ChangeType } from '@prisma/client';
+import type { Change, ChangeType, Prisma } from '@prisma/client';
 import { writable, derived } from 'svelte/store';
 import { base } from '$app/paths';
 import { createQueryParams, type IFetch } from '$lib/utils';
@@ -45,12 +45,26 @@ export async function showChangeById(id: string, fetchFn: IFetch = fetch) {
 	return change;
 }
 
+export async function showChangeAt(id: string, fetchFn: IFetch = fetch) {
+	const res = await fetchFn(`${base}/api/creator/changes/${id}/value`, {
+		headers: {
+			'Content-Type': 'application/json'
+		}
+	});
+	if (!res.ok) {
+		throw await res.json();
+	}
+	const value: Prisma.JsonObject = await res.json();
+	console.log(value);
+	return value;
+}
+
 export async function showChanges(
 	referenceType: ChangeType,
 	referenceId: string | null | undefined,
 	currentUser: boolean,
-	latest: boolean | null,
-	merged: boolean | null,
+	latest: boolean | undefined,
+	merged: boolean | undefined,
 	fetchFn: IFetch = fetch
 ) {
 	const res = await fetchFn(
@@ -76,10 +90,12 @@ export async function showChanges(
 }
 
 export async function showChangesByIds(ids: string[], fetchFn: IFetch = fetch) {
-	const res = await fetchFn(`${base}/api/creator/changes${createQueryParams({ ids })}`, {
+	const res = await fetchFn(`${base}/api/creator/changes/ids`, {
+		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json'
-		}
+		},
+		body: JSON.stringify(ids)
 	});
 	if (!res.ok) {
 		throw await res.json();
@@ -92,7 +108,8 @@ export async function showChangesByIds(ids: string[], fetchFn: IFetch = fetch) {
 export async function createChange(
 	referenceType: ChangeType,
 	referenceId: string | null,
-	body: Change['value']
+	name: string,
+	value: Change['value']
 ) {
 	const res = await fetch(
 		`${base}/api/creator/changes${createQueryParams({
@@ -101,7 +118,7 @@ export async function createChange(
 		})}`,
 		{
 			method: 'POST',
-			body: JSON.stringify(body)
+			body: JSON.stringify({ name, value })
 		}
 	);
 	if (!res.ok) {
@@ -112,10 +129,10 @@ export async function createChange(
 	return change;
 }
 
-export async function updateChange(id: string, body: Change['value']) {
+export async function updateChange(id: string, name: string, value: Change['value']) {
 	const res = await fetch(`${base}/api/creator/changes/${id}`, {
 		method: 'PATCH',
-		body: JSON.stringify(body)
+		body: JSON.stringify({ name, value })
 	});
 	if (!res.ok) {
 		throw await res.json();

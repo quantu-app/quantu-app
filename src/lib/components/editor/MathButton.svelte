@@ -7,8 +7,6 @@
 	import { insertMath, MATH_TYPE } from 'svelte-slate/plugins/MathElement.svelte';
 	import { isBlockActive } from 'svelte-slate/plugins/utils';
 
-	export let container: HTMLElement = undefined;
-
 	const editorContext = getEditorContext();
 	const focusedContext = getFocusedContext();
 
@@ -54,7 +52,7 @@
 	});
 </script>
 
-<MathEditor bind:open bind:math bind:inline {container} {onDone} />
+<MathEditor bind:open bind:math bind:inline {onDone} />
 
 <Button {active} {onMouseDown}>
 	<i class="bi bi-plus-slash-minus" />

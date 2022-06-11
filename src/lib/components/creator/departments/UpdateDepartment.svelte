@@ -7,44 +7,34 @@
 	import { createChange } from '$lib/state/creator/changes';
 	import { addNotification, NotificationType } from '$lib/state/notifications';
 	import type { Department } from '@prisma/client';
-	import DepartmentChangeEditor from './DepartmentChangeEditor.svelte';
 
-	let editorKey = Math.random();
-	let open = false;
-	function onOpen() {
-		open = true;
-	}
+	export let department: Department;
+	export let open = false;
+
 	let name: string;
-	let departmentChange: Partial<Department> = {};
-
 	let creatingDepartmentChange = false;
-	async function onCreateDepartment() {
+
+	async function onCreateDepartmentChange() {
 		creatingDepartmentChange = true;
 		try {
-			const { id } = await createChange('DEPARTMENT', null, name, departmentChange as any);
+			const change = await createChange('DEPARTMENT', department.id, name, {});
 			open = false;
-			await goto(`${base}/creator/departments/changes/${id}`);
-			departmentChange = {};
+			await goto(`${base}/creator/departments/changes/${change.id}`);
 		} catch (e) {
 			console.error(e);
 			addNotification({
 				type: NotificationType.Danger,
-				title: 'Error Creating',
+				title: 'Error Creating Change',
 				description: (e as Error).message
 			});
 		} finally {
 			creatingDepartmentChange = false;
-			editorKey = Math.random();
 		}
 	}
 </script>
 
-<button type="button" class="btn btn-primary" on:click={onOpen} aria-label="Create Department"
-	>Create a new Department</button
->
-
 <Modal bind:open>
-	<svelte:fragment slot="header">Create a new Department</svelte:fragment>
+	<svelte:fragment slot="header">Propose a Change to {department.name}</svelte:fragment>
 	<div class="row mb-2">
 		<div class="col">
 			<label for="name" class="form-label">Name of this Change</label>
@@ -57,13 +47,10 @@
 			/>
 		</div>
 	</div>
-	{#key editorKey}
-		<DepartmentChangeEditor bind:departmentChange />
-	{/key}
 	<button
 		slot="footer"
 		type="button"
-		on:click={onCreateDepartment}
+		on:click={onCreateDepartmentChange}
 		disabled={creatingDepartmentChange}
 		class="btn btn-primary"
 	>

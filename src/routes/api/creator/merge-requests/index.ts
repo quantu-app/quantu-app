@@ -46,6 +46,7 @@ export async function getMergeRequests(
 				select: {
 					referenceId: true,
 					referenceType: true,
+					prevChangeId: true,
 					value: true
 				}
 			}
@@ -74,7 +75,9 @@ export async function getMergeRequests(
 
 export async function getReferenceType(
 	client: PrismaClient,
-	mergeRequest: MergeRequest & { change: { referenceType: string; referenceId: string } }
+	mergeRequest: MergeRequest & {
+		change: { referenceType: string; referenceId: string };
+	}
 ) {
 	if (!mergeRequest.change.referenceId) {
 		return null;

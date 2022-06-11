@@ -15,7 +15,7 @@
 		<div class="card-body">
 			<h4 class="card-title">
 				<a class="link-dark" href={`${base}/creator/merge-requests/${mergeRequest.id}`}
-					>{mergeRequest.name}</a
+					>{change.name}</a
 				>
 			</h4>
 			<div class="card-text">

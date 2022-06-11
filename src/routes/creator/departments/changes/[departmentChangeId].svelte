@@ -59,12 +59,12 @@
 			href: `${base}/creator`
 		},
 		{
-			title: 'Department Changes',
+			title: 'Changes',
 			href: `${base}/creator/departments/changes`
 		},
 		{
-			title: department?.name || departmentChange.value['name'],
-			href: `${base}/creator/department/changes/${departmentChangeId}`
+			title: departmentChange.name,
+			href: `${base}/creator/departments/changes/${departmentChangeId}`
 		}
 	]}
 >

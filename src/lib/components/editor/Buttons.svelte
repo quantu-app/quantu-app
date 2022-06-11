@@ -4,8 +4,6 @@
 	import ImageButton from './ImageButton.svelte';
 	import CodeButton from './CodeButton.svelte';
 	import MathButton from './MathButton.svelte';
-
-	export let container: HTMLElement = undefined;
 </script>
 
 <MarkButton format="bold"><i class="bi bi-type-bold" /></MarkButton>
@@ -19,4 +17,4 @@
 <BlockButton format="bulleted-list"><i class="bi bi-list-ul" /></BlockButton>
 <ImageButton />
 <CodeButton />
-<MathButton {container} />
+<MathButton />

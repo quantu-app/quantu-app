@@ -26,14 +26,10 @@ export function getChange(client: PrismaClient, changeId: string) {
 }
 
 export const patch = isCreator((event) =>
-	run(async (client) =>
-		updateChange(
-			client,
-			event.params.changeId,
-			event.locals.token.userId,
-			await event.request.json()
-		)
-	).then((change) => ({
+	run(async (client) => {
+		const { name, value } = await event.request.json();
+		return updateChange(client, event.params.changeId, event.locals.token.userId, name, value);
+	}).then((change) => ({
 		body: change,
 		status: change ? 200 : 404
 	}))
@@ -43,6 +39,7 @@ export async function updateChange(
 	client: PrismaClient,
 	changeId: string,
 	userId: string,
+	name: string,
 	value: Prisma.InputJsonObject
 ) {
 	const change = await client.change.findFirst({
@@ -62,6 +59,7 @@ export async function updateChange(
 			id: changeId
 		},
 		data: {
+			name,
 			value,
 			referenceType: change.referenceType,
 			referenceId: change.referenceId,

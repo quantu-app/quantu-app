@@ -162,10 +162,21 @@ export function createQueryParams(params: Record<string, IPrimitive | IPrimitive
 		.map(([key, value]) => {
 			if (Array.isArray(value)) {
 				return value
-					.map((v) => `${encodeURIComponent(key)}=${encodeURIComponent(v as string)}`)
+					.map((v) => {
+						if (v === null) {
+							return `${encodeURIComponent(key)}`;
+						} else if (v === undefined) {
+							return '';
+						} else {
+							return `${encodeURIComponent(key)}=${encodeURIComponent(v as string)}`;
+						}
+					})
 					.join('&');
+			} else if (value === null) {
+				return `${encodeURIComponent(key)}`;
+			} else {
+				return `${encodeURIComponent(key)}=${encodeURIComponent(value as string)}`;
 			}
-			return `${encodeURIComponent(key)}=${encodeURIComponent(value as string)}`;
 		})
 		.join('&');
 	return queryParams ? `?${queryParams}` : '';

@@ -5,12 +5,12 @@ import { getReferenceType } from '..';
 
 export const get = isCreator(async (event) => {
 	return {
-		body: await run((client) => getMergeRequests(client, event.params.mergeRequestId)),
+		body: await run((client) => getMergeRequest(client, event.params.mergeRequestId)),
 		status: 200
 	};
 });
 
-export async function getMergeRequests(client: PrismaClient, mergeRequestId: string) {
+export async function getMergeRequest(client: PrismaClient, mergeRequestId: string) {
 	const mergeRequest = await client.mergeRequest.findUnique({
 		where: {
 			id: mergeRequestId
@@ -26,7 +26,8 @@ export async function getMergeRequests(client: PrismaClient, mergeRequestId: str
 			change: {
 				select: {
 					referenceId: true,
-					referenceType: true
+					referenceType: true,
+					prevChangeId: true
 				}
 			}
 		}

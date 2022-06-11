@@ -20,30 +20,15 @@
 	import { base } from '$app/paths';
 	import type { StateChallenge } from '$lib/state/creator/challenges';
 	import type { StateDepartment } from '$lib/state/creator/departments';
-	import { createChange } from '$lib/state/creator/changes';
-	import { goto } from '$app/navigation';
 	import RichViewer from '$lib/components/editor/RichViewer.svelte';
-	import { addNotification, NotificationType } from '$lib/state/notifications';
+	import UpdateDepartment from './UpdateDepartment.svelte';
 
 	export let department: StateDepartment;
 	export let challenges: StateChallenge[];
 
-	let creatingChange = false;
-	async function onCreateChange() {
-		creatingChange = true;
-		try {
-			const departmentChange = await createChange('DEPARTMENT', department.id, {});
-			await goto(`${base}/creator/departments/changes/${departmentChange.id}`);
-		} catch (e) {
-			console.error(e);
-			addNotification({
-				type: NotificationType.Danger,
-				title: 'Error Creating',
-				description: (e as Error).message
-			});
-		} finally {
-			creatingChange = false;
-		}
+	let createChangeOpen = false;
+	function onOpenCreateChange() {
+		createChangeOpen = true;
 	}
 
 	function onChange(nameFilter: string) {
@@ -64,9 +49,7 @@
 <div class="container">
 	<div class="d-flex justify-content-between mt-2">
 		<div class="d-flex">
-			<button class="btn btn-primary" on:click={onCreateChange} disabled={creatingChange}
-				>Update</button
-			>
+			<button class="btn btn-primary" on:click={onOpenCreateChange}>Propose a Change</button>
 		</div>
 		<div class="d-flex align-items-center">
 			<a class="link-dark me-2" href={`${base}/creator/departments/${department.id}/assets`}
@@ -81,3 +64,5 @@
 <div class="container">
 	<ChallengeList challenges={filteredChallenges} />
 </div>
+
+<UpdateDepartment bind:open={createChangeOpen} {department} />

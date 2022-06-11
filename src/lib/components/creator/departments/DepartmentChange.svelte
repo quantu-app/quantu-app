@@ -55,7 +55,7 @@
 			diff.description = value.description;
 		}
 		try {
-			await updateChange(departmentChange.id, diff);
+			await updateChange(departmentChange.id, departmentChange.name, diff);
 		} finally {
 			updating = false;
 		}
@@ -63,21 +63,35 @@
 </script>
 
 <div class="container mb-8">
-	<div class="d-flex justify-content-end">
-		{#if mergeRequest}
-			<a
-				role="button"
-				href={`${base}/creator/merge-requests/${mergeRequest.id}`}
-				class="btn btn-primary">Merge Request</a
-			>
-		{:else}
-			<button
-				type="button"
-				on:click={onCreateMerge}
-				class="btn btn-primary"
-				disabled={creatingMerge}>Create Merge Request</button
-			>
-		{/if}
+	<div class="d-flex justify-between-end mb-2">
+		<div class="flex-grow-1 row">
+			<div class="col-8">
+				<label for="name" class="form-label">Name of this Change</label>
+				<input
+					id="name"
+					type="text"
+					class="form-control"
+					placeholder="Change Name"
+					bind:value={departmentChange.name}
+				/>
+			</div>
+		</div>
+		<div class="flex-grow-0">
+			{#if mergeRequest}
+				<a
+					role="button"
+					href={`${base}/creator/merge-requests/${mergeRequest.id}`}
+					class="btn btn-primary">Merge Request</a
+				>
+			{:else}
+				<button
+					type="button"
+					on:click={onCreateMerge}
+					class="btn btn-primary"
+					disabled={creatingMerge}>Create Merge Request</button
+				>
+			{/if}
+		</div>
 	</div>
 
 	<div>

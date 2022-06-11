@@ -13,7 +13,7 @@
 	let departmentUrl = departmentChange.url;
 	let validUrl: boolean = false;
 
-	$: validUrl = isUrlSafe(departmentChange.url);
+	$: validUrl = !!departmentChange.url && isUrlSafe(departmentChange.url);
 
 	let validatingUrl = false;
 	async function onUrlChange() {
@@ -22,7 +22,7 @@
 		}
 		validatingUrl = true;
 		try {
-			validUrl = await validDepartmentUrl(departmentChange.url);
+			validUrl = await validDepartmentUrl(departmentChange.url as string);
 		} catch (e) {
 			console.error(e);
 			addNotification({

@@ -1,6 +1,6 @@
-import type { LoadOutput } from '@sveltejs/kit/types/private';
+import type { Load } from '@sveltejs/kit';
 
-export function authGuard({ url, session }): LoadOutput {
+export const authGuard: Load = ({ url, session }) => {
 	if (session?.user) {
 		return {};
 	} else {
@@ -17,4 +17,4 @@ export function authGuard({ url, session }): LoadOutput {
 
 		return output;
 	}
-}
+};

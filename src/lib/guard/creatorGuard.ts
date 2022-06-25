@@ -1,6 +1,6 @@
-import type { LoadOutput } from '@sveltejs/kit';
+import type { Load } from '@sveltejs/kit';
 
-export function creatorGuard({ session }): LoadOutput {
+export const creatorGuard: Load = ({ session }) => {
 	if (session?.user?.creator) {
 		return {};
 	} else {
@@ -9,4 +9,4 @@ export function creatorGuard({ session }): LoadOutput {
 			redirect: '/'
 		};
 	}
-}
+};

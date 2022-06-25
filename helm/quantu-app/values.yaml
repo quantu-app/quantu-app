@@ -1,9 +1,9 @@
 replicas:
   min: 1
-  max: 8
+  max: 4
   resource:
     cpu:
-      utilization: 75
+      utilization: 60
 
 image:
   repository: ghcr.io/quantu-app/quantu-app/quantu-app

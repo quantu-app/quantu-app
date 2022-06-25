@@ -25,7 +25,6 @@ worker.addEventListener('activate', (event) => {
 			for (const key of keys) {
 				if (key !== FILES) await caches.delete(key);
 			}
-
 			worker.clients.claim();
 		})
 	);

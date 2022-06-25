@@ -47,6 +47,7 @@
 	}
 
 	const toggleSignInUp = () => {
+		Cookies.remove('token');
 		SignInUpComponent = SignInUpComponent === SignIn ? SignUp : SignIn;
 	};
 

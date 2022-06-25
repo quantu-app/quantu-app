@@ -1,16 +1,14 @@
 <script context="module" lang="ts">
 	import { authGuard } from '$lib/guard/authGuard';
-	import type { LoadInput } from '@sveltejs/kit';
 
-	export async function load(input: LoadInput) {
-		return authGuard(input);
-	}
+	export const load: Load = (input) => authGuard(input);
 </script>
 
 <script lang="ts">
 	import UserLayout from '$lib/components/layouts/UserLayout.svelte';
 	import { currentUser } from '$lib/state/user';
 	import Welcome from '$lib/components/user/Welcome.svelte';
+	import type { Load } from '@sveltejs/kit';
 </script>
 
 <svelte:head>
@@ -18,5 +16,7 @@
 </svelte:head>
 
 <UserLayout>
-	<Welcome user={$currentUser} />
+	<div class="container mb-8">
+		<Welcome user={$currentUser} />
+	</div>
 </UserLayout>

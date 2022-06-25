@@ -6,6 +6,7 @@ import Cookies from 'js-cookie';
 import type { ApplicationSettings, User } from '@prisma/client';
 import { base } from '$app/paths';
 import { goto } from '$app/navigation';
+import { browser } from '$app/env';
 
 export type StateUser = User & {
 	settings: ApplicationSettings;
@@ -20,7 +21,7 @@ export const userEmitter = new EventEmitter<{
 	signOut: () => void;
 }>();
 
-export function getCurrentUser(): StateUser {
+export function getCurrentUser(): StateUser | null {
 	return get(currentUser);
 }
 

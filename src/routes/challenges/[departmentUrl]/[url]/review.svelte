@@ -59,7 +59,19 @@
 		<ChallengeWrapper {challenge}>
 			<h2>{challenge.name}</h2>
 			{#if challenge.result}
-				<ReviewChallenge result={challenge.result} />
+				<ReviewChallenge result={challenge.result}>
+					<div slot="extra" class="d-flex justify-content-end">
+						<span>
+							<a
+								class="link-dark"
+								href={`${base}/challenges/${challenge.department.url}/${challenge.url}/solutions`}
+							>
+								View Discussion
+							</a>
+							<span class="linkArrow"> &gt; </span>
+						</span>
+					</div>
+				</ReviewChallenge>
 			{/if}
 		</ChallengeWrapper>
 	{/if}

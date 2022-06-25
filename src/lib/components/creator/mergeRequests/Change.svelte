@@ -9,6 +9,6 @@
 	export let reference: StateMergeRequest['reference'];
 </script>
 
-{#if referenceType === 'DEPARTMENT'}
+{#if referenceType === 'DEPARTMENT' && reference}
 	<DepartmentChange department={reference} />
 {/if}

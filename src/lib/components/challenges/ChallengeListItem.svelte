@@ -53,7 +53,9 @@
 	<div class="card-footer">
 		<div class="text-muted card-footer-info">
 			<span class="text-uppercase">{challenge.department.name}</span><br />
-			<span>{challenge.solvers == 1 ? `1 Solver` : `${challenge.solvers} Solvers`} </span>
+			<span
+				>{challenge.answers.length === 1 ? `1 Solver` : `${challenge.answers.length} Solvers`}
+			</span>
 			<span class="releasedAt">
 				<span class="dot-block" />{formatDistanceToNowStrict(challenge.releasedAt, {
 					addSuffix: false

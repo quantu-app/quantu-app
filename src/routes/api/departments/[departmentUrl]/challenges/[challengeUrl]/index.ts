@@ -43,7 +43,7 @@ export async function getChallengeByUrl(
 	});
 
 	if (challenge) {
-		const [result, solvers] = await Promise.all([
+		const [result, answers, solutions] = await Promise.all([
 			client.result.findUnique({
 				where: {
 					userId_challengeId: {
@@ -52,7 +52,15 @@ export async function getChallengeByUrl(
 					}
 				}
 			}),
-			client.result.aggregate({
+			client.result.findMany({
+				where: {
+					challengeId: challenge.id
+				},
+				select: {
+					value: true
+				}
+			}),
+			client.challengeSolution.aggregate({
 				_count: { _all: true },
 				where: {
 					challengeId: challenge.id
@@ -60,7 +68,8 @@ export async function getChallengeByUrl(
 			})
 		]);
 		(challenge as any).result = result;
-		(challenge as any).solvers = solvers || 0;
+		(challenge as any).answers = answers;
+		(challenge as any).solutions = solutions;
 	}
 
 	return removePrivate(challenge);

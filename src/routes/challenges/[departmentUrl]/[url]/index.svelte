@@ -1,10 +1,9 @@
 <script context="module" lang="ts">
 	import { authGuard } from '$lib/guard/authGuard';
 	import { isValidStatus } from '$lib/guard/isValidStatus';
-	import type { LoadInput } from '@sveltejs/kit/types/internal';
 
-	export async function load(input: LoadInput) {
-		const response = authGuard(input);
+	export const load: Load = async (input) => {
+		const response = await authGuard(input);
 
 		if (!isValidStatus(response)) {
 			return response;
@@ -21,7 +20,7 @@
 				url
 			}
 		};
-	}
+	};
 </script>
 
 <script lang="ts">
@@ -32,6 +31,7 @@
 	import SEO from '$lib/components/SEO/index.svelte';
 	import ChallengeWrapper from '$lib/components/challenges/ChallengeWrapper.svelte';
 	import { base } from '$app/paths';
+	import type { Load } from '@sveltejs/kit';
 
 	export let departmentUrl: string;
 	export let url: string;

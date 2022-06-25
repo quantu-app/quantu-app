@@ -8,10 +8,10 @@
 
 <div class="container">
 	<div class="row mt-4">
-		<a class="mainChallenges" href="/challenges">
+		<span>
 			<span class="linkArrow"> &lt; </span>
-			<span class="linkText">Back to Challenges</span>
-		</a>
+			<a class="link-dark" href="/challenges"> Back to Challenges </a>
+		</span>
 	</div>
 	<div class="row mb-5">
 		<div class="col">
@@ -27,16 +27,3 @@
 		</div>
 	</div>
 </div>
-
-<style type="css">
-	a.mainChallenges {
-		color: black;
-		text-decoration: none;
-	}
-	a.mainChallenges .linkText {
-		text-decoration: underline;
-	}
-	a.mainChallenges .linkArrow {
-		text-decoration: none;
-	}
-</style>

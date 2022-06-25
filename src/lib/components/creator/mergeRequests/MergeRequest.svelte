@@ -1,6 +1,17 @@
 <svelte:options immutable />
 
+<script lang="ts" context="module">
+	function getUrl(merge: StateMergeRequest) {
+		switch (merge.change.referenceType) {
+			case 'DEPARTMENT': {
+				return `/creator/departments/${merge.reference?.id}`;
+			}
+		}
+	}
+</script>
+
 <script lang="ts">
+	import { goto } from '$app/navigation';
 	import type { StateChange } from '$lib/state/creator/changes';
 	import { mergeMergeRequest, type StateMergeRequest } from '$lib/state/creator/mergeRequests';
 	import { addNotification, NotificationType } from '$lib/state/notifications';
@@ -17,7 +28,8 @@
 	async function onMerge() {
 		merging = true;
 		try {
-			await mergeMergeRequest(mergeRequest.id);
+			const merge = await mergeMergeRequest(mergeRequest.id);
+			await goto(getUrl(merge));
 		} catch (e) {
 			console.error(e);
 			addNotification({

@@ -68,8 +68,8 @@ export async function getChallengeByUrl(
 			})
 		]);
 		(challenge as any).result = result;
-		(challenge as any).answers = answers;
-		(challenge as any).solutions = solutions;
+		(challenge as any).answers = answers.map((answer) => answer.value);
+		(challenge as any).solutions = solutions._count._all;
 	}
 
 	return removePrivate(challenge);

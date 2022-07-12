@@ -1,4 +1,8 @@
+<svelte:options immutable />
+
 <script lang="ts">
+	import Modal from '$lib/components/ui/Modal.svelte';
+
 	export let correct: number;
 	export let totalSolvers: number;
 
@@ -12,25 +16,25 @@
 	let solverCountText = totalSolvers == 1 ? `${totalSolvers} solver` : `${totalSolvers} solvers`;
 
 	let btnClass = 'bi-chevron-right';
-	let showingStats = false;
 
-	function showStats() {
-		if (showingStats) {
-			btnClass = 'bi-chevron-right';
-			showingStats = false;
-		} else {
-			btnClass = 'bi-chevron-down';
-			showingStats = true;
-		}
+	let showModal = false;
+	$: if (showModal) {
+		btnClass = 'bi-chevron-down';
+	} else {
+		btnClass = 'bi-chevron-right';
+	}
+
+	function show() {
+		showModal = true;
 	}
 </script>
 
-<button type="button" class="btn btn-link link-dark" on:click={showStats}
+<button type="button" class="btn btn-link link-dark" on:click={show}
 	>Stats
 	<i class="bi {btnClass}" />
 </button>
 
-{#if showingStats}
+<Modal bind:open={showModal} size="sm">
 	<div class="card challengeStats">
 		<div class="card-body text-center">
 			<h1 class="percentageCorrect">{successRatePercentage}</h1>
@@ -52,7 +56,7 @@
 			</p>
 		</div>
 	</div>
-{/if}
+</Modal>
 
 <style>
 	.card {

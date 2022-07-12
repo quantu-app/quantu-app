@@ -2,8 +2,10 @@
 
 <script lang="ts">
 	import type { StateChallenge } from '$lib/state/creator/challenges';
+	import Stats from './Stats.svelte';
 
 	export let challenge: StateChallenge;
+	console.log(challenge);
 </script>
 
 <div class="container">
@@ -11,6 +13,9 @@
 		<span>
 			<span class="linkArrow"> &lt; </span>
 			<a class="link-dark" href="/challenges"> Back to Challenges </a>
+		</span>
+		<span class="text-align-right">
+			<Stats totalSolvers={20} correct={15} />
 		</span>
 	</div>
 	<div class="row mb-5">

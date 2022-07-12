@@ -6,10 +6,15 @@
 	import InputReview from './InputReview.svelte';
 	import MarkAsReadReview from './MarkAsReadReview.svelte';
 	import MultipleChoiceReview from './multiple_choice/MultipleChoiceReview.svelte';
+	import Stats from '../challenges/Stats.svelte';
 
 	export let result: Result;
 	export let seed: number | undefined = undefined;
 </script>
+
+<div class="stats">
+	<Stats totalSolvers={20} correct={15} />
+</div>
 
 {#key result.id}
 	{#if result.type === 'FLASH_CARD'}
@@ -30,3 +35,12 @@
 		</MarkAsReadReview>
 	{/if}
 {/key}
+
+<style>
+	.stats {
+		position: absolute;
+		right: 0;
+		top: 80px;
+		z-index: 1;
+	}
+</style>

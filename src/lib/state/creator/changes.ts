@@ -55,7 +55,7 @@ export async function showChangeAt(id: string, fetchFn: IFetch = fetch) {
 		throw await res.json();
 	}
 	const value: Prisma.JsonObject = await res.json();
-	console.log(value);
+
 	return value;
 }
 

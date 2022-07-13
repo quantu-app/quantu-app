@@ -18,13 +18,16 @@
 
 <div class="container">
 	<div class="row mt-4">
-		<span>
-			<span class="linkArrow"> &lt; </span>
-			<a class="link-dark" href="/challenges"> Back to Challenges </a>
-		</span>
-		<span class="text-align-right">
-			<Stats totalSolvers={challenge.solutions} {correct} />
-		</span>
+		<div class="col-6">
+			<span>
+				<span class="linkArrow"> &lt; </span>
+				<a class="link-dark" href="/challenges"> Back to Challenges </a>
+			</span>
+		</div>
+		<div class="col-6 text-end">
+			<!-- <Stats totalSolvers={challenge.solutions} {correct} /> -->
+			<Stats totalSolvers={10} correct={10} />
+		</div>
 	</div>
 	<div class="row mb-5">
 		<div class="col">

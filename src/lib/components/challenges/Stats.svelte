@@ -11,6 +11,14 @@
 	let t = correct / (totalSolvers + Number.EPSILON);
 	let successRate = Math.round((t + Number.EPSILON) * 100) / 100;
 	let successRatePercentage = `${successRate * 100}%`;
+	let successRateTextClasses = 'percentageCorrect';
+	if (correct == 0) {
+		successRateTextClasses += ' zero';
+	} else if (correct == totalSolvers) {
+		successRateTextClasses += ' allcorrect';
+	} else {
+		successRateTextClasses += ' midrange';
+	}
 	let percentageComplete = 100 - successRate * 100;
 
 	let solverCountText = totalSolvers == 1 ? `${totalSolvers} solver` : `${totalSolvers} solvers`;
@@ -19,9 +27,9 @@
 
 	let showModal = false;
 	$: if (showModal) {
-		btnClass = 'bi-chevron-down';
+		btnClass = 'bi-bar-chart-line-fill';
 	} else {
-		btnClass = 'bi-chevron-right';
+		btnClass = 'bi-bar-chart-line';
 	}
 
 	function show() {
@@ -29,25 +37,31 @@
 	}
 </script>
 
-<button type="button" class="btn btn-link link-dark" on:click={show}
-	>Stats
+<button type="button" class="btn btn-link link-dark" on:click={show}>
 	<i class="bi {btnClass}" />
+	<span>Stats</span>
 </button>
 
-<Modal bind:open={showModal} size="sm">
-	<div class="card challengeStats">
+<Modal bind:open={showModal} size="md">
+	<div class="card challengeStats mx-auto border-0">
 		<div class="card-body text-center">
-			<h1 class="percentageCorrect">{successRatePercentage}</h1>
+			<h1 class={successRateTextClasses}>{successRatePercentage}</h1>
+
 			<svg class="circle-container" viewBox="2 -2 28 36" xmlns="http://www.w3.org/2000/svg">
-				<circle class="circle-container__background" r="16" cx="16" cy="16" />
-				<circle
-					class="circle-container__progress"
-					r="16"
-					cx="16"
-					cy="16"
-					style="stroke-dashoffset: {percentageComplete}"
-				/>
+				{#if correct > 0}
+					<circle class="circle-container__background" r="16" cx="16" cy="16" />
+					<circle
+						class="circle-container__progress"
+						r="16"
+						cx="16"
+						cy="16"
+						style="stroke-dashoffset: {percentageComplete}"
+					/>
+				{:else}
+					<circle class="circle-container__background" r="16" cx="16" cy="16" />
+				{/if}
 			</svg>
+
 			<h2 class="successRate">Success Rate</h2>
 			<h3 class="solversCount mt-4">{solverCountText}</h3>
 			<p>
@@ -58,7 +72,7 @@
 	</div>
 </Modal>
 
-<style>
+<style lang="scss">
 	.card {
 		width: 300px;
 	}
@@ -68,7 +82,15 @@
 		font-weight: bold;
 		position: absolute;
 		top: 100px;
-		left: 70px;
+		&.midrange {
+			left: 26%;
+		}
+		&.zero {
+			left: 35%;
+		}
+		&.allcorrect {
+			left: 18%;
+		}
 		z-index: 1;
 	}
 	h2.successRate {

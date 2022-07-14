@@ -110,21 +110,21 @@ export async function answer(challengeId: string, answer: Answer) {
 		const challenge = state[index];
 		if (challenge) {
 			state = state.slice();
-			const newChallenge = { ...challenge, result };
+			let answers = challenge.answers;
+			let solutions = challenge.solutions;
 			if (challenge.result) {
-				const prevResultIndex = newChallenge.answers.findIndex(
-					(result) => newChallenge.result?.userId === result.userId
+				const prevResultIndex = answers.findIndex(
+					(result) => challenge.result?.userId === result.userId
 				);
-				const newAnswers = newChallenge.answers.slice();
+				answers = answers.slice();
 				if (prevResultIndex === -1) {
-					newChallenge.solutions += 1;
-					newAnswers.push({ value: result.value, userId: result.userId });
+					solutions += 1;
+					answers.push({ value: result.value, userId: result.userId });
 				} else {
-					newAnswers[prevResultIndex] = { value: result.value, userId: result.userId };
+					answers[prevResultIndex] = { value: result.value, userId: result.userId };
 				}
 			}
-			console.log(challenge);
-			state[index] = newChallenge;
+			state[index] = { ...challenge, answers, solutions, result };
 		}
 		return state;
 	});
@@ -144,20 +144,21 @@ export async function explain(challengeId: string) {
 		const challenge = state[index];
 		if (challenge) {
 			state = state.slice();
-			const newChallenge = { ...challenge, result };
+			let answers = challenge.answers;
+			let solutions = challenge.solutions;
 			if (challenge.result) {
-				const prevResultIndex = newChallenge.answers.findIndex(
-					(result) => newChallenge.result?.userId === result.userId
+				const prevResultIndex = challenge.answers.findIndex(
+					(result) => challenge.result?.userId === result.userId
 				);
-				const newAnswers = newChallenge.answers.slice();
+				answers = challenge.answers.slice();
 				if (prevResultIndex === -1) {
-					newChallenge.solutions += 1;
-					newAnswers.push({ value: result.value, userId: result.userId });
+					solutions += 1;
+					answers.push({ value: result.value, userId: result.userId });
 				} else {
-					newAnswers[prevResultIndex] = { value: result.value, userId: result.userId };
+					answers[prevResultIndex] = { value: result.value, userId: result.userId };
 				}
 			}
-			state[index] = newChallenge;
+			state[index] = { ...challenge, answers, solutions, result };
 		}
 		return state;
 	});

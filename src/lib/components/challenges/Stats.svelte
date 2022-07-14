@@ -6,26 +6,18 @@
 	export let correct: number;
 	export let totalSolvers: number;
 
-	let wrong = totalSolvers - correct;
+	$: wrong = totalSolvers - correct;
+	$: t = correct / (totalSolvers + Number.EPSILON);
 
-	let t = correct / (totalSolvers + Number.EPSILON);
-	let successRate = Math.round((t + Number.EPSILON) * 100) / 100;
-	let successRatePercentage = `${successRate * 100}%`;
-	let successRateTextClasses = 'percentageCorrect';
-	if (correct == 0) {
-		successRateTextClasses += ' zero';
-	} else if (correct == totalSolvers) {
-		successRateTextClasses += ' allcorrect';
-	} else {
-		successRateTextClasses += ' midrange';
-	}
-	let percentageComplete = 100 - successRate * 100;
+	$: successRate = Math.round((t + Number.EPSILON) * 100) / 100;
+	$: successRatePercentage = `${successRate * 100}%`;
 
-	let solverCountText = totalSolvers == 1 ? `${totalSolvers} solver` : `${totalSolvers} solvers`;
+	$: percentageComplete = 100 - successRate * 100;
+	$: solverCountText = totalSolvers == 1 ? `${totalSolvers} solver` : `${totalSolvers} solvers`;
 
 	let btnClass = 'bi-chevron-right';
-
 	let showModal = false;
+
 	$: if (showModal) {
 		btnClass = 'bi-bar-chart-line-fill';
 	} else {
@@ -45,7 +37,14 @@
 <Modal bind:open={showModal} size="md">
 	<div class="card challengeStats mx-auto border-0">
 		<div class="card-body text-center">
-			<h1 class={successRateTextClasses}>{successRatePercentage}</h1>
+			<h1
+				class="percentageCorrect"
+				class:zero={correct === 0}
+				class:allcorrect={correct === totalSolvers}
+				class:midrange={correct !== 0 && correct !== totalSolvers}
+			>
+				{successRatePercentage}
+			</h1>
 
 			<svg class="circle-container" viewBox="2 -2 28 36" xmlns="http://www.w3.org/2000/svg">
 				{#if correct > 0}

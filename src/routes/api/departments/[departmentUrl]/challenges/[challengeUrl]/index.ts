@@ -57,6 +57,7 @@ export async function getChallengeByUrl(
 					challengeId: challenge.id
 				},
 				select: {
+					userId: true,
 					value: true
 				}
 			}),
@@ -69,7 +70,7 @@ export async function getChallengeByUrl(
 		]);
 		(challenge as any).result = result;
 		(challenge as any).answers = answers;
-		(challenge as any).solutions = solutions;
+		(challenge as any).solutions = solutions._count._all;
 	}
 
 	return removePrivate(challenge);

@@ -2,16 +2,31 @@
 
 <script lang="ts">
 	import type { StateChallenge } from '$lib/state/creator/challenges';
+	import Stats from './Stats.svelte';
 
 	export let challenge: StateChallenge;
+	const CORRECT_THRESHOLD = 0.6;
+
+	$: correct = challenge.answers.reduce((correct, result) => {
+		if (result.value >= CORRECT_THRESHOLD) {
+			return correct + 1;
+		} else {
+			return correct;
+		}
+	}, 0);
 </script>
 
 <div class="container">
 	<div class="row mt-4">
-		<span>
-			<span class="linkArrow"> &lt; </span>
-			<a class="link-dark" href="/challenges"> Back to Challenges </a>
-		</span>
+		<div class="col-6">
+			<span>
+				<span class="linkArrow"> &lt; </span>
+				<a class="link-dark" href="/challenges"> Back to Challenges </a>
+			</span>
+		</div>
+		<div class="col-6 text-end">
+			<Stats totalSolvers={challenge.solutions} {correct} />
+		</div>
 	</div>
 	<div class="row mb-5">
 		<div class="col">

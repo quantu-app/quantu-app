@@ -7,7 +7,7 @@ import type { IFetch } from '../utils';
 export type StateChallenge = Challenge & {
 	department: { url: string; name: string };
 	result?: Result;
-	answers: number[];
+	answers: { value: number; userId: string }[];
 	solutions: number;
 };
 
@@ -110,7 +110,21 @@ export async function answer(challengeId: string, answer: Answer) {
 		const challenge = state[index];
 		if (challenge) {
 			state = state.slice();
-			state[index] = { ...challenge, result };
+			let answers = challenge.answers;
+			let solutions = challenge.solutions;
+			if (challenge.result) {
+				const prevResultIndex = answers.findIndex(
+					(result) => challenge.result?.userId === result.userId
+				);
+				answers = answers.slice();
+				if (prevResultIndex === -1) {
+					solutions += 1;
+					answers.push({ value: result.value, userId: result.userId });
+				} else {
+					answers[prevResultIndex] = { value: result.value, userId: result.userId };
+				}
+			}
+			state[index] = { ...challenge, answers, solutions, result };
 		}
 		return state;
 	});
@@ -130,7 +144,21 @@ export async function explain(challengeId: string) {
 		const challenge = state[index];
 		if (challenge) {
 			state = state.slice();
-			state[index] = { ...challenge, result };
+			let answers = challenge.answers;
+			let solutions = challenge.solutions;
+			if (challenge.result) {
+				const prevResultIndex = challenge.answers.findIndex(
+					(result) => challenge.result?.userId === result.userId
+				);
+				answers = challenge.answers.slice();
+				if (prevResultIndex === -1) {
+					solutions += 1;
+					answers.push({ value: result.value, userId: result.userId });
+				} else {
+					answers[prevResultIndex] = { value: result.value, userId: result.userId };
+				}
+			}
+			state[index] = { ...challenge, answers, solutions, result };
 		}
 		return state;
 	});

@@ -8,14 +8,7 @@ const config = {
 	preprocess: preprocess(),
 
 	kit: {
-		adapter: adapter({
-			preprocess: true
-		}),
-		vite: {
-			build: {
-				target: 'es2020'
-			}
-		}
+		adapter: adapter()
 	}
 };
 

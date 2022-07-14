@@ -160,6 +160,7 @@ model Department {
 
   challenges Challenge[]
   assets     Asset[]
+  Course     Course[]
 }
 
 // Challenges
@@ -315,9 +316,81 @@ model Asset {
 
   departmentLogos Department[] @relation(name: "DepartmentLogo")
   challengeLogos  Challenge[]  @relation(name: "ChallengeLogo")
+  courseLogos     Course[]     @relation(name: "CourseLogo")
+  chapterLogos    Chapter[]    @relation(name: "ChapterLogo")
+  lessonLogos     Lesson[]     @relation(name: "LessonLogo")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@unique([departmentId, folder, name])
+}
+
+// Courses
+
+model Course {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  logo         Asset?     @relation(name: "CourseLogo", fields: [logoId], references: [id])
+  logoId       String?    @db.ObjectId
+  department   Department @relation(fields: [departmentId], references: [id])
+  departmentId String     @db.ObjectId
+
+  name        String
+  url         String
+  description Json
+
+  visible    Boolean   @default(false)
+  releasedAt DateTime?
+
+  chapters Chapter[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([departmentId, url])
+}
+
+model Chapter {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  logo     Asset?  @relation(name: "ChapterLogo", fields: [logoId], references: [id])
+  logoId   String? @db.ObjectId
+  course   Course  @relation(fields: [courseId], references: [id])
+  courseId String  @db.ObjectId
+
+  name        String
+  url         String
+  description Json
+
+  visible    Boolean   @default(false)
+  releasedAt DateTime?
+
+  lessons Lesson[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([courseId, url])
+}
+
+model Lesson {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  logo      Asset?  @relation(name: "LessonLogo", fields: [logoId], references: [id])
+  logoId    String? @db.ObjectId
+  chapter   Chapter @relation(fields: [chapterId], references: [id])
+  chapterId String  @db.ObjectId
+
+  name        String
+  url         String
+  description Json
+
+  visible    Boolean   @default(false)
+  releasedAt DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([chapterId, url])
 }

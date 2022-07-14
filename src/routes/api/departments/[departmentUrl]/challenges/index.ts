@@ -75,6 +75,7 @@ export async function getChallenges(
 				}
 			},
 			select: {
+				userId: true,
 				challengeId: true,
 				value: true
 			}
@@ -97,9 +98,9 @@ export async function getChallenges(
 
 	const answersMap = answers.reduce((map, answer) => {
 		const values = map[answer.challengeId as string] || (map[answer.challengeId as string] = []);
-		values.push(answer.value);
+		values.push({ value: answer.value, userId: answer.userId });
 		return map;
-	}, {} as Record<string, number[]>);
+	}, {} as Record<string, { value: number; userId: string }[]>);
 
 	const solutionsMap = solutions.reduce((map, solutions) => {
 		map[solutions.challengeId as string] = solutions._count._all;

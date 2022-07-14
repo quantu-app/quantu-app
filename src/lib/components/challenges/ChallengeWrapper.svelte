@@ -7,11 +7,11 @@
 	export let challenge: StateChallenge;
 	const CORRECT_THRESHOLD = 0.6;
 
-	$: correct = challenge.answers.reduce((init, cur) => {
-		if (cur >= CORRECT_THRESHOLD) {
-			return init + 1;
+	$: correct = challenge.answers.reduce((correct, result) => {
+		if (result.value >= CORRECT_THRESHOLD) {
+			return correct + 1;
 		} else {
-			return init;
+			return correct;
 		}
 	}, 0);
 </script>

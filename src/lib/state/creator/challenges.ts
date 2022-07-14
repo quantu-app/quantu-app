@@ -3,7 +3,11 @@ import { writable, derived } from 'svelte/store';
 import { base } from '$app/paths';
 import type { IFetch } from '$lib/utils';
 
-export type StateChallenge = Challenge & { department: { url: string; name: string }, solutions: number, answers: number[] };
+export type StateChallenge = Challenge & {
+	department: { url: string; name: string };
+	solutions: number;
+	answers: { value: number; userId: string }[];
+};
 
 const challengesWritable = writable<Array<StateChallenge>>([]);
 

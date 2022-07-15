@@ -25,7 +25,7 @@
 			</span>
 		</div>
 		<div class="col-6 text-end">
-			<Stats totalSolvers={challenge.solutions} {correct} />
+			<Stats totalSolvers={challenge.answers.length} {correct} />
 		</div>
 	</div>
 	<div class="row mb-5">

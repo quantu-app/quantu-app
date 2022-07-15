@@ -59,19 +59,20 @@ export async function getChallenges(
 		}
 	});
 
+	const challengeIds = challenges.map((challenge) => challenge.id);
 	const [results, answers, solutions] = await Promise.all([
 		client.result.findMany({
 			where: {
 				userId,
 				challengeId: {
-					in: challenges.map((challenge) => challenge.id)
+					in: challengeIds
 				}
 			}
 		}),
 		client.result.findMany({
 			where: {
 				challengeId: {
-					in: challenges.map((challenge) => challenge.id)
+					in: challengeIds
 				}
 			},
 			select: {
@@ -85,7 +86,7 @@ export async function getChallenges(
 			_count: { _all: true },
 			where: {
 				challengeId: {
-					in: challenges.map((challenge) => challenge.id)
+					in: challengeIds
 				}
 			}
 		})

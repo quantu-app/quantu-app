@@ -7,7 +7,7 @@ import type { PrismaClient } from '@prisma/client';
 
 const ONE_MONTH_IN_SECONDS = 60 * 60 * 24 * 30;
 
-export async function get(event: RequestEvent) {
+export const GET = async (event: RequestEvent) => {
 	return run((client) => getAssetById(client, event.params.id))
 		.then((asset) =>
 			asset
@@ -37,7 +37,7 @@ export async function get(event: RequestEvent) {
 		.catch(() => ({
 			status: 404
 		}));
-}
+};
 
 export function getAssetById(client: PrismaClient, id: string) {
 	return client.asset.findUnique({ where: { id } });

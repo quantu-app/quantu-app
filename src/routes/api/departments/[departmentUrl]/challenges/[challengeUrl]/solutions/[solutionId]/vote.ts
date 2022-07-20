@@ -2,7 +2,7 @@ import { authenticated } from '$lib/api/auth';
 import { run } from '$lib/prisma';
 import type { PrismaClient } from '@prisma/client';
 
-export const patch = authenticated(async (event) => ({
+export const PATCH = authenticated(async (event) => ({
 	body: await run(async (client) =>
 		voteOnChallengeSolution(
 			client,

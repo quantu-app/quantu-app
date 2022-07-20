@@ -3,7 +3,7 @@ import { run } from '$lib/prisma';
 import type { PrismaClient } from '@prisma/client';
 import { getReferenceType } from '..';
 
-export const get = isCreator(async (event) => {
+export const GET = isCreator(async (event) => {
 	return {
 		body: await run((client) => getMergeRequest(client, event.params.mergeRequestId)),
 		status: 200

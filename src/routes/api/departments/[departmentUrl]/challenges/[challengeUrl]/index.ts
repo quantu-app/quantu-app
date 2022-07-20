@@ -3,7 +3,7 @@ import type { PrismaClient } from '@prisma/client';
 import type { RequestEvent } from '@sveltejs/kit/types/internal';
 import { removePrivate } from '../../../_utils';
 
-export async function get(event: RequestEvent) {
+export const GET = async (event: RequestEvent) => {
 	const challenge = await run((client) =>
 		getChallengeByUrl(
 			client,
@@ -17,7 +17,7 @@ export async function get(event: RequestEvent) {
 		body: challenge,
 		status: challenge ? 200 : 404
 	};
-}
+};
 
 export async function getChallengeByUrl(
 	client: PrismaClient,

@@ -3,7 +3,7 @@ import { run } from '$lib/prisma';
 import { isEmpty } from '$lib/utils';
 import type { PrismaClient, ChangeType, Change, Prisma } from '@prisma/client';
 
-export const get = isCreator(async (event) => {
+export const GET = isCreator(async (event) => {
 	const latestString = event.url.searchParams.get('latest');
 	const latest = latestString === 'true' ? true : latestString === 'false' ? false : undefined;
 	const mergedString = event.url.searchParams.get('merged');
@@ -77,7 +77,7 @@ export async function getChanges(
 	}
 }
 
-export const post = isCreator(async (event) => ({
+export const POST = isCreator(async (event) => ({
 	body: await run(async (client) => {
 		const body = await event.request.json();
 		return createChange(

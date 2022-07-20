@@ -1,7 +1,7 @@
 import { authenticated } from '$lib/api/auth';
 import { run } from '$lib/prisma';
 
-export const get = authenticated((event) =>
+export const GET = authenticated((event) =>
 	run((client) =>
 		client.user.findUnique({
 			where: {
@@ -34,7 +34,7 @@ export const get = authenticated((event) =>
 	)
 );
 
-export const patch = authenticated((event) =>
+export const PATCH = authenticated((event) =>
 	event.request.json().then((data) =>
 		run((client) =>
 			client.user.update({

@@ -3,7 +3,7 @@ import { run } from '$lib/prisma';
 import type { PrismaClient, CommentReferenceType } from '@prisma/client';
 import { createNestedIncludeRecur } from '../';
 
-export const get = authenticated(async (event) => ({
+export const GET = authenticated(async (event) => ({
 	body: await run((client) =>
 		getCommentById(
 			client,
@@ -42,7 +42,7 @@ export async function getCommentById(
 	});
 }
 
-export const patch = authenticated(async (event) => ({
+export const PATCH = authenticated(async (event) => ({
 	body: await run(async (client) =>
 		updateComment(
 			client,
@@ -100,7 +100,7 @@ export async function updateComment(
 	});
 }
 
-export const del = authenticated(async (event) => ({
+export const DELETE = authenticated(async (event) => ({
 	body: await run(async (client) =>
 		deleteComment(
 			client,

@@ -2,7 +2,7 @@ import { isCreator } from '$lib/api/auth';
 import { run } from '$lib/prisma';
 import type { Prisma, PrismaClient } from '@prisma/client';
 
-export const get = isCreator((event) =>
+export const GET = isCreator((event) =>
 	run((client) => getChange(client, event.params.changeId)).then((change) => ({
 		body: change,
 		status: change ? 200 : 404
@@ -25,7 +25,7 @@ export function getChange(client: PrismaClient, changeId: string) {
 	});
 }
 
-export const patch = isCreator((event) =>
+export const PATCH = isCreator((event) =>
 	run(async (client) => {
 		const { name, value } = await event.request.json();
 		return updateChange(client, event.params.changeId, event.locals.token.userId, name, value);

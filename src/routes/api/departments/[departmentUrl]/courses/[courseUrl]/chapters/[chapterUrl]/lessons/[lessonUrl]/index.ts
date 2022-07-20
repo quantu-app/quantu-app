@@ -2,7 +2,7 @@ import { run } from '$lib/prisma';
 import type { PrismaClient } from '@prisma/client';
 import type { RequestEvent } from '@sveltejs/kit/types/internal';
 
-export async function get(event: RequestEvent) {
+export const GET = async (event: RequestEvent) => {
 	const lesson = await run((client) =>
 		getLessonByUrl(
 			client,
@@ -17,7 +17,7 @@ export async function get(event: RequestEvent) {
 		body: lesson,
 		status: lesson ? 200 : 404
 	};
-}
+};
 
 export async function getLessonByUrl(
 	client: PrismaClient,

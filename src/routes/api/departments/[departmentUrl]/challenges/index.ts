@@ -5,7 +5,7 @@ import { removePrivate } from '../../_utils';
 
 const DEFAULT_PAGINATION_SIZE = 25;
 
-export const get = authenticated(async (event) => ({
+export const GET = authenticated(async (event) => ({
 	body: await run((client) =>
 		getChallenges(
 			client,

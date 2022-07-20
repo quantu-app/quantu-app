@@ -4,7 +4,7 @@ import type { PrismaClient } from '@prisma/client';
 import { getChallenges } from '../departments/[departmentUrl]/challenges';
 import { getDepartments } from '../departments';
 
-export const get = authenticated(async (event) => ({
+export const GET = authenticated(async (event) => ({
 	body: await run((client) => getTopChallenges(client, event.locals.token.userId)),
 	status: 200
 }));

@@ -4,7 +4,7 @@ import type { CommentReferenceType, PrismaClient } from '@prisma/client';
 import { deleteComments } from '../../../../../../comments/[referenceType]/[referenceId]/[commentId]';
 import { getCommentsByReferenceId } from '../../../../../../comments/[referenceType]/[referenceId]';
 
-export const get = authenticated(async (event) => {
+export const GET = authenticated(async (event) => {
 	const solution = await run((client) =>
 		getSolutionById(
 			client,
@@ -55,7 +55,7 @@ export async function getSolutionById(client: PrismaClient, solutionId: string, 
 	return solution;
 }
 
-export const patch = authenticated(async (event) => ({
+export const PATCH = authenticated(async (event) => ({
 	body: await run(async (client) =>
 		updateSolution(
 			client,
@@ -132,7 +132,7 @@ export async function updateSolution(
 	return solution;
 }
 
-export const del = authenticated(async (event) => {
+export const DELETE = authenticated(async (event) => {
 	const solution = await run((client) =>
 		deleteSolutionById(
 			client,

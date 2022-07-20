@@ -1,16 +1,16 @@
 import { isCreator } from '$lib/api/auth';
 import { run } from '$lib/prisma';
 
-export const get = isCreator((event) => {
-	const chapterId = event.params.chapterId;
+export const GET = isCreator((event) => {
+	const courseId = event.params.courseId;
 
 	return run((client) =>
-		client.lesson.findMany({
+		client.chapter.findMany({
 			where: {
-				chapterId
+				courseId
 			},
 			include: {
-				chapter: {
+				course: {
 					select: {
 						url: true,
 						name: true
@@ -18,24 +18,24 @@ export const get = isCreator((event) => {
 				}
 			}
 		})
-	).then((lessons) => ({
-		body: lessons,
+	).then((chapters) => ({
+		body: chapters,
 		status: 200
 	}));
 });
 
-export const post = isCreator(async (event) => {
+export const POST = isCreator(async (event) => {
 	const data = await event.request.json();
-	const chapterId = event.params.chapterId;
+	const courseId = event.params.courseId;
 
 	return run((client) =>
-		client.lesson.create({
+		client.chapter.create({
 			data: {
 				...data,
-				chapterId
+				courseId
 			},
 			include: {
-				chapter: {
+				course: {
 					select: {
 						url: true,
 						name: true
@@ -43,8 +43,8 @@ export const post = isCreator(async (event) => {
 				}
 			}
 		})
-	).then((lesson) => ({
-		body: lesson,
+	).then((chapter) => ({
+		body: chapter,
 		status: 201
 	}));
 });

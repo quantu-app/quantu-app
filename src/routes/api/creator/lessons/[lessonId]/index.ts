@@ -1,7 +1,7 @@
 import { isCreator } from '$lib/api/auth';
 import { run } from '$lib/prisma';
 
-export const get = isCreator((event) => {
+export const GET = isCreator((event) => {
 	const lessonId = event.params.lessonId;
 
 	return run((client) =>
@@ -24,7 +24,7 @@ export const get = isCreator((event) => {
 	}));
 });
 
-export const patch = isCreator(async (event) => {
+export const PATCH = isCreator(async (event) => {
 	const data = await event.request.json();
 	const lessonId = event.params.lessonId;
 
@@ -49,7 +49,7 @@ export const patch = isCreator(async (event) => {
 	}));
 });
 
-export const del = isCreator((event) => {
+export const DELETE = isCreator((event) => {
 	const lessonId = event.params.lessonId;
 
 	return run((client) =>

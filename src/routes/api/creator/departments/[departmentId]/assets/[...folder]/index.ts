@@ -8,7 +8,7 @@ import { listAssets } from '..';
 
 const ONE_GIBIBYTE = 1024 * 1024 * 1024;
 
-export const get = isCreator(async (event) => {
+export const GET = isCreator(async (event) => {
 	const departmentId = event.params.departmentId;
 	const folder = event.params.folder;
 	const type = event.url.searchParams.get('type');
@@ -21,7 +21,7 @@ export const get = isCreator(async (event) => {
 	}));
 });
 
-export const post = isCreator(async (event) => {
+export const POST = isCreator(async (event) => {
 	const departmentId = event.params.departmentId;
 	const path = event.params.folder.split('/');
 	const name = path.pop();
@@ -96,7 +96,7 @@ export const post = isCreator(async (event) => {
 	);
 });
 
-export const del = isCreator(async (event) => {
+export const DELETE = isCreator(async (event) => {
 	const departmentId = event.params.departmentId;
 	const path = event.params.folder.split('/');
 	const name = path.pop();

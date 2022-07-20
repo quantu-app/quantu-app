@@ -11,7 +11,7 @@ import type {
 import { InputType } from '$lib/types';
 import { authenticated } from '$lib/api/auth';
 
-export const get = authenticated(async (event) => {
+export const GET = authenticated(async (event) => {
 	const result = await run((client) =>
 		getResultById(client, event.locals.token.userId, event.params.id)
 	);
@@ -30,7 +30,7 @@ export function getResultById(client: PrismaClient, userId: string, challengeId:
 	});
 }
 
-export const post = authenticated(async (event) => ({
+export const POST = authenticated(async (event) => ({
 	body: await run(async (client) =>
 		answer(client, event.locals.token.userId, event.params.id, await event.request.json())
 	),

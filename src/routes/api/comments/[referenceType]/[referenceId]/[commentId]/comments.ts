@@ -3,7 +3,7 @@ import { run } from '$lib/prisma';
 import type { PrismaClient, CommentReferenceType } from '@prisma/client';
 import { createNestedIncludeRecur } from '..';
 
-export const get = authenticated(async (event) => ({
+export const GET = authenticated(async (event) => ({
 	body: await run((client) =>
 		getCommentsById(
 			client,

@@ -1,7 +1,7 @@
 import { authenticated } from '$lib/api/auth';
 import { run } from '$lib/prisma';
 
-export const get = authenticated((event) => {
+export const GET = authenticated((event) => {
 	const username = event.params.username;
 
 	return run((client) =>

@@ -4,7 +4,7 @@ import type { Comment, PrismaClient } from '@prisma/client';
 import type { CommentReferenceType } from '@prisma/client';
 import { getCommentsByReferenceId } from '../../../../../comments/[referenceType]/[referenceId]';
 
-export const get = authenticated(async (event) => ({
+export const GET = authenticated(async (event) => ({
 	body: await run((client) =>
 		getSolutions(
 			client,
@@ -70,7 +70,7 @@ export async function getSolutions(
 	});
 }
 
-export const post = authenticated(async (event) => ({
+export const POST = authenticated(async (event) => ({
 	body: await run(async (client) =>
 		createSolution(
 			client,

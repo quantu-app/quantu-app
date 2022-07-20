@@ -1,7 +1,7 @@
 import { authenticated } from '$lib/api/auth';
 import { run } from '$lib/prisma';
 
-export const patch = authenticated((event) =>
+export const PATCH = authenticated((event) =>
 	event.request.json().then((data) =>
 		run((client) =>
 			client.applicationSettings.upsert({

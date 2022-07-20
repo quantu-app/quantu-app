@@ -2,7 +2,7 @@ import { isCreator } from '$lib/api/auth';
 import { run } from '$lib/prisma';
 import type { PrismaClient, ChangeType, MergeRequest, Department } from '@prisma/client';
 
-export const get = isCreator(async (event) => {
+export const GET = isCreator(async (event) => {
 	const mergedString = event.url.searchParams.get('merged');
 	const merged = mergedString === 'true' ? true : mergedString === 'false' ? false : undefined;
 	return {

@@ -2,7 +2,7 @@ import { run } from '$lib/prisma';
 import { authenticated } from '$lib/api/auth';
 import type { PrismaClient } from '@prisma/client';
 
-export const post = authenticated(async (event) => ({
+export const POST = authenticated(async (event) => ({
 	body: await run((client) => explain(client, event.locals.token.userId, event.params.id)),
 	status: 201
 }));

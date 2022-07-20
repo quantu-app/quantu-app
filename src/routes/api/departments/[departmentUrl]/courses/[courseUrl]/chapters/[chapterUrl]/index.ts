@@ -2,7 +2,7 @@ import { run } from '$lib/prisma';
 import type { PrismaClient } from '@prisma/client';
 import type { RequestEvent } from '@sveltejs/kit/types/internal';
 
-export async function get(event: RequestEvent) {
+export const GET = async (event: RequestEvent) => {
 	const chapter = await run((client) =>
 		getChapterByUrl(
 			client,
@@ -16,7 +16,7 @@ export async function get(event: RequestEvent) {
 		body: chapter,
 		status: chapter ? 200 : 404
 	};
-}
+};
 
 export async function getChapterByUrl(
 	client: PrismaClient,

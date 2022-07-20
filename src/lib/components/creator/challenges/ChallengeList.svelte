@@ -33,7 +33,7 @@
 		if (challengeToUpdate) {
 			const { id, department, ...challengeBody } = challengeToUpdate;
 			try {
-				await updateChallenge(departmentId, challengeToUpdate.id, challengeBody);
+				await updateChallenge(challengeToUpdate.id, challengeBody);
 				challengeToUpdate = undefined;
 				updateOpen = false;
 			} catch (e) {
@@ -49,7 +49,7 @@
 	async function onDeleteChallenge() {
 		if (challengeToDelete) {
 			try {
-				await deleteChallenge(departmentId, challengeToDelete.id);
+				await deleteChallenge(challengeToDelete.id);
 				challengeToDelete = undefined;
 				deleteOpen = false;
 			} catch (e) {

@@ -2,7 +2,7 @@ import { isCreator } from '$lib/api/auth';
 import { run } from '$lib/prisma';
 import type { PrismaClient, MergeRequest, Change, Prisma, Department } from '@prisma/client';
 
-export const post = isCreator(async (event) => {
+export const POST = isCreator(async (event) => {
 	return {
 		body: await run((client) => mergeMergeRequest(client, event.params.mergeRequestId)),
 		status: 200

@@ -2,7 +2,7 @@ import { isCreator } from '$lib/api/auth';
 import { run } from '$lib/prisma';
 import type { PrismaClient } from '@prisma/client';
 
-export const get = isCreator((event) => {
+export const GET = isCreator((event) => {
 	const sectionId = event.params.sectionId;
 
 	return run((client) =>
@@ -25,7 +25,7 @@ export const get = isCreator((event) => {
 	}));
 });
 
-export const patch = isCreator(async (event) =>
+export const PATCH = isCreator(async (event) =>
 	run(async (client) =>
 		updateSection(client, event.params.sectionId, await event.request.json())
 	).then((section) => ({
@@ -52,7 +52,7 @@ export async function updateSection(client: PrismaClient, sectionId: string, dat
 	});
 }
 
-export const del = isCreator((event) => {
+export const DELETE = isCreator((event) => {
 	const sectionId = event.params.sectionId;
 
 	return run((client) =>

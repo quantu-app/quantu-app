@@ -4,7 +4,7 @@ import type { PrismaClient } from '@prisma/client';
 
 const DEFAULT_PAGINATION_SIZE = 25;
 
-export const get = authenticated(async (event) => {
+export const GET = authenticated(async (event) => {
 	const pageString = event.url.searchParams.get('page');
 	const sizeString = event.url.searchParams.get('size');
 	return {

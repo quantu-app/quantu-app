@@ -3,7 +3,7 @@ import { run } from '$lib/prisma';
 import type { PrismaClient, Result } from '@prisma/client';
 import { removePrivate } from '../../../../../../../../_utils';
 
-export const get = authenticated(async (event) => ({
+export const GET = authenticated(async (event) => ({
 	body: await run((client) =>
 		getSections(
 			client,

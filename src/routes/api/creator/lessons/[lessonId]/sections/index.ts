@@ -1,7 +1,7 @@
 import { isCreator } from '$lib/api/auth';
 import { run } from '$lib/prisma';
 
-export const get = isCreator((event) => {
+export const GET = isCreator((event) => {
 	const sectionId = event.params.sectionId;
 
 	return run((client) =>
@@ -24,7 +24,7 @@ export const get = isCreator((event) => {
 	}));
 });
 
-export const post = isCreator(async (event) => {
+export const POST = isCreator(async (event) => {
 	const data = await event.request.json();
 	const sectionId = event.params.sectionId;
 

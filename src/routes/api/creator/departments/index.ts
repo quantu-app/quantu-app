@@ -2,7 +2,7 @@ import { isCreator } from '$lib/api/auth';
 import { run } from '$lib/prisma';
 import type { PrismaClient } from '@prisma/client';
 
-export const get = isCreator(async (event) => {
+export const GET = isCreator(async (event) => {
 	return {
 		body: await run((client) => getDepartments(client, event.url.searchParams.getAll('ids'))),
 		status: 200
@@ -28,7 +28,7 @@ export function getDepartments(client: PrismaClient, ids: string[]) {
 	});
 }
 
-export const post = isCreator(async (event) => ({
+export const POST = isCreator(async (event) => ({
 	body: await run(async (client) => createDepartment(client, await event.request.json())),
 	status: 201
 }));

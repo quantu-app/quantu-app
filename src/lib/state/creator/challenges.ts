@@ -28,8 +28,8 @@ export const challengesByDepartmentId = derived(challengesWritable, (challenges)
 	}, {} as { [departmentId: string]: Array<StateChallenge> })
 );
 
-export async function showChallengeById(departmentId: string, id: string, fetchFn: IFetch = fetch) {
-	const res = await fetchFn(`${base}/api/creator/departments/${departmentId}/challenges/${id}`, {
+export async function showChallengeById(id: string, fetchFn: IFetch = fetch) {
+	const res = await fetchFn(`${base}/api/creator/challenges/${id}`, {
 		headers: {
 			'Content-Type': 'application/json'
 		}
@@ -84,12 +84,8 @@ export async function createChallenge(departmentId: string, body: Partial<StateC
 	return challenge;
 }
 
-export async function updateChallenge(
-	departmentId: string,
-	id: string,
-	body: Partial<StateChallenge>
-) {
-	const res = await fetch(`${base}/api/creator/departments/${departmentId}/challenges/${id}`, {
+export async function updateChallenge(id: string, body: Partial<StateChallenge>) {
+	const res = await fetch(`${base}/api/creator/challenges/${id}`, {
 		method: 'PATCH',
 		body: JSON.stringify(body)
 	});
@@ -101,8 +97,8 @@ export async function updateChallenge(
 	return challenge;
 }
 
-export async function deleteChallenge(departmentId: string, id: string) {
-	const res = await fetch(`${base}/api/creator/departments/${departmentId}/challenges/${id}`, {
+export async function deleteChallenge(id: string) {
+	const res = await fetch(`${base}/api/creator/challenges/${id}`, {
 		method: 'DELETE'
 	});
 	if (!res.ok) {

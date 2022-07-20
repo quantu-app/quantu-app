@@ -3,7 +3,7 @@ import { run } from '$lib/prisma';
 import type { AssetType, PrismaClient } from '@prisma/client';
 import type { RequestEvent } from '@sveltejs/kit/types/internal';
 
-export const get = isCreator((event: RequestEvent) => {
+export const GET = isCreator((event: RequestEvent) => {
 	const departmentId = event.params.departmentId;
 	const type = event.url.searchParams.get('type');
 

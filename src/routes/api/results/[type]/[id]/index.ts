@@ -22,12 +22,10 @@ export const get = authenticated(async (event) => {
 });
 
 export function getResultById(client: PrismaClient, userId: string, challengeId: string) {
-	return client.result.findUnique({
+	return client.result.findFirst({
 		where: {
-			userId_challengeId: {
-				userId,
-				challengeId
-			}
+			userId,
+			challengeId
 		}
 	});
 }

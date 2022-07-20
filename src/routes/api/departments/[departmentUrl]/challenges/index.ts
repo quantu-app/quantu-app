@@ -1,9 +1,7 @@
 import { authenticated } from '$lib/api/auth';
-import { validUsernameRegex } from '$lib/components/user/userProfileSuite';
 import { run } from '$lib/prisma';
-import type { Prompt, PromptPrivate } from '$lib/types';
-import { isMultipleChoicePrivate, isInputPrivate } from '$lib/types';
-import type { Challenge, PrismaClient, QuestionType, Result } from '@prisma/client';
+import type { PrismaClient, Result } from '@prisma/client';
+import { removePrivate } from '../../_utils';
 
 const DEFAULT_PAGINATION_SIZE = 25;
 
@@ -114,23 +112,4 @@ export async function getChallenges(
 		(challenge as any).solutions = solutionsMap[challenge.id] || 0;
 		return removePrivate(challenge);
 	});
-}
-
-export function removePrivate(challenge: Challenge | null): Challenge | null {
-	if (challenge) {
-		challenge.prompt = removePrivatePrompt(challenge.type, challenge.prompt as any) as any;
-	}
-	return challenge;
-}
-
-function removePrivatePrompt(type: QuestionType, prompt: PromptPrivate): Prompt {
-	if (isMultipleChoicePrivate(type, prompt)) {
-		prompt.choices.forEach((choice) => {
-			delete choice.correct;
-		});
-		delete prompt.explanation;
-	} else if (isInputPrivate(type, prompt)) {
-		delete prompt.answers;
-	}
-	return prompt;
 }

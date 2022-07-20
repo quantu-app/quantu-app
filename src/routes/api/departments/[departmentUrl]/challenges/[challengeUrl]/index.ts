@@ -1,7 +1,7 @@
 import { run } from '$lib/prisma';
 import type { PrismaClient } from '@prisma/client';
 import type { RequestEvent } from '@sveltejs/kit/types/internal';
-import { removePrivate } from '..';
+import { removePrivate } from '../../../_utils';
 
 export async function get(event: RequestEvent) {
 	const challenge = await run((client) =>
@@ -44,12 +44,10 @@ export async function getChallengeByUrl(
 
 	if (challenge) {
 		const [result, answers, solutions] = await Promise.all([
-			client.result.findUnique({
+			client.result.findFirst({
 				where: {
-					userId_challengeId: {
-						userId: userId,
-						challengeId: challenge.id
-					}
+					userId,
+					challengeId: challenge.id
 				}
 			}),
 			client.result.findMany({

@@ -295,7 +295,7 @@ model Result {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@unique([userId, challengeId])
+  @@unique([userId, challengeId, sectionId])
 }
 
 // Assets
@@ -403,6 +403,7 @@ model Section {
 
   lesson   Lesson @relation(fields: [lessonId], references: [id])
   lessonId String @db.ObjectId
+  index    Int
 
   description Json
   type        QuestionType @default(MULTIPLE_CHOICE)

@@ -2,12 +2,12 @@ import { isCreator } from '$lib/api/auth';
 import { run } from '$lib/prisma';
 
 export const get = isCreator((event) => {
-	const lessonId = event.params.lessonId;
+	const chapterId = event.params.chapterId;
 
 	return run((client) =>
-		client.lesson.findFirst({
+		client.lesson.findMany({
 			where: {
-				id: lessonId
+				chapterId
 			},
 			include: {
 				chapter: {
@@ -18,44 +18,21 @@ export const get = isCreator((event) => {
 				}
 			}
 		})
-	).then((lesson) => ({
-		body: lesson,
+	).then((lessons) => ({
+		body: lessons,
 		status: 200
 	}));
 });
 
-export const patch = isCreator(async (event) => {
+export const post = isCreator(async (event) => {
 	const data = await event.request.json();
-	const lessonId = event.params.lessonId;
+	const chapterId = event.params.chapterId;
 
 	return run((client) =>
-		client.lesson.update({
-			where: {
-				id: lessonId
-			},
-			data,
-			include: {
-				chapter: {
-					select: {
-						url: true,
-						name: true
-					}
-				}
-			}
-		})
-	).then((lesson) => ({
-		body: lesson,
-		status: 200
-	}));
-});
-
-export const del = isCreator((event) => {
-	const lessonId = event.params.lessonId;
-
-	return run((client) =>
-		client.lesson.delete({
-			where: {
-				id: lessonId
+		client.lesson.create({
+			data: {
+				...data,
+				chapterId
 			},
 			include: {
 				chapter: {
@@ -68,6 +45,6 @@ export const del = isCreator((event) => {
 		})
 	).then((lesson) => ({
 		body: lesson,
-		status: 200
+		status: 201
 	}));
 });

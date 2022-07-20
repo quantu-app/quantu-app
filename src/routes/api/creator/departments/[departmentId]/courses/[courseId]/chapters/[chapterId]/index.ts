@@ -5,7 +5,7 @@ export const get = isCreator((event) => {
 	const chapterId = event.params.chapterId;
 
 	return run((client) =>
-		client.chapter.findMany({
+		client.chapter.findFirst({
 			where: {
 				id: chapterId
 			},
@@ -18,24 +18,24 @@ export const get = isCreator((event) => {
 				}
 			}
 		})
-	).then((lessons) => ({
-		body: lessons,
+	).then((chapter) => ({
+		body: chapter,
 		status: 200
 	}));
 });
 
-export const post = isCreator(async (event) => {
+export const patch = isCreator(async (event) => {
 	const data = await event.request.json();
 	const chapterId = event.params.chapterId;
 
 	return run((client) =>
-		client.lesson.create({
-			data: {
-				...data,
-				chapterId
+		client.chapter.update({
+			where: {
+				id: chapterId
 			},
+			data,
 			include: {
-				chapter: {
+				course: {
 					select: {
 						url: true,
 						name: true
@@ -43,8 +43,31 @@ export const post = isCreator(async (event) => {
 				}
 			}
 		})
-	).then((lesson) => ({
-		body: lesson,
-		status: 201
+	).then((chapter) => ({
+		body: chapter,
+		status: 200
+	}));
+});
+
+export const del = isCreator((event) => {
+	const chapterId = event.params.chapterId;
+
+	return run((client) =>
+		client.chapter.delete({
+			where: {
+				id: chapterId
+			},
+			include: {
+				course: {
+					select: {
+						url: true,
+						name: true
+					}
+				}
+			}
+		})
+	).then((chapter) => ({
+		body: chapter,
+		status: 200
 	}));
 });

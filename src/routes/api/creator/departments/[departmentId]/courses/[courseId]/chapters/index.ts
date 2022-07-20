@@ -2,12 +2,12 @@ import { isCreator } from '$lib/api/auth';
 import { run } from '$lib/prisma';
 
 export const get = isCreator((event) => {
-	const chapterId = event.params.chapterId;
+	const courseId = event.params.courseId;
 
 	return run((client) =>
-		client.chapter.findFirst({
+		client.chapter.findMany({
 			where: {
-				id: chapterId
+				courseId
 			},
 			include: {
 				course: {
@@ -18,44 +18,21 @@ export const get = isCreator((event) => {
 				}
 			}
 		})
-	).then((chapter) => ({
-		body: chapter,
+	).then((chapters) => ({
+		body: chapters,
 		status: 200
 	}));
 });
 
-export const patch = isCreator(async (event) => {
+export const post = isCreator(async (event) => {
 	const data = await event.request.json();
-	const chapterId = event.params.chapterId;
+	const courseId = event.params.courseId;
 
 	return run((client) =>
-		client.chapter.update({
-			where: {
-				id: chapterId
-			},
-			data,
-			include: {
-				course: {
-					select: {
-						url: true,
-						name: true
-					}
-				}
-			}
-		})
-	).then((chapter) => ({
-		body: chapter,
-		status: 200
-	}));
-});
-
-export const del = isCreator((event) => {
-	const chapterId = event.params.chapterId;
-
-	return run((client) =>
-		client.chapter.delete({
-			where: {
-				id: chapterId
+		client.chapter.create({
+			data: {
+				...data,
+				courseId
 			},
 			include: {
 				course: {
@@ -68,6 +45,6 @@ export const del = isCreator((event) => {
 		})
 	).then((chapter) => ({
 		body: chapter,
-		status: 200
+		status: 201
 	}));
 });

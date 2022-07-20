@@ -1,7 +1,7 @@
 import { authenticated } from '$lib/api/auth';
 import { run } from '$lib/prisma';
 import type { PrismaClient, Result } from '@prisma/client';
-import { removePrivate } from 'src/routes/api/departments/_utils';
+import { removePrivate } from '../../../../../../../../_utils';
 
 export const get = authenticated(async (event) => ({
 	body: await run((client) =>

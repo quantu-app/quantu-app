@@ -13,7 +13,25 @@ export const GET = isCreator((event) => {
 				lesson: {
 					select: {
 						url: true,
-						name: true
+						name: true,
+						chapter: {
+							select: {
+								url: true,
+								name: true,
+								course: {
+									select: {
+										url: true,
+										name: true,
+										department: {
+											select: {
+												url: true,
+												name: true
+											}
+										}
+									}
+								}
+							}
+						}
 					}
 				}
 			}
@@ -38,7 +56,25 @@ export const POST = isCreator(async (event) => {
 				lesson: {
 					select: {
 						url: true,
-						name: true
+						name: true,
+						chapter: {
+							select: {
+								url: true,
+								name: true,
+								course: {
+									select: {
+										url: true,
+										name: true,
+										department: {
+											select: {
+												url: true,
+												name: true
+											}
+										}
+									}
+								}
+							}
+						}
 					}
 				}
 			}

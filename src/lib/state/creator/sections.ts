@@ -4,7 +4,15 @@ import { base } from '$app/paths';
 import type { IFetch } from '$lib/utils';
 
 export type StateSection = Section & {
-	lesson: { url: string; name: string };
+	lesson: {
+		url: string;
+		name: string;
+		chapter: {
+			url: string;
+			name: string;
+			course: { url: string; name: string; department: { url: string; name: string } };
+		};
+	};
 };
 
 const sectionsWritable = writable<Array<StateSection>>([]);

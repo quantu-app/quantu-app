@@ -4,7 +4,7 @@ import { base } from '$app/paths';
 import type { IFetch } from '$lib/utils';
 
 export type StateChapter = Chapter & {
-	course: { url: string; name: string };
+	course: { url: string; name: string; department: { url: string; name: string } };
 };
 
 const chaptersWritable = writable<Array<StateChapter>>([]);

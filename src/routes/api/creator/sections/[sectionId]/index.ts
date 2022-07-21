@@ -14,7 +14,25 @@ export const GET = isCreator((event) => {
 				lesson: {
 					select: {
 						url: true,
-						name: true
+						name: true,
+						chapter: {
+							select: {
+								url: true,
+								name: true,
+								course: {
+									select: {
+										url: true,
+										name: true,
+										department: {
+											select: {
+												url: true,
+												name: true
+											}
+										}
+									}
+								}
+							}
+						}
 					}
 				}
 			}
@@ -45,7 +63,25 @@ export async function updateSection(client: PrismaClient, sectionId: string, dat
 			lesson: {
 				select: {
 					url: true,
-					name: true
+					name: true,
+					chapter: {
+						select: {
+							url: true,
+							name: true,
+							course: {
+								select: {
+									url: true,
+									name: true,
+									department: {
+										select: {
+											url: true,
+											name: true
+										}
+									}
+								}
+							}
+						}
+					}
 				}
 			}
 		}
@@ -64,7 +100,25 @@ export const DELETE = isCreator((event) => {
 				lesson: {
 					select: {
 						url: true,
-						name: true
+						name: true,
+						chapter: {
+							select: {
+								url: true,
+								name: true,
+								course: {
+									select: {
+										url: true,
+										name: true,
+										department: {
+											select: {
+												url: true,
+												name: true
+											}
+										}
+									}
+								}
+							}
+						}
 					}
 				}
 			}

@@ -26,7 +26,7 @@ export const coursesByDepartmentId = derived(coursesWritable, (courses) =>
 	}, {} as { [departmentId: string]: Array<StateCourse> })
 );
 
-export async function showCourseById(departmentId: string, id: string, fetchFn: IFetch = fetch) {
+export async function showCourseById(id: string, fetchFn: IFetch = fetch) {
 	const res = await fetchFn(`${base}/api/creator/courses/${id}`, {
 		headers: {
 			'Content-Type': 'application/json'

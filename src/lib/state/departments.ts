@@ -20,7 +20,7 @@ export const departmentsByUrl = derived(departmentsWritable, (departments) =>
 	}, {} as { [url: string]: Department })
 );
 
-export async function showDepartmentsByUrl(url: string, fetchFn: IFetch = fetch) {
+export async function showDepartmentByUrl(url: string, fetchFn: IFetch = fetch) {
 	const res = await fetchFn(`${base}/api/departments/${url}`, {
 		headers: {
 			'Content-Type': 'application/json'
@@ -29,11 +29,9 @@ export async function showDepartmentsByUrl(url: string, fetchFn: IFetch = fetch)
 	if (!res.ok) {
 		throw await res.json();
 	}
-	const departments: Department[] = (await res.json()).map(departmentFromJSON);
-	departmentsWritable.update((state) =>
-		departments.reduce((state, department) => addOrUpdate(state, department), state.slice())
-	);
-	return departments;
+	const department: Department = departmentFromJSON(await res.json());
+	departmentsWritable.update((state) => addOrUpdate(state.slice(), department));
+	return department;
 }
 
 export async function showDepartments(fetchFn: IFetch = fetch) {

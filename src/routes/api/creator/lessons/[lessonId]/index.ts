@@ -13,7 +13,19 @@ export const GET = isCreator((event) => {
 				chapter: {
 					select: {
 						url: true,
-						name: true
+						name: true,
+						course: {
+							select: {
+								url: true,
+								name: true,
+								department: {
+									select: {
+										url: true,
+										name: true
+									}
+								}
+							}
+						}
 					}
 				}
 			}
@@ -38,7 +50,19 @@ export const PATCH = isCreator(async (event) => {
 				chapter: {
 					select: {
 						url: true,
-						name: true
+						name: true,
+						course: {
+							select: {
+								url: true,
+								name: true,
+								department: {
+									select: {
+										url: true,
+										name: true
+									}
+								}
+							}
+						}
 					}
 				}
 			}
@@ -61,7 +85,19 @@ export const DELETE = isCreator((event) => {
 				chapter: {
 					select: {
 						url: true,
-						name: true
+						name: true,
+						course: {
+							select: {
+								url: true,
+								name: true,
+								department: {
+									select: {
+										url: true,
+										name: true
+									}
+								}
+							}
+						}
 					}
 				}
 			}

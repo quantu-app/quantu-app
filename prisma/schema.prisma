@@ -360,6 +360,7 @@ model Chapter {
   logoId   String? @db.ObjectId
   course   Course  @relation(fields: [courseId], references: [id])
   courseId String  @db.ObjectId
+  index    Int     @default(0)
 
   name        String
   url         String
@@ -383,6 +384,7 @@ model Lesson {
   logoId    String? @db.ObjectId
   chapter   Chapter @relation(fields: [chapterId], references: [id])
   chapterId String  @db.ObjectId
+  index     Int     @default(0)
 
   name        String
   url         String
@@ -403,16 +405,16 @@ model Section {
 
   lesson   Lesson @relation(fields: [lessonId], references: [id])
   lessonId String @db.ObjectId
-  index    Int
+  index    Int    @default(0)
 
   description Json
   type        QuestionType @default(MULTIPLE_CHOICE)
   prompt      Json
 
-  results Result[] @relation(name: "SectionResult")
-
   visible    Boolean   @default(false)
   releasedAt DateTime?
+
+  results Result[] @relation(name: "SectionResult")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

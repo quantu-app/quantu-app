@@ -26,6 +26,7 @@
 	import { departmentsById, showDepartmentById } from '$lib/state/creator/departments';
 	import { base } from '$app/paths';
 	import { showCourses, coursesByDepartmentId } from '$lib/state/creator/courses';
+	import Courses from '$lib/components/creator/courses/Courses.svelte';
 
 	export let departmentId: string;
 
@@ -56,4 +57,6 @@
 			href: `${base}/creator/departments/${departmentId}/courses`
 		}
 	]}
-/>
+>
+	<Courses {department} {courses} />
+</StudioLayout>

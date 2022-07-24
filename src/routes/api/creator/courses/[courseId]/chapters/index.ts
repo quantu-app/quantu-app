@@ -10,6 +10,11 @@ export const GET = isCreator((event) => {
 				courseId
 			},
 			include: {
+				logo: {
+					select: {
+						name: true
+					}
+				},
 				course: {
 					select: {
 						url: true,
@@ -41,6 +46,11 @@ export const POST = isCreator(async (event) => {
 				courseId
 			},
 			include: {
+				logo: {
+					select: {
+						name: true
+					}
+				},
 				course: {
 					select: {
 						url: true,

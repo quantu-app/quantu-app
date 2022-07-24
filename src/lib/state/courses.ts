@@ -23,6 +23,19 @@ export const coursesByUrl = derived(coursesWritable, (courses) =>
 		return byUrl;
 	}, {} as { [departmentUrl: string]: { [url: string]: StateCourse } })
 );
+export const coursesByDepartment = derived(coursesWritable, (courses) =>
+	courses.reduce((state, course) => {
+		const byDepartmentUrl =
+			state[course.department.url] ||
+			(state[course.department.url] = {
+				url: course.department.url,
+				name: course.department.name,
+				courses: []
+			});
+		byDepartmentUrl.courses.push(course);
+		return state;
+	}, {} as { [departmentUrl: string]: { url: string; name: string; courses: StateCourse[] } })
+);
 
 export async function showCourseByUrl(departmentUrl: string, url: string, fetchFn: IFetch = fetch) {
 	const cachedCourse = (get(coursesByUrl)[departmentUrl] || {})[url];

@@ -55,6 +55,9 @@
 			<a class="link-dark me-2" href={`${base}/creator/departments/${department.id}/assets`}
 				>Assets <i class="bi bi-chevron-right" /></a
 			>
+			<a class="link-dark me-2" href={`${base}/creator/departments/${department.id}/courses`}
+				>Courses <i class="bi bi-chevron-right" /></a
+			>
 			<CreateChallenge departmentId={department.id} />
 		</div>
 	</div>

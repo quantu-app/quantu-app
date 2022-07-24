@@ -10,6 +10,11 @@ export const GET = isCreator((event) => {
 				id: courseId
 			},
 			include: {
+				logo: {
+					select: {
+						name: true
+					}
+				},
 				department: {
 					select: {
 						url: true,
@@ -35,6 +40,11 @@ export const PATCH = isCreator(async (event) => {
 			},
 			data,
 			include: {
+				logo: {
+					select: {
+						name: true
+					}
+				},
 				department: {
 					select: {
 						url: true,
@@ -58,6 +68,11 @@ export const DELETE = isCreator((event) => {
 				id: courseId
 			},
 			include: {
+				logo: {
+					select: {
+						name: true
+					}
+				},
 				department: {
 					select: {
 						url: true,

@@ -4,6 +4,9 @@ import { base } from '$app/paths';
 import type { IFetch } from '$lib/utils';
 
 export type StateLesson = Lesson & {
+	logo?: {
+		name: string;
+	};
 	chapter: {
 		url: string;
 		name: string;

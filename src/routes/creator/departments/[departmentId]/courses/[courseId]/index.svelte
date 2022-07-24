@@ -9,7 +9,7 @@
 		}
 		const departmentId = input.params.departmentId;
 		const courseId = input.params.courseId;
-		const department = await showDepartmentById(departmentId, input.fetch);
+		await showDepartmentById(departmentId, input.fetch);
 		await showCourseById(courseId, input.fetch);
 
 		return {
@@ -30,9 +30,10 @@
 	import { showCourseById, coursesById } from '$lib/state/creator/courses';
 
 	export let departmentId: string;
+	export let courseId: string;
 
 	$: department = $departmentsById[departmentId];
-	$: course = $coursesById[department.id] || [];
+	$: course = $coursesById[courseId];
 </script>
 
 <svelte:head>

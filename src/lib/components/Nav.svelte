@@ -22,6 +22,9 @@
 				<li class="nav-item">
 					<a class="nav-link linkExtra" href={`${base}/challenges`}>Challenges</a>
 				</li>
+				<li class="nav-item">
+					<a class="nav-link linkExtra" href={`${base}/courses`}>Courses</a>
+				</li>
 			</ul>
 			<div class="navbar-nav ms-lg-auto">
 				<UserDropdown />

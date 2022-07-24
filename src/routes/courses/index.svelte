@@ -14,6 +14,7 @@
 </script>
 
 <script lang="ts">
+	import CoursesMain from '$lib/components/courses/CoursesMain.svelte';
 	import UserLayout from '$lib/components/layouts/UserLayout.svelte';
 	import SEO from '$lib/components/SEO/index.svelte';
 	import { isValidStatus } from '$lib/guard/isValidStatus';
@@ -27,6 +28,8 @@
 
 	$: topCourses = $courses.sort(sortByCreatedAt).slice(0, 4);
 	$: allCoursesByDepartment = Object.values($coursesByDepartment);
+
+	$: console.log(topCourses);
 </script>
 
 <SEO
@@ -36,4 +39,6 @@
 	robotsDirectives={['all']}
 />
 
-<UserLayout />
+<UserLayout>
+	<CoursesMain {topCourses} coursesByDepartments={allCoursesByDepartment} courses={[]} />
+</UserLayout>

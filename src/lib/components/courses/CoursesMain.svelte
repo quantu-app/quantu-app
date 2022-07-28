@@ -2,9 +2,8 @@
 
 <script lang="ts">
 	import CourseList from '$lib/components/courses/CourseList.svelte';
-	import { type StateCourse } from '$lib/state/courses';
+	import type { StateCourse } from '$lib/state/courses';
 
-	export let courses: StateCourse[];
 	export let topCourses: StateCourse[];
 	export let coursesByDepartments: {
 		url: string;

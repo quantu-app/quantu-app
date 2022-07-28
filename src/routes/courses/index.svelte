@@ -29,10 +29,29 @@
 		coursesByDepartment
 	} from '$lib/state/courses';
 
-	$: topCourses = $courses.sort(sortByDate).slice(0, 4);
-	$: allCoursesByDepartment = Object.values($coursesByDepartment);
-
-	$: console.log(topCourses);
+	//$: topCourses = $courses.sort(sortByDate).slice(0, 4);
+	// $: allCoursesByDepartment = Object.values($coursesByDepartment);
+	let calculusCourse = {
+		department: {
+			url: 'mathematics',
+			name: 'Mathematics'
+		},
+		id: '622f35c95cd53de1c82b4210',
+		visible: true,
+		name: 'Calculus 1: Differential Calculus',
+		url: 'calculus-1-differential-calculus',
+		releasedAt: new Date(),
+		createdAt: new Date(),
+		updatedAt: new Date()
+	};
+	let topCourses = [calculusCourse];
+	let allCoursesByDepartment = [
+		{
+			url: 'mathematics',
+			name: 'Mathematics',
+			courses: [calculusCourse]
+		}
+	];
 </script>
 
 <SEO
@@ -43,5 +62,5 @@
 />
 
 <UserLayout>
-	<CoursesMain {topCourses} coursesByDepartments={allCoursesByDepartment} courses={[]} />
+	<CoursesMain {topCourses} coursesByDepartments={allCoursesByDepartment} />
 </UserLayout>

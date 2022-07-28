@@ -26,14 +26,14 @@
 
 <div class="card">
 	<img
-		src={challenge.logoId ? `${base}/api/assets/${challenge.logoId}` : image}
-		alt={challenge.name}
+		src={course.logoId ? `${base}/api/assets/${course.logoId}` : image}
+		alt={course.name}
 		class="card-img-top"
 	/>
 	<div class="card-body">
-		<h5 class="card-title mt-4 mt-lg-0 mb-0">{challenge.name}</h5>
+		<h5 class="card-title mt-4 mt-lg-0 mb-0">{course.name}</h5>
 		<div class="text-end">
-			{#if challenge.result}
+			<!-- {#if course.inProgress}
 				<a
 					role="button"
 					aria-label="review"
@@ -47,24 +47,21 @@
 					class="stretched-link"
 					href={`${base}/challenges/${challenge.department.url}/${challenge.url}`}
 				/>
-			{/if}
+			{/if} -->
 		</div>
 	</div>
 	<div class="card-footer">
 		<div class="text-muted card-footer-info">
-			<span class="text-uppercase">{challenge.department.name}</span><br />
-			<span
-				>{challenge.answers.length === 1 ? `1 Solver` : `${challenge.answers.length} Solvers`}
-			</span>
+			<span class="text-uppercase">{course.department.name}</span><br />
 			<span class="releasedAt">
-				<span class="dot-block" />{formatDistanceToNowStrict(challenge.releasedAt, {
+				<span class="dot-block" />{formatDistanceToNowStrict(course.releasedAt, {
 					addSuffix: false
 				})}
-				{#if !isSameDay(challenge.releasedAt, TODAY) && isBefore(challenge.releasedAt, TODAY)}
+				{#if !isSameDay(course.releasedAt, TODAY) && isBefore(course.releasedAt, TODAY)}
 					ago
 				{/if}
 			</span>
-			{#if challenge.result}
+			{#if course.finished}
 				<i class="bi fs-4 bi-check-circle-fill text-success solved-check" />
 			{/if}
 		</div>

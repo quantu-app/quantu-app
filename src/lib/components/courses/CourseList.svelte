@@ -1,7 +1,7 @@
 <svelte:options immutable />
 
 <script lang="ts">
-	import CourseListItem from '$lib/components/challenges/ChallengeListItem.svelte';
+	import CourseListItem from '$lib/components/courses/CourseListItem.svelte';
 	import type { StateCourse } from '$lib/state/courses';
 
 	export let courses: StateCourse[];

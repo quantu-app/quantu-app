@@ -28,8 +28,6 @@
 
 	$: topCourses = $courses.sort(sortByCreatedAt).slice(0, 4);
 	$: allCoursesByDepartment = Object.values($coursesByDepartment);
-
-	$: console.log(topCourses);
 </script>
 
 <SEO
@@ -40,5 +38,5 @@
 />
 
 <UserLayout>
-	<CoursesMain {topCourses} coursesByDepartments={allCoursesByDepartment} courses={[]} />
+	<CoursesMain {topCourses} coursesByDepartments={allCoursesByDepartment} />
 </UserLayout>

@@ -165,11 +165,11 @@
 						>
 					</li>
 					<li>
-						<strong>Web Beacons.</strong> Certain sections of our Service and our emails may contain
+						<strong>Web Beacons.</strong> Certain lessonBlocks of our Service and our emails may contain
 						small electronic files known as web beacons (also referred to as clear gifs, pixel tags,
 						and single-pixel gifs) that permit the Company, for example, to count users who have visited
 						those pages or opened an email and for other related website statistics (for example, recording
-						the popularity of a certain section and verifying system and server integrity).
+						the popularity of a certain lessonBlock and verifying system and server integrity).
 					</li>
 				</ul>
 				<p>
@@ -217,8 +217,8 @@
 				</ul>
 				<p>
 					For more information about the cookies we use and your choices regarding cookies, please
-					visit our <a href="/info/cookie-policy">Cookies Policy</a> or the Cookies section of our Privacy
-					Policy.
+					visit our <a href="/info/cookie-policy">Cookies Policy</a> or the Cookies lessonBlock of our
+					Privacy Policy.
 				</p>
 				<br />
 				<br />

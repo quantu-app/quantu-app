@@ -11,6 +11,7 @@
 		const courseId = input.params.courseId;
 		await showDepartmentById(departmentId, input.fetch);
 		await showCourseById(courseId, input.fetch);
+		await showChapters(courseId, input.fetch);
 
 		return {
 			props: {
@@ -28,12 +29,15 @@
 	import { departmentsById, showDepartmentById } from '$lib/state/creator/departments';
 	import { base } from '$app/paths';
 	import { showCourseById, coursesById } from '$lib/state/creator/courses';
+	import Course from '$lib/components/creator/courses/Course.svelte';
+	import { showChapters, chaptersByCourseId } from '$lib/state/creator/chapters';
 
 	export let departmentId: string;
 	export let courseId: string;
 
 	$: department = $departmentsById[departmentId];
 	$: course = $coursesById[courseId];
+	$: chapters = $chaptersByCourseId[courseId] || [];
 </script>
 
 <svelte:head>
@@ -63,4 +67,6 @@
 			href: `${base}/creator/departments/${departmentId}/courses/${course.id}`
 		}
 	]}
-/>
+>
+	<Course {department} {course} {chapters} />
+</StudioLayout>

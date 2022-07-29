@@ -4,8 +4,11 @@
 		if (!isValidStatus(response)) {
 			return response;
 		}
-		const changes = await showChanges('DEPARTMENT', undefined, false, true, undefined, input.fetch);
-		await showDepartments(
+
+		const departmentId = input.params.departmentId;
+		const changes = await showChanges('CHANGE', undefined, false, true, undefined, input.fetch);
+		await showCourses(
+			departmentId,
 			changes
 				.map((change) => change.referenceId)
 				.filter((referenceId) => !!referenceId) as string[],
@@ -18,16 +21,16 @@
 <script lang="ts">
 	import StudioLayout from '$lib/components/layouts/StudioLayout.svelte';
 	import { creatorGuard } from '$lib/guard/creatorGuard';
-	import DepartmentChanges from '$lib/components/creator/departments/DepartmentChanges.svelte';
+	import CourseChanges from '$lib/components/creator/courses/CourseChanges.svelte';
 	import { isValidStatus } from '$lib/guard/isValidStatus';
 	import type { Load } from '@sveltejs/kit';
 	import { changes, showChanges } from '$lib/state/creator/changes';
 	import { base } from '$app/paths';
-	import { showDepartments } from '$lib/state/creator/departments';
+	import { showCourses } from '$lib/state/creator/courses';
 </script>
 
 <svelte:head>
-	<title>Creator Studio - Department Changes</title>
+	<title>Creator Studio - Course Changes</title>
 </svelte:head>
 
 <StudioLayout
@@ -37,14 +40,14 @@
 			href: `${base}/creator`
 		},
 		{
-			title: 'Departments',
+			title: 'Courses',
 			href: `${base}/creator`
 		},
 		{
 			title: 'Changes',
-			href: `${base}/creator/departments/changes`
+			href: `${base}/creator/courses/changes`
 		}
 	]}
 >
-	<DepartmentChanges departmentChanges={$changes} />
+	<CourseChanges courseChanges={$changes} />
 </StudioLayout>

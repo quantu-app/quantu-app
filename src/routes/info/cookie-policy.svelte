@@ -138,7 +138,7 @@
 				</p>
 				<p>
 					To explore what Cookie settings are available to you, look in the "preferences" or
-					"options" section of your browser's menu.
+					"options" lessonBlock of your browser's menu.
 				</p>
 				<p>
 					If you have any queries regarding this Cookie Policy please contact us at

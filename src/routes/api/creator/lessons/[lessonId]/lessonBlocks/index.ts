@@ -2,12 +2,12 @@ import { isCreator } from '$lib/api/auth';
 import { run } from '$lib/prisma';
 
 export const GET = isCreator((event) => {
-	const sectionId = event.params.sectionId;
+	const lessonBlockId = event.params.lessonBlockId;
 
 	return run((client) =>
-		client.section.findMany({
+		client.lessonBlock.findMany({
 			where: {
-				id: sectionId
+				id: lessonBlockId
 			},
 			include: {
 				lesson: {
@@ -36,21 +36,21 @@ export const GET = isCreator((event) => {
 				}
 			}
 		})
-	).then((sections) => ({
-		body: sections,
+	).then((lessonBlocks) => ({
+		body: lessonBlocks,
 		status: 200
 	}));
 });
 
 export const POST = isCreator(async (event) => {
 	const data = await event.request.json();
-	const sectionId = event.params.sectionId;
+	const lessonBlockId = event.params.lessonBlockId;
 
 	return run((client) =>
-		client.section.create({
+		client.lessonBlock.create({
 			data: {
 				...data,
-				id: sectionId
+				id: lessonBlockId
 			},
 			include: {
 				lesson: {
@@ -79,8 +79,8 @@ export const POST = isCreator(async (event) => {
 				}
 			}
 		})
-	).then((section) => ({
-		body: section,
+	).then((lessonBlock) => ({
+		body: lessonBlock,
 		status: 201
 	}));
 });

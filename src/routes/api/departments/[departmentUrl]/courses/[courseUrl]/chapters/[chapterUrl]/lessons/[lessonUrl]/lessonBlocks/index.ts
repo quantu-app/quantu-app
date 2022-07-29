@@ -5,7 +5,7 @@ import { removePrivate } from '../../../../../../../../_utils';
 
 export const GET = authenticated(async (event) => ({
 	body: await run((client) =>
-		getSections(
+		getLessonBlocks(
 			client,
 			event.locals.token.userId,
 			event.params.departmentUrl,
@@ -17,7 +17,7 @@ export const GET = authenticated(async (event) => ({
 	status: 200
 }));
 
-export async function getSections(
+export async function getLessonBlocks(
 	client: PrismaClient,
 	userId: string,
 	departmentUrl: string,
@@ -25,7 +25,7 @@ export async function getSections(
 	chapterUrl: string,
 	lessonUrl: string
 ) {
-	const sections = await client.section.findMany({
+	const lessonBlocks = await client.lessonBlock.findMany({
 		where: {
 			lesson: {
 				url: lessonUrl,
@@ -71,44 +71,45 @@ export async function getSections(
 		}
 	});
 
-	const sectionIds = sections.map((section) => section.id);
+	const lessonBlockIds = lessonBlocks.map((lessonBlock) => lessonBlock.id);
 	const [results, answers] = await Promise.all([
 		client.result.findMany({
 			where: {
 				userId,
-				sectionId: {
-					in: sectionIds
+				lessonBlockId: {
+					in: lessonBlockIds
 				}
 			}
 		}),
 		client.result.findMany({
 			where: {
-				sectionId: {
-					in: sectionIds
+				lessonBlockId: {
+					in: lessonBlockIds
 				}
 			},
 			select: {
 				userId: true,
-				sectionId: true,
+				lessonBlockId: true,
 				value: true
 			}
 		})
 	]);
 
 	const resultMap = results.reduce((map, result) => {
-		map[result.sectionId as string] = result;
+		map[result.lessonBlockId as string] = result;
 		return map;
 	}, {} as Record<string, Result>);
 
 	const answersMap = answers.reduce((map, answer) => {
-		const values = map[answer.sectionId as string] || (map[answer.sectionId as string] = []);
+		const values =
+			map[answer.lessonBlockId as string] || (map[answer.lessonBlockId as string] = []);
 		values.push({ value: answer.value, userId: answer.userId });
 		return map;
 	}, {} as Record<string, { value: number; userId: string }[]>);
 
-	return sections.map((section) => {
-		(section as any).result = resultMap[section.id];
-		(section as any).answers = answersMap[section.id] || [];
-		return removePrivate(section);
+	return lessonBlocks.map((lessonBlock) => {
+		(lessonBlock as any).result = resultMap[lessonBlock.id];
+		(lessonBlock as any).answers = answersMap[lessonBlock.id] || [];
+		return removePrivate(lessonBlock);
 	});
 }

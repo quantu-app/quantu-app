@@ -21,7 +21,7 @@
 			lessonUrl,
 			input.fetch
 		);
-		await showSections(departmentUrl, courseUrl, chapterUrl, lessonUrl, input.fetch);
+		await showLessonBlocks(departmentUrl, courseUrl, chapterUrl, lessonUrl, input.fetch);
 
 		return {
 			props: {
@@ -41,7 +41,7 @@
 	import { coursesByUrl, showCourseByUrl } from '$lib/state/courses';
 	import { chaptersByUrl, showChapterByUrl } from '$lib/state/chapters';
 	import { lessonsByUrl, showLessonByUrl } from '$lib/state/lessons';
-	import { sectionsByUrl, showSections } from '$lib/state/sections';
+	import { lessonBlocksByUrl, showLessonBlocks } from '$lib/state/lesson-blocks';
 	import PublicLayout from '$lib/components/layouts/PublicLayout.svelte';
 
 	export let departmentUrl: string;
@@ -55,8 +55,9 @@
 	$: lesson = ((($lessonsByUrl[departmentUrl] || {})[courseUrl] || {})[chapterUrl] || {})[
 		lessonUrl
 	];
-	$: sections =
-		((($sectionsByUrl[departmentUrl] || {})[courseUrl] || {})[chapterUrl] || {})[lessonUrl] || [];
+	$: lessonBlocks =
+		((($lessonBlocksByUrl[departmentUrl] || {})[courseUrl] || {})[chapterUrl] || {})[lessonUrl] ||
+		[];
 </script>
 
 <svelte:head>

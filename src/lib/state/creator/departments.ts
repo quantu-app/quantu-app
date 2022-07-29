@@ -35,11 +35,20 @@ export async function showDepartmentById(id: string, fetchFn: IFetch = fetch) {
 }
 
 export async function showDepartments(ids: string[] = [], fetchFn: IFetch = fetch) {
-	const res = await fetchFn(`${base}/api/creator/departments${createQueryParams({ ids })}`, {
-		headers: {
-			'Content-Type': 'application/json'
-		}
-	});
+	const res =
+		ids && ids.length
+			? await fetchFn(`${base}/api/creator/departments${createQueryParams({ ids })}`, {
+					method: 'PUT',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify(ids)
+			  })
+			: await fetchFn(`${base}/api/creator/departments${createQueryParams({ ids })}`, {
+					headers: {
+						'Content-Type': 'application/json'
+					}
+			  });
 	if (!res.ok) {
 		throw await res.json();
 	}

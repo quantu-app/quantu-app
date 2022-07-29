@@ -1,7 +1,7 @@
 import { isMultipleChoicePrivate, type Prompt, type PromptPrivate } from '$lib/types';
-import type { Challenge, QuestionType, Section } from '@prisma/client';
+import type { Challenge, QuestionType, LessonBlock } from '@prisma/client';
 
-export function removePrivate<T extends Challenge | Section>(question: T | null): T | null {
+export function removePrivate<T extends Challenge | LessonBlock>(question: T | null): T | null {
 	if (question) {
 		question.prompt = removePrivatePrompt(question.type, question.prompt as any) as any;
 	}

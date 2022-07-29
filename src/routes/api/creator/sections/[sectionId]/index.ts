@@ -3,12 +3,12 @@ import { run } from '$lib/prisma';
 import type { PrismaClient } from '@prisma/client';
 
 export const GET = isCreator((event) => {
-	const sectionId = event.params.sectionId;
+	const lessonBlockId = event.params.lessonBlockId;
 
 	return run((client) =>
-		client.section.findFirst({
+		client.lessonBlock.findFirst({
 			where: {
-				id: sectionId
+				id: lessonBlockId
 			},
 			include: {
 				lesson: {
@@ -37,26 +37,26 @@ export const GET = isCreator((event) => {
 				}
 			}
 		})
-	).then((section) => ({
-		body: section,
+	).then((lessonBlock) => ({
+		body: lessonBlock,
 		status: 200
 	}));
 });
 
 export const PATCH = isCreator(async (event) =>
 	run(async (client) =>
-		updateSection(client, event.params.sectionId, await event.request.json())
-	).then((section) => ({
-		body: section,
+		updateLessonBlock(client, event.params.lessonBlockId, await event.request.json())
+	).then((lessonBlock) => ({
+		body: lessonBlock,
 		status: 200
 	}))
 );
 
-export async function updateSection(client: PrismaClient, sectionId: string, data: any) {
+export async function updateLessonBlock(client: PrismaClient, lessonBlockId: string, data: any) {
 	delete data.index;
-	return client.section.update({
+	return client.lessonBlock.update({
 		where: {
-			id: sectionId
+			id: lessonBlockId
 		},
 		data,
 		include: {
@@ -89,12 +89,12 @@ export async function updateSection(client: PrismaClient, sectionId: string, dat
 }
 
 export const DELETE = isCreator((event) => {
-	const sectionId = event.params.sectionId;
+	const lessonBlockId = event.params.lessonBlockId;
 
 	return run((client) =>
-		client.section.delete({
+		client.lessonBlock.delete({
 			where: {
-				id: sectionId
+				id: lessonBlockId
 			},
 			include: {
 				lesson: {
@@ -123,8 +123,8 @@ export const DELETE = isCreator((event) => {
 				}
 			}
 		})
-	).then((section) => ({
-		body: section,
+	).then((lessonBlock) => ({
+		body: lessonBlock,
 		status: 200
 	}));
 });

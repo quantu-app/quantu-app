@@ -15,7 +15,7 @@
 		const course = await showCourseById(courseId, input.fetch);
 		const chapter = await showChapterById(chapterId, input.fetch);
 		const lesson = await showLessonById(lessonId, input.fetch);
-		await showSections(lessonId, input.fetch);
+		await showLessonBlocks(lessonId, input.fetch);
 
 		return {
 			props: {
@@ -37,7 +37,7 @@
 	import { coursesById, showCourseById } from '$lib/state/creator/courses';
 	import { chaptersById, showChapterById } from '$lib/state/creator/chapters';
 	import { lessonsById, showLessonById } from '$lib/state/creator/lessons';
-	import { sectionsByLessonId, showSections } from '$lib/state/creator/sections';
+	import { lessonBlocksByLessonId, showLessonBlocks } from '$lib/state/creator/lesson-blocks';
 
 	export let departmentId: string;
 	export let courseId: string;
@@ -48,7 +48,7 @@
 	$: course = $coursesById[courseId];
 	$: chapter = $chaptersById[chapterId];
 	$: lesson = $lessonsById[lessonId];
-	$: sections = $sectionsByLessonId[lessonId] || [];
+	$: lessonBlocks = $lessonBlocksByLessonId[lessonId] || [];
 </script>
 
 <svelte:head>

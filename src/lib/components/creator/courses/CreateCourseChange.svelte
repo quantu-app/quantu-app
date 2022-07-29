@@ -4,11 +4,11 @@
 	import { goto } from '$app/navigation';
 	import { base } from '$app/paths';
 	import Modal from '$lib/components/ui/Modal.svelte';
-	import { createCourse } from '$lib/state/creator/courses';
+	import { createChange } from '$lib/state/creator/changes';
 	import type { StateDepartment } from '$lib/state/creator/departments';
 	import { addNotification, NotificationType } from '$lib/state/notifications';
 	import type { Course } from '@prisma/client';
-	import CourseEditor from './CourseEditor.svelte';
+	import CourseChangeEditor from './CourseChangeEditor.svelte';
 
 	export let department: StateDepartment;
 
@@ -18,16 +18,19 @@
 		open = true;
 	}
 	let name: string;
-	let course: Partial<Course> = {};
+	let courseChange: Partial<Course> = {};
 
 	let creatingCourseChange = false;
 	async function onCreateCourse() {
 		creatingCourseChange = true;
 		try {
-			const { id } = await createCourse(department.id, course);
+			const { id } = await createChange('COURSE', null, name, {
+				...courseChange,
+				departmentId: department.id
+			});
 			open = false;
-			await goto(`${base}/creator/departments/${department.id}/courses/changes/${id}`);
-			course = {};
+			await goto(`${base}/creator/courses/changes/${id}`);
+			courseChange = {};
 		} catch (e) {
 			console.error(e);
 			addNotification({
@@ -61,7 +64,7 @@
 		</div>
 	</div>
 	{#key editorKey}
-		<CourseEditor bind:course />
+		<CourseChangeEditor bind:courseChange />
 	{/key}
 	<button
 		slot="footer"

@@ -16,7 +16,7 @@
 		publishedTime: Date;
 		modifiedTime?: Date;
 		expirationTime?: Date;
-		section?: string;
+		lessonBlock?: string;
 		authors: ProfileObject[];
 		tags: string[];
 	};
@@ -64,8 +64,8 @@
 				content={format(article.expirationTime, "yyyy-MM-dd'T'HH:mm:ss'Z'")}
 			/>
 		{/if}
-		{#if article.section}
-			<meta property="article:section" content={article.section} />
+		{#if article.lessonBlock}
+			<meta property="article:lessonBlock" content={article.lessonBlock} />
 		{/if}
 		{#if article.authors && article.authors.length}
 			{#each article.authors as author}

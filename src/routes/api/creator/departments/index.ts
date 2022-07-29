@@ -4,12 +4,19 @@ import type { PrismaClient } from '@prisma/client';
 
 export const GET = isCreator(async (event) => {
 	return {
-		body: await run((client) => getDepartments(client, event.url.searchParams.getAll('ids'))),
+		body: await run((client) => getDepartments(client)),
 		status: 200
 	};
 });
 
-export function getDepartments(client: PrismaClient, ids: string[]) {
+export const PUT = isCreator(async (event) => {
+	return {
+		body: await run(async (client) => getDepartments(client, await event.request.json())),
+		status: 200
+	};
+});
+
+export function getDepartments(client: PrismaClient, ids: string[] = []) {
 	const where: any = {};
 	if (ids.length) {
 		where.id = {

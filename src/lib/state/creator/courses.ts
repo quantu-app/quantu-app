@@ -56,12 +56,25 @@ export async function validCourseUrl(departmentUrl: string, url: string) {
 	}
 }
 
-export async function showCourses(departmentId: string, fetchFn: IFetch = fetch) {
-	const res = await fetchFn(`${base}/api/creator/departments/${departmentId}/courses`, {
-		headers: {
-			'Content-Type': 'application/json'
-		}
-	});
+export async function showCourses(
+	departmentId: string,
+	ids: string[] = [],
+	fetchFn: IFetch = fetch
+) {
+	const res =
+		ids && ids.length
+			? await fetchFn(`${base}/api/creator/departments/${departmentId}/courses`, {
+					method: 'PUT',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify(ids)
+			  })
+			: await fetchFn(`${base}/api/creator/departments/${departmentId}/courses`, {
+					headers: {
+						'Content-Type': 'application/json'
+					}
+			  });
 	if (!res.ok) {
 		throw await res.json();
 	}

@@ -9,7 +9,7 @@
 		}
 		const departmentId = input.params.departmentId;
 		const department = await showDepartmentById(departmentId, input.fetch);
-		await showCourses(department.id, input.fetch);
+		await showCourses(department.id, [], input.fetch);
 
 		return {
 			props: {

@@ -4,7 +4,7 @@
 	import type { LoadInput } from '@sveltejs/kit/types/internal';
 
 	export async function load(input: LoadInput) {
-		const response = authGuard(input);
+		const response = await authGuard(input);
 
 		if (!isValidStatus(response)) {
 			return response;

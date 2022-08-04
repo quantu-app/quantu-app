@@ -41,7 +41,7 @@
 	import { coursesByUrl, showCourseByUrl } from '$lib/state/courses';
 	import { chaptersByUrl, showChapterByUrl } from '$lib/state/chapters';
 	import { lessonsByUrl, showLessonByUrl } from '$lib/state/lessons';
-	import { lessonBlocksByUrl, showLessonBlocks } from '$lib/state/lesson-blocks';
+	import { lessonBlocksByUrl, showLessonBlocks } from '$lib/state/lessonBlocks';
 	import PublicLayout from '$lib/components/layouts/PublicLayout.svelte';
 
 	export let departmentUrl: string;

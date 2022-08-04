@@ -3,7 +3,7 @@
 	import type { Load } from '@sveltejs/kit';
 
 	export const load: Load = async (input) => {
-		const response = authGuard(input);
+		const response = await authGuard(input);
 		if (!isValidStatus(response)) {
 			return response;
 		}

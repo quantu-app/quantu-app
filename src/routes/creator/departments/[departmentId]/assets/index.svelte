@@ -2,7 +2,7 @@
 	import type { Load } from '@sveltejs/kit';
 
 	export const load: Load = async (input) => {
-		const response = creatorGuard(input);
+		const response = await creatorGuard(input);
 
 		if (!isValidStatus(response)) {
 			return response;

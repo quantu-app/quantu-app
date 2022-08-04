@@ -19,7 +19,7 @@
 	import Search from '$lib/components/Search.svelte';
 	import type { StateChallenge } from '$lib/state/creator/challenges';
 
-	export let departmentId: string = undefined;
+	export let departmentId: string | undefined = undefined;
 	export let challenges: Array<StateChallenge>;
 
 	$: filter = (challenge: StateChallenge) =>

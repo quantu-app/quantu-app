@@ -4,33 +4,28 @@
 	import { goto } from '$app/navigation';
 	import { base } from '$app/paths';
 	import Modal from '$lib/components/ui/Modal.svelte';
-	import { createChange } from '$lib/state/creator/changes';
+	import { createCourse } from '$lib/state/creator/courses';
 	import type { StateDepartment } from '$lib/state/creator/departments';
 	import { addNotification, NotificationType } from '$lib/state/notifications';
 	import type { Course } from '@prisma/client';
-	import CourseChangeEditor from './CourseChangeEditor.svelte';
+	import CourseEditor from './CourseEditor.svelte';
 
 	export let department: StateDepartment;
 
-	let editorKey = Math.random();
 	let open = false;
 	function onOpen() {
 		open = true;
 	}
-	let name: string;
-	let courseChange: Partial<Course> = {};
+	let course: Partial<Course> = {};
 
 	let creatingCourseChange = false;
 	async function onCreateCourse() {
 		creatingCourseChange = true;
 		try {
-			const { id } = await createChange('COURSE', null, name, {
-				...courseChange,
-				departmentId: department.id
-			});
+			const { id } = await createCourse(department.id, course);
 			open = false;
-			await goto(`${base}/creator/courses/changes/${id}`);
-			courseChange = {};
+			await goto(`${base}/creator/departments/${department.id}/courses/${id}`);
+			course = {};
 		} catch (e) {
 			console.error(e);
 			addNotification({
@@ -40,7 +35,6 @@
 			});
 		} finally {
 			creatingCourseChange = false;
-			editorKey = Math.random();
 		}
 	}
 </script>
@@ -51,21 +45,7 @@
 
 <Modal bind:open>
 	<svelte:fragment slot="header">Create a new Course</svelte:fragment>
-	<div class="row mb-2">
-		<div class="col">
-			<label for="name" class="form-label">Name of this Change</label>
-			<input
-				id="name"
-				type="text"
-				class="form-control"
-				placeholder="Change Name"
-				bind:value={name}
-			/>
-		</div>
-	</div>
-	{#key editorKey}
-		<CourseChangeEditor bind:courseChange />
-	{/key}
+	<CourseEditor {department} bind:course />
 	<button
 		slot="footer"
 		type="button"

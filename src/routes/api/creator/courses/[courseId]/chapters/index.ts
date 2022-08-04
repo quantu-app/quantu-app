@@ -43,7 +43,11 @@ export const POST = isCreator(async (event) => {
 		client.chapter.create({
 			data: {
 				...data,
-				courseId
+				course: {
+					connect: {
+						id: courseId
+					}
+				}
 			},
 			include: {
 				logo: {

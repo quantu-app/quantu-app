@@ -1,28 +1,30 @@
 <script lang="ts">
 	import RichEditor from '$lib/components/editor/RichEditor.svelte';
-	import { validChapterUrl } from '$lib/state/creator/chapters';
+	import { validCourseUrl } from '$lib/state/creator/courses';
+	import type { StateDepartment } from '$lib/state/creator/departments';
 	import { addNotification, NotificationType } from '$lib/state/notifications';
 	import { isUrlSafe } from '$lib/utils';
 	import { debounce } from '@aicacia/debounce';
-	import type { Chapter } from '@prisma/client';
+	import type { Course } from '@prisma/client';
 	import SelectAsset from '../assets/SelectAsset.svelte';
 
-	export let chapterChange: Partial<Chapter>;
+	export let department: StateDepartment;
+	export let course: Partial<Course>;
 	export let disabled = false;
 
-	let chapterUrl = chapterChange.url;
+	let courseUrl = course.url;
 	let validUrl: boolean = false;
 
-	$: validUrl = !!chapterChange.url && isUrlSafe(chapterChange.url);
+	$: validUrl = !!course.url && isUrlSafe(course.url);
 
 	let validatingUrl = false;
 	async function onUrlChange() {
-		if (!validUrl || validatingUrl || chapterUrl === chapterChange.url) {
+		if (!validUrl || validatingUrl || courseUrl === course.url) {
 			return;
 		}
 		validatingUrl = true;
 		try {
-			validUrl = await validChapterUrl(chapterChange.url as string);
+			validUrl = await validCourseUrl(department.url, course.url as string);
 		} catch (e) {
 			console.error(e);
 			addNotification({
@@ -39,47 +41,47 @@
 
 <div class="row">
 	<div class="col-md">
-		<label for="chapter-name" class="form-label">Name</label>
+		<label for="course-name" class="form-label">Name</label>
 		<input
-			id="chapter-name"
+			id="course-name"
 			type="text"
 			class="form-control"
-			placeholder="Chapter Name"
+			placeholder="Course Name"
 			{disabled}
-			bind:value={chapterChange.name}
+			bind:value={course.name}
 		/>
 	</div>
 	<div class="col-md">
-		<label for="chapter-url" class="form-label">URL</label>
+		<label for="course-url" class="form-label">URL</label>
 		<input
-			id="chapter-url"
+			id="course-url"
 			type="text"
 			class="form-control"
-			placeholder="Chapter URL"
+			placeholder="Course URL"
 			class:is-invalid={!validUrl}
 			{disabled}
-			bind:value={chapterChange.url}
+			bind:value={course.url}
 			on:change={debouncedOnUrlChange}
 		/>
 	</div>
 </div>
 <hr />
 <div class="row">
-	{#if chapterChange.id}
+	{#if course.id}
 		<div class="col-md-3">
 			<div class="form-control">
-				<label for="chapter-logo" class="form-label">Logo</label>
+				<label for="course-logo" class="form-label">Logo</label>
 				<SelectAsset
-					id="chapter-logo"
-					chapterId={chapterChange.id}
-					bind:assetId={chapterChange.logoId}
+					id="course-logo"
+					courseId={course.id}
+					bind:assetId={course.logoId}
 					type="IMAGE"
 				/>
 			</div>
 		</div>
 	{/if}
 	<div class="col">
-		<label for="chapter-description" class="form-label">Description</label>
-		<RichEditor id="chapter-description" bind:value={chapterChange.description} />
+		<label for="course-description" class="form-label">Description</label>
+		<RichEditor id="course-description" bind:value={course.description} />
 	</div>
 </div>

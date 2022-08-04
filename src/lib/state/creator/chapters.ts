@@ -42,12 +42,15 @@ export async function showChapterById(id: string, fetchFn: IFetch = fetch) {
 	return chapter;
 }
 
-export async function validChapterUrl(courseUrl: string, url: string) {
-	const res = await fetch(`${base}/api/courses/${courseUrl}/chapters/${url}`, {
-		headers: {
-			'Content-Type': 'application/json'
+export async function validChapterUrl(departmentUrl: string, courseUrl: string, url: string) {
+	const res = await fetch(
+		`${base}/api/departments/${departmentUrl}/courses/${courseUrl}/chapters/${url}`,
+		{
+			headers: {
+				'Content-Type': 'application/json'
+			}
 		}
-	});
+	);
 	if (!res.ok) {
 		return true;
 	} else {

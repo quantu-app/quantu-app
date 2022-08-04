@@ -44,13 +44,17 @@ export const GET = isCreator((event) => {
 
 export const POST = isCreator(async (event) => {
 	const data = await event.request.json();
-	const lessonBlockId = event.params.lessonBlockId;
+	const lessonId = event.params.lessonId;
 
 	return run((client) =>
 		client.lessonBlock.create({
 			data: {
 				...data,
-				id: lessonBlockId
+				lesson: {
+					connect: {
+						id: lessonId
+					}
+				}
 			},
 			include: {
 				lesson: {

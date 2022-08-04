@@ -4,24 +4,25 @@
 	import { goto } from '$app/navigation';
 	import { base } from '$app/paths';
 	import Modal from '$lib/components/ui/Modal.svelte';
-	import { createChange } from '$lib/state/creator/changes';
+	import { createCourse } from '$lib/state/creator/courses';
 	import type { StateDepartment } from '$lib/state/creator/departments';
 	import { addNotification, NotificationType } from '$lib/state/notifications';
 	import type { Course } from '@prisma/client';
+	import CourseEditor from './CourseEditor.svelte';
 
 	export let department: StateDepartment;
 	export let course: Course;
 	export let open = false;
 
 	let name: string;
-	let creatingCourseChange = false;
+	let creatingCourse = false;
 
-	async function onCreateCourseChange() {
-		creatingCourseChange = true;
+	async function onCreateCourse() {
+		creatingCourse = true;
 		try {
-			const change = await createChange('DEPARTMENT', course.id, name, {});
+			const course = await createCourse(department.id, {});
 			open = false;
-			await goto(`${base}/creator/departments/${department.id}/courses/changes/${change.id}`);
+			await goto(`${base}/creator/departments/${department.id}/courses/${course.id}`);
 		} catch (e) {
 			console.error(e);
 			addNotification({
@@ -30,33 +31,22 @@
 				description: (e as Error).message
 			});
 		} finally {
-			creatingCourseChange = false;
+			creatingCourse = false;
 		}
 	}
 </script>
 
 <Modal bind:open>
 	<svelte:fragment slot="header">Propose a Change to {course.name}</svelte:fragment>
-	<div class="row mb-2">
-		<div class="col">
-			<label for="name" class="form-label">Name of this Change</label>
-			<input
-				id="name"
-				type="text"
-				class="form-control"
-				placeholder="Change Name"
-				bind:value={name}
-			/>
-		</div>
-	</div>
+	<CourseEditor {department} bind:course />
 	<button
 		slot="footer"
 		type="button"
-		on:click={onCreateCourseChange}
-		disabled={creatingCourseChange}
+		on:click={onCreateCourse}
+		disabled={creatingCourse}
 		class="btn btn-primary"
 	>
-		{#if creatingCourseChange}
+		{#if creatingCourse}
 			<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" />
 		{/if}
 		Create

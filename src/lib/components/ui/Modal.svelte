@@ -8,9 +8,11 @@
 	export let size: 'sm' | 'md' | 'lg' = 'lg';
 	export let onClose: () => void = () => undefined;
 
+	let key = Math.random();
 	let prevOpen: boolean;
 	$: if (modal && prevOpen !== open) {
 		prevOpen = open;
+		key = Math.random();
 
 		if (open) {
 			modal.show();
@@ -57,14 +59,16 @@
 		<div class="modal-dialog modal-{size}">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h5 class="modal-title"><slot name="header" /></h5>
+					<h5 class="modal-title">
+						{#key key}<slot name="header" />{/key}
+					</h5>
 					<button type="button" class="btn-close" aria-label="Close" data-bs-dismiss="modal" />
 				</div>
 				<div class="modal-body">
-					<slot />
+					{#key key}<slot />{/key}
 				</div>
 				<div class="modal-footer">
-					<slot name="footer" />
+					{#key key}<slot name="footer" />{/key}
 					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
 				</div>
 			</div>

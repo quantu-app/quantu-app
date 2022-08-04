@@ -4,69 +4,67 @@
 	import { writable } from 'svelte/store';
 
 	interface IState {
-		nameFilter: string | undefined;
+		search: string | undefined;
 	}
 
 	const state = writable<IState>({
-		nameFilter: undefined
+		search: undefined
 	});
 </script>
 
 <script lang="ts">
 	import { fuzzyEquals } from '@aicacia/string-fuzzy_equals';
-	import Search from '$lib/components/Search.svelte';
-	import ChapterList from '$lib/components/creator/chapters/ChapterList.svelte';
-	import CreateChapterChange from '../chapters/CreateChapterChange.svelte';
-	import { base } from '$app/paths';
 	import type { StateCourse } from '$lib/state/creator/courses';
-	import RichViewer from '$lib/components/editor/RichViewer.svelte';
-	import UpdateCourse from './UpdateCourse.svelte';
 	import type { StateDepartment } from '$lib/state/creator/departments';
-	import type { StateChapter } from '$lib/state/chapters';
+	import type { StateChapter } from '$lib/state/creator/chapters';
+	import ChapterTreeItem from './ChapterTreeItem.svelte';
+	import Search from '$lib/components/Search.svelte';
+	import CreateChapter from './CreateChapter.svelte';
 
 	export let department: StateDepartment;
 	export let course: StateCourse;
 	export let chapters: StateChapter[];
 
-	let createChangeOpen = false;
-	function onOpenCreateChange() {
-		createChangeOpen = true;
+	let selected: StateChapter | undefined;
+	function onSelect(newSelected: any) {
+		if (newSelected !== selected) {
+			selected = newSelected;
+		} else {
+			selected = undefined;
+		}
 	}
 
-	function onChange(nameFilter: string) {
-		state.update((state) => ({ ...state, nameFilter }));
+	let openCreateChapter = false;
+	function onCreatingChapter() {
+		openCreateChapter = true;
 	}
-	$: nameFilter = $state.nameFilter || '';
+
+	function onChange(search: string) {
+		state.update((state) => ({ ...state, search }));
+	}
+	$: search = $state.search || '';
 	$: filterChapters = (chapter: StateChapter) =>
-		nameFilter ? fuzzyEquals(nameFilter, chapter.name) : true;
+		search ? fuzzyEquals(search, chapter.name) : true;
 	$: filteredChapters = chapters.filter(filterChapters);
 </script>
 
-<div class="container">
-	<h2>{course.name}</h2>
-	<div>
-		<RichViewer value={course.description} />
+<div class="d-flex flex-grow-1 flex-row w-100 h-100 pe-2 border-top">
+	<div class="d-flex flex-column flex-shrink overflow-auto border-end">
+		<ul class="list-group list-group-flush">
+			{#each filteredChapters as chapter (chapter.id)}
+				<ChapterTreeItem {search} {chapter} {selected} {onSelect} />
+			{/each}
+			<li class="list-group-item">
+				<button class="btn btn-primary" on:click={onCreatingChapter}>Create Chapter</button>
+			</li>
+		</ul>
 	</div>
-</div>
-<div class="container">
-	<div class="d-flex justify-content-between mt-2">
-		<div class="d-flex">
-			<button class="btn btn-primary" on:click={onOpenCreateChange}>Propose a Change</button>
-		</div>
-		<div class="d-flex align-items-center">
-			<a
-				class="link-dark me-2"
-				href={`${base}/creator/departments/${department.id}courses/${course.id}/courses`}
-				>Chapters <i class="bi bi-chevron-right" /></a
-			>
-			<CreateChapterChange {department} />
+	<div class="d-flex flex-column flex-grow-1 px-2">
+		<Search filter={search} {onChange} />
+		<div>
+			<pre>{JSON.stringify(selected, null, 2)}<pre /></pre>
 		</div>
 	</div>
-	<Search filter={nameFilter} {onChange} />
 </div>
 
-<div class="container">
-	<ChapterList {department} chapters={filteredChapters} />
-</div>
-
-<UpdateCourse bind:open={createChangeOpen} {department} {course} />
+<CreateChapter {department} {course} bind:open={openCreateChapter} />

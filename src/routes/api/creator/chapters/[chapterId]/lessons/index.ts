@@ -49,7 +49,11 @@ export const POST = isCreator(async (event) => {
 		client.lesson.create({
 			data: {
 				...data,
-				chapterId
+				chapter: {
+					connect: {
+						id: chapterId
+					}
+				}
 			},
 			include: {
 				logo: {

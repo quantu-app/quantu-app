@@ -14,7 +14,7 @@
 
 <script lang="ts">
 	import CourseList from './CourseList.svelte';
-	import CreateCourseChange from './CreateCourseChange.svelte';
+	import CreateCourse from './CreateCourse.svelte';
 	import { fuzzyEquals } from '@aicacia/string-fuzzy_equals';
 	import Search from '$lib/components/Search.svelte';
 	import type { StateCourse } from '$lib/state/creator/courses';
@@ -40,7 +40,7 @@
 	<div class="d-flex align-items-center justify-content-end mt-2">
 		<a class="link-dark me-2" href={`${base}/creator/merge-requests`}>Merge Requests</a>
 		<a class="link-dark me-2" href={`${base}/creator/courses/changes`}>Changes</a>
-		<CreateCourseChange {department} />
+		<CreateCourse {department} />
 	</div>
 	<Search filter={courseNameFilter} {onChange} />
 	<CourseList {department} courses={filteredCourses} />

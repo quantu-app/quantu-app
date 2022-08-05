@@ -33,21 +33,12 @@
 	<div class="card-body">
 		<h5 class="card-title mt-4 mt-lg-0 mb-0">{course.name}</h5>
 		<div class="text-end">
-			<!-- {#if course.inProgress}
-				<a
-					role="button"
-					aria-label="review"
-					class="text-success stretched-link"
-					href={`${base}/challenges/${challenge.department.url}/${challenge.url}/review`}
-				/>
-			{:else}
-				<a
-					role="button"
-					aria-label="solve"
-					class="stretched-link"
-					href={`${base}/challenges/${challenge.department.url}/${challenge.url}`}
-				/>
-			{/if} -->
+			<a
+				role="button"
+				aria-label="enter"
+				class="stretched-link"
+				href={`${base}/departments/${course.department.url}/courses/${course.url}`}
+			/>
 		</div>
 	</div>
 	<div class="card-footer">

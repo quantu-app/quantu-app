@@ -13,19 +13,18 @@
 </script>
 
 <div class="container my-4 mb-8">
-	{#if topCourses.length}
-		<div class="row">
-			<h2>Newest Courses</h2>
-
+	<div class="row">
+		<h2>Newest Courses</h2>
+		{#if topCourses.length}
 			<CourseList courses={topCourses} />
-		</div>
-		<div class="row mt-3 text-end">
-			<a class="viewAllChallenges" href="/courses/all">
-				<span class="linkText">View All Courses</span>
-				<span class="linkArrow"> &gt; </span>
-			</a>
-		</div>
-	{/if}
+		{/if}
+	</div>
+	<div class="row mt-3 text-end">
+		<a class="viewAllChallenges" href="/courses/all">
+			<span class="linkText">View All Courses</span>
+			<span class="linkArrow"> &gt; </span>
+		</a>
+	</div>
 	<hr />
 	{#if coursesByDepartments.length}
 		{#each coursesByDepartments as depCourses (depCourses.url)}

@@ -3,16 +3,18 @@
 <script lang="ts">
 	import type { StateCourse } from '$lib/state/creator/courses';
 	import type { StateChapter } from '$lib/state/creator/chapters';
-	import type { StateLessonBlock } from '$lib/state/creator/lessonBlocks';
-	import { lessonsByChapterId, showLessons, type StateLesson } from '$lib/state/creator/lessons';
-	import { fuzzyEquals } from '@aicacia/string-fuzzy_equals';
-	import DeleteChapter from './DeleteChapter.svelte';
-	import CreateLesson from './CreateLesson.svelte';
+	import {
+		showLessonBlocks,
+		lessonBlocksByLessonId,
+		type StateLessonBlock
+	} from '$lib/state/creator/lessonBlocks';
+	import type { StateLesson } from '$lib/state/creator/lessons';
 	import type { StateDepartment } from '$lib/state/creator/departments';
 
 	export let department: StateDepartment;
 	export let course: StateCourse;
 	export let chapter: StateChapter;
+	export let lesson: StateLesson;
 	export let selected: StateCourse | StateChapter | StateLesson | StateLessonBlock;
 	export let search = '';
 	export let onSelect: (newSelected: any) => void;
@@ -26,23 +28,23 @@
 		expanded = !expanded;
 	}
 
-	let openCreatingLesson = false;
-	function onOpenCreatingLesson(e: MouseEvent) {
+	let openCreatingLessonBlock = false;
+	function onOpenCreatingLessonBlock(e: MouseEvent) {
 		e.stopPropagation();
-		openCreatingLesson = true;
+		openCreatingLessonBlock = true;
 	}
 
-	let openDeletingChapter = false;
+	let openDeletingLesson = false;
 	function onOpenDeletingLesson(e: MouseEvent) {
 		e.stopPropagation();
-		openDeletingChapter = true;
+		openDeletingLesson = true;
 	}
 
 	let loaded = false;
 	let loading = false;
 	$: if (expanded === true && !loading && !loaded) {
 		loading = true;
-		showLessons(chapter.id)
+		showLessonBlocks(lesson.id)
 			.then(() => {
 				loaded = true;
 			})
@@ -50,9 +52,7 @@
 				loading = false;
 			});
 	}
-	$: lessons = $lessonsByChapterId[chapter.id] || [];
-	$: filterLessons = (chapter: StateLesson) => (search ? fuzzyEquals(search, chapter.name) : true);
-	$: filteredLessons = lessons.filter(filterLessons);
+	$: lessonBlocks = $lessonBlocksByLessonId[lesson.id] || [];
 </script>
 
 <li
@@ -69,7 +69,7 @@
 		<div class="d-flex flex-grow-1 justify-content-between">
 			<p class="d-flex flex-grow-1 align-self-center m-0 p-0">{chapter.name}</p>
 			<div class="btn-group" role="group">
-				<button class="btn btn-sm btn-secondary" on:click={onOpenCreatingLesson}
+				<button class="btn btn-sm btn-secondary" on:click={onOpenCreatingLessonBlock}
 					><i class="bi bi-plus" /></button
 				>
 				<button class="btn btn-sm btn-danger" on:click={onOpenDeletingLesson}
@@ -81,11 +81,8 @@
 </li>
 {#if expanded}
 	<ul class="list-group list-group-flush">
-		{#each filteredLessons as lesson (lesson.id)}
-			{lesson.name}
+		{#each lessonBlocks as lessonBlock (lessonBlock.id)}
+			{JSON.stringify(lessonBlock)}
 		{/each}
 	</ul>
 {/if}
-
-<CreateLesson bind:open={openCreatingLesson} {department} {course} {chapter} />
-<DeleteChapter bind:open={openDeletingChapter} {chapter} />

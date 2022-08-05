@@ -3,17 +3,19 @@
 <script lang="ts">
 	import type { StateCourse } from '$lib/state/creator/courses';
 	import type { StateDepartment } from '$lib/state/creator/departments';
-	import { createChapter, validChapterUrl } from '$lib/state/creator/chapters';
+	import { createLesson, validLessonUrl } from '$lib/state/creator/lessons';
 	import { addNotification, NotificationType } from '$lib/state/notifications';
 	import { debounce } from '@aicacia/debounce';
 	import Modal from '$lib/components/ui/Modal.svelte';
+	import type { StateChapter } from '$lib/state/creator/chapters';
 
 	export let department: StateDepartment;
 	export let course: StateCourse;
+	export let chapter: StateChapter;
 	export let open = false;
 
-	let chapterName: '';
-	let chapterUrl: '';
+	let lessonName: '';
+	let lessonUrl: '';
 	let validUrl = true;
 	let validatingUrl = false;
 	async function onUrlChange() {
@@ -22,7 +24,7 @@
 		}
 		validatingUrl = true;
 		try {
-			validUrl = await validChapterUrl(department.url, course.url, chapterUrl);
+			validUrl = await validLessonUrl(department.url, course.url, lessonUrl);
 		} catch (e) {
 			console.error(e);
 			addNotification({
@@ -36,17 +38,17 @@
 	}
 	const debouncedOnUrlChange = debounce(onUrlChange, 300);
 
-	let creatingChapter = false;
-	async function onCreateChapter() {
-		creatingChapter = true;
+	let creatingLesson = false;
+	async function onCreateLesson() {
+		creatingLesson = true;
 		try {
-			const promise = createChapter(course.id, {
-				name: chapterName,
-				url: chapterUrl,
+			const promise = createLesson(chapter.id, {
+				name: lessonName,
+				url: lessonUrl,
 				description: []
 			});
-			chapterName = '';
-			chapterUrl = '';
+			lessonName = '';
+			lessonUrl = '';
 			open = false;
 			await promise;
 		} catch (e) {
@@ -56,33 +58,33 @@
 				description: (e as Error).message
 			});
 		} finally {
-			creatingChapter = false;
+			creatingLesson = false;
 		}
 	}
 </script>
 
 <Modal bind:open>
-	<svelte:fragment slot="header">Create Chapter in {course.name}</svelte:fragment>
+	<svelte:fragment slot="header">Create Lesson in {chapter.name}</svelte:fragment>
 	<div class="row">
 		<div class="col-md">
-			<label for="chapter-url" class="form-label">Chapter Name</label>
+			<label for="lesson-url" class="form-label">Lesson Name</label>
 			<input
 				class="form-control"
-				name="chapter-url"
+				name="lesson-url"
 				type="text"
-				placeholder="Chapter Name"
-				bind:value={chapterName}
+				placeholder="Lesson Name"
+				bind:value={lessonName}
 			/>
 		</div>
 		<div class="col-md">
-			<label for="chapter-name" class="form-label">URL</label>
+			<label for="lesson-name" class="form-label">URL</label>
 			<input
-				name="chapter-name"
+				name="lesson-name"
 				class="form-control"
 				type="text"
-				placeholder="Chapter URL"
+				placeholder="Lesson URL"
 				class:is-invalid={!validUrl}
-				bind:value={chapterUrl}
+				bind:value={lessonUrl}
 				on:input={debouncedOnUrlChange}
 			/>
 		</div>
@@ -90,7 +92,7 @@
 	<button
 		slot="footer"
 		class="btn btn-primary"
-		on:click={onCreateChapter}
-		disabled={creatingChapter || !validUrl || validatingUrl}>Create</button
+		on:click={onCreateLesson}
+		disabled={creatingLesson || !validUrl || validatingUrl}>Create</button
 	>
 </Modal>

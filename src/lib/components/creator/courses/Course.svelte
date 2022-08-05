@@ -20,18 +20,23 @@
 	import ChapterTreeItem from './ChapterTreeItem.svelte';
 	import Search from '$lib/components/Search.svelte';
 	import CreateChapter from './CreateChapter.svelte';
+	import type { StateLesson } from '$lib/state/creator/lessons';
+	import type { StateLessonBlock } from '$lib/state/creator/lessonBlocks';
 
 	export let department: StateDepartment;
 	export let course: StateCourse;
 	export let chapters: StateChapter[];
 
-	let selected: StateChapter | undefined;
+	let selected: StateCourse | StateChapter | StateLesson | StateLessonBlock = course;
 	function onSelect(newSelected: any) {
 		if (newSelected !== selected) {
 			selected = newSelected;
 		} else {
-			selected = undefined;
+			selected = course;
 		}
+	}
+	function onSelectCourse() {
+		selected = course;
 	}
 
 	let openCreateChapter = false;
@@ -49,14 +54,23 @@
 </script>
 
 <div class="d-flex flex-grow-1 flex-row w-100 h-100 pe-2 border-top">
-	<div class="d-flex flex-column flex-shrink overflow-auto border-end">
+	<div class="course-sidebar d-flex flex-column flex-shrink overflow-auto border-end">
 		<ul class="list-group list-group-flush">
-			{#each filteredChapters as chapter (chapter.id)}
-				<ChapterTreeItem {search} {chapter} {selected} {onSelect} />
-			{/each}
-			<li class="list-group-item">
-				<button class="btn btn-primary" on:click={onCreatingChapter}>Create Chapter</button>
+			<li
+				class="list-group-item list-group-item-action"
+				class:active={selected === course}
+				on:click={onSelectCourse}
+			>
+				<div class="d-flex flex-grow-1 justify-content-between">
+					<p class="align-self-center m-0 p-0">{course.name}</p>
+					<button class="btn btn-sm btn-secondary" on:click={onCreatingChapter}
+						><i class="bi bi-plus" /></button
+					>
+				</div>
 			</li>
+			{#each filteredChapters as chapter (chapter.id)}
+				<ChapterTreeItem {search} {department} {course} {chapter} {selected} {onSelect} />
+			{/each}
 		</ul>
 	</div>
 	<div class="d-flex flex-column flex-grow-1 px-2">
@@ -68,3 +82,9 @@
 </div>
 
 <CreateChapter {department} {course} bind:open={openCreateChapter} />
+
+<style>
+	.course-sidebar {
+		min-width: 256px;
+	}
+</style>

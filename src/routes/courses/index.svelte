@@ -2,6 +2,7 @@
 	import { authGuard } from '$lib/guard/authGuard';
 	import type { Load } from '@sveltejs/kit';
 	import { isValidStatus } from '$lib/guard/isValidStatus';
+	import { showAllCourses } from '$lib/state/courses';
 
 	export const load: Load = async (input) => {
 		const response = await authGuard(input);

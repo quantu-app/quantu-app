@@ -6,7 +6,6 @@
 	import DateTimeInput from '../../ui/DateTimeInput.svelte';
 	import { isUrlSafe } from '../../../utils';
 	import SelectAsset from '../assets/SelectAsset.svelte';
-	import { addNotification, NotificationType } from '$lib/state/notifications';
 
 	export let challenge: Partial<StateChallenge>;
 	export let disabled = false;

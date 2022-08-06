@@ -7,6 +7,7 @@
 	import type { HistoryEditor } from 'slate-history';
 
 	export let id: string | undefined = undefined;
+	export let name: string | undefined = undefined;
 	export let value: any;
 	export let selection: Selection | null = null;
 	export let placeholder = 'Type...';
@@ -18,7 +19,7 @@
 	}
 </script>
 
-<div {id} class="border p-2">
+<div {id} {name} class="border p-2">
 	<Editor
 		bind:value
 		bind:editor

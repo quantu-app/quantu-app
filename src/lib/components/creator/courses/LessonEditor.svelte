@@ -56,15 +56,22 @@
 	import { isUrlSafe } from '$lib/utils';
 	import classnames from 'vest/classnames';
 	import InputMessages from '$lib/components/ui/InputMessages.svelte';
-	import { onMount } from 'svelte';
+	import LessonBlocksEditor from './LessonBlocksEditor.svelte';
 
 	export let lesson: StateLesson;
 
 	let origLesson: StateLesson = { ...lesson };
 	let prevLesson: StateLesson;
+	let loadingLessonBlocks = false;
 	$: if (prevLesson !== lesson) {
 		prevLesson = lesson;
 		origLesson = { ...lesson };
+		if (!loadingLessonBlocks) {
+			loadingLessonBlocks = true;
+			showLessonBlocks(lesson.id).finally(() => {
+				loadingLessonBlocks = false;
+			});
+		}
 	}
 
 	let result: SuiteResult = suite(lesson, origLesson).done((r) => {
@@ -110,17 +117,6 @@
 	}
 
 	$: lessonBlocks = $lessonBlocksByLessonId[lesson.id] || [];
-
-	let loaded = false;
-	onMount(() => {
-		if (!lessonBlocks.length) {
-			showLessonBlocks(lesson.id).finally(() => {
-				loaded = true;
-			});
-		} else {
-			loaded = true;
-		}
-	});
 </script>
 
 <div class="mt-4 d-flex justify-content-between">
@@ -173,3 +169,5 @@
 		<RichEditor id="lesson-description" bind:value={lesson.description} />
 	</div>
 </div>
+
+<LessonBlocksEditor {lesson} {lessonBlocks} />

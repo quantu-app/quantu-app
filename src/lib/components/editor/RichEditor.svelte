@@ -6,11 +6,11 @@
 	import Editor from './Editor.svelte';
 	import type { HistoryEditor } from 'slate-history';
 
-	export let id: string = undefined;
+	export let id: string | undefined = undefined;
 	export let value: any;
 	export let selection: Selection | null = null;
 	export let placeholder = 'Type...';
-	export let editor: ISvelteEditor | BaseEditor | HistoryEditor = undefined;
+	export let editor: ISvelteEditor | BaseEditor | HistoryEditor | undefined = undefined;
 	export let showHelper = false;
 
 	$: if (!value || value.length === 0) {

@@ -46,9 +46,14 @@ export async function showLessonById(id: string, fetchFn: IFetch = fetch) {
 	return lesson;
 }
 
-export async function validLessonUrl(courseUrl: string, chapterUrl: string, url: string) {
+export async function validLessonUrl(
+	departmentUrl: string,
+	courseUrl: string,
+	chapterUrl: string,
+	url: string
+) {
 	const res = await fetch(
-		`${base}/api/courses/${courseUrl}/chapters/${chapterUrl}/lessons/${url}`,
+		`${base}/api/departments/${departmentUrl}courses/${courseUrl}/chapters/${chapterUrl}/lessons/${url}`,
 		{
 			headers: {
 				'Content-Type': 'application/json'

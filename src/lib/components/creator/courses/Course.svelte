@@ -76,7 +76,7 @@
 	<div class="d-flex flex-column flex-grow-1 px-2">
 		<Search filter={search} {onChange} />
 		<div class="mt-2">
-			<Editor {department} {selected} />
+			<Editor {selected} />
 		</div>
 	</div>
 </div>

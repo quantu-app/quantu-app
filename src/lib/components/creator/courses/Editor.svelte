@@ -10,14 +10,13 @@
 	import type { StateDepartment } from '$lib/state/creator/departments';
 	import LessonEditor from './LessonEditor.svelte';
 
-	export let department: StateDepartment;
 	export let selected: StateCourse | StateChapter | StateLesson | StateLessonBlock;
 </script>
 
 {#if 'department' in selected}
-	<CourseEditor {department} course={selected} />
+	<CourseEditor course={selected} />
 {:else if 'course' in selected}
-	<ChapterEditor {department} chapter={selected} />
+	<ChapterEditor chapter={selected} />
 {:else if 'chapter' in selected}
-	<LessonEditor {department} lesson={selected} />
+	<LessonEditor lesson={selected} />
 {/if}

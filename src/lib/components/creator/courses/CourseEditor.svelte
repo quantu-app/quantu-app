@@ -3,13 +3,15 @@
 <script lang="ts" context="module">
 	import { create, test, enforce, only, type SuiteResult } from 'vest';
 
-	async function onUrl(department: StateDepartment, origCourse: StateCourse, url: string) {
+	async function onUrl(origCourse: StateCourse, url: string) {
 		if (url === origCourse.url) {
 			return url;
 		}
 		try {
-			const valid = await validCourseUrl(department.url, url as string);
-			return valid ? url : Promise.reject(`${url} is already used in ${department.name}`);
+			const valid = await validCourseUrl(origCourse.department.url, url as string);
+			return valid
+				? url
+				: Promise.reject(`${url} is already used in ${origCourse.department.name}`);
 		} catch (e) {
 			console.error(e);
 			addNotification({
@@ -23,12 +25,7 @@
 
 	export const suite = create(
 		'user_edit_profile_form',
-		(
-			data: Partial<StateCourse> = {},
-			department: StateDepartment,
-			origCourse: StateCourse,
-			fieldname?: string
-		) => {
+		(data: Partial<StateCourse> = {}, origCourse: StateCourse, fieldname?: string) => {
 			if (fieldname) {
 				only(fieldname);
 			}
@@ -41,7 +38,7 @@
 				enforce(data.url).condition(isUrlSafe);
 			});
 			test('url', 'url must be unique to the Department', () => {
-				return onUrl(department, origCourse, data.url as string);
+				return onUrl(origCourse, data.url as string);
 			});
 		}
 	);
@@ -50,14 +47,12 @@
 <script lang="ts">
 	import RichEditor from '$lib/components/editor/RichEditor.svelte';
 	import { updateCourse, validCourseUrl, type StateCourse } from '$lib/state/creator/courses';
-	import type { StateDepartment } from '$lib/state/creator/departments';
 	import { addNotification, NotificationType } from '$lib/state/notifications';
 	import SelectAsset from '../assets/SelectAsset.svelte';
 	import { isUrlSafe } from '$lib/utils';
 	import classnames from 'vest/classnames';
 	import InputMessages from '$lib/components/ui/InputMessages.svelte';
 
-	export let department: StateDepartment;
 	export let course: StateCourse;
 
 	let origCourse: StateCourse = { ...course };
@@ -67,7 +62,7 @@
 		origCourse = { ...course };
 	}
 
-	let result: SuiteResult = suite(course, department, origCourse).done((r) => {
+	let result: SuiteResult = suite(course, origCourse).done((r) => {
 		result = r;
 	});
 	$: disabled = updatingCourse || !result.isValid();
@@ -83,7 +78,7 @@
 	});
 
 	function runSuite(fieldname?: string) {
-		suite(course, department, origCourse, fieldname).done((r) => {
+		suite(course, origCourse, fieldname).done((r) => {
 			result = r;
 		});
 	}

@@ -107,6 +107,15 @@
 	}
 </script>
 
+<div class="mt-4 d-flex justify-content-between">
+	<h3>Chapter: {chapter.name}</h3>
+	<button type="button" on:click={onUpdateChapter} {disabled} class="btn btn-primary">
+		{#if updatingChapter}
+			<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" />
+		{/if}
+		Update
+	</button>
+</div>
 <div class="row">
 	<div class="col-md">
 		<label for="name" class="form-label">Name</label>
@@ -152,12 +161,4 @@
 		<label for="chapter-description" class="form-label">Description</label>
 		<RichEditor id="chapter-description" bind:value={chapter.description} />
 	</div>
-</div>
-<div class="mt-4 d-flex justify-content-end">
-	<button type="button" on:click={onUpdateChapter} {disabled} class="btn btn-primary">
-		{#if updatingChapter}
-			<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" />
-		{/if}
-		Update
-	</button>
 </div>

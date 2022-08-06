@@ -3,25 +3,23 @@
 <script lang="ts">
 	import type { StateCourse } from '$lib/state/creator/courses';
 	import type { StateChapter } from '$lib/state/creator/chapters';
-	import type { StateLessonBlock } from '$lib/state/creator/lessonBlocks';
 	import { lessonsByChapterId, showLessons, type StateLesson } from '$lib/state/creator/lessons';
 	import { fuzzyEquals } from '@aicacia/string-fuzzy_equals';
 	import CreateLesson from './CreateLesson.svelte';
 	import type { StateDepartment } from '$lib/state/creator/departments';
 	import LessonTreeItem from './LessonTreeItem.svelte';
 	import ContextMenu from '$lib/components/ui/ContextMenu.svelte';
+	import { setSelected, selected } from './Course.svelte';
 
 	export let department: StateDepartment;
 	export let course: StateCourse;
 	export let chapter: StateChapter;
-	export let selected: StateCourse | StateChapter | StateLesson | StateLessonBlock;
 	export let search = '';
-	export let onSelect: (newSelected: any) => void;
 
 	let chapterElement: HTMLElement;
 
 	function onSelectInternal() {
-		onSelect(chapter);
+		setSelected('chapter', chapter.id);
 	}
 	let expanded = false;
 	function onToggleExpand(e: MouseEvent) {
@@ -55,7 +53,7 @@
 <li
 	bind:this={chapterElement}
 	class="list-group-item list-group-item-action"
-	class:active={selected === chapter}
+	class:active={$selected === chapter}
 	on:click={onSelectInternal}
 >
 	<div class="d-flex flex-row">
@@ -70,7 +68,7 @@
 {#if expanded}
 	<ul class="list-group list-group-flush">
 		{#each filteredLessons as lesson (lesson.id)}
-			<LessonTreeItem {lesson} {selected} {onSelect} />
+			<LessonTreeItem {lesson} />
 		{/each}
 	</ul>
 {/if}

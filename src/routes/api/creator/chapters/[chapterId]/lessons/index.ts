@@ -33,6 +33,9 @@ export const GET = isCreator((event) => {
 						}
 					}
 				}
+			},
+			orderBy: {
+				index: 'asc'
 			}
 		})
 	).then((lessons) => ({

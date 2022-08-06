@@ -123,6 +123,15 @@
 	});
 </script>
 
+<div class="mt-4 d-flex justify-content-between">
+	<h3>Lesson: {lesson.name}</h3>
+	<button type="button" on:click={onUpdateLesson} {disabled} class="btn btn-primary">
+		{#if updatingLesson}
+			<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" />
+		{/if}
+		Update
+	</button>
+</div>
 <div class="row">
 	<div class="col-md">
 		<label for="name" class="form-label">Name</label>
@@ -163,12 +172,4 @@
 		<label for="lesson-description" class="form-label">Description</label>
 		<RichEditor id="lesson-description" bind:value={lesson.description} />
 	</div>
-</div>
-<div class="mt-4 d-flex justify-content-end">
-	<button type="button" on:click={onUpdateLesson} {disabled} class="btn btn-primary">
-		{#if updatingLesson}
-			<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" />
-		{/if}
-		Update
-	</button>
 </div>

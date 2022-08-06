@@ -1,29 +1,56 @@
 <svelte:options immutable />
 
 <script context="module" lang="ts">
-	import { writable } from 'svelte/store';
+	import { derived, writable } from 'svelte/store';
 
 	interface IState {
 		search: string | undefined;
+		selectedId: string;
+		selectedType: 'course' | 'chapter' | 'lesson';
 	}
 
 	const state = writable<IState>({
-		search: undefined
+		search: undefined,
+		selectedId: '' as any,
+		selectedType: 'course'
 	});
+
+	export const selected = derived(
+		[state, coursesById, chaptersById, lessonsById],
+		([state, coursesById, chaptersById, lessonsById]) => {
+			switch (state.selectedType) {
+				case 'course':
+					return coursesById[state.selectedId];
+				case 'chapter':
+					return chaptersById[state.selectedId];
+				case 'lesson':
+					return lessonsById[state.selectedId];
+				default:
+					return undefined;
+			}
+		}
+	);
+
+	export function setSelected(selectedType: IState['selectedType'], selectedId: string) {
+		state.update((state) => ({
+			...state,
+			selectedId,
+			selectedType
+		}));
+	}
 </script>
 
 <script lang="ts">
 	import { fuzzyEquals } from '@aicacia/string-fuzzy_equals';
-	import type { StateCourse } from '$lib/state/creator/courses';
+	import { coursesById, type StateCourse } from '$lib/state/creator/courses';
 	import type { StateDepartment } from '$lib/state/creator/departments';
-	import type { StateChapter } from '$lib/state/creator/chapters';
+	import { chaptersById, type StateChapter } from '$lib/state/creator/chapters';
 	import ChapterTreeItem from './ChapterTreeItem.svelte';
 	import Search from '$lib/components/Search.svelte';
 	import CreateChapter from './CreateChapter.svelte';
-	import type { StateLesson } from '$lib/state/creator/lessons';
-	import type { StateLessonBlock } from '$lib/state/creator/lessonBlocks';
 	import ContextMenu from '$lib/components/ui/ContextMenu.svelte';
 	import Editor from './Editor.svelte';
+	import { lessonsById } from '$lib/state/creator/lessons';
 
 	export let department: StateDepartment;
 	export let course: StateCourse;
@@ -31,17 +58,10 @@
 
 	let courseElement: HTMLElement;
 
-	let selected: StateCourse | StateChapter | StateLesson | StateLessonBlock = course;
-	function onSelect(newSelected: any) {
-		if (newSelected !== selected) {
-			selected = newSelected;
-		} else {
-			selected = course;
-		}
-	}
 	function onSelectCourse() {
-		selected = course;
+		setSelected('course', course.id);
 	}
+	onSelectCourse();
 
 	let openCreateChapter = false;
 	function onCreatingChapter() {
@@ -63,20 +83,20 @@
 			<li
 				bind:this={courseElement}
 				class="list-group-item list-group-item-action"
-				class:active={selected === course}
+				class:active={$selected === course}
 				on:click={onSelectCourse}
 			>
 				<p class="align-self-center m-0 p-0">{course.name}</p>
 			</li>
 			{#each filteredChapters as chapter (chapter.id)}
-				<ChapterTreeItem {search} {department} {course} {chapter} {selected} {onSelect} />
+				<ChapterTreeItem {search} {department} {course} {chapter} />
 			{/each}
 		</ul>
 	</div>
 	<div class="d-flex flex-column flex-grow-1 px-2">
 		<Search filter={search} {onChange} />
-		<div class="mt-2">
-			<Editor {selected} />
+		<div class="mt-2 mb-8">
+			<Editor />
 		</div>
 	</div>
 </div>

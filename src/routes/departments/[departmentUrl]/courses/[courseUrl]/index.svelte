@@ -29,9 +29,10 @@
 	import PublicLayout from '$lib/components/layouts/PublicLayout.svelte';
 
 	export let departmentUrl: string;
+	export let courseUrl: string;
 
 	$: department = $departmentsByUrl[departmentUrl];
-	$: course = $coursesByUrl[department.id] || [];
+	$: course = $coursesByUrl[departmentUrl][courseUrl];
 </script>
 
 <svelte:head>

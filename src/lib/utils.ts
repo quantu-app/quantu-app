@@ -181,3 +181,11 @@ export function createQueryParams(params: Record<string, IPrimitive | IPrimitive
 		.join('&');
 	return queryParams ? `?${queryParams}` : '';
 }
+
+export function sortByCreatedAt<T extends { createdAt: Date }>(a: T, b: T) {
+	return b.createdAt.getMilliseconds() - a.createdAt.getMilliseconds();
+}
+
+export function sortByIndex<T extends { index: number }>(a: T, b: T) {
+	return a.index - b.index;
+}

@@ -11,10 +11,6 @@
 		await showAllCourses(input.fetch);
 		return response;
 	};
-
-	function sortByDate(a: StateCourse, b: StateCourse) {
-		return a.createdAt < b.createdAt ? 1 : -1;
-	}
 </script>
 
 <script lang="ts">
@@ -27,8 +23,9 @@
 		type StateCourse,
 		coursesByDepartment
 	} from '$lib/state/courses';
+	import { sortByCreatedAt } from '$lib/utils';
 
-	$: topCourses = $courses.sort(sortByDate).slice(0, 4);
+	$: topCourses = $courses.sort(sortByCreatedAt).slice(0, 4);
 	$: allCoursesByDepartment = Object.values($coursesByDepartment);
 </script>
 

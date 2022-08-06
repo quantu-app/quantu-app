@@ -11,10 +11,6 @@
 		await showAllChallenges(input.fetch);
 		return response;
 	};
-
-	function sortByDate(a: StateChallenge, b: StateChallenge) {
-		return a.createdAt < b.createdAt ? 1 : -1;
-	}
 </script>
 
 <script lang="ts">
@@ -28,8 +24,9 @@
 	} from '$lib/state/challenges';
 	import SEO from '$lib/components/SEO/index.svelte';
 	import { isValidStatus } from '$lib/guard/isValidStatus';
+	import { sortByCreatedAt } from '$lib/utils';
 
-	$: topChallenges = $challengesState.sort(sortByDate).slice(0, 4);
+	$: topChallenges = $challengesState.sort(sortByCreatedAt).slice(0, 4);
 	$: challengesByDepartments = Object.values($challengesByDepartment);
 </script>
 

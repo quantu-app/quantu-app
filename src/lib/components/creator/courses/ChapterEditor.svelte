@@ -108,7 +108,7 @@
 </script>
 
 <div class="mt-4 d-flex justify-content-between">
-	<h3>Chapter: {chapter.name}</h3>
+	<h3>Chapter - {chapter.index + 1}: {chapter.name}</h3>
 	<button type="button" on:click={onUpdateChapter} {disabled} class="btn btn-primary">
 		{#if updatingChapter}
 			<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" />

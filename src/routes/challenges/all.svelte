@@ -10,15 +10,11 @@
 		await showAllChallenges(input.fetch);
 		return response;
 	};
-
-	function sortByDate(a: StateChallenge, b: StateChallenge) {
-		return a.createdAt < b.createdAt ? 1 : -1;
-	}
 </script>
 
 <script lang="ts">
 	import UserLayout from '$lib/components/layouts/UserLayout.svelte';
-	import { showAllChallenges, challenges, type StateChallenge } from '$lib/state/challenges';
+	import { showAllChallenges, challenges } from '$lib/state/challenges';
 	import SEO from '$lib/components/SEO/index.svelte';
 	import ChallengesAll from '$lib/components/challenges/ChallengesAll.svelte';
 	import { isValidStatus } from '$lib/guard/isValidStatus';

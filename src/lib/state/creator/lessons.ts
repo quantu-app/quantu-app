@@ -1,7 +1,7 @@
 import type { Lesson } from '@prisma/client';
 import { writable, derived } from 'svelte/store';
 import { base } from '$app/paths';
-import type { IFetch } from '$lib/utils';
+import { sortByIndex, type IFetch } from '$lib/utils';
 
 export type StateLesson = Lesson & {
 	logo?: {
@@ -24,13 +24,17 @@ export const lessonsById = derived(lessonsWritable, (lessons) =>
 		return byId;
 	}, {} as { [id: string]: StateLesson })
 );
-export const lessonsByChapterId = derived(lessonsWritable, (lessons) =>
-	lessons.reduce((byParentId, lesson) => {
+export const lessonsByChapterId = derived(lessonsWritable, (lessons) => {
+	const state = lessons.reduce((byParentId, lesson) => {
 		const parentStateLessons = byParentId[lesson.chapterId] || (byParentId[lesson.chapterId] = []);
 		parentStateLessons.push(lesson);
 		return byParentId;
-	}, {} as { [chapterId: string]: Array<StateLesson> })
-);
+	}, {} as { [chapterId: string]: Array<StateLesson> });
+	Object.values(state).forEach((byParentId) => {
+		byParentId.sort(sortByIndex);
+	});
+	return state;
+});
 
 export async function showLessonById(id: string, fetchFn: IFetch = fetch) {
 	const res = await fetchFn(`${base}/api/creator/lessons/${id}`, {
@@ -117,6 +121,19 @@ export async function sortLessons(chapterId: string, newOrder: { id: string; ind
 	if (!res.ok) {
 		throw await res.json();
 	}
+	lessonsWritable.update((state) => {
+		state = state.slice();
+
+		for (const { id, index } of newOrder) {
+			const i = state.findIndex((lesson) => lesson.id === id);
+
+			if (i !== -1) {
+				state[i] = { ...state[i], index };
+			}
+		}
+
+		return state;
+	});
 }
 
 export async function deleteLesson(id: string) {

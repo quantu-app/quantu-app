@@ -1,30 +1,15 @@
-<script lang="ts">
-	import RichEditor from '$lib/components/editor/RichEditor.svelte';
-	import { validCourseUrl } from '$lib/state/creator/courses';
-	import type { StateDepartment } from '$lib/state/creator/departments';
-	import { addNotification, NotificationType } from '$lib/state/notifications';
-	import { isUrlSafe } from '$lib/utils';
-	import { debounce } from '@aicacia/debounce';
-	import type { Course } from '@prisma/client';
-	import SelectAsset from '../assets/SelectAsset.svelte';
+<svelte:options immutable />
 
-	export let department: StateDepartment;
-	export let course: Partial<Course>;
-	export let disabled = false;
+<script lang="ts" context="module">
+	import { create, test, enforce, only, type SuiteResult } from 'vest';
 
-	let courseUrl = course.url;
-	let validUrl: boolean = false;
-
-	$: validUrl = !!course.url && isUrlSafe(course.url);
-
-	let validatingUrl = false;
-	async function onUrlChange() {
-		if (!validUrl || validatingUrl || courseUrl === course.url) {
-			return;
+	async function onUrl(department: StateDepartment, origCourse: StateCourse, url: string) {
+		if (url === origCourse.url) {
+			return url;
 		}
-		validatingUrl = true;
 		try {
-			validUrl = await validCourseUrl(department.url, course.url as string);
+			const valid = await validCourseUrl(department.url, url as string);
+			return valid ? url : Promise.reject(`${url} is already used in ${department.name}`);
 		} catch (e) {
 			console.error(e);
 			addNotification({
@@ -32,37 +17,123 @@
 				title: 'Error validating URL',
 				description: (e as Error).message
 			});
-		} finally {
-			validatingUrl = false;
+			return Promise.reject(e);
 		}
 	}
-	const debouncedOnUrlChange = debounce(onUrlChange, 300);
+
+	export const suite = create(
+		'user_edit_profile_form',
+		(
+			data: Partial<StateCourse> = {},
+			department: StateDepartment,
+			origCourse: StateCourse,
+			fieldname?: string
+		) => {
+			if (fieldname) {
+				only(fieldname);
+			}
+
+			test('name', 'is not empty or blank', () => {
+				enforce(data.name).isNotEmpty().isNotBlank();
+			});
+
+			test('url', 'must be a valid URL', () => {
+				enforce(data.url).condition(isUrlSafe);
+			});
+			test('url', 'url must be unique to the Department', () => {
+				return onUrl(department, origCourse, data.url as string);
+			});
+		}
+	);
+</script>
+
+<script lang="ts">
+	import RichEditor from '$lib/components/editor/RichEditor.svelte';
+	import { updateCourse, validCourseUrl, type StateCourse } from '$lib/state/creator/courses';
+	import type { StateDepartment } from '$lib/state/creator/departments';
+	import { addNotification, NotificationType } from '$lib/state/notifications';
+	import SelectAsset from '../assets/SelectAsset.svelte';
+	import { isUrlSafe } from '$lib/utils';
+	import classnames from 'vest/classnames';
+	import InputMessages from '$lib/components/ui/InputMessages.svelte';
+
+	export let department: StateDepartment;
+	export let course: StateCourse;
+
+	let origCourse: StateCourse = { ...course };
+	let prevCourse: StateCourse;
+	$: if (prevCourse !== course) {
+		prevCourse = course;
+		origCourse = { ...course };
+	}
+
+	let result: SuiteResult = suite(course, department, origCourse).done((r) => {
+		result = r;
+	});
+	$: disabled = updatingCourse || !result.isValid();
+	$: formClassName = classnames(result, {
+		warning: 'warning',
+		invalid: 'is-invalid',
+		valid: 'is-valid'
+	});
+	$: messageClassName = classnames(result, {
+		warning: 'warning-feedback',
+		invalid: 'invalid-feedback',
+		valid: 'valid-feedback'
+	});
+
+	function runSuite(fieldname?: string) {
+		suite(course, department, origCourse, fieldname).done((r) => {
+			result = r;
+		});
+	}
+	function onChange({ currentTarget: { name } }: Event & { currentTarget: { name?: string } }) {
+		runSuite(name);
+	}
+
+	let updatingCourse = false;
+	async function onUpdateCourse() {
+		updatingCourse = true;
+		try {
+			const { id, department, logo, ...data } = course;
+			await updateCourse(course.id, data);
+		} catch (e) {
+			console.error(e);
+			addNotification({
+				type: NotificationType.Danger,
+				title: 'Error Creating',
+				description: (e as Error).message
+			});
+		} finally {
+			updatingCourse = false;
+		}
+	}
 </script>
 
 <div class="row">
 	<div class="col-md">
-		<label for="course-name" class="form-label">Name</label>
+		<label for="name" class="form-label">Name</label>
 		<input
-			id="course-name"
+			name="name"
 			type="text"
-			class="form-control"
+			class="form-control {formClassName('name')}"
 			placeholder="Course Name"
-			{disabled}
 			bind:value={course.name}
+			on:input={onChange}
 		/>
+		<InputMessages className={messageClassName('name')} messages={result.getErrors('name')} />
 	</div>
 	<div class="col-md">
-		<label for="course-url" class="form-label">URL</label>
+		<label for="url" class="form-label">URL</label>
 		<input
-			id="course-url"
+			name="url"
 			type="text"
-			class="form-control"
+			class="form-control {formClassName('url')}"
 			placeholder="Course URL"
-			class:is-invalid={!validUrl}
-			{disabled}
 			bind:value={course.url}
-			on:change={debouncedOnUrlChange}
+			on:input={onChange}
 		/>
+		<InputMessages className={messageClassName('url')} messages={result.getErrors('url')} />
 	</div>
 </div>
 <hr />
@@ -70,13 +141,8 @@
 	{#if course.id}
 		<div class="col-md-3">
 			<div class="form-control">
-				<label for="course-logo" class="form-label">Logo</label>
-				<SelectAsset
-					id="course-logo"
-					courseId={course.id}
-					bind:assetId={course.logoId}
-					type="IMAGE"
-				/>
+				<label for="logo" class="form-label">Logo</label>
+				<SelectAsset name="logo" courseId={course.id} bind:assetId={course.logoId} type="IMAGE" />
 			</div>
 		</div>
 	{/if}
@@ -84,4 +150,12 @@
 		<label for="course-description" class="form-label">Description</label>
 		<RichEditor id="course-description" bind:value={course.description} />
 	</div>
+</div>
+<div class="mt-4 d-flex justify-content-end">
+	<button type="button" on:click={onUpdateCourse} {disabled} class="btn btn-primary">
+		{#if updatingCourse}
+			<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" />
+		{/if}
+		Update
+	</button>
 </div>

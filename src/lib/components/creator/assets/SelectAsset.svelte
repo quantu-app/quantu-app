@@ -9,10 +9,11 @@
 	import AssetManager from './AssetManager.svelte';
 
 	export let departmentId: string;
-	export let id: string = undefined;
-	export let asset: Asset = undefined;
-	export let assetId: string = undefined;
-	export let type: string = undefined;
+	export let id: string | undefined = undefined;
+	export let name: string | undefined = undefined;
+	export let asset: Asset | undefined = undefined;
+	export let assetId: string | undefined = undefined;
+	export let type: string | undefined = undefined;
 
 	let open = false;
 	function onOpen() {
@@ -31,7 +32,7 @@
 	}
 </script>
 
-<button {id} type="button" class="btn btn-primary w-100 d-block" on:click={onOpen}>
+<button {id} {name} type="button" class="btn btn-primary w-100 d-block" on:click={onOpen}>
 	{#if asset}
 		<AssetComponent {asset} />
 	{:else}

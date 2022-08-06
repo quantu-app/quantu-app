@@ -6,9 +6,10 @@
 	import type { StateLessonBlock } from '$lib/state/creator/lessonBlocks';
 	import { lessonsByChapterId, showLessons, type StateLesson } from '$lib/state/creator/lessons';
 	import { fuzzyEquals } from '@aicacia/string-fuzzy_equals';
-	import DeleteChapter from './DeleteChapter.svelte';
 	import CreateLesson from './CreateLesson.svelte';
 	import type { StateDepartment } from '$lib/state/creator/departments';
+	import LessonTreeItem from './LessonTreeItem.svelte';
+	import ContextMenu from '$lib/components/ui/ContextMenu.svelte';
 
 	export let department: StateDepartment;
 	export let course: StateCourse;
@@ -16,6 +17,8 @@
 	export let selected: StateCourse | StateChapter | StateLesson | StateLessonBlock;
 	export let search = '';
 	export let onSelect: (newSelected: any) => void;
+
+	let chapterElement: HTMLElement;
 
 	function onSelectInternal() {
 		onSelect(chapter);
@@ -30,12 +33,6 @@
 	function onOpenCreatingLesson(e: MouseEvent) {
 		e.stopPropagation();
 		openCreatingLesson = true;
-	}
-
-	let openDeletingChapter = false;
-	function onOpenDeletingLesson(e: MouseEvent) {
-		e.stopPropagation();
-		openDeletingChapter = true;
 	}
 
 	let loaded = false;
@@ -56,6 +53,7 @@
 </script>
 
 <li
+	bind:this={chapterElement}
 	class="list-group-item list-group-item-action"
 	class:active={selected === chapter}
 	on:click={onSelectInternal}
@@ -66,26 +64,19 @@
 					class="bi bi-caret-right-fill"
 				/>{/if}</button
 		>
-		<div class="d-flex flex-grow-1 justify-content-between">
-			<p class="d-flex flex-grow-1 align-self-center m-0 p-0">{chapter.name}</p>
-			<div class="btn-group" role="group">
-				<button class="btn btn-sm btn-secondary" on:click={onOpenCreatingLesson}
-					><i class="bi bi-plus" /></button
-				>
-				<button class="btn btn-sm btn-danger" on:click={onOpenDeletingLesson}
-					><i class="bi bi-trash" /></button
-				>
-			</div>
-		</div>
+		<p class="d-flex flex-grow-1 align-self-center m-0 p-0">{chapter.name}</p>
 	</div>
 </li>
 {#if expanded}
 	<ul class="list-group list-group-flush">
 		{#each filteredLessons as lesson (lesson.id)}
-			{lesson.name}
+			<LessonTreeItem {lesson} {selected} {onSelect} />
 		{/each}
 	</ul>
 {/if}
 
+<ContextMenu target={chapterElement}>
+	<li><button class="dropdown-item" on:click={onOpenCreatingLesson}>Add Lesson</button></li>
+</ContextMenu>
+
 <CreateLesson bind:open={openCreatingLesson} {department} {course} {chapter} />
-<DeleteChapter bind:open={openDeletingChapter} {chapter} />

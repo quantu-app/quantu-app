@@ -22,10 +22,14 @@
 	import CreateChapter from './CreateChapter.svelte';
 	import type { StateLesson } from '$lib/state/creator/lessons';
 	import type { StateLessonBlock } from '$lib/state/creator/lessonBlocks';
+	import ContextMenu from '$lib/components/ui/ContextMenu.svelte';
+	import Editor from './Editor.svelte';
 
 	export let department: StateDepartment;
 	export let course: StateCourse;
 	export let chapters: StateChapter[];
+
+	let courseElement: HTMLElement;
 
 	let selected: StateCourse | StateChapter | StateLesson | StateLessonBlock = course;
 	function onSelect(newSelected: any) {
@@ -57,16 +61,12 @@
 	<div class="course-sidebar d-flex flex-column flex-shrink overflow-auto border-end">
 		<ul class="list-group list-group-flush">
 			<li
+				bind:this={courseElement}
 				class="list-group-item list-group-item-action"
 				class:active={selected === course}
 				on:click={onSelectCourse}
 			>
-				<div class="d-flex flex-grow-1 justify-content-between">
-					<p class="align-self-center m-0 p-0">{course.name}</p>
-					<button class="btn btn-sm btn-secondary" on:click={onCreatingChapter}
-						><i class="bi bi-plus" /></button
-					>
-				</div>
+				<p class="align-self-center m-0 p-0">{course.name}</p>
 			</li>
 			{#each filteredChapters as chapter (chapter.id)}
 				<ChapterTreeItem {search} {department} {course} {chapter} {selected} {onSelect} />
@@ -75,11 +75,15 @@
 	</div>
 	<div class="d-flex flex-column flex-grow-1 px-2">
 		<Search filter={search} {onChange} />
-		<div>
-			<pre>{JSON.stringify(selected, null, 2)}<pre /></pre>
+		<div class="mt-2">
+			<Editor {department} {selected} />
 		</div>
 	</div>
 </div>
+
+<ContextMenu target={courseElement}>
+	<li><button class="dropdown-item" on:click={onCreatingChapter}>Add Chapter</button></li>
+</ContextMenu>
 
 <CreateChapter {department} {course} bind:open={openCreateChapter} />
 

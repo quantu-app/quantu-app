@@ -3,18 +3,47 @@
 <script lang="ts">
 	import type { StateCourse } from '$lib/state/creator/courses';
 	import type { StateChapter } from '$lib/state/creator/chapters';
-	import { lessonsByChapterId, showLessons, type StateLesson } from '$lib/state/creator/lessons';
+	import {
+		lessonsByChapterId,
+		showLessons,
+		sortLessons,
+		type StateLesson
+	} from '$lib/state/creator/lessons';
 	import { fuzzyEquals } from '@aicacia/string-fuzzy_equals';
 	import CreateLesson from './CreateLesson.svelte';
 	import type { StateDepartment } from '$lib/state/creator/departments';
 	import LessonTreeItem from './LessonTreeItem.svelte';
 	import ContextMenu from '$lib/components/ui/ContextMenu.svelte';
 	import { setSelected, selected } from './Course.svelte';
+	import SortableList from '$lib/components/ui/SortableList.svelte';
+	import { addNotification, NotificationType } from '$lib/state/notifications';
 
+	export let id: string;
+	export let index: number;
 	export let department: StateDepartment;
 	export let course: StateCourse;
 	export let chapter: StateChapter;
 	export let search = '';
+
+	let sortingLessons = false;
+	async function onSortLessons(e: CustomEvent<StateChapter[]>) {
+		const newOrder = e.detail.map((chapter, index) => ({ id: chapter.id, index }));
+		sortingLessons = true;
+		try {
+			await sortLessons(chapter.id, newOrder);
+		} catch (e) {
+			console.error(e);
+			addNotification({
+				type: NotificationType.Danger,
+				description: (e as Error).message
+			});
+		} finally {
+			sortingLessons = false;
+		}
+	}
+	function getLessonId(lesson: StateLesson) {
+		return lesson.id;
+	}
 
 	let chapterElement: HTMLElement;
 
@@ -52,6 +81,8 @@
 
 <li
 	bind:this={chapterElement}
+	data-id={id}
+	data-index={index}
 	class="list-group-item list-group-item-action"
 	class:active={$selected === chapter}
 	on:click={onSelectInternal}
@@ -67,9 +98,17 @@
 </li>
 {#if expanded}
 	<ul class="list-group list-group-flush">
-		{#each filteredLessons as lesson (lesson.id)}
-			<LessonTreeItem {lesson} />
-		{/each}
+		<SortableList
+			list={filteredLessons}
+			disabled={sortingLessons}
+			let:id
+			let:index
+			let:item
+			getId={getLessonId}
+			on:change={onSortLessons}
+		>
+			<LessonTreeItem {id} {index} lesson={item} />
+		</SortableList>
 	</ul>
 {/if}
 

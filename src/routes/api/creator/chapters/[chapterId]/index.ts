@@ -36,7 +36,7 @@ export const GET = isCreator((event) => {
 });
 
 export const PATCH = isCreator(async (event) => {
-	const data = await event.request.json();
+	const { index, ...data } = await event.request.json();
 	const chapterId = event.params.chapterId;
 
 	return run((client) =>

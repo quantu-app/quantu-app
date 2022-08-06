@@ -44,13 +44,15 @@
 	import { fuzzyEquals } from '@aicacia/string-fuzzy_equals';
 	import { coursesById, type StateCourse } from '$lib/state/creator/courses';
 	import type { StateDepartment } from '$lib/state/creator/departments';
-	import { chaptersById, type StateChapter } from '$lib/state/creator/chapters';
+	import { chaptersById, sortChapters, type StateChapter } from '$lib/state/creator/chapters';
 	import ChapterTreeItem from './ChapterTreeItem.svelte';
 	import Search from '$lib/components/Search.svelte';
 	import CreateChapter from './CreateChapter.svelte';
 	import ContextMenu from '$lib/components/ui/ContextMenu.svelte';
 	import Editor from './Editor.svelte';
 	import { lessonsById } from '$lib/state/creator/lessons';
+	import SortableList from '$lib/components/ui/SortableList.svelte';
+	import { addNotification, NotificationType } from '$lib/state/notifications';
 
 	export let department: StateDepartment;
 	export let course: StateCourse;
@@ -62,6 +64,26 @@
 		setSelected('course', course.id);
 	}
 	onSelectCourse();
+
+	let sortingChapters = false;
+	async function onSortChapters(e: CustomEvent<StateChapter[]>) {
+		const newOrder = e.detail.map((chapter, index) => ({ id: chapter.id, index }));
+		sortingChapters = true;
+		try {
+			await sortChapters(course.id, newOrder);
+		} catch (e) {
+			console.error(e);
+			addNotification({
+				type: NotificationType.Danger,
+				description: (e as Error).message
+			});
+		} finally {
+			sortingChapters = false;
+		}
+	}
+	function getChapterId(chapter: StateChapter) {
+		return chapter.id;
+	}
 
 	let openCreateChapter = false;
 	function onCreatingChapter() {
@@ -88,9 +110,17 @@
 			>
 				<p class="align-self-center m-0 p-0">{course.name}</p>
 			</li>
-			{#each filteredChapters as chapter (chapter.id)}
-				<ChapterTreeItem {search} {department} {course} {chapter} />
-			{/each}
+			<SortableList
+				list={filteredChapters}
+				disabled={sortingChapters}
+				let:id
+				let:index
+				let:item
+				getId={getChapterId}
+				on:change={onSortChapters}
+			>
+				<ChapterTreeItem {id} {index} {search} {department} {course} chapter={item} />
+			</SortableList>
 		</ul>
 	</div>
 	<div class="d-flex flex-column flex-grow-1 px-2">

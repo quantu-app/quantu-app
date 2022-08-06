@@ -4,6 +4,8 @@
 	import type { StateLesson } from '$lib/state/creator/lessons';
 	import { setSelected, selected } from './Course.svelte';
 
+	export let id: string;
+	export let index: number;
 	export let lesson: StateLesson;
 
 	function onSelectInternal() {
@@ -12,6 +14,8 @@
 </script>
 
 <li
+	data-id={id}
+	data-index={index}
 	class="list-group-item list-group-item-action"
 	class:active={$selected === lesson}
 	on:click={onSelectInternal}

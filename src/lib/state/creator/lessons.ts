@@ -109,6 +109,16 @@ export async function updateLesson(id: string, body: Partial<StateLesson>) {
 	return lesson;
 }
 
+export async function sortLessons(chapterId: string, newOrder: { id: string; index: number }[]) {
+	const res = await fetch(`${base}/api/creator/chapters/${chapterId}/lessons/sort`, {
+		method: 'PATCH',
+		body: JSON.stringify(newOrder)
+	});
+	if (!res.ok) {
+		throw await res.json();
+	}
+}
+
 export async function deleteLesson(id: string) {
 	const res = await fetch(`${base}/api/creator/lessons/${id}`, {
 		method: 'DELETE'

@@ -42,7 +42,7 @@ export const GET = isCreator((event) => {
 });
 
 export const PATCH = isCreator(async (event) => {
-	const data = await event.request.json();
+	const { index, ...data } = await event.request.json();
 	const lessonId = event.params.lessonId;
 
 	return run((client) =>

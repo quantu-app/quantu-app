@@ -19,12 +19,7 @@
 	import CoursesMain from '$lib/components/courses/CoursesMain.svelte';
 	import UserLayout from '$lib/components/layouts/UserLayout.svelte';
 	import SEO from '$lib/components/SEO/index.svelte';
-	import {
-		showAllCourses,
-		courses,
-		type StateCourse,
-		coursesByDepartment
-	} from '$lib/state/courses';
+	import { courses, type StateCourse, coursesByDepartment } from '$lib/state/courses';
 	import { sortByCreatedAt } from '$lib/utils';
 
 	$: topCourses = $courses.sort(sortByCreatedAt).slice(0, 4);

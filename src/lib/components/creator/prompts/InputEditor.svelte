@@ -6,6 +6,7 @@
 
 	export let prompt: InputPrivate;
 	export let disabled = false;
+	export let onChange: () => void = () => undefined;
 
 	$: answers = prompt.answers || [];
 
@@ -38,7 +39,7 @@
 	{#if disabled}
 		<RichViewer value={prompt.question} />
 	{:else}
-		<RichEditor bind:value={prompt.question} />
+		<RichEditor bind:value={prompt.question} {onChange} />
 	{/if}
 </div>
 
@@ -47,7 +48,7 @@
 	{#if disabled}
 		<RichViewer value={prompt.explanation} />
 	{:else}
-		<RichEditor bind:value={prompt.explanation} />
+		<RichEditor bind:value={prompt.explanation} {onChange} />
 	{/if}
 </div>
 
@@ -61,7 +62,7 @@
 					>
 				{/if}
 			</div>
-			<InputAnswerEditor bind:type={prompt.type} bind:input={prompt.answers[index]} />
+			<InputAnswerEditor bind:type={prompt.type} bind:input={prompt.answers[index]} {onChange} />
 		</li>
 	{/each}
 </ul>

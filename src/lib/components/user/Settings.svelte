@@ -76,7 +76,7 @@
 						id="display-languange"
 						class="form-select {formClassName('lang')}"
 						bind:value={data.lang}
-						on:input={onChange}
+						on:change={onChange}
 					>
 						{#each languages as language}
 							<option value={language.code}>{language.nativeName} | {language.name}</option>

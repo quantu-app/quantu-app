@@ -5,6 +5,7 @@
 	export let input: string;
 	export let correct: boolean | undefined = undefined;
 	export let disabled = false;
+	export let onChange: () => void = () => undefined;
 
 	let prevType: InputType;
 	let mathElement: HTMLElement;
@@ -16,6 +17,7 @@
 			handlers: {
 				edit: function () {
 					input = mathField.latex();
+					onChange();
 				}
 			}
 		});
@@ -42,6 +44,7 @@
 			placeholder="Type answer"
 			{disabled}
 			bind:value={input}
+			on:change={onChange}
 		/>
 	</div>
 {:else if type === 'number'}
@@ -54,6 +57,7 @@
 			placeholder="Type answer"
 			{disabled}
 			bind:value={input}
+			on:change={onChange}
 		/>
 	</div>
 {/if}

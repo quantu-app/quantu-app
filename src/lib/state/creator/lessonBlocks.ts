@@ -113,6 +113,12 @@ export async function updateLessonBlock(id: string, body: Partial<StateLessonBlo
 		throw await res.json();
 	}
 	const lessonBlock: StateLessonBlock = lessonBlockFromJSON(await res.json());
+	if (body.description) {
+		lessonBlock.description = body.description;
+	}
+	if (body.prompt) {
+		lessonBlock.prompt = body.prompt;
+	}
 	lessonBlocksWritable.update((state) => addOrUpdate(state.slice(), lessonBlock));
 	return lessonBlock;
 }
@@ -173,7 +179,6 @@ function addOrUpdate(
 function lessonBlockFromJSON(lessonBlock: StateLessonBlock): StateLessonBlock {
 	return {
 		...lessonBlock,
-		releasedAt: lessonBlock.releasedAt ? new Date(lessonBlock.releasedAt) : null,
 		createdAt: new Date(lessonBlock.createdAt),
 		updatedAt: new Date(lessonBlock.updatedAt)
 	};

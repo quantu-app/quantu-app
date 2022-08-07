@@ -83,7 +83,7 @@
 				placeholder="Chapter URL"
 				class:is-invalid={!validUrl}
 				bind:value={chapterUrl}
-				on:input={debouncedOnUrlChange}
+				on:change={debouncedOnUrlChange}
 			/>
 		</div>
 	</div>

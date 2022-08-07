@@ -26,6 +26,7 @@
 
 	export let prompt: MultipleChoicePrivate;
 	export let disabled = false;
+	export let onChange: () => void = () => undefined;
 
 	$: choices = prompt.choices || [];
 	$: canBeSingleAnswer = choices.reduce((acc, choice) => acc + (choice.correct ? 1 : 0), 0) === 1;
@@ -40,6 +41,7 @@
 			if (index !== -1) {
 				choices.splice(index, 1);
 				prompt.choices = choices;
+				onChange();
 			}
 		};
 	};
@@ -52,6 +54,7 @@
 			content: []
 		});
 		prompt.choices = choices;
+		onChange();
 	};
 </script>
 
@@ -60,7 +63,7 @@
 	{#if disabled}
 		<RichViewer value={prompt.question} />
 	{:else}
-		<RichEditor bind:value={prompt.question} />
+		<RichEditor bind:value={prompt.question} {onChange} />
 	{/if}
 </div>
 
@@ -69,7 +72,7 @@
 	{#if disabled}
 		<RichViewer value={prompt.explanation} />
 	{:else}
-		<RichEditor bind:value={prompt.explanation} />
+		<RichEditor bind:value={prompt.explanation} {onChange} />
 	{/if}
 </div>
 
@@ -80,6 +83,7 @@
 		type="checkbox"
 		disabled={!canBeSingleAnswer}
 		bind:checked={prompt.singleAnswer}
+		on:change={onChange}
 		id="flexCheckDefault"
 	/>
 </div>
@@ -109,7 +113,7 @@
 			{#if disabled}
 				<RichViewer value={choice.content} />
 			{:else}
-				<RichEditor bind:value={choice.content} />
+				<RichEditor bind:value={choice.content} {onChange} />
 			{/if}
 		</li>
 	{/each}

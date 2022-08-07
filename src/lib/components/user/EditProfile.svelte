@@ -111,7 +111,7 @@
 				name="username"
 				placeholder="Username"
 				bind:value={username}
-				on:input={onChange}
+				on:change={onChange}
 			/>
 			<InputMessages
 				className={messageClassName('username')}
@@ -137,7 +137,7 @@
 					name="firstName"
 					placeholder="First name"
 					bind:value={firstName}
-					on:input={onChange}
+					on:change={onChange}
 				/>
 				<InputMessages
 					className={messageClassName('firstName')}
@@ -158,7 +158,7 @@
 					name="lastName"
 					placeholder="Last name"
 					bind:value={lastName}
-					on:input={onChange}
+					on:change={onChange}
 				/>
 				<InputMessages
 					className={messageClassName('lastName')}
@@ -181,7 +181,7 @@
 				name="birthday"
 				placeholder="Birthday"
 				bind:value={birthday}
-				on:input={onChange}
+				on:change={onChange}
 			/>
 			<InputMessages
 				className={messageClassName('birthday')}

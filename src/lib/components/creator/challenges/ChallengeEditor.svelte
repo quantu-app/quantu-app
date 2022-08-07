@@ -68,7 +68,7 @@
 			placeholder="Challenge Url"
 			{disabled}
 			bind:value={challenge.url}
-			on:input={debouncedOnUrlChange}
+			on:change={debouncedOnUrlChange}
 		/>
 	</div>
 	<div class="col-md">

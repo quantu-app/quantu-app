@@ -5,6 +5,7 @@
 
 	export let prompt: FlashCardPrivate;
 	export let disabled = false;
+	export let onChange: () => void = () => undefined;
 </script>
 
 <div class="mt-4">
@@ -12,7 +13,7 @@
 	{#if disabled}
 		<RichViewer value={prompt.front} />
 	{:else}
-		<RichEditor bind:value={prompt.front} />
+		<RichEditor bind:value={prompt.front} {onChange} />
 	{/if}
 </div>
 
@@ -23,6 +24,6 @@
 	{#if disabled}
 		<RichViewer value={prompt.back} />
 	{:else}
-		<RichEditor bind:value={prompt.back} />
+		<RichEditor bind:value={prompt.back} {onChange} />
 	{/if}
 </div>

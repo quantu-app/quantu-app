@@ -17,7 +17,7 @@
 			class="form-control"
 			{placeholder}
 			bind:value={filter}
-			on:input={internalOnChange}
+			on:change={internalOnChange}
 		/>
 	</div>
 </form>

@@ -59,7 +59,7 @@
 					class="form-select"
 					bind:value={lessonBlock.type}
 					aria-label="lessonBlock Type"
-					on:input={debouncedOnChange}
+					on:change={debouncedOnChange}
 				>
 					<option value={'MULTIPLE_CHOICE'}>Multiple Choice</option>
 					<option value={'INPUT'}>Input</option>
@@ -78,6 +78,6 @@
 				/>
 			</div>
 		</div>
-		<PromptEditor type={lessonBlock.type} {prompt} />
+		<PromptEditor type={lessonBlock.type} {prompt} onChange={debouncedOnChange} />
 	</div>
 </div>

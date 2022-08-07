@@ -124,7 +124,7 @@
 			class="form-control {formClassName('name')}"
 			placeholder="Course Name"
 			bind:value={course.name}
-			on:input={onChange}
+			on:change={onChange}
 		/>
 		<InputMessages className={messageClassName('name')} messages={result.getErrors('name')} />
 	</div>
@@ -136,7 +136,7 @@
 			class="form-control {formClassName('url')}"
 			placeholder="Course URL"
 			bind:value={course.url}
-			on:input={onChange}
+			on:change={onChange}
 		/>
 		<InputMessages className={messageClassName('url')} messages={result.getErrors('url')} />
 	</div>

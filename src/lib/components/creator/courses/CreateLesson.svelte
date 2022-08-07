@@ -85,7 +85,7 @@
 				placeholder="Lesson URL"
 				class:is-invalid={!validUrl}
 				bind:value={lessonUrl}
-				on:input={debouncedOnUrlChange}
+				on:change={debouncedOnUrlChange}
 			/>
 		</div>
 	</div>

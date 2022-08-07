@@ -5,6 +5,7 @@
 
 	export let prompt: MarkAsReadPrivate;
 	export let disabled = false;
+	export let onChange: () => void = () => undefined;
 </script>
 
 <div class="mt-4">
@@ -12,6 +13,6 @@
 	{#if disabled}
 		<RichViewer value={prompt.content} />
 	{:else}
-		<RichEditor bind:value={prompt.content} />
+		<RichEditor bind:value={prompt.content} {onChange} />
 	{/if}
 </div>

@@ -15,6 +15,7 @@
 	export let type: string;
 	export let prompt: FlashCardPrivate | MultipleChoicePrivate | InputPrivate | MarkAsReadPrivate;
 	export let disabled = false;
+	export let onChange: () => void = () => undefined;
 
 	$: promptFlashCard = prompt as FlashCardPrivate;
 	$: promptMultipleChoice = prompt as MultipleChoicePrivate;
@@ -23,11 +24,11 @@
 </script>
 
 {#if type === 'FLASH_CARD'}
-	<FlashCardEditor {disabled} bind:prompt={promptFlashCard} />
+	<FlashCardEditor {disabled} bind:prompt={promptFlashCard} {onChange} />
 {:else if type === 'MULTIPLE_CHOICE'}
-	<MultipleChoiceEditor {disabled} bind:prompt={promptMultipleChoice} />
+	<MultipleChoiceEditor {disabled} bind:prompt={promptMultipleChoice} {onChange}/>
 {:else if type === 'INPUT'}
-	<InputEditor {disabled} bind:prompt={promptInput} />
+	<InputEditor {disabled} bind:prompt={promptInput} {onChange}/>
 {:else if type === 'mark_as_read'}
-	<MarkAsReadEditor {disabled} bind:prompt={promptMarkAsRead} />
+	<MarkAsReadEditor {disabled} bind:prompt={promptMarkAsRead} {onChange}/>
 {/if}

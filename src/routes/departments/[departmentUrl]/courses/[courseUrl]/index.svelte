@@ -29,6 +29,7 @@
 	import UserLayout from '$lib/components/layouts/UserLayout.svelte';
 	import { base } from '$app/paths';
 	import RichViewer from '$lib/components/editor/RichViewer.svelte';
+	import CourseChapter from '$lib/components/courses/CourseChapter.svelte';
 
 	export let departmentUrl: string;
 	export let courseUrl: string;
@@ -37,6 +38,8 @@
 	$: course = $coursesByUrl[departmentUrl][courseUrl];
 
 	let fallbackImage = 'https://loremflickr.com/320/240';
+
+	let chapters = [{ id: '092h3f092h3f0923', name: 'Simple Linear Regression' }];
 </script>
 
 <svelte:head>
@@ -48,7 +51,10 @@
 		<div class="container">
 			<div class="row text-white">
 				<div class="col-8">
-					<a href={`${base}/courses`} class="linkToCourses">Back to Courses</a>
+					<a href={`${base}/courses`} class="linkToCourses">
+						<span>&lt;</span>
+						<span>Back to Courses</span>
+					</a>
 
 					<h1 class="mt-3">{course.name}</h1>
 					<RichViewer value={course.description} />
@@ -79,6 +85,13 @@
 					</div>
 				</div>
 			</div>
+		</div>
+	</div>
+	<div class="container">
+		<div class="row py-4 my-4">
+			{#each chapters as chapter, idx}
+				<CourseChapter {chapter} chapterNumber={idx + 1} />
+			{/each}
 		</div>
 	</div>
 </UserLayout>

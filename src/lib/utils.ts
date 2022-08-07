@@ -78,10 +78,6 @@ export function toPercent(value: number): string {
 	}
 }
 
-export function sortById(a: { id: number }, b: { id: number }) {
-	return a.id - b.id;
-}
-
 export function randomString(length = 6): string {
 	return range(0, length)
 		.iter()
@@ -188,4 +184,8 @@ export function sortByCreatedAt<T extends { createdAt: Date }>(a: T, b: T) {
 
 export function sortByIndex<T extends { index: number }>(a: T, b: T) {
 	return a.index - b.index;
+}
+
+export function sortById<T extends { id: number }>(a: T, b: T) {
+	return a.id - b.id;
 }

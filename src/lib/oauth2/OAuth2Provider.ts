@@ -56,7 +56,7 @@ export class OAuth2Provider<
 	}
 
 	async callback(url: URL): Promise<{ profile: Profile; tokens: Tokens; state: object }> {
-		const code = url.searchParams.get('code');
+		const code = url.searchParams.get('code') as string;
 		const state = getState(url.searchParams);
 
 		const tokens = await this.getTokens(code, url.origin + this.config.redirectPath);
@@ -69,9 +69,11 @@ export class OAuth2Provider<
 		return `${this.config.authorizationUrl}?${new URLSearchParams({
 			state,
 			nonce,
-			response_type: this.config.responseType,
-			client_id: this.config.clientId,
-			scope: Array.isArray(this.config.scope) ? this.config.scope.join(' ') : this.config.scope,
+			response_type: this.config.responseType as string,
+			client_id: this.config.clientId as string,
+			scope: Array.isArray(this.config.scope)
+				? this.config.scope.join(' ')
+				: (this.config.scope as string),
 			redirect_uri: url.origin + this.config.redirectPath,
 			...(this.config.authorizationParams ?? {})
 		})}`;
@@ -90,24 +92,27 @@ export class OAuth2Provider<
 		let body: string;
 		if (this.config.contentType === 'application/x-www-form-urlencoded') {
 			body = Object.entries(data)
-				.map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
+				.map(
+					([key, value]) =>
+						`${encodeURIComponent(key)}${value ? `=${encodeURIComponent(value)}` : ''}`
+				)
 				.join('&');
 		} else {
 			body = JSON.stringify(data);
 		}
 
-		return fetch(this.config.accessTokenUrl, {
+		return fetch(this.config.accessTokenUrl as string, {
 			body,
 			method: 'POST',
 			headers: {
-				'Content-Type': this.config.contentType,
+				'Content-Type': this.config.contentType || 'application/json',
 				...(this.config.headers ?? {})
 			}
 		}).then((res) => res.json());
 	}
 
 	getUserProfile(tokens: Tokens): Promise<Profile> {
-		return fetch(this.config.profileUrl, {
+		return fetch(this.config.profileUrl as string, {
 			headers: { Authorization: `${tokens.token_type} ${tokens.access_token}` }
 		})
 			.then((res) => res.json())
@@ -118,7 +123,7 @@ export class OAuth2Provider<
 function getState(query: URLSearchParams): Record<string, string> {
 	const state = query.get('state');
 	if (state) {
-		const state = Buffer.from(query.get('state'), 'base64').toString();
+		const state = Buffer.from(query.get('state') as string, 'base64').toString();
 		return state
 			.split(',')
 			.map((kv) => kv.split('='))

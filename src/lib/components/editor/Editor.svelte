@@ -13,7 +13,7 @@
 	import { isHotkey, isReadOnly, withSvelte } from 'svelte-slate';
 	import Slate from 'svelte-slate/plugins/Slate.svelte';
 	import Editable from 'svelte-slate/plugins/Editable.svelte';
-	import { createEditor, Editor } from 'slate';
+	import { createEditor, Editor, type Descendant } from 'slate';
 	import { withHistory } from 'slate-history';
 	import { DEFAULT_PLUGINS } from 'svelte-slate/plugins/DEFAULT_PLUGINS';
 	import ImageElement, { IMAGE_TYPE, withImages } from 'svelte-slate/plugins/ImageElement.svelte';
@@ -46,9 +46,14 @@
 		[MATH_TYPE]: { component: MathElement, withFn: withMath }
 	};
 	export let hoveringToolbar = true;
+	export let onChange: (value: any) => void = () => undefined;
 
 	let open = false;
 	let ref: HTMLDivElement;
+
+	function onValue(e: CustomEvent<Descendant[]>) {
+		onChange(e.detail);
+	}
 
 	function onKeyDown(event: KeyboardEvent) {
 		for (const hotkey in HOTKEYS) {
@@ -75,7 +80,7 @@
 	}
 </script>
 
-<Slate bind:editor bind:selection bind:value {plugins}>
+<Slate bind:editor bind:selection bind:value on:value={onValue} {plugins}>
 	{#if hoveringToolbar}
 		<HoveringToolbar container={ref} bind:open>
 			<div class="border p-1 mb-1 bg-white">

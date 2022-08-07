@@ -104,8 +104,8 @@ export async function updateChapter(id: string, body: Partial<StateChapter>) {
 	return chapter;
 }
 
-export async function sortChapters(courseId: string, newOrder: { id: string; index: number }[]) {
-	const res = await fetch(`${base}/api/creator/courses/${courseId}/chapters/sort`, {
+export async function sortChapters(newOrder: { id: string; index: number }[]) {
+	const res = await fetch(`${base}/api/creator/chapters/sort`, {
 		method: 'PATCH',
 		body: JSON.stringify(newOrder)
 	});

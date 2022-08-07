@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { afterUpdate, createEventDispatcher } from 'svelte/internal';
+	import { afterUpdate, createEventDispatcher } from 'svelte';
 
 	type T = any;
 

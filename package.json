@@ -87,7 +87,7 @@
 		"vite": "^3.0.4"
 	},
 	"dependencies": {
-		"@aicacia/debounce": "^0.1.15",
+		"@aicacia/debounce": "^0.1.16",
 		"@aicacia/rand": "^0.2.11",
 		"@aicacia/range": "^0.1.3",
 		"@aicacia/string-fuzzy_equals": "^0.1.4",
@@ -109,7 +109,7 @@
 		"svelte": "^3.49.0",
 		"svelte-icons": "^2.1.0",
 		"svelte-portal": "^2.2.0",
-		"svelte-slate": "^0.1.41",
+		"svelte-slate": "^0.1.43",
 		"title-case": "^3.0.3",
 		"uuid": "^8.3.2",
 		"validator": "^13.7.0",

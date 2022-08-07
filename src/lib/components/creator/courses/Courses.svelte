@@ -38,8 +38,6 @@
 
 <div class="container mb-8">
 	<div class="d-flex align-items-center justify-content-end mt-2">
-		<a class="link-dark me-2" href={`${base}/creator/merge-requests`}>Merge Requests</a>
-		<a class="link-dark me-2" href={`${base}/creator/courses/changes`}>Changes</a>
 		<CreateCourse {department} />
 	</div>
 	<Search filter={courseNameFilter} {onChange} />

@@ -8,15 +8,15 @@ export const GET = async (event: RequestEvent) => {
 	const provider = providers[event.params.provider];
 	const url = new URL(event.request.url);
 	const { profile, state } = await provider.callback(url);
-	const names = profile['name'] ? profile['name'].split(' ') : [];
+	const names = 'name' in profile ? (profile as any)['name'].split(' ') : [];
 
 	const user = await run((prisma) =>
 		fromCallback(prisma, {
-			isCreate: Boolean(state['isCreate']),
+			isCreate: Boolean((state as any)['isCreate']),
 			firstName: names[0],
 			lastName: names[names.length - 1],
 			email: profile.email,
-			emailVerified: !!profile['email_verified']
+			emailVerified: !!(profile as any)['email_verified']
 		})
 	);
 	const token = await encode({ userId: user.id });
@@ -26,7 +26,7 @@ export const GET = async (event: RequestEvent) => {
 			'Set-Cookie': `token=${token}; path=/; SameSite=Strict; Secure; expires=${new Date(
 				Date.now() + 1000 * 60 * 60 * 24 * 365
 			).toUTCString()}`,
-			Location: state['redirect'] || '/'
+			Location: (state as any)['redirect'] || '/'
 		},
 		status: 302
 	};

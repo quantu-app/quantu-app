@@ -120,7 +120,7 @@
 </script>
 
 <div class="mt-4 d-flex justify-content-between">
-	<h3>Lesson {lesson.index + 1}: {lesson.name}</h3>
+	<h3>Lesson {lesson.chapter.index + 1}.{lesson.index + 1}: {lesson.name}</h3>
 	<button type="button" on:click={onUpdateLesson} {disabled} class="btn btn-primary">
 		{#if updatingLesson}
 			<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" />

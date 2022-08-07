@@ -2,7 +2,11 @@
 
 <script lang="ts">
 	import type { StateLesson } from '$lib/state/creator/lessons';
-	import { createLessonBlock, type StateLessonBlock } from '$lib/state/creator/lessonBlocks';
+	import {
+		createLessonBlock,
+		sortLessonBlocks,
+		type StateLessonBlock
+	} from '$lib/state/creator/lessonBlocks';
 	import SortableList from '$lib/components/ui/SortableList.svelte';
 	import LessonBlockEditor from './LessonBlockEditor.svelte';
 	import { addNotification, NotificationType } from '$lib/state/notifications';
@@ -13,7 +17,22 @@
 	function getLessonBlockId(lessonBlock: StateLessonBlock) {
 		return lessonBlock.id;
 	}
-	function onSortLessonBlocks(e: CustomEvent<StateLessonBlock[]>) {}
+	let sortingLessonBlocks = false;
+	async function onSortLessonBlocks(e: CustomEvent<StateLessonBlock[]>) {
+		const newOrder = e.detail.map((chapter, index) => ({ id: chapter.id, index }));
+		sortingLessonBlocks = true;
+		try {
+			await sortLessonBlocks(newOrder);
+		} catch (e) {
+			console.error(e);
+			addNotification({
+				type: NotificationType.Danger,
+				description: (e as Error).message
+			});
+		} finally {
+			sortingLessonBlocks = false;
+		}
+	}
 
 	let creatingLessonBlock = false;
 	async function onCreateLessonBlock() {
@@ -36,9 +55,10 @@
 	}
 </script>
 
-<ul class="list-group list-group-flush">
+<div class="accordion accordion-flush" id={`accordion-${lesson.id}`}>
 	<SortableList
 		list={lessonBlocks}
+		disabled={sortingLessonBlocks}
 		let:id
 		let:index
 		let:item
@@ -47,7 +67,7 @@
 	>
 		<LessonBlockEditor {id} {index} {lesson} lessonBlock={item} />
 	</SortableList>
-</ul>
+</div>
 
 <div class="d-flex justify-content-center">
 	<button

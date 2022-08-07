@@ -1,13 +1,15 @@
 import type { LessonBlock } from '@prisma/client';
 import { writable, derived } from 'svelte/store';
 import { base } from '$app/paths';
-import type { IFetch } from '$lib/utils';
+import { sortByIndex, type IFetch } from '$lib/utils';
 
 export type StateLessonBlock = LessonBlock & {
 	lesson: {
+		index: number;
 		url: string;
 		name: string;
 		chapter: {
+			index: number;
 			url: string;
 			name: string;
 			course: { url: string; name: string; department: { url: string; name: string } };
@@ -25,14 +27,18 @@ export const lessonBlocksById = derived(lessonBlocksWritable, (lessonBlocks) =>
 		return byId;
 	}, {} as { [id: string]: StateLessonBlock })
 );
-export const lessonBlocksByLessonId = derived(lessonBlocksWritable, (lessonBlocks) =>
-	lessonBlocks.reduce((byParentId, lessonBlock) => {
+export const lessonBlocksByLessonId = derived(lessonBlocksWritable, (lessonBlocks) => {
+	const state = lessonBlocks.reduce((byParentId, lessonBlock) => {
 		const parentStateLessonBlocks =
 			byParentId[lessonBlock.lessonId] || (byParentId[lessonBlock.lessonId] = []);
 		parentStateLessonBlocks.push(lessonBlock);
 		return byParentId;
-	}, {} as { [lessonId: string]: Array<StateLessonBlock> })
-);
+	}, {} as { [lessonId: string]: Array<StateLessonBlock> });
+	Object.values(state).forEach((byParentId) => {
+		byParentId.sort(sortByIndex);
+	});
+	return state;
+});
 
 export async function showLessonBlockById(id: string, fetchFn: IFetch = fetch) {
 	const res = await fetchFn(`${base}/api/creator/lesson-blocks/${id}`, {
@@ -109,6 +115,29 @@ export async function updateLessonBlock(id: string, body: Partial<StateLessonBlo
 	const lessonBlock: StateLessonBlock = lessonBlockFromJSON(await res.json());
 	lessonBlocksWritable.update((state) => addOrUpdate(state.slice(), lessonBlock));
 	return lessonBlock;
+}
+
+export async function sortLessonBlocks(newOrder: { id: string; index: number }[]) {
+	const res = await fetch(`${base}/api/creator/lesson-blocks/sort`, {
+		method: 'PATCH',
+		body: JSON.stringify(newOrder)
+	});
+	if (!res.ok) {
+		throw await res.json();
+	}
+	lessonBlocksWritable.update((state) => {
+		state = state.slice();
+
+		for (const { id, index } of newOrder) {
+			const i = state.findIndex((lessonBlock) => lessonBlock.id === id);
+
+			if (i !== -1) {
+				state[i] = { ...state[i], index };
+			}
+		}
+
+		return state;
+	});
 }
 
 export async function deleteLessonBlock(id: string) {

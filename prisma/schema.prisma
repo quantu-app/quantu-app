@@ -416,9 +416,6 @@ model LessonBlock {
   type        QuestionType @default(MULTIPLE_CHOICE)
   prompt      Json
 
-  visible    Boolean   @default(false)
-  releasedAt DateTime?
-
   results Result[] @relation(name: "LessonBlockResult")
 
   createdAt DateTime @default(now())

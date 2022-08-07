@@ -70,7 +70,7 @@
 		const newOrder = e.detail.map((chapter, index) => ({ id: chapter.id, index }));
 		sortingChapters = true;
 		try {
-			await sortChapters(course.id, newOrder);
+			await sortChapters(newOrder);
 		} catch (e) {
 			console.error(e);
 			addNotification({

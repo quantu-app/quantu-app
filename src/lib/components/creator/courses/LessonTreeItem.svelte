@@ -1,11 +1,13 @@
 <svelte:options immutable />
 
 <script lang="ts">
+	import type { StateChapter } from '$lib/state/creator/chapters';
 	import type { StateLesson } from '$lib/state/creator/lessons';
 	import { setSelected, selected } from './Course.svelte';
 
 	export let id: string;
 	export let index: number;
+	export let chapter: StateChapter;
 	export let lesson: StateLesson;
 
 	function onSelectInternal() {
@@ -21,6 +23,8 @@
 	on:click={onSelectInternal}
 >
 	<div class="d-flex flex-row ps-5">
-		<p class="d-flex flex-grow-1 align-self-center m-0 p-0">{lesson.name}</p>
+		<p class="d-flex flex-grow-1 align-self-center m-0 p-0">
+			{chapter.index + 1}.{lesson.index + 1} - {lesson.name}
+		</p>
 	</div>
 </li>

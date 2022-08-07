@@ -8,6 +8,7 @@ export type StateLesson = Lesson & {
 		name: string;
 	};
 	chapter: {
+		index: number;
 		url: string;
 		name: string;
 		course: { url: string; name: string; department: { url: string; name: string } };
@@ -113,8 +114,8 @@ export async function updateLesson(id: string, body: Partial<StateLesson>) {
 	return lesson;
 }
 
-export async function sortLessons(chapterId: string, newOrder: { id: string; index: number }[]) {
-	const res = await fetch(`${base}/api/creator/chapters/${chapterId}/lessons/sort`, {
+export async function sortLessons(newOrder: { id: string; index: number }[]) {
+	const res = await fetch(`${base}/api/creator/lessons/sort`, {
 		method: 'PATCH',
 		body: JSON.stringify(newOrder)
 	});

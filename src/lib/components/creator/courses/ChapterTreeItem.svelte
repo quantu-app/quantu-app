@@ -26,11 +26,11 @@
 	export let search = '';
 
 	let sortingLessons = false;
-	async function onSortLessons(e: CustomEvent<StateChapter[]>) {
-		const newOrder = e.detail.map((chapter, index) => ({ id: chapter.id, index }));
+	async function onSortLessons(e: CustomEvent<StateLesson[]>) {
+		const newOrder = e.detail.map((lesson, index) => ({ id: lesson.id, index }));
 		sortingLessons = true;
 		try {
-			await sortLessons(chapter.id, newOrder);
+			await sortLessons(newOrder);
 		} catch (e) {
 			console.error(e);
 			addNotification({
@@ -93,7 +93,7 @@
 					class="bi bi-caret-right-fill"
 				/>{/if}</button
 		>
-		<p class="d-flex flex-grow-1 align-self-center m-0 p-0">{chapter.name}</p>
+		<p class="d-flex flex-grow-1 align-self-center m-0 p-0">{chapter.index + 1} - {chapter.name}</p>
 	</div>
 </li>
 {#if expanded}
@@ -107,7 +107,7 @@
 			getId={getLessonId}
 			on:change={onSortLessons}
 		>
-			<LessonTreeItem {id} {index} lesson={item} />
+			<LessonTreeItem {id} {index} {chapter} lesson={item} />
 		</SortableList>
 	</ul>
 {/if}

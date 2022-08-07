@@ -15,10 +15,12 @@ export const GET = isCreator((event) => {
 					select: {
 						url: true,
 						name: true,
+						index: true,
 						chapter: {
 							select: {
 								url: true,
 								name: true,
+								index: true,
 								course: {
 									select: {
 										url: true,
@@ -64,10 +66,12 @@ export async function updateLessonBlock(client: PrismaClient, lessonBlockId: str
 				select: {
 					url: true,
 					name: true,
+					index: true,
 					chapter: {
 						select: {
 							url: true,
 							name: true,
+							index: true,
 							course: {
 								select: {
 									url: true,
@@ -101,10 +105,12 @@ export const DELETE = isCreator((event) => {
 					select: {
 						url: true,
 						name: true,
+						index: true,
 						chapter: {
 							select: {
 								url: true,
 								name: true,
+								index: true,
 								course: {
 									select: {
 										url: true,

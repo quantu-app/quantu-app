@@ -13,6 +13,7 @@
 	export let placeholder = 'Type...';
 	export let editor: ISvelteEditor | BaseEditor | HistoryEditor | undefined = undefined;
 	export let showHelper = false;
+	export let onChange: (value: any) => void = () => undefined;
 
 	$: if (!value || value.length === 0) {
 		value = [{ type: 'paragraph', children: [{ text: '' }] }];
@@ -27,5 +28,6 @@
 		readOnly={false}
 		{placeholder}
 		hoveringToolbar={!showHelper}
+		{onChange}
 	/>
 </div>

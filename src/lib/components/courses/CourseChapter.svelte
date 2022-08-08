@@ -8,6 +8,7 @@
 
 	let lessons = [
 		{
+			url: 'subsets',
 			name: 'Subsets',
 			totalQuestions: 19,
 			exp: 5,
@@ -23,6 +24,7 @@
 			]
 		},
 		{
+			url: 'probability-theory',
 			name: 'Probability Theory',
 			totalQuestions: 15,
 			exp: 4,
@@ -38,6 +40,7 @@
 			]
 		},
 		{
+			url: 'calculus',
 			name: 'Calculus',
 			totalQuestions: 22,
 			exp: 3,
@@ -49,6 +52,7 @@
 			]
 		},
 		{
+			url: 'integration',
 			name: 'Integration',
 			totalQuestions: 18,
 			exp: 5,

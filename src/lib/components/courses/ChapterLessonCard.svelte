@@ -17,11 +17,16 @@
 		<h5 class="card-title mt-3">{lesson.name}</h5>
 		<div class="card-text">
 			<RichViewer value={lesson.description} />
+			<a
+				role="button"
+				aria-label="review"
+				class="text-success stretched-link"
+				href={`${base}/${lesson.url}`}
+			/>
 		</div>
 	</div>
 	<div class="card-footer text-muted">
 		<span>{lesson.totalQuestions} questions</span>
-		<span>+{lesson.exp} EXP</span>
 	</div>
 </div>
 

@@ -52,12 +52,12 @@
 			<button class="btn btn-primary" on:click={onOpenCreateChange}>Propose a Change</button>
 		</div>
 		<div class="d-flex align-items-center">
-			<a class="link-dark me-2" href={`${base}/creator/departments/${department.id}/assets`}
-				>Assets <i class="bi bi-chevron-right" /></a
-			>
-			<a class="link-dark me-2" href={`${base}/creator/departments/${department.id}/courses`}
-				>Courses <i class="bi bi-chevron-right" /></a
-			>
+			<a class="btn btn-outline-dark me-2" href={`${base}/creator/departments/${department.id}/assets`}>
+				Assets <i class="bi bi-archive" />
+			</a>
+			<a class="btn btn-outline-dark me-2" href={`${base}/creator/departments/${department.id}/courses`}>
+				Courses	<i class="bi bi-book" />
+			</a>
 			<CreateChallenge departmentId={department.id} />
 		</div>
 	</div>

@@ -3,6 +3,7 @@
 <script lang="ts">
 	import UserDropdown from './UserDropdown.svelte';
 	import { base } from '$app/paths';
+	import { page } from '$app/stores';
 	import { currentUser } from '$lib/state/user';
 </script>
 
@@ -20,7 +21,18 @@
 		{#if $currentUser}
 			<ul class="navbar-nav me-auto">
 				<li class="nav-item">
-					<a class="nav-link linkExtra" href={`${base}/challenges`}>Challenges</a>
+					<a
+						class:active={$page.url.pathname.startsWith(`${base}/challenges`)}
+						class="nav-link linkExtra"
+						href={`${base}/challenges`}>Challenges</a
+					>
+				</li>
+				<li class="nav-item">
+					<a
+						class:active={$page.url.pathname.startsWith(`${base}/courses`)}
+						class="nav-link linkExtra"
+						href={`${base}/courses`}>Courses</a
+					>
 				</li>
 			</ul>
 			<div class="navbar-nav ms-lg-auto">
@@ -59,7 +71,5 @@
 	}
 	a.nav-link.linkExtra {
 		font-size: 20px;
-		color: white;
-		opacity: 1;
 	}
 </style>

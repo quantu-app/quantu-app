@@ -1,38 +1,36 @@
 <script context="module" lang="ts">
 	import { authGuard } from '$lib/guard/authGuard';
 	import type { Load } from '@sveltejs/kit';
-	import { isValidStatus } from '$lib/guard/isValidStatus';
-	import { showAllCourses } from '$lib/state/courses';
 
 	export const load: Load = async (input) => {
 		const response = await authGuard(input);
-
 		if (!isValidStatus(response)) {
 			return response;
 		}
 		await showAllCourses(input.fetch);
 		return response;
 	};
+
+	function sortByDate(a: StateCourse, b: StateCourse) {
+		return a.createdAt < b.createdAt ? 1 : -1;
+	}
 </script>
 
 <script lang="ts">
-	import CoursesMain from '$lib/components/courses/CoursesMain.svelte';
 	import UserLayout from '$lib/components/layouts/UserLayout.svelte';
+	import { showAllCourses, courses, type StateCourse } from '$lib/state/courses';
 	import SEO from '$lib/components/SEO/index.svelte';
-	import { courses, type StateCourse, coursesByDepartment } from '$lib/state/courses';
-	import { sortByCreatedAt } from '$lib/utils';
-
-	$: topCourses = $courses.sort(sortByCreatedAt).slice(0, 4);
-	$: allCoursesByDepartment = Object.values($coursesByDepartment);
+	import CoursesAll from '$lib/components/courses/CoursesAll.svelte';
+	import { isValidStatus } from '$lib/guard/isValidStatus';
 </script>
 
 <SEO
-	title="Courses"
+	title="All Courses"
 	description="University level problems requiring reasoning to solve."
-	keywords="courses"
+	keywords="courses, interactive lessons, reasoning puzzles and quizzes"
 	robotsDirectives={['all']}
 />
 
 <UserLayout>
-	<CoursesMain {topCourses} coursesByDepartments={allCoursesByDepartment} />
+	<CoursesAll courses={$courses} />
 </UserLayout>

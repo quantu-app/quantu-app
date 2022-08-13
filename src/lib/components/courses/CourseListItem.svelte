@@ -14,57 +14,45 @@
 
 <script lang="ts">
 	import { base } from '$app/paths';
-	import type { StateChallenge } from '$lib/state/challenges';
+	import type { StateCourse } from '$lib/state/courses';
 	import { XorShiftRng } from '@aicacia/rand';
 	import { formatDistanceToNowStrict, isBefore, isSameDay } from 'date-fns';
 
-	export let challenge: StateChallenge;
+	export let course: StateCourse;
 
-	const rng = XorShiftRng.fromSeed(new Date(challenge.createdAt).getTime());
+	const rng = XorShiftRng.fromSeed(new Date(course.createdAt).getTime());
 	const image = rng.fromArray(IMAGES).unwrap();
 </script>
 
-<div class={challenge.result ? 'card solved' : 'card'}>
+<div class="card">
 	<img
-		src={challenge.logoId ? `${base}/api/assets/${challenge.logoId}` : image}
-		alt={challenge.name}
+		src={course.logoId ? `${base}/api/assets/${course.logoId}` : image}
+		alt={course.name}
 		class="card-img-top"
 	/>
 	<div class="card-body">
-		<h5 class="card-title mt-4 mt-lg-0 mb-0">{challenge.name}</h5>
+		<h5 class="card-title mt-4 mt-lg-0 mb-0">{course.name}</h5>
 		<div class="text-end">
-			{#if challenge.result}
-				<a
-					role="button"
-					aria-label="review"
-					class="text-success stretched-link"
-					href={`${base}/departments/${challenge.department.url}/challenges/${challenge.url}/review`}
-				/>
-			{:else}
-				<a
-					role="button"
-					aria-label="solve"
-					class="stretched-link"
-					href={`${base}/departments/${challenge.department.url}/challenges/${challenge.url}`}
-				/>
-			{/if}
+			<a
+				role="button"
+				aria-label="enter"
+				class="stretched-link"
+				href={`${base}/departments/${course.department.url}/courses/${course.url}`}
+			/>
 		</div>
 	</div>
 	<div class="card-footer">
 		<div class="text-muted card-footer-info">
-			<span class="text-uppercase">{challenge.department.name}</span><br />
-			<span
-				>{challenge.answers.length === 1 ? `1 Solver` : `${challenge.answers.length} Solvers`}
-			</span>
+			<span class="text-uppercase">{course.department.name}</span><br />
 			<span class="releasedAt">
-				<span class="dot-block" />{formatDistanceToNowStrict(challenge.releasedAt, {
+				<span class="dot-block" />{formatDistanceToNowStrict(course.releasedAt, {
 					addSuffix: false
 				})}
-				{#if !isSameDay(challenge.releasedAt, TODAY) && isBefore(challenge.releasedAt, TODAY)}
+				{#if !isSameDay(course.releasedAt, TODAY) && isBefore(course.releasedAt, TODAY)}
 					ago
 				{/if}
 			</span>
-			{#if challenge.result}
+			{#if course.finished}
 				<i class="bi fs-4 bi-check-circle-fill text-success solved-check" />
 			{/if}
 		</div>

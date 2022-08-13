@@ -18,7 +18,32 @@ export async function getCourseByUrl(
 	departmentUrl: string,
 	courseUrl: string
 ) {
-	return await client.course.findFirst({
+	const chapters = await client.chapter.findMany({
+		where: {
+			course: {
+				url: courseUrl,
+				department: {
+					url: departmentUrl
+				}
+			}
+		},
+		select: {
+			id: true
+		}
+	});
+	const chapterIds = chapters.map((chapter) => chapter.id);
+	const {
+		_count: { _all: lessonCount }
+	} = await client.lesson.aggregate({
+		_count: { _all: true },
+		where: {
+			chapterId: {
+				in: chapterIds
+			}
+		}
+	});
+
+	const course = await client.course.findFirst({
 		where: {
 			url: courseUrl,
 			department: {
@@ -34,4 +59,9 @@ export async function getCourseByUrl(
 			}
 		}
 	});
+
+	(course as any).finished = false; // TODO: add user course progress
+	(course as any).lessons = lessonCount;
+
+	return course;
 }

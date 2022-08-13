@@ -45,10 +45,12 @@
 		<div class="text-muted card-footer-info">
 			<span class="text-uppercase">{course.department.name}</span><br />
 			<span class="releasedAt">
-				<span class="dot-block" />{formatDistanceToNowStrict(course.releasedAt, {
-					addSuffix: false
-				})}
-				{#if !isSameDay(course.releasedAt, TODAY) && isBefore(course.releasedAt, TODAY)}
+				{#if course.releasedAt}
+					<span class="dot-block" />{formatDistanceToNowStrict(course.releasedAt, {
+						addSuffix: false
+					})}
+				{/if}
+				{#if course.releasedAt && !isSameDay(course.releasedAt, TODAY) && isBefore(course.releasedAt, TODAY)}
 					ago
 				{/if}
 			</span>

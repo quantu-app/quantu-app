@@ -26,7 +26,7 @@ export async function getLessonByUrl(
 	chapterUrl: string,
 	lessonUrl: string
 ) {
-	return await client.lesson.findFirst({
+	const lesson = await client.lesson.findFirst({
 		where: {
 			url: lessonUrl,
 			chapter: {
@@ -60,4 +60,18 @@ export async function getLessonByUrl(
 			}
 		}
 	});
+
+	if (lesson) {
+		const {
+			_count: { _all: lessonBlockCount }
+		} = await client.lessonBlock.aggregate({
+			_count: { _all: true },
+			where: {
+				lessonId: lesson.id
+			}
+		});
+		(lesson as any).blocks = lessonBlockCount;
+	}
+
+	return lesson;
 }

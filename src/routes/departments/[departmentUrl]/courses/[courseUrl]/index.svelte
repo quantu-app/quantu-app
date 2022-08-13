@@ -9,8 +9,12 @@
 		}
 		const departmentUrl = input.params.departmentUrl;
 		const courseUrl = input.params.courseUrl;
-		const department = await showDepartmentByUrl(departmentUrl, input.fetch);
+		await showDepartmentByUrl(departmentUrl, input.fetch);
 		await showCourseByUrl(departmentUrl, courseUrl, input.fetch);
+		const chapters = await showChapters(departmentUrl, courseUrl, input.fetch);
+		await Promise.all(
+			chapters.map((chapter) => showLessons(departmentUrl, courseUrl, chapter.url, input.fetch))
+		);
 
 		return {
 			props: {
@@ -24,22 +28,24 @@
 <script lang="ts">
 	import { authGuard } from '$lib/guard/authGuard';
 	import { isValidStatus } from '$lib/guard/isValidStatus';
-	import { departmentsByUrl, showDepartmentByUrl } from '$lib/state/departments';
+	import { showDepartmentByUrl } from '$lib/state/departments';
 	import { showCourseByUrl, coursesByUrl } from '$lib/state/courses';
 	import UserLayout from '$lib/components/layouts/UserLayout.svelte';
 	import { base } from '$app/paths';
 	import RichViewer from '$lib/components/editor/RichViewer.svelte';
 	import CourseChapter from '$lib/components/courses/CourseChapter.svelte';
+	import { showChapters, chaptersByUrl } from '$lib/state/chapters';
+	import { sortByIndex } from '$lib/utils';
+	import { lessonsByUrl, showLessons } from '$lib/state/lessons';
 
 	export let departmentUrl: string;
 	export let courseUrl: string;
 
-	$: department = $departmentsByUrl[departmentUrl];
-	$: course = $coursesByUrl[departmentUrl][courseUrl];
-
-	let fallbackImage = 'https://loremflickr.com/320/240';
-
-	let chapters = [{ id: '092h3f092h3f0923', name: 'Simple Linear Regression' }];
+	$: course = ($coursesByUrl[departmentUrl] || {})[courseUrl];
+	$: chapters = Object.values(($chaptersByUrl[departmentUrl] || {})[courseUrl] || {}).sort(
+		sortByIndex
+	);
+	$: lessonsByChapterUrl = ($lessonsByUrl[departmentUrl] || {})[courseUrl] || {};
 </script>
 
 <svelte:head>
@@ -61,24 +67,22 @@
 				</div>
 				<div class="col-4">
 					<div class="card darkerBgColor">
-						<img
-							src={course.logoId ? `${base}/api/assets/${course.logoId}` : fallbackImage}
-							alt={course.name}
-							class="card-img-top"
-						/>
+						{#if course.logoId}
+							<img
+								src={`${base}/api/assets/${course.logoId}`}
+								alt={course.name}
+								class="card-img-top"
+							/>
+						{/if}
 						<div class="card-body">
 							<div class="row text-center">
-								<div class="col-4">
-									<h4>32</h4>
+								<div class="col">
+									<h4>{chapters.length}</h4>
+									<p>Chapters</p>
+								</div>
+								<div class="col">
+									<h4>{course.lessons}</h4>
 									<p>Lessons</p>
-								</div>
-								<div class="col-4">
-									<h4>80</h4>
-									<p>Quizzes</p>
-								</div>
-								<div class="col-4">
-									<h4>5</h4>
-									<p>Tests</p>
 								</div>
 							</div>
 						</div>
@@ -90,7 +94,11 @@
 	<div class="container">
 		<div class="row py-4 my-4">
 			{#each chapters as chapter, idx}
-				<CourseChapter {chapter} chapterNumber={idx + 1} />
+				<CourseChapter
+					{chapter}
+					chapterNumber={idx + 1}
+					lessons={Object.values(lessonsByChapterUrl[chapter.url] || {})}
+				/>
 			{/each}
 		</div>
 	</div>

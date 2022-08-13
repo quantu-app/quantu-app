@@ -4,6 +4,7 @@ import { base } from '$app/paths';
 import type { IFetch } from '../utils';
 
 export type StateLesson = Lesson & {
+	blocks: number;
 	chapter: {
 		url: string;
 		name: string;

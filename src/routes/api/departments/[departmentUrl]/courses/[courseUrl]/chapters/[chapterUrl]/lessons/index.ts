@@ -22,7 +22,7 @@ export async function getLessons(
 	chapterUrl: string,
 	lessonUrl: string
 ) {
-	return await client.lesson.findMany({
+	const lessons = await client.lesson.findMany({
 		where: {
 			url: lessonUrl,
 			chapter: {
@@ -56,4 +56,26 @@ export async function getLessons(
 			}
 		}
 	});
+
+	const lessonIds = lessons.map((lesson) => lesson.id);
+	const lessonBlockCounts = await client.lessonBlock.groupBy({
+		by: ['lessonId'],
+		_count: { _all: true },
+		where: {
+			lessonId: {
+				in: lessonIds
+			}
+		}
+	});
+
+	const lessonBlockCountByLessonId = lessonBlockCounts.reduce((byLessonId, lessonBlockCount) => {
+		byLessonId[lessonBlockCount.lessonId] = lessonBlockCount._count._all;
+		return byLessonId;
+	}, {} as { [lessonId: string]: number });
+
+	for (const lesson of lessons) {
+		(lesson as any).blocks = lessonBlockCountByLessonId[lesson.id] || 0;
+	}
+
+	return lessons;
 }

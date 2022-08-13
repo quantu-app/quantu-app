@@ -4,16 +4,13 @@
 	import { base } from '$app/paths';
 
 	export let lesson: StateLesson;
-	export const fallbackImage: string = 'https://loremflickr.com/320/180';
 </script>
 
 <div class="card">
 	<div class="card-body">
-		<img
-			src={lesson.logoId ? `${base}/api/assets/${lesson.logoId}` : fallbackImage}
-			alt={lesson.name}
-			class="card-img-top"
-		/>
+		{#if lesson.logoId}
+			<img src={`${base}/api/assets/${lesson.logoId}`} alt={lesson.name} class="card-img-top" />
+		{/if}
 		<h5 class="card-title mt-3">{lesson.name}</h5>
 		<div class="card-text">
 			<RichViewer value={lesson.description} />
@@ -21,17 +18,11 @@
 				role="button"
 				aria-label="review"
 				class="text-success stretched-link"
-				href={`${base}/${lesson.url}`}
+				href={`${base}/departments/${lesson.chapter.course.department.url}/courses/${lesson.chapter.course.url}/chapters/${lesson.chapter.url}/lessons/${lesson.url}`}
 			/>
 		</div>
 	</div>
 	<div class="card-footer text-muted">
-		<span>{lesson.totalQuestions} questions</span>
+		<span>{lesson.blocks} questions</span>
 	</div>
 </div>
-
-<style>
-	.card {
-		height: 360px;
-	}
-</style>

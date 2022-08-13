@@ -20,20 +20,25 @@
 </script>
 
 <script lang="ts">
-	import PublicLayout from '$lib/components/layouts/PublicLayout.svelte';
+	import UserLayout from '$lib/components/layouts/UserLayout.svelte';
+	import DepartmentCoursesMain from '$lib/components/courses/DepartmentCoursesMain.svelte';
 	import { authGuard } from '$lib/guard/authGuard';
 	import { isValidStatus } from '$lib/guard/isValidStatus';
 	import { departmentsByUrl, showDepartmentByUrl } from '$lib/state/departments';
-	import { showCourses, coursesByUrl } from '$lib/state/courses';
+	import { courses as coursesState, showCourses, coursesByUrl } from '$lib/state/courses';
+	import { sortByCreatedAt } from '$lib/utils';
 
 	export let departmentUrl: string;
 
 	$: department = $departmentsByUrl[departmentUrl];
 	$: courses = $coursesByUrl[departmentUrl] || [];
+	$: newestCourses = $coursesState.sort(sortByCreatedAt).slice(0, 4);
 </script>
 
 <svelte:head>
-	<title>Courses</title>
+	<title>{department.name} | Courses</title>
 </svelte:head>
 
-<PublicLayout />
+<UserLayout>
+	<DepartmentCoursesMain {newestCourses} {courses} />
+</UserLayout>

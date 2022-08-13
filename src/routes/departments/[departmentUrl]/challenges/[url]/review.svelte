@@ -64,7 +64,7 @@
 						<span>
 							<a
 								class="link-dark"
-								href={`${base}/challenges/${challenge.department.url}/${challenge.url}/solutions`}
+								href={`${base}/departments/${challenge.department.url}/challenges/${challenge.url}/solutions`}
 							>
 								View Discussion
 							</a>

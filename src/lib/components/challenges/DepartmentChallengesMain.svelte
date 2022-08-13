@@ -17,16 +17,13 @@
 			<h2>Newest Challenges</h2>
 			<ChallengeList challenges={newestChallenges} />
 		</div>
-		<div class="row mt-3 text-end">
-			<a class="viewAllChallenges" href={`${base}/${Department.url}/challenges/all`}>
-				<span class="linkText">View All Challenges</span>
-				<span class="linkArrow"> &gt; </span>
-			</a>
-		</div>
 	{/if}
 	<hr />
 	{#if challenges.length}
-		<ChallengeList {challenges} />
+		<div class="row">
+			<h2>All Challenges</h2>
+			<ChallengeList {challenges} />
+		</div>
 	{/if}
 </div>
 

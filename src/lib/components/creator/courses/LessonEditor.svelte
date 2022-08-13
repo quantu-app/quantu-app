@@ -50,34 +50,26 @@
 <script lang="ts">
 	import RichEditor from '$lib/components/editor/RichEditor.svelte';
 	import { updateLesson, validLessonUrl, type StateLesson } from '$lib/state/creator/lessons';
-	import { lessonBlocksByLessonId, showLessonBlocks } from '$lib/state/creator/lessonBlocks';
 	import { addNotification, NotificationType } from '$lib/state/notifications';
 	import SelectAsset from '../assets/SelectAsset.svelte';
 	import { isUrlSafe } from '$lib/utils';
 	import classnames from 'vest/classnames';
 	import InputMessages from '$lib/components/ui/InputMessages.svelte';
-	import LessonBlocksEditor from './LessonBlocksEditor.svelte';
+	import { debounce } from '@aicacia/debounce';
 
 	export let lesson: StateLesson;
 
 	let origLesson: StateLesson = { ...lesson };
 	let prevLesson: StateLesson;
-	let loadingLessonBlocks = false;
 	$: if (prevLesson !== lesson) {
 		prevLesson = lesson;
 		origLesson = { ...lesson };
-		if (!loadingLessonBlocks) {
-			loadingLessonBlocks = true;
-			showLessonBlocks(lesson.id).finally(() => {
-				loadingLessonBlocks = false;
-			});
-		}
 	}
 
 	let result: SuiteResult = suite(lesson, origLesson).done((r) => {
 		result = r;
 	});
-	$: disabled = updatingLesson || !result.isValid();
+	$: disabled = result.isValid() || updatingLesson;
 	$: formClassName = classnames(result, {
 		warning: 'warning',
 		invalid: 'is-invalid',
@@ -89,12 +81,20 @@
 		valid: 'valid-feedback'
 	});
 
-	function runSuite(fieldname?: string) {
-		suite(lesson, origLesson, fieldname).done((r) => {
-			result = r;
+	function runSuite(fieldName?: string) {
+		return new Promise((resolve) => {
+			suite(lesson, origLesson, fieldName).done((r) => {
+				result = r;
+				resolve(r.isValid());
+			});
 		});
 	}
-	function onChange({ currentTarget: { name } }: Event & { currentTarget: { name?: string } }) {
+	function onChangeEvent({
+		currentTarget: { name }
+	}: Event & { currentTarget: { name?: string } }) {
+		runSuite(name);
+	}
+	function onChange(name?: string) {
 		runSuite(name);
 	}
 
@@ -102,7 +102,7 @@
 	async function onUpdateLesson() {
 		updatingLesson = true;
 		try {
-			const { id, chapter, logo, ...data } = lesson;
+			const { id, chapter, ...data } = lesson;
 			await updateLesson(lesson.id, data);
 		} catch (e) {
 			console.error(e);
@@ -115,8 +115,6 @@
 			updatingLesson = false;
 		}
 	}
-
-	$: lessonBlocks = $lessonBlocksByLessonId[lesson.id] || [];
 </script>
 
 <div class="mt-4 d-flex justify-content-between">
@@ -137,7 +135,7 @@
 			class="form-control {formClassName('name')}"
 			placeholder="Lesson Name"
 			bind:value={lesson.name}
-			on:change={onChange}
+			on:change={onChangeEvent}
 		/>
 		<InputMessages className={messageClassName('name')} messages={result.getErrors('name')} />
 	</div>
@@ -149,7 +147,7 @@
 			class="form-control {formClassName('url')}"
 			placeholder="Lesson URL"
 			bind:value={lesson.url}
-			on:change={onChange}
+			on:change={onChangeEvent}
 		/>
 		<InputMessages className={messageClassName('url')} messages={result.getErrors('url')} />
 	</div>
@@ -160,14 +158,18 @@
 		<div class="col-md-3">
 			<div class="form-control">
 				<label for="logo" class="form-label">Logo</label>
-				<SelectAsset name="logo" lessonId={lesson.id} bind:assetId={lesson.logoId} type="IMAGE" />
+				<SelectAsset
+					name="logo"
+					departmentId={lesson.chapter.course.department.id}
+					bind:assetId={lesson.logoId}
+					type="IMAGE"
+					{onChange}
+				/>
 			</div>
 		</div>
 	{/if}
 	<div class="col">
 		<label for="lesson-description" class="form-label">Description</label>
-		<RichEditor id="lesson-description" bind:value={lesson.description} />
+		<RichEditor name="description" bind:value={lesson.description} {onChange} />
 	</div>
 </div>
-
-<LessonBlocksEditor {lesson} {lessonBlocks} />

@@ -77,10 +77,12 @@ async function createChapter(client: Prisma.TransactionClient, courseId: string,
 			},
 			course: {
 				select: {
+					id: true,
 					url: true,
 					name: true,
 					department: {
 						select: {
+							id: true,
 							url: true,
 							name: true
 						}

@@ -13,20 +13,24 @@ export const GET = isCreator((event) => {
 			include: {
 				lesson: {
 					select: {
+						id: true,
 						url: true,
 						name: true,
 						index: true,
 						chapter: {
 							select: {
+								id: true,
 								url: true,
 								name: true,
 								index: true,
 								course: {
 									select: {
+										id: true,
 										url: true,
 										name: true,
 										department: {
 											select: {
+												id: true,
 												url: true,
 												name: true
 											}
@@ -85,20 +89,24 @@ export async function createLessonBlock(
 		include: {
 			lesson: {
 				select: {
+					id: true,
 					url: true,
 					name: true,
 					index: true,
 					chapter: {
 						select: {
+							id: true,
 							url: true,
 							name: true,
 							index: true,
 							course: {
 								select: {
+									id: true,
 									url: true,
 									name: true,
 									department: {
 										select: {
+											id: true,
 											url: true,
 											name: true
 										}

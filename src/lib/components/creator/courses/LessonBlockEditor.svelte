@@ -1,20 +1,17 @@
 <script lang="ts">
-	import type { StateLesson } from '$lib/state/creator/lessons';
 	import { updateLessonBlock, type StateLessonBlock } from '$lib/state/creator/lessonBlocks';
 	import RichEditor from '$lib/components/editor/RichEditor.svelte';
 	import PromptEditor from '../prompts/PromptEditor.svelte';
-	import { debounce } from '@aicacia/debounce';
 	import { addNotification, NotificationType } from '$lib/state/notifications';
+	import { typeToName } from '$lib/types';
 
-	export let id: string;
-	export let index: number;
-	export let lesson: StateLesson;
 	export let lessonBlock: StateLessonBlock;
 
 	$: prompt = lessonBlock.prompt as any;
+	$: disabled = updatingLessonBlock;
 
 	let updatingLessonBlock = false;
-	async function onChange() {
+	async function onUpdateLessonBlock() {
 		updatingLessonBlock = true;
 		try {
 			const { id, lesson, ...data } = lessonBlock;
@@ -25,59 +22,45 @@
 				type: NotificationType.Danger,
 				description: (e as Error).message
 			});
+		} finally {
+			updatingLessonBlock = false;
 		}
 	}
-
-	const debouncedOnChange = debounce(onChange, 1000);
 </script>
 
-<div data-id={id} data-index={index} class="accordion-item">
-	<h2 class="accordion-header" id={`accordion-heading-${lessonBlock.id}`}>
-		<button
-			class="accordion-button"
-			type="button"
-			data-bs-toggle="collapse"
-			data-bs-target={`#accordion-collapse-${lessonBlock.id}`}
-			aria-expanded="false"
-			aria-controls={`accordion-collapse-${lessonBlock.id}`}
+<div class="mt-4 d-flex justify-content-between">
+	<h3>
+		Lesson {lessonBlock.lesson.chapter.index + 1}.{lessonBlock.lesson.index +
+			1}.{lessonBlock.index + 1}: {typeToName(lessonBlock.type)}
+	</h3>
+	<button type="button" on:click={onUpdateLessonBlock} {disabled} class="btn btn-primary">
+		{#if updatingLessonBlock}
+			<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" />
+		{/if}
+		Update
+	</button>
+</div>
+
+<div class="row">
+	<div class="col">
+		<label for="lesson-blocktype" class="form-label">Type</label>
+		<select
+			name="lesson-blocktype"
+			class="form-select"
+			bind:value={lessonBlock.type}
+			aria-label="lessonBlock Type"
 		>
-			{lessonBlock.lesson.chapter.index + 1}.{lessonBlock.lesson.index + 1}.{lessonBlock.index + 1}
-			{lessonBlock.type}
-		</button>
-	</h2>
-	<div
-		id={`accordion-collapse-${lessonBlock.id}`}
-		class="accordion-collapse collapse show my-4"
-		aria-labelledby={`accordion-heading-${lessonBlock.id}`}
-		data-bs-parent={`accordion-${lesson.id}`}
-	>
-		<div class="row">
-			<div class="col">
-				<label for="lesson-blocktype" class="form-label">Type</label>
-				<select
-					name="lesson-blocktype"
-					class="form-select"
-					bind:value={lessonBlock.type}
-					aria-label="lessonBlock Type"
-					on:change={debouncedOnChange}
-				>
-					<option value={'MULTIPLE_CHOICE'}>Multiple Choice</option>
-					<option value={'INPUT'}>Input</option>
-					<option value={'FLASH_CARD'}>Flash Card</option>
-					<option value={'MARK_AS_READ'}>Mark as Read</option>
-				</select>
-			</div>
-		</div>
-		<div class="row">
-			<div class="col">
-				<label for="description" class="form-label">Description</label>
-				<RichEditor
-					id="description"
-					bind:value={lessonBlock.description}
-					onChange={debouncedOnChange}
-				/>
-			</div>
-		</div>
-		<PromptEditor type={lessonBlock.type} {prompt} onChange={debouncedOnChange} />
+			<option value={'MULTIPLE_CHOICE'}>Multiple Choice</option>
+			<option value={'INPUT'}>Input</option>
+			<option value={'FLASH_CARD'}>Flash Card</option>
+			<option value={'MARK_AS_READ'}>Mark as Read</option>
+		</select>
 	</div>
 </div>
+<div class="row">
+	<div class="col">
+		<label for="description" class="form-label">Description</label>
+		<RichEditor id="description" name="description" bind:value={lessonBlock.description} />
+	</div>
+</div>
+<PromptEditor type={lessonBlock.type} {prompt} />

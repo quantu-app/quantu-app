@@ -8,10 +8,16 @@ export type StateLesson = Lesson & {
 		name: string;
 	};
 	chapter: {
+		id: string;
 		index: number;
 		url: string;
 		name: string;
-		course: { url: string; name: string; department: { url: string; name: string } };
+		course: {
+			id: string;
+			url: string;
+			name: string;
+			department: { id: string; url: string; name: string };
+		};
 	};
 };
 

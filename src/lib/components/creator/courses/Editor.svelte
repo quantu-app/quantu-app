@@ -5,6 +5,7 @@
 	import ChapterEditor from './ChapterEditor.svelte';
 	import LessonEditor from './LessonEditor.svelte';
 	import { selected } from './Course.svelte';
+	import LessonBlockEditor from './LessonBlockEditor.svelte';
 
 	$: value = $selected;
 </script>
@@ -16,5 +17,7 @@
 		<ChapterEditor chapter={value} />
 	{:else if 'chapter' in value}
 		<LessonEditor lesson={value} />
+	{:else if 'lesson' in value}
+		<LessonBlockEditor lessonBlock={value} />
 	{/if}
 {/if}

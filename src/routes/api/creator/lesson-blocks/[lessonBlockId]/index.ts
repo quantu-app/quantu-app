@@ -13,20 +13,24 @@ export const GET = isCreator((event) => {
 			include: {
 				lesson: {
 					select: {
+						id: true,
 						url: true,
 						name: true,
 						index: true,
 						chapter: {
 							select: {
+								id: true,
 								url: true,
 								name: true,
 								index: true,
 								course: {
 									select: {
+										id: true,
 										url: true,
 										name: true,
 										department: {
 											select: {
+												id: true,
 												url: true,
 												name: true
 											}
@@ -64,20 +68,24 @@ export async function updateLessonBlock(client: PrismaClient, lessonBlockId: str
 		include: {
 			lesson: {
 				select: {
+					id: true,
 					url: true,
 					name: true,
 					index: true,
 					chapter: {
 						select: {
+							id: true,
 							url: true,
 							name: true,
 							index: true,
 							course: {
 								select: {
+									id: true,
 									url: true,
 									name: true,
 									department: {
 										select: {
+											id: true,
 											url: true,
 											name: true
 										}
@@ -103,20 +111,24 @@ export const DELETE = isCreator((event) => {
 			include: {
 				lesson: {
 					select: {
+						id: true,
 						url: true,
 						name: true,
 						index: true,
 						chapter: {
 							select: {
+								id: true,
 								url: true,
 								name: true,
 								index: true,
 								course: {
 									select: {
+										id: true,
 										url: true,
 										name: true,
 										department: {
 											select: {
+												id: true,
 												url: true,
 												name: true
 											}

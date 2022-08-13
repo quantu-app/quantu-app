@@ -7,7 +7,7 @@ export type StateCourse = Course & {
 	logo?: {
 		name: string;
 	};
-	department: { url: string; name: string };
+	department: { id: string; url: string; name: string };
 };
 
 const coursesWritable = writable<Array<StateCourse>>([]);

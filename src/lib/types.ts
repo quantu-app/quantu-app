@@ -100,3 +100,16 @@ export function isMultipleChoicePrivate(
 ): _prompt is MultipleChoicePrivate {
 	return type === 'MULTIPLE_CHOICE';
 }
+
+export function typeToName(type: QuestionType) {
+	switch (type) {
+		case 'FLASH_CARD':
+			return 'Flash Card';
+		case 'INPUT':
+			return 'Input';
+		case 'MARK_AS_READ':
+			return 'Mark as Read';
+		case 'MULTIPLE_CHOICE':
+			return 'Mutiple Choice';
+	}
+}

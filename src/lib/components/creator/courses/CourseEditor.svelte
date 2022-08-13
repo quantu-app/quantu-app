@@ -147,7 +147,12 @@
 		<div class="col-md-3">
 			<div class="form-control">
 				<label for="logo" class="form-label">Logo</label>
-				<SelectAsset name="logo" courseId={course.id} bind:assetId={course.logoId} type="IMAGE" />
+				<SelectAsset
+					name="logo"
+					departmentId={course.departmentId}
+					bind:assetId={course.logoId}
+					type="IMAGE"
+				/>
 			</div>
 		</div>
 	{/if}

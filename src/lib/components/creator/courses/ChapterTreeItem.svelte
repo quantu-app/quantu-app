@@ -107,7 +107,7 @@
 			getId={getLessonId}
 			on:change={onSortLessons}
 		>
-			<LessonTreeItem {id} {index} {chapter} lesson={item} />
+			<LessonTreeItem {id} {index} {department} {course} {chapter} lesson={item} />
 		</SortableList>
 	</ul>
 {/if}

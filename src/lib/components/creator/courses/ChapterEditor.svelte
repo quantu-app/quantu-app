@@ -80,11 +80,19 @@
 	});
 
 	function runSuite(fieldname?: string) {
-		suite(chapter, origChapter, fieldname).done((r) => {
-			result = r;
+		return new Promise((resolve) => {
+			suite(chapter, origChapter, fieldname).done((r) => {
+				result = r;
+				resolve(r.isValid());
+			});
 		});
 	}
-	function onChange({ currentTarget: { name } }: Event & { currentTarget: { name?: string } }) {
+	function onChangeEvent({
+		currentTarget: { name }
+	}: Event & { currentTarget: { name?: string } }) {
+		runSuite(name);
+	}
+	function onChange(name?: string) {
 		runSuite(name);
 	}
 
@@ -107,7 +115,7 @@
 	}
 </script>
 
-<div class="mt-4 d-flex justify-content-between">
+<div class="mt-4 d-flex">
 	<h3>Chapter - {chapter.index + 1}: {chapter.name}</h3>
 	<button type="button" on:click={onUpdateChapter} {disabled} class="btn btn-primary">
 		{#if updatingChapter}
@@ -125,7 +133,7 @@
 			class="form-control {formClassName('name')}"
 			placeholder="Chapter Name"
 			bind:value={chapter.name}
-			on:change={onChange}
+			on:change={onChangeEvent}
 		/>
 		<InputMessages className={messageClassName('name')} messages={result.getErrors('name')} />
 	</div>
@@ -137,7 +145,7 @@
 			class="form-control {formClassName('url')}"
 			placeholder="Chapter URL"
 			bind:value={chapter.url}
-			on:change={onChange}
+			on:change={onChangeEvent}
 		/>
 		<InputMessages className={messageClassName('url')} messages={result.getErrors('url')} />
 	</div>
@@ -150,15 +158,16 @@
 				<label for="logo" class="form-label">Logo</label>
 				<SelectAsset
 					name="logo"
-					chapterId={chapter.id}
+					departmentId={chapter.course.department.id}
 					bind:assetId={chapter.logoId}
+					{onChange}
 					type="IMAGE"
 				/>
 			</div>
 		</div>
 	{/if}
 	<div class="col">
-		<label for="chapter-description" class="form-label">Description</label>
-		<RichEditor id="chapter-description" bind:value={chapter.description} />
+		<label for="description" class="form-label">Description</label>
+		<RichEditor id="description" name="description" bind:value={chapter.description} {onChange} />
 	</div>
 </div>

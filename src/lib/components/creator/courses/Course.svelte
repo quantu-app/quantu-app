@@ -6,7 +6,7 @@
 	interface IState {
 		search: string | undefined;
 		selectedId: string;
-		selectedType: 'course' | 'chapter' | 'lesson';
+		selectedType: 'course' | 'chapter' | 'lesson' | 'lesson-block';
 	}
 
 	const state = writable<IState>({
@@ -16,8 +16,8 @@
 	});
 
 	export const selected = derived(
-		[state, coursesById, chaptersById, lessonsById],
-		([state, coursesById, chaptersById, lessonsById]) => {
+		[state, coursesById, chaptersById, lessonsById, lessonBlocksById],
+		([state, coursesById, chaptersById, lessonsById, lessonBlocksById]) => {
 			switch (state.selectedType) {
 				case 'course':
 					return coursesById[state.selectedId];
@@ -25,6 +25,8 @@
 					return chaptersById[state.selectedId];
 				case 'lesson':
 					return lessonsById[state.selectedId];
+				case 'lesson-block':
+					return lessonBlocksById[state.selectedId];
 				default:
 					return undefined;
 			}
@@ -53,6 +55,7 @@
 	import { lessonsById } from '$lib/state/creator/lessons';
 	import SortableList from '$lib/components/ui/SortableList.svelte';
 	import { addNotification, NotificationType } from '$lib/state/notifications';
+	import { lessonBlocksById } from '$lib/state/creator/lessonBlocks';
 
 	export let department: StateDepartment;
 	export let course: StateCourse;

@@ -12,8 +12,9 @@
 	export let id: string | undefined = undefined;
 	export let name: string | undefined = undefined;
 	export let asset: Asset | undefined = undefined;
-	export let assetId: string | undefined = undefined;
+	export let assetId: string | null | undefined = undefined;
 	export let type: string | undefined = undefined;
+	export let onChange: (fieldName?: string) => void = () => undefined;
 
 	let open = false;
 	function onOpen() {
@@ -29,6 +30,7 @@
 	}
 	function onSelect(a?: Asset) {
 		assetId = a?.id;
+		onChange(name);
 	}
 </script>
 

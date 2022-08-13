@@ -84,15 +84,18 @@ export async function createLesson(client: Prisma.TransactionClient, chapterId: 
 			},
 			chapter: {
 				select: {
+					id: true,
 					url: true,
 					name: true,
 					index: true,
 					course: {
 						select: {
+							id: true,
 							url: true,
 							name: true,
 							department: {
 								select: {
+									id: true,
 									url: true,
 									name: true
 								}

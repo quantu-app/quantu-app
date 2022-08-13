@@ -12,7 +12,7 @@ export interface IQuestion {
 	prompt: PromptPrivate;
 }
 
-export abstract class Generator<C> {
+export abstract class QuestionGenerator<C> {
 	config: C;
 	rng: Rng;
 

@@ -30,7 +30,7 @@ export enum InputType {
 }
 
 export interface InputPrivate {
-	answers: string[];
+	answers: (string | number)[];
 	explanation?: Array<IElement | IText>;
 	question: Array<IElement | IText>;
 	type: InputType;

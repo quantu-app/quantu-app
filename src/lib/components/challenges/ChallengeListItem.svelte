@@ -38,14 +38,14 @@
 					role="button"
 					aria-label="review"
 					class="text-success stretched-link"
-					href={`${base}/challenges/${challenge.department.url}/${challenge.url}/review`}
+					href={`${base}/departments/${challenge.department.url}/challenges/${challenge.url}/review`}
 				/>
 			{:else}
 				<a
 					role="button"
 					aria-label="solve"
 					class="stretched-link"
-					href={`${base}/challenges/${challenge.department.url}/${challenge.url}`}
+					href={`${base}/departments/${challenge.department.url}/challenges/${challenge.url}`}
 				/>
 			{/if}
 		</div>

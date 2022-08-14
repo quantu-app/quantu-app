@@ -374,12 +374,24 @@ model Chapter {
   visible    Boolean   @default(false)
   releasedAt DateTime?
 
-  lessons Lesson[]
+  lessons  Lesson[]
+  quizzies Quiz[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@unique([courseId, url])
+}
+
+model Quiz {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  chapter   Chapter @relation(fields: [chapterId], references: [id])
+  chapterId String  @db.ObjectId
+  config    Json
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Lesson {

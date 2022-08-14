@@ -5,19 +5,26 @@ import type { IJwtString } from '$lib/api/jwt';
 import type { User } from '@prisma/client';
 import type * as bootstrap from 'bootstrap';
 
-declare namespace App {
-	interface Locals {
-		rawToken?: IJwtString<ITokenValue>;
-		token?: ITokenValue;
-	}
-	// interface Platform {}
-	interface Session {
-		user: Omit<User, 'encryptedPassword'>;
-	}
-	// interface Stuff {}
-}
-
 declare global {
+	declare namespace App {
+		interface Locals {
+			rawToken?: IJwtString<ITokenValue>;
+			token?: ITokenValue;
+		}
+
+		interface Platform {}
+
+		interface PrivateEnv {}
+
+		interface PublicEnv {}
+
+		interface Session {
+			user?: Omit<User, 'encryptedPassword'>;
+		}
+
+		interface Stuff {}
+	}
+
 	interface Window {
 		bootstrap: typeof bootstrap;
 		dataLayer: IArguments[];

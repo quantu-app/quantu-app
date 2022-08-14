@@ -55,13 +55,13 @@
 
 <div class="d-flex flex-column">
 	<button
-		class="btn btn-sm btn-ghost"
+		class="btn btn-sm btn-noBorder fs-4 py-0"
 		disabled={voting || disabled || vote === true}
 		on:click={onVoteUp}
 	>
-		<i class="bi bi-chevron-up" class:text-success={vote === true} />
+		<i class="bi bi-triangle-fill" class:text-success={vote === true} />
 	</button>
-	<button class="btn btn-sm btn-ghost" disabled>
+	<button class="btn btn-sm btn-noBorder fs-3 py-0" disabled>
 		<span class:text-success={vote === true} class:text-danger={vote === false}>
 			{#if voting}
 				<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" />
@@ -71,15 +71,26 @@
 		</span>
 	</button>
 	<button
-		class="btn btn-sm btn-ghost"
+		class="btn btn-sm btn-noBorder fs-4 py-0"
 		disabled={voting || disabled || vote === false}
 		on:click={onVoteDown}
 	>
-		<i class="bi bi-chevron-down" class:text-danger={vote === false} />
+		<i class="bi bi-triangle-fill triangleDown" class:text-danger={vote === false} />
 	</button>
 </div>
 
 <style>
+	.triangleDown {
+		display: inline-block;
+		-webkit-transform: rotate(180deg);
+		-moz-transform: rotate(180deg);
+		-ms-transform: rotate(180deg);
+		-o-transform: rotate(180deg);
+		transform: rotate(180deg);
+	}
+	.btn-noBorder {
+		border: none;
+	}
 	.spinner-border {
 		width: 14px;
 		height: 14px;

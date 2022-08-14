@@ -14,6 +14,7 @@
 	import { currentUser } from '$lib/state/user';
 	import TimeDisplay from '$lib/components/ui/TimeDisplay.svelte';
 	import { addNotification, NotificationType } from '$lib/state/notifications';
+	import SolutionOptionsBar from './SolutionOptionsBar.svelte';
 
 	export let challenge: StateChallenge;
 	export let solution: StateChallengeSolution;
@@ -54,11 +55,11 @@
 </script>
 
 <div class="d-flex flex-row">
-	<div class="flex-grow-0">
+	<div class="flex-grow-0 pe-2">
 		<Vote vote={yourVote} votes={solution.votes} {onVote} />
 	</div>
 	<div class="flex-grow-1 d-flex flex-column">
-		<div class="flex-grow-1">
+		<div class="flex-grow-1 pb-3">
 			{#if editing}
 				<RichEditor bind:value={solution.solution} placeholder="Type Your Solution..." showHelper />
 			{:else}
@@ -67,30 +68,20 @@
 		</div>
 		<div class="d-flex flex-grow-0 justify-content-between">
 			<div>
-				<a href={`${base}/user/profile/${solution.user.username}`}>{solution.user.username}</a>
-				|
-				<TimeDisplay value={solution.createdAt} />
+				<SolutionOptionsBar
+					bind:editing
+					{onUpdate}
+					onDelete={internalOnDelete}
+					isOwner={$currentUser?.id === solution.user.id}
+					shareLink={`${base}/departments/${solution.challenge.department.url}/challenges/${solution.challenge.url}/solutions/${solution.id}`}
+				/>
 			</div>
 			<div>
-				{#if !editing && $currentUser?.id === solution.user.id}
-					<div class="btn-group" role="group">
-						<button class="btn btn-sm btn-primary" on:click={toggleEdit}>Edit</button>
-						<button class="btn btn-sm btn-danger" on:click={internalOnDelete}>Delete</button>
-					</div>
-				{:else if editing}
-					<div class="btn-group" role="group">
-						<button class="btn btn-sm btn-primary" disabled={updating} on:click={onUpdate}
-							>Update</button
-						>
-						<button class="btn btn-sm btn-secondary" disabled={updating} on:click={toggleEdit}
-							>Cancel</button
-						>
-					</div>
-				{/if}
-				<a
-					href={`${base}/challenges/${solution.challenge.department.url}/${solution.challenge.url}/solutions/${solution.id}`}
-					>View Thread ({solution.commentCount})</a
-				>
+				<a href={`${base}/user/profile/${solution.user.username}`}>{solution.user.username}</a>
+				|
+				<span class="small text-muted">
+					<TimeDisplay value={solution.createdAt} />
+				</span>
 			</div>
 		</div>
 	</div>

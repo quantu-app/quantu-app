@@ -24,7 +24,9 @@
 						<h4 class="fw-bold">Product</h4>
 						<ul>
 							<li><a class="link-light" href={`${base}/info/about-us`}>About us</a></li>
-							<li><a class="link-light" href={`${base}/info/principles`}>Principles</a></li>
+							<li>
+								<a class="link-light" href={`${base}/info/principles`}>Principles</a>
+							</li>
 							<!--<li><a class="link-light" href={`${base}/community`}>Community</a></li>-->
 							<li>
 								<a

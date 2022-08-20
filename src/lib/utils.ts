@@ -109,7 +109,7 @@ export function convertToUrlSafe(value: string): string {
 	 * @remarks
 	 * This method trims off beginning and ending space,
 	 * converts remaining space to a single character, deletes everything not a-z0-9,
-	 * and finally lowercases the resultant value
+	 * and finally lowercases the resulting value
 	 */
 	return value
 		.trim()
@@ -119,7 +119,7 @@ export function convertToUrlSafe(value: string): string {
 }
 
 export function isUrlSafe(value: string): boolean {
-	// is an empty string url safe?
+	// TODO: should an empty string url safe?
 	return /^[a-zA-Z0-9_-]+$/.test(value);
 }
 

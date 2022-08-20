@@ -9,6 +9,20 @@ import { render } from '@testing-library/svelte';
 describe('Test Footer', () => {
 	test('Footer renders', () => {
 		const component = render(Footer as any);
-		expect(component.queryAllByText('Open Source Projects').length).toBeGreaterThan(0);
+
+		// test footer links
+		const footerLinks = [
+			{ text: "About us", link: "/info/about-us" },
+			{ text: "Principles", link: "/info/principles" },
+			{ text: "Roadmap", link: "https://trello.com/b/DrtlVKXH/product-roadmap" },
+			{ text: "Open Source Projects", link: "https://github.com/quantu-app" },
+		];
+
+		for (let i = 0; i < footerLinks.length; i++) {
+			const item = footerLinks[i];
+			const domNode = component.getByText(item.text);
+			expect(domNode.closest("a")).toHaveAttribute("href", item.link);
+		}
+
 	});
 });

@@ -157,7 +157,7 @@ export async function createChange(
 
 	if (mergeRequest) {
 		if (mergeRequest.merged === true) {
-			const [_prevChange, change] = await client.$transaction([
+			const [_prevChange, change] = await run([
 				client.change.update({
 					where: {
 						id: mergeRequest.change.id

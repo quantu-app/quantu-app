@@ -50,7 +50,7 @@ export const POST = isCreator(async (event) => {
 	const data = await event.request.json();
 	const chapterId = event.params.chapterId;
 
-	return transaction((client) => createLesson(client, chapterId, data)).then((lesson) => ({
+	return run((client) => createLesson(client, chapterId, data)).then((lesson) => ({
 		body: lesson,
 		status: 201
 	}));

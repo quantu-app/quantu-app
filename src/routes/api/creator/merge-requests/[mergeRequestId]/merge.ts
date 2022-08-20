@@ -10,7 +10,7 @@ export const POST = isCreator(async (event) => {
 });
 
 export function mergeMergeRequest(client: PrismaClient, mergeRequestId: string) {
-	return client.$transaction(async (client) => {
+	return run(async (client) => {
 		const mergeRequest = await client.mergeRequest.update({
 			where: {
 				id: mergeRequestId

@@ -17,6 +17,7 @@
 	import { base } from '$app/paths';
 	import Cookies from 'js-cookie';
 	import { signIn } from '$lib/state/user';
+	import { addNotification, NotificationType } from '$lib/state/notifications';
 
 	let loading = false;
 	let SignInUpComponent = SignIn;
@@ -26,7 +27,7 @@
 		loading = true;
 		const childWindow = window.open(
 			`${base}/api/oauth2/${provider}/signin?redirect=/`,
-			`${provider} sign in`,
+			`Login with ${provider}`,
 			`width=${Math.max(window.outerWidth * 0.3, 320)},height=${Math.max(
 				window.outerHeight * 0.7,
 				320
@@ -36,12 +37,31 @@
 		function cleanUp() {
 			clearInterval(intervalId);
 			loading = false;
-			childWindow.close();
+			closeModal();
+			childWindow?.close();
 		}
 
 		const intervalId = setInterval(() => {
-			if (childWindow.closed || Cookies.get('token')) {
-				signIn().then(closeModal).finally(cleanUp);
+			const hasToken = !!Cookies.get('token');
+			if (!childWindow) {
+				addNotification({
+					type: NotificationType.Danger,
+					description: 'Failed to open OAuth window'
+				});
+			} else if (childWindow.closed || hasToken) {
+				signIn()
+					.then(cleanUp)
+					.catch((error: Error) => {
+						if (hasToken) {
+							Cookies.remove('token');
+						} else {
+							addNotification({
+								type: NotificationType.Danger,
+								description: error.message
+							});
+							cleanUp();
+						}
+					});
 			}
 		}, 1000);
 	}
@@ -51,7 +71,7 @@
 		SignInUpComponent = SignInUpComponent === SignIn ? SignUp : SignIn;
 	};
 
-	function setSignInUpComponentFromTriggerElement(event) {
+	function setSignInUpComponentFromTriggerElement(event: any) {
 		const btn = event.relatedTarget;
 
 		if (btn.dataset.signup) {

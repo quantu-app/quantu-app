@@ -4,7 +4,7 @@
 	import type { StateCourse } from '$lib/state/creator/courses';
 	import type { StateChapter } from '$lib/state/creator/chapters';
 	import type { StateLesson } from '$lib/state/creator/lessons';
-	import CreateLesson from './CreateLesson.svelte';
+	import CreateLessonBlock from './CreateLessonBlock.svelte';
 	import type { StateDepartment } from '$lib/state/creator/departments';
 	import LessonBlockTreeItem from './LessonBlockTreeItem.svelte';
 	import ContextMenu from '$lib/components/ui/ContextMenu.svelte';
@@ -118,4 +118,4 @@
 	</li>
 </ContextMenu>
 
-<CreateLesson bind:open={openCreatingLessonBlock} {department} {course} {chapter} />
+<CreateLessonBlock bind:open={openCreatingLessonBlock} {department} {course} {chapter} {lesson} />

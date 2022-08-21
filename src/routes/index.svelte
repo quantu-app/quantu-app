@@ -80,6 +80,7 @@
 					class="img-fluid mx-auto d-block "
 					src="https://github.com/quantu-app/design-platform/raw/master/app/resources/homepage/hand-crafted.png"
 					alt="Hand Crafted"
+					width="50%"
 				/>
 				<h2 class="fw-bold mt-5">Hand-crafted to build mastery</h2>
 				<p class="mb-5">
@@ -92,6 +93,7 @@
 					class="img-fluid mx-auto d-block "
 					src="https://github.com/quantu-app/design-platform/raw/master/app/resources/homepage/for-learners.png"
 					alt="For Learners"
+					width="50%"
 				/>
 				<h2 class="fw-bold mt-5">For learners by learners</h2>
 				<p class="mb-5">
@@ -101,7 +103,7 @@
 			</div>
 			<hr />
 			<div class="col-12 pb-5 my-5">
-				<h2 class="display-5 fw-bold ">Build Expertise Easily</h2>
+				<h2 class="display-5 fw-bold">Build Expertise Easily</h2>
 			</div>
 			<div class="col-md-6 px-4 text-center">
 				<img
@@ -128,9 +130,9 @@
 					alt="Circle and Line"
 				/>
 			</div>
-			<div class="col-md-6 ">
-				<h2 class="display-5 fw-bold ">Become a Prodigy with Quantu</h2>
-				<p class="fs-4 py-3">Join and become a part of Quantu's community of lifelong-learners.</p>
+			<div class="col-md-6 px-4">
+				<h2 class="fw-bold">Become a Prodigy with Quantu</h2>
+				<p class="py-3">Join and become a part of Quantu's community of lifelong-learners.</p>
 				{#if !$currentUser}
 					<button
 						type="button"

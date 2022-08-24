@@ -9,7 +9,7 @@
 	export let open = false;
 
 	let deletingLesson = false;
-	async function onCreateLesson() {
+	async function onDeleteLesson() {
 		deletingLesson = true;
 		try {
 			open = false;
@@ -28,8 +28,8 @@
 
 <Modal bind:open>
 	<svelte:fragment slot="header">Delete Lesson {lesson.name}?</svelte:fragment>
-	<p>This will delete all lesson blocks? are you sure?</p>
-	<button slot="footer" class="btn btn-danger" on:click={onCreateLesson} disabled={deletingLesson}
+	<p>This will delete all lesson blocks and quizes? are you sure?</p>
+	<button slot="footer" class="btn btn-danger" on:click={onDeleteLesson} disabled={deletingLesson}
 		>Delete</button
 	>
 </Modal>

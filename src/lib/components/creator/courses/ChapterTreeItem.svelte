@@ -17,6 +17,7 @@
 	import { setSelected, selected } from './Course.svelte';
 	import SortableList from '$lib/components/ui/SortableList.svelte';
 	import { addNotification, NotificationType } from '$lib/state/notifications';
+	import DeleteChapter from './DeleteChapter.svelte';
 
 	export let id: string;
 	export let index: number;
@@ -60,6 +61,12 @@
 	function onOpenCreatingLesson(e: MouseEvent) {
 		e.stopPropagation();
 		openCreatingLesson = true;
+	}
+
+	let openDeleteChapter = false;
+	function onOpenDeleteLesson(e: MouseEvent) {
+		e.stopPropagation();
+		openDeleteChapter = true;
 	}
 
 	let loaded = false;
@@ -114,6 +121,8 @@
 
 <ContextMenu target={chapterElement}>
 	<li><button class="dropdown-item" on:click={onOpenCreatingLesson}>Add Lesson</button></li>
+	<li><button class="dropdown-item danger" on:click={onOpenDeleteLesson}>Delete?</button></li>
 </ContextMenu>
 
 <CreateLesson bind:open={openCreatingLesson} {department} {course} {chapter} />
+<DeleteChapter bind:open={openDeleteChapter} {chapter} />

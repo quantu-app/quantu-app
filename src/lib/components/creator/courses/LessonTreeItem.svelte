@@ -17,6 +17,7 @@
 		lessonBlocksByLessonId,
 		type StateLessonBlock
 	} from '$lib/state/creator/lessonBlocks';
+	import DeleteLesson from './DeleteLesson.svelte';
 
 	export let id: string;
 	export let index: number;
@@ -60,6 +61,12 @@
 	function onOpenCreatingLessonBlock(e: MouseEvent) {
 		e.stopPropagation();
 		openCreatingLessonBlock = true;
+	}
+
+	let openDeleteLesson = false;
+	function onOpenDeleteLesson(e: MouseEvent) {
+		e.stopPropagation();
+		openDeleteLesson = true;
 	}
 
 	let loaded = false;
@@ -116,6 +123,10 @@
 	<li>
 		<button class="dropdown-item" on:click={onOpenCreatingLessonBlock}>Add Lesson Block</button>
 	</li>
+	<li>
+		<button class="dropdown-item danger" on:click={onOpenDeleteLesson}>Delete?</button>
+	</li>
 </ContextMenu>
 
 <CreateLessonBlock bind:open={openCreatingLessonBlock} {department} {course} {chapter} {lesson} />
+<DeleteLesson bind:open={openDeleteLesson} {lesson} />

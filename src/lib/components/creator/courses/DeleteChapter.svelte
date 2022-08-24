@@ -9,7 +9,7 @@
 	export let open = false;
 
 	let deletingChapter = false;
-	async function onCreateChapter() {
+	async function onDeleteChapter() {
 		deletingChapter = true;
 		try {
 			open = false;
@@ -28,8 +28,8 @@
 
 <Modal bind:open>
 	<svelte:fragment slot="header">Delete Chapter {chapter.name}?</svelte:fragment>
-	<p>This will delete all lessons? are you sure?</p>
-	<button slot="footer" class="btn btn-danger" on:click={onCreateChapter} disabled={deletingChapter}
+	<p>This will delete all lessons and everything inside of them? are you sure?</p>
+	<button slot="footer" class="btn btn-danger" on:click={onDeleteChapter} disabled={deletingChapter}
 		>Delete</button
 	>
 </Modal>

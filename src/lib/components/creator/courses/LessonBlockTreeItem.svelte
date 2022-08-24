@@ -1,11 +1,14 @@
 <svelte:options immutable />
 
 <script lang="ts">
+	import ContextMenu from '$lib/components/ui/ContextMenu.svelte';
+
 	import type { StateChapter } from '$lib/state/creator/chapters';
 	import type { StateLessonBlock } from '$lib/state/creator/lessonBlocks';
 	import type { StateLesson } from '$lib/state/creator/lessons';
 	import { typeToName } from '$lib/types';
 	import { setSelected, selected } from './Course.svelte';
+	import DeleteLessonBlock from './DeleteLessonBlock.svelte';
 
 	export let id: string;
 	export let index: number;
@@ -16,9 +19,18 @@
 	function onSelectInternal() {
 		setSelected('lesson-block', lessonBlock.id);
 	}
+
+	let lessonBlockElement: HTMLElement;
+
+	let openDeleteLessonBlock = false;
+	function onOpenDeleteLessonBlock(e: MouseEvent) {
+		e.stopPropagation();
+		openDeleteLessonBlock = true;
+	}
 </script>
 
 <li
+	bind:this={lessonBlockElement}
 	data-id={id}
 	data-index={index}
 	class="list-group-item list-group-item-action"
@@ -31,3 +43,11 @@
 		</p>
 	</div>
 </li>
+
+<ContextMenu target={lessonBlockElement}>
+	<li>
+		<button class="dropdown-item danger" on:click={onOpenDeleteLessonBlock}>Delete?</button>
+	</li>
+</ContextMenu>
+
+<DeleteLessonBlock bind:open={openDeleteLessonBlock} {lessonBlock} />

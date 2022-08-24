@@ -55,7 +55,6 @@
 	import { isUrlSafe } from '$lib/utils';
 	import classnames from 'vest/classnames';
 	import InputMessages from '$lib/components/ui/InputMessages.svelte';
-	import { debounce } from '@aicacia/debounce';
 
 	export let lesson: StateLesson;
 
@@ -69,7 +68,7 @@
 	let result: SuiteResult = suite(lesson, origLesson).done((r) => {
 		result = r;
 	});
-	$: disabled = result.isValid() || updatingLesson;
+	$: disabled = !result.isValid() || updatingLesson;
 	$: formClassName = classnames(result, {
 		warning: 'warning',
 		invalid: 'is-invalid',
@@ -102,7 +101,7 @@
 	async function onUpdateLesson() {
 		updatingLesson = true;
 		try {
-			const { id, chapter, ...data } = lesson;
+			const { id, chapter, logo, ...data } = lesson;
 			await updateLesson(lesson.id, data);
 		} catch (e) {
 			console.error(e);

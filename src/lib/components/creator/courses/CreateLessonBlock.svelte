@@ -22,6 +22,7 @@
 		creatingLesson = true;
 		try {
 			const promise = createLessonBlock(lesson.id, {
+				type: lessonBlockType,
 				description: [],
 				prompt: {}
 			});

@@ -121,7 +121,7 @@
 
 <ContextMenu target={lessonElement}>
 	<li>
-		<button class="dropdown-item" on:click={onOpenCreatingLessonBlock}>Add Lesson Block</button>
+		<button class="dropdown-item" on:click={onOpenCreatingLessonBlock}>Add Learning Block</button>
 	</li>
 	<li>
 		<button class="dropdown-item danger" on:click={onOpenDeleteLesson}>Delete?</button>

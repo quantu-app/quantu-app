@@ -3,12 +3,12 @@ import { run, transaction } from '$lib/prisma';
 import type { Prisma } from '@prisma/client';
 
 export const GET = isCreator((event) => {
-	const lessonBlockId = event.params.lessonBlockId;
+	const lessonId = event.params.lessonId;
 
 	return run((client) =>
 		client.lessonBlock.findMany({
 			where: {
-				id: lessonBlockId
+				lessonId: lessonId
 			},
 			include: {
 				lesson: {

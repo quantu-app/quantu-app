@@ -425,6 +425,8 @@ model LessonBlock {
   lessonId String @db.ObjectId
   index    Int    @default(0)
 
+  name        String
+  url         String
   description Json
   type        QuestionType @default(MULTIPLE_CHOICE)
   prompt      Json
@@ -433,4 +435,6 @@ model LessonBlock {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@unique([lessonId, url])
 }

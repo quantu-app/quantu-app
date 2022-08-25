@@ -8,7 +8,8 @@
 	import Modal from '$lib/components/ui/Modal.svelte';
 	import type { StateChapter } from '$lib/state/creator/chapters';
 	import { createLessonBlock } from '$lib/state/creator/lessonBlocks';
-	import type { QuestionType } from '@prisma/client';
+	import { QuestionType } from '@prisma/client';
+	import { convertToUrlSafe, isUrlSafe } from '$lib/utils';
 
 	export let department: StateDepartment;
 	export let course: StateCourse;
@@ -16,12 +17,21 @@
 	export let lesson: StateLesson;
 	export let open = false;
 
-	let lessonBlockType: QuestionType;
+	let lessonBlockType: QuestionType = QuestionType.MULTIPLE_CHOICE;
+	let lessonBlockName: string = '';
+	let lessonBlockUrl: string = '';
+	let invalidFormData: boolean = true;
+
+	$: lessonBlockUrl = convertToUrlSafe(lessonBlockName, '-');
+	$: invalidFormData = !isUrlSafe(lessonBlockUrl) || lessonBlockName.trim().length == 0;
+
 	let creatingLesson = false;
 	async function onCreateLesson() {
 		creatingLesson = true;
 		try {
 			const promise = createLessonBlock(lesson.id, {
+				name: lessonBlockName,
+				url: lessonBlockUrl,
 				type: lessonBlockType,
 				description: [],
 				prompt: {}
@@ -36,13 +46,38 @@
 			});
 		} finally {
 			creatingLesson = false;
+
+			// reset form values
+			lessonBlockType = QuestionType.MULTIPLE_CHOICE;
+			lessonBlockName = '';
+			lessonBlockUrl = '';
 		}
 	}
 </script>
 
 <Modal bind:open>
-	<svelte:fragment slot="header">Create Lesson in {chapter.name}</svelte:fragment>
+	<svelte:fragment slot="header">Create Learning Block in {chapter.name}</svelte:fragment>
 	<div class="row">
+		<div class="col-6">
+			<label for="lesson-block--name" class="form-label">Name</label>
+			<input
+				type="text"
+				class:is-invalid={lessonBlockName.length > 0 && lessonBlockName.trim().length == 0}
+				bind:value={lessonBlockName}
+				class="form-control"
+			/>
+		</div>
+		<div class="col-6">
+			<label for="lesson-block--url" class="form-label">Url</label>
+			<input
+				type="text"
+				class:is-invalid={lessonBlockUrl.length > 0 && !isUrlSafe(lessonBlockUrl)}
+				bind:value={lessonBlockUrl}
+				class="form-control"
+			/>
+		</div>
+	</div>
+	<div class="row mt-2">
 		<div class="col">
 			<label for="lesson-blocktype" class="form-label">Type</label>
 			<select
@@ -58,7 +93,10 @@
 			</select>
 		</div>
 	</div>
-	<button slot="footer" class="btn btn-primary" on:click={onCreateLesson} disabled={creatingLesson}
-		>Create</button
+	<button
+		slot="footer"
+		class="btn btn-primary"
+		on:click={onCreateLesson}
+		disabled={invalidFormData || creatingLesson}>Create</button
 	>
 </Modal>

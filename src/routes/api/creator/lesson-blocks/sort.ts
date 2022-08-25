@@ -1,5 +1,5 @@
 import { isCreator } from '$lib/api/auth';
-import { transaction } from '$lib/prisma';
+import { transaction, run } from '$lib/prisma';
 
 export const PATCH = isCreator(async (event) => {
 	const newOrder: { id: string; index: number }[] = await event.request.json();

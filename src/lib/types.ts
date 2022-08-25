@@ -113,3 +113,16 @@ export function typeToName(type: QuestionType) {
 			return 'Mutiple Choice';
 	}
 }
+
+export function typeToIconName(type: QuestionType) {
+	switch (type) {
+		case 'FLASH_CARD':
+			return 'postcard';
+		case 'INPUT':
+			return 'input-cursor';
+		case 'MARK_AS_READ':
+			return 'eyeglasses';
+		case 'MULTIPLE_CHOICE':
+			return 'list-task';
+	}
+}

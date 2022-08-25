@@ -4,6 +4,7 @@
 	import PromptEditor from '../prompts/PromptEditor.svelte';
 	import { addNotification, NotificationType } from '$lib/state/notifications';
 	import { typeToName } from '$lib/types';
+	import { isUrlSafe } from '$lib/utils';
 
 	export let lessonBlock: StateLessonBlock;
 
@@ -30,8 +31,8 @@
 
 <div class="mt-4 d-flex justify-content-between">
 	<h3>
-		Lesson {lessonBlock.lesson.chapter.index + 1}.{lessonBlock.lesson.index +
-			1}.{lessonBlock.index + 1}: {typeToName(lessonBlock.type)}
+		{lessonBlock.name} [{lessonBlock.lesson.chapter.index + 1}.{lessonBlock.lesson.index +
+			1}.{lessonBlock.index + 1}] ({typeToName(lessonBlock.type)})
 	</h3>
 	<button type="button" on:click={onUpdateLessonBlock} {disabled} class="btn btn-primary">
 		{#if updatingLessonBlock}
@@ -42,6 +43,26 @@
 </div>
 
 <div class="row">
+	<div class="col-6">
+		<label for="lesson-block--name" class="form-label">Name</label>
+		<input
+			type="text"
+			class:is-invalid={lessonBlock.name.length > 0 && lessonBlock.name.trim().length == 0}
+			bind:value={lessonBlock.name}
+			class="form-control"
+		/>
+	</div>
+	<div class="col-6">
+		<label for="lesson-block--url" class="form-label">Url</label>
+		<input
+			type="text"
+			class:is-invalid={lessonBlock.url.length > 0 && !isUrlSafe(lessonBlock.url)}
+			bind:value={lessonBlock.url}
+			class="form-control"
+		/>
+	</div>
+</div>
+<div class="row mt-2">
 	<div class="col">
 		<label for="lesson-blocktype" class="form-label">Type</label>
 		<select
@@ -57,7 +78,7 @@
 		</select>
 	</div>
 </div>
-<div class="row">
+<div class="row mt-2">
 	<div class="col">
 		<label for="description" class="form-label">Description</label>
 		<RichEditor id="description" name="description" bind:value={lessonBlock.description} />

@@ -38,15 +38,15 @@
 	on:click={onSelectInternal}
 >
 	<div class="d-flex flex-row ps-5">
-		<div class="d-flex flex-grow-1 align-self-center m-0 p-0">
-			<div class="lesson-block--id col-3">
-				{chapter.index + 1}.{lesson.index + 1}.{lessonBlock.index}
-			</div>
-			<div class="lesson-block--name col-6">
-				{lessonBlock.name}
-			</div>
-			<div class="lesson-block--typeIcon col-3 text-end">
+		<div
+			class="d-flex flex-grow-1 align-self-center m-0 p-0"
+			data-lessonBlockIndexPath="{chapter.index + 1}.{lesson.index + 1}.{lessonBlock.index}"
+		>
+			<div class="lesson-block--typeIcon col-2 text-start">
 				<i class="bi bi-{typeToIconName(lessonBlock.type)}" title={typeToName(lessonBlock.type)} />
+			</div>
+			<div class="lesson-block--name col-10">
+				{lessonBlock.name}
 			</div>
 		</div>
 	</div>

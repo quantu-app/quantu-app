@@ -9,6 +9,7 @@
 	import type { StateChapter } from '$lib/state/creator/chapters';
 	import { createLessonBlock } from '$lib/state/creator/lessonBlocks';
 	import { QuestionType } from '@prisma/client';
+	import { convertToUrlSafe, isUrlSafe } from '$lib/utils';
 
 	export let department: StateDepartment;
 	export let course: StateCourse;
@@ -17,8 +18,12 @@
 	export let open = false;
 
 	let lessonBlockType: QuestionType = QuestionType.MULTIPLE_CHOICE;
-	let lessonBlockName: string;
-	let lessonBlockUrl: string;
+	let lessonBlockName: string = '';
+	let lessonBlockUrl: string = '';
+	let invalidFormData: boolean = true;
+
+	$: lessonBlockUrl = convertToUrlSafe(lessonBlockName, '-');
+	$: invalidFormData = !isUrlSafe(lessonBlockUrl) || lessonBlockName.trim().length == 0;
 
 	let creatingLesson = false;
 	async function onCreateLesson() {
@@ -55,11 +60,21 @@
 	<div class="row">
 		<div class="col-6">
 			<label for="lesson-block--name" class="form-label">Name</label>
-			<input type="text" bind:value={lessonBlockName} class="form-control" />
+			<input
+				type="text"
+				class:is-invalid={lessonBlockName.length > 0 && lessonBlockName.trim().length == 0}
+				bind:value={lessonBlockName}
+				class="form-control"
+			/>
 		</div>
 		<div class="col-6">
 			<label for="lesson-block--url" class="form-label">Url</label>
-			<input type="text" bind:value={lessonBlockUrl} class="form-control" />
+			<input
+				type="text"
+				class:is-invalid={lessonBlockUrl.length > 0 && !isUrlSafe(lessonBlockUrl)}
+				bind:value={lessonBlockUrl}
+				class="form-control"
+			/>
 		</div>
 	</div>
 	<div class="row mt-2">
@@ -78,7 +93,10 @@
 			</select>
 		</div>
 	</div>
-	<button slot="footer" class="btn btn-primary" on:click={onCreateLesson} disabled={creatingLesson}
-		>Create</button
+	<button
+		slot="footer"
+		class="btn btn-primary"
+		on:click={onCreateLesson}
+		disabled={invalidFormData || creatingLesson}>Create</button
 	>
 </Modal>

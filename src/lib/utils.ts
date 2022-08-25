@@ -102,19 +102,19 @@ export function groupBy<K extends string | symbol | number, T extends Record<K, 
 	}, {} as Record<string, T[]>);
 }
 
-export function convertToUrlSafe(value: string): string {
+export function convertToUrlSafe(value: string, replaceWhitespaceWith = '-'): string {
 	/**
 	 * Converts a string to a value which can safely be sent and read in the url bar of browsers.
 	 *
 	 * @remarks
 	 * This method trims off beginning and ending space,
-	 * converts remaining space to a single character, deletes everything not a-z0-9,
+	 * replaces remaining whitespace with a given character "-"" by default, then deletes everything not a-z0-9_-,
 	 * and finally lowercases the resulting value
 	 */
 	return value
 		.trim()
-		.replace(/\s\s+/g, ' ')
-		.replace(/[^a-z0-9]/gi, '')
+		.replace(/\s+/g, replaceWhitespaceWith)
+		.replace(/[^a-z0-9-_]/gi, '')
 		.toLowerCase();
 }
 

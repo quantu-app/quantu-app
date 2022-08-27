@@ -18,26 +18,26 @@ export async function fromCallback(prisma: PrismaClient, params: IFromCallbackPa
 	});
 	const user = email
 		? await prisma.user.findFirst({
-				where: {
-					id: email.userId
-				},
-				select: {
-					id: true,
-					username: true,
-					creator: true,
-					active: true,
-					emails: true,
-					confirmed: true,
-					firstName: true,
-					lastName: true,
-					birthday: true,
-					country: true,
-					bio: true,
-					settings: true,
-					createdAt: true,
-					updatedAt: true
-				}
-		  })
+			where: {
+				id: email.userId
+			},
+			select: {
+				id: true,
+				username: true,
+				creator: true,
+				active: true,
+				emails: true,
+				confirmed: true,
+				firstName: true,
+				lastName: true,
+				birthday: true,
+				country: true,
+				bio: true,
+				settings: true,
+				createdAt: true,
+				updatedAt: true
+			}
+		})
 		: null;
 
 	if (user) {

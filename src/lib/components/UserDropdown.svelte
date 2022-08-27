@@ -24,7 +24,7 @@
 					role="button"
 					class="dropdown-item"
 					aria-label="Profile"
-					href={`${base}/user/profile/${$currentUser.username}`}>Your Profile</a
+					href={`${base}/user/profile/${$currentUser.username}`}>View Profile</a
 				>
 			</li>
 			<li><hr class="dropdown-divider" /></li>

@@ -3,13 +3,13 @@
 <script lang="ts">
 	import countries from '$lib/data/countries';
 	import { base } from '$app/paths';
-	import { currentUser } from '$lib/state/user';
+	import { currentUser, getPrimaryEmail, type StateUser } from '$lib/state/user';
 	import type { User } from '@prisma/client';
 	import RichViewer from '../editor/RichViewer.svelte';
 	import { formatRelative } from 'date-fns';
 	import Gravatar from './Gravatar.svelte';
 
-	export let user: User;
+	export let user: StateUser;
 
 	let userCountry: string = user.country || '';
 	let userCountryName: string = countries.find((c) => c.code == userCountry).name || '';
@@ -19,7 +19,7 @@
 <div class="container-xxl mt-4">
 	<div class="row my-4">
 		<div class="col-1 pe-0">
-			<Gravatar email={'jwaterfaucett@gmail.com'} />
+			<Gravatar email={getPrimaryEmail(user)} />
 		</div>
 		<div class="col-11">
 			<div class="qu-user--info me-4">

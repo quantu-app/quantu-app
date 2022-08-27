@@ -3,12 +3,18 @@ import { get, writable, derived } from 'svelte/store';
 import EventEmitter from 'eventemitter3';
 import { session } from '$app/stores';
 import Cookies from 'js-cookie';
-import type { ApplicationSettings, User } from '@prisma/client';
+import type { ApplicationSettings, User, Email } from '@prisma/client';
 import { base } from '$app/paths';
 import { goto } from '$app/navigation';
 import { browser } from '$app/env';
+import { eachMinuteOfInterval } from 'date-fns';
 
-export type StateUser = User & {
+export type PublicUser = User & {
+	emailHash: string
+}
+
+export type StateUser = PublicUser & {
+	emails: Email[],
 	settings: ApplicationSettings;
 };
 
@@ -83,10 +89,16 @@ export async function updateSettings(data: Partial<ApplicationSettings>) {
 	}
 }
 
+export function getPrimaryEmail(emails: Email[]): string {
+	const email = emails.find((email) => email.primary && email.confirmed);
+
+	return email?.email as string;
+}
+
 export function userFromJSON(user: any): StateUser {
 	return {
 		...user,
-		birthday: user.birthday ? new Date(user.birthday) : new Date(Date.now() - 1000000000000),
+		birthday: user.birthday ? new Date(user.birthday) : new Date(Date.now() - 1000000000000), // TODO: use correct birthdate
 		updatedAt: new Date(user.updatedAt),
 		createdAt: new Date(user.createdAt)
 	};

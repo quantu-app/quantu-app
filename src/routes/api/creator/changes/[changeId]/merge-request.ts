@@ -44,7 +44,7 @@ export async function getMergeRequestByChangeId(client: PrismaClient, changeId: 
 
 export const POST = isCreator(async (event) => ({
 	body: await run(async (client) =>
-		createMergeRequest(client, event.params.changeId, event.locals.token.userId)
+		createMergeRequest(client, event.params.changeId, event.locals.token?.userId)
 	),
 	status: 201
 }));

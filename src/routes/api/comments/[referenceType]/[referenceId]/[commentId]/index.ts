@@ -49,7 +49,7 @@ export const PATCH = authenticated(async (event) => ({
 			event.params.referenceType as CommentReferenceType,
 			event.params.referenceId,
 			event.params.commentId,
-			event.locals.token.userId,
+			event.locals.token?.userId,
 			await event.request.json()
 		)
 	),
@@ -107,7 +107,7 @@ export const DELETE = authenticated(async (event) => ({
 			event.params.referenceType as CommentReferenceType,
 			event.params.referenceId,
 			event.params.commentId,
-			event.locals.token.userId
+			event.locals.token?.userId
 		)
 	),
 	status: 200

@@ -11,7 +11,7 @@ export const GET = authenticated(async (event) => {
 		body: await run((client) =>
 			getCourses(
 				client,
-				event.locals.token.userId,
+				event.locals.token?.userId,
 				pageString ? parseInt(pageString) : undefined,
 				sizeString ? parseInt(sizeString) : undefined,
 				event.params.departmentUrl

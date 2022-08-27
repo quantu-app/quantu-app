@@ -6,7 +6,7 @@ export const PATCH = authenticated(async (event) => ({
 	body: await run(async (client) =>
 		voteOnComment(
 			client,
-			event.locals.token.userId,
+			event.locals.token?.userId,
 			event.params.commentId,
 			await event.request.json()
 		)

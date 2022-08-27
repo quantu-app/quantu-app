@@ -1,6 +1,6 @@
 import { authenticated } from '$lib/api/auth';
+import { getPrimaryEmail } from '$lib/api/users/fromCallback';
 import { run } from '$lib/prisma';
-import { getPrimaryEmail, type PublicUser } from '$lib/state/user';
 import { MD5 } from 'md5-js-tools';
 
 export const GET = authenticated((event) => {
@@ -25,7 +25,7 @@ export const GET = authenticated((event) => {
 	)
 		.then((user) => {
 			if (!user) {
-				return { status: 404 }
+				return { status: 404 };
 			}
 			const primaryEmail = getPrimaryEmail(user.emails);
 			const primaryEmailHash = MD5.generate(primaryEmail);

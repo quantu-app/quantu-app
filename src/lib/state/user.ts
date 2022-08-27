@@ -6,15 +6,13 @@ import Cookies from 'js-cookie';
 import type { ApplicationSettings, User, Email } from '@prisma/client';
 import { base } from '$app/paths';
 import { goto } from '$app/navigation';
-import { browser } from '$app/env';
-import { eachMinuteOfInterval } from 'date-fns';
 
 export type PublicUser = User & {
-	emailHash: string
-}
+	emailHash: string;
+};
 
 export type StateUser = PublicUser & {
-	emails: Email[],
+	emails: Email[];
 	settings: ApplicationSettings;
 };
 
@@ -87,12 +85,6 @@ export async function updateSettings(data: Partial<ApplicationSettings>) {
 	} else {
 		throw await res.json();
 	}
-}
-
-export function getPrimaryEmail(emails: Email[]): string {
-	const email = emails.find((email) => email.primary && email.confirmed);
-
-	return email?.email as string;
 }
 
 export function userFromJSON(user: any): StateUser {

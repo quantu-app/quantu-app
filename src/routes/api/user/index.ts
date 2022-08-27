@@ -1,11 +1,14 @@
 import { authenticated } from '$lib/api/auth';
+import { getPrimaryEmail } from '$lib/api/users/fromCallback';
 import { run } from '$lib/prisma';
+import type { StateUser } from '$lib/state/user';
+import { MD5 } from 'md5-js-tools';
 
 export const GET = authenticated((event) =>
 	run((client) =>
 		client.user.findUnique({
 			where: {
-				id: event.locals.token.userId
+				id: event.locals.token?.userId
 			},
 			select: {
 				id: true,
@@ -24,14 +27,18 @@ export const GET = authenticated((event) =>
 				settings: true
 			}
 		})
-	).then((user) =>
-		user
-			? {
-					status: 200,
-					body: user
-			  }
-			: { status: 404 }
-	)
+	).then((user) => {
+		if (user) {
+			const privateUser = user as StateUser;
+			privateUser.emailHash = MD5.generate(getPrimaryEmail(privateUser.emails));
+			return {
+				status: 200,
+				body: privateUser
+			};
+		} else {
+			return { status: 404 };
+		}
+	})
 );
 
 export const PATCH = authenticated((event) =>
@@ -40,7 +47,7 @@ export const PATCH = authenticated((event) =>
 			client.user.update({
 				data,
 				where: {
-					id: event.locals.token.userId
+					id: event.locals.token?.userId
 				},
 				select: {
 					id: true,
@@ -59,13 +66,17 @@ export const PATCH = authenticated((event) =>
 					settings: true
 				}
 			})
-		).then((user) =>
-			user
-				? {
-						status: 200,
-						body: user
-				  }
-				: { status: 404 }
-		)
+		).then((user) => {
+			if (user) {
+				const privateUser = user as StateUser;
+				privateUser.emailHash = MD5.generate(getPrimaryEmail(privateUser.emails));
+				return {
+					status: 200,
+					body: privateUser
+				};
+			} else {
+				return { status: 404 };
+			}
+		})
 	)
 );

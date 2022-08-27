@@ -28,7 +28,7 @@ export function getChange(client: PrismaClient, changeId: string) {
 export const PATCH = isCreator((event) =>
 	run(async (client) => {
 		const { name, value } = await event.request.json();
-		return updateChange(client, event.params.changeId, event.locals.token.userId, name, value);
+		return updateChange(client, event.params.changeId, event.locals.token?.userId, name, value);
 	}).then((change) => ({
 		body: change,
 		status: change ? 200 : 404

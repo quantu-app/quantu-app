@@ -62,7 +62,7 @@ export const PATCH = authenticated(async (event) => ({
 			event.params.deparementUrl,
 			event.params.challengeUrl,
 			event.params.solutionId,
-			event.locals.token.userId,
+			event.locals.token?.userId,
 			await event.request.json(),
 			parseInt(event.url.searchParams.get('depth') || '2')
 		)
@@ -139,7 +139,7 @@ export const DELETE = authenticated(async (event) => {
 			event.params.deparementUrl,
 			event.params.challengeUrl,
 			event.params.solutionId,
-			event.locals.token.userId
+			event.locals.token?.userId
 		)
 	);
 	return {

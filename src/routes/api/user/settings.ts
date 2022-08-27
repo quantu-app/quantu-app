@@ -7,14 +7,14 @@ export const PATCH = authenticated((event) =>
 			client.applicationSettings.upsert({
 				create: {
 					...data,
-					userId: event.locals.token.userId
+					userId: event.locals.token?.userId
 				},
 				update: {
 					...data,
-					userId: event.locals.token.userId
+					userId: event.locals.token?.userId
 				},
 				where: {
-					userId: event.locals.token.userId
+					userId: event.locals.token?.userId
 				}
 			})
 		).then((settings) =>

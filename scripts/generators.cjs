@@ -17,7 +17,7 @@ async function main() {
 	for await (const entry of walk(BASE_DIR)) {
 		const name = path
 			.join(path.relative(BASE_DIR, path.dirname(entry)), path.parse(entry).name)
-			.replace('/', '_');
+			.replaceAll('/', '_');
 		const appPath = path.join(path.dirname(entry.replace('src/', '$')), path.parse(entry).name);
 		await fs.appendFile(OUT_FILE, `\t${name}: () => import('${appPath}'),\n`);
 	}

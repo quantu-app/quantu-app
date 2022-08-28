@@ -1,3 +1,3 @@
 export default {
-	addition: () => import('$lib/generators/addition'),
+	math_basic_addition: () => import('$lib/generators/math/basic/addition'),
 };

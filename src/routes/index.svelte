@@ -24,7 +24,7 @@
 		redirectPathWritable.set(redirectPath);
 	}
 
-	let pageTitle: string = 'QUANTU | Where learning meets fun';
+	const pageTitle = 'QUANTU | Where learning meets fun';
 </script>
 
 <SEO title={pageTitle} robotsDirectives={['all']} />

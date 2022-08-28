@@ -1,7 +1,7 @@
 <svelte:options immutable />
 
 <script lang="ts">
-	export let filter: string = '';
+	export let filter = '';
 	export let placeholder = 'Filter...';
 	export let onChange: (value: string) => void;
 

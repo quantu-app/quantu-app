@@ -14,7 +14,7 @@ export async function getChangeValueAt(client: PrismaClient, changeId: string) {
 		return null;
 	}
 	const changes: Prisma.JsonObject[] = [];
-	while (true) {
+	for (; ;) {
 		const change = await client.change.findUnique({
 			where: {
 				id: changeId

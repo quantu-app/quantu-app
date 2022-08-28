@@ -12,3 +12,6 @@ WixTools
 !.env.example
 
 src/routes/editor.svelte
+
+# testing relics
+coverage/

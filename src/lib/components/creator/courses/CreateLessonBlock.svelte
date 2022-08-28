@@ -18,9 +18,9 @@
 	export let open = false;
 
 	let lessonBlockType: QuestionType = QuestionType.MULTIPLE_CHOICE;
-	let lessonBlockName: string = '';
-	let lessonBlockUrl: string = '';
-	let invalidFormData: boolean = true;
+	let lessonBlockName = '';
+	let lessonBlockUrl = '';
+	let invalidFormData = true;
 
 	$: lessonBlockUrl = convertToUrlSafe(lessonBlockName, '-');
 	$: invalidFormData = !isUrlSafe(lessonBlockUrl) || lessonBlockName.trim().length == 0;

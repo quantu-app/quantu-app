@@ -4,9 +4,9 @@
 	import { format } from 'date-fns';
 
 	export let date: string = new Date().toJSON();
-	export let id: string = '';
-	export let placeholder: string = '';
-	export let disabled: boolean = false;
+	export let id = '';
+	export let placeholder = '';
+	export let disabled = false;
 
 	let internalValue: string = format(new Date(date), "yyyy-MM-dd'T'HH:mm");
 

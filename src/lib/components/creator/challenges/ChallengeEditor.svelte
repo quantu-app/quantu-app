@@ -10,10 +10,10 @@
 	export let challenge: Partial<StateChallenge>;
 	export let disabled = false;
 
-	const MAX_NAME_LEN: number = 50;
+	const MAX_NAME_LEN = 50;
 
 	let challengeUrl = challenge.url;
-	let validUrl: boolean = false;
+	let validUrl = false;
 
 	$: prompt = challenge.prompt as any;
 	$: validUrl = !!challenge?.url && isUrlSafe(challenge.url);

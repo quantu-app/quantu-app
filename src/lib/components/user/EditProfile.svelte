@@ -88,8 +88,6 @@
 			updating = false;
 		}
 	}
-
-	onMount(() => {});
 </script>
 
 <form on:submit|preventDefault class="my-4">

@@ -1,9 +1,6 @@
-/**
- * @jest-environment jsdom
- */
-
 import '@testing-library/jest-dom';
 import Footer from './Footer.svelte';
+import { describe, expect, test } from "vitest";
 import { render } from '@testing-library/svelte';
 
 describe('Test Footer', () => {

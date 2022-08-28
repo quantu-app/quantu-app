@@ -41,7 +41,7 @@ export function isEmpty(value: unknown) {
 }
 
 export function timeSince(date: Date): string {
-	let seconds = Math.floor((new Date().getTime() - date.getTime()) / 1000);
+	const seconds = Math.floor((new Date().getTime() - date.getTime()) / 1000);
 	let interval = seconds / 31536000;
 
 	if (interval > 1) {

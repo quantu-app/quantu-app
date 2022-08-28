@@ -2,9 +2,9 @@
 	import RichViewer from '../editor/RichViewer.svelte';
 	import { base } from '$app/paths';
 
-	export let quiz: object;
+	export let quiz: object; // TODO: give me a correct QuizType
 	export let quizNumber: number;
-	export const fallbackImage: string = 'https://loremflickr.com/140/140';
+	export const fallbackImage = 'https://loremflickr.com/140/140';
 </script>
 
 <div class="card">

@@ -3,6 +3,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import Portal from 'svelte-portal/src/Portal.svelte';
+	import { type Modal } from 'bootstrap';
 
 	export let open = false;
 	export let size: 'sm' | 'md' | 'lg' = 'lg';
@@ -32,7 +33,7 @@
 	}
 
 	let modalElement: HTMLDivElement;
-	let modal: bootstrap.Modal;
+	let modal: Modal;
 
 	onMount(() => {
 		modal = window.bootstrap.Modal.getOrCreateInstance(modalElement);

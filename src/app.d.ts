@@ -12,17 +12,17 @@ declare global {
 			token?: ITokenValue;
 		}
 
-		interface Platform {}
+		// interface Platform {}
 
-		interface PrivateEnv {}
+		// interface PrivateEnv {}
 
-		interface PublicEnv {}
+		// interface PublicEnv {}
 
 		interface Session {
 			user?: Omit<User, 'encryptedPassword'>;
 		}
 
-		interface Stuff {}
+		// interface Stuff {}
 	}
 
 	interface Window {

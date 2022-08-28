@@ -11,7 +11,7 @@
 	export let disabled = false;
 
 	let departmentUrl = departmentChange.url;
-	let validUrl: boolean = false;
+	let validUrl = false;
 
 	$: validUrl = !!departmentChange.url && isUrlSafe(departmentChange.url);
 

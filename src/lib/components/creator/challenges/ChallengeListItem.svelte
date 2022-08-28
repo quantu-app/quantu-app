@@ -18,7 +18,7 @@
 				>{challenge.name || 'No Name'}</button
 			>
 			<h6 class="d-inline">
-				- {titleCase(challenge.type.replace(/\_/gim, ' '))}
+				- {titleCase(challenge.type.replace(/_/gim, ' '))}
 			</h6>
 		</h4>
 		<div class="d-flex">

@@ -5,7 +5,7 @@
 	import type { InputType } from '$lib/types';
 
 	export let type: InputType;
-	export let input: string = '';
+	export let input = '';
 	export let correct: boolean | undefined = undefined;
 	export let disabled = false;
 </script>

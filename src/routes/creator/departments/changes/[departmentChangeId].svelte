@@ -12,7 +12,9 @@
 		if (change.referenceId) {
 			await showDepartmentById(change.referenceId, input.fetch);
 		}
-		await showMergeRequestByChangeId(departmentChangeId, input.fetch).catch(() => {});
+		await showMergeRequestByChangeId(departmentChangeId, input.fetch).catch((error) => {
+			console.error(error);
+		});
 
 		return {
 			props: {

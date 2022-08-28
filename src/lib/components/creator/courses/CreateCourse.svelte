@@ -20,7 +20,7 @@
 	let course: Partial<Course> = {};
 
 	let courseUrl = course.url;
-	let validUrl: boolean = false;
+	let validUrl = false;
 
 	$: validUrl = !!course.url && isUrlSafe(course.url);
 

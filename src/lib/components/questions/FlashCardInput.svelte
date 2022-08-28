@@ -3,7 +3,7 @@
 <script lang="ts">
 	export let disabled = false;
 	export let shown = false;
-	export let input: number = 0;
+	export let input = 0;
 </script>
 
 <div class="d-flex my-2">

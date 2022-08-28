@@ -2,10 +2,14 @@
 
 <script lang="ts" context="module">
 	export function closeModal() {
-		const modal = window.bootstrap.Modal.getOrCreateInstance(
-			document.getElementById('sign-in-up-modal')
-		);
-		modal.hide();
+		const modalElement = document.getElementById('sign-in-up-modal');
+		if (modalElement) {
+			const modal = window.bootstrap.Modal.getOrCreateInstance(modalElement);
+			modal.hide();
+		} else {
+			// noop
+			throw new globalThis.Error('unable to find "Sign in/up modal"');
+		}
 	}
 </script>
 

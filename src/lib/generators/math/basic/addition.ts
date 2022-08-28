@@ -3,7 +3,7 @@ import { content } from '$lib/api/generator/Content';
 import { InputType, type InputPrivate } from '$lib/types';
 import { QuestionType } from '@prisma/client';
 
-export interface IConfig {}
+export interface IConfig { [key: string]: any }
 
 export class Generator extends QuestionGenerator<IConfig> {
 	generate(): IQuestion {

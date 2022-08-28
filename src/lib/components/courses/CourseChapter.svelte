@@ -4,7 +4,7 @@
 	import ChapterLessonCard from './ChapterLessonCard.svelte';
 	import ChapterQuizCard from './ChapterQuizCard.svelte';
 
-	export let chapterNumber: number = 1;
+	export let chapterNumber = 1;
 	export let chapter: StateChapter;
 	export let lessons: StateLesson[] = [];
 	export let quizzes: any[] = [];

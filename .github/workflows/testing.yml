@@ -1,0 +1,59 @@
+name: testing
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+    types:
+      - opened
+      - synchronize
+
+jobs:
+  lint:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+        with:
+          persist-credentials: false
+
+      - name: setup node
+        uses: actions/setup-node@v2
+        with:
+          cache: 'npm'
+          node-version: 16
+
+      - name: install dependencies
+        run: npm ci
+
+      - name: lint
+        run: npm run lint
+
+  test:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+        with:
+          persist-credentials: false
+
+      - name: setup node
+        uses: actions/setup-node@v2
+        with:
+          cache: 'npm'
+          node-version: 16
+
+      - name: install dependencies
+        run: npm ci
+
+      - name: install playwright
+        run: npx playwright install
+
+      - name: unit tests
+        run: npm run unit.test
+      
+      - name: integration tests
+        run: npm run integration.test

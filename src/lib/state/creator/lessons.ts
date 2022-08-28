@@ -155,6 +155,9 @@ export async function deleteLesson(id: string) {
 		if (index !== -1) {
 			state = state.slice();
 			state.splice(index, 1);
+			for (let i = 0; i < state.length; i++) {
+				state[i] = { ...state[i], index: i };
+			}
 		}
 		return state;
 	});

@@ -94,43 +94,44 @@ export const PATCH = isCreator(async (event) => {
 export const DELETE = isCreator((event) => {
 	const lessonId = event.params.lessonId;
 
-	return run((client) =>
-		client.lesson.delete({
+	return run(async (client) => {
+		const lesson = await client.lesson.delete({
 			where: {
 				id: lessonId
 			},
-			include: {
-				logo: {
-					select: {
-						name: true
-					}
-				},
-				chapter: {
-					select: {
-						id: true,
-						url: true,
-						name: true,
-						index: true,
-						course: {
-							select: {
-								id: true,
-								url: true,
-								name: true,
-								department: {
-									select: {
-										id: true,
-										url: true,
-										name: true
-									}
-								}
-							}
-						}
-					}
-				}
+			select: {
+				chapterId: true
 			}
-		})
-	).then((lesson) => ({
-		body: lesson,
-		status: 200
-	}));
+		});
+
+		if (lesson) {
+			const children = await client.lesson.findMany({
+				where: {
+					chapterId: lesson.chapterId
+				},
+				select: {
+					id: true
+				}
+			});
+			await Promise.all(
+				children.map(({ id }, index) =>
+					client.lesson.update({
+						where: {
+							id
+						},
+						data: {
+							index
+						}
+					})
+				)
+			);
+			return {
+				status: 204
+			};
+		} else {
+			return {
+				status: 404
+			};
+		}
+	});
 });

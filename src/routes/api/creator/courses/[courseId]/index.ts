@@ -62,27 +62,24 @@ export const PATCH = isCreator(async (event) => {
 export const DELETE = isCreator((event) => {
 	const courseId = event.params.courseId;
 
-	return run((client) =>
-		client.course.delete({
+	return run(async (client) => {
+		const course = await client.course.delete({
 			where: {
 				id: courseId
 			},
-			include: {
-				logo: {
-					select: {
-						name: true
-					}
-				},
-				department: {
-					select: {
-						url: true,
-						name: true
-					}
-				}
+			select: {
+				departmentId: true
 			}
-		})
-	).then((course) => ({
-		body: course,
-		status: 200
-	}));
+		});
+
+		if (course) {
+			return {
+				status: 204
+			};
+		} else {
+			return {
+				status: 404
+			};
+		}
+	});
 });

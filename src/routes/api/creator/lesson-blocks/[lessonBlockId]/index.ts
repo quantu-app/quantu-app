@@ -103,46 +103,44 @@ export async function updateLessonBlock(client: PrismaClient, lessonBlockId: str
 export const DELETE = isCreator((event) => {
 	const lessonBlockId = event.params.lessonBlockId;
 
-	return run((client) =>
-		client.lessonBlock.delete({
+	return run(async (client) => {
+		const lessonBlock = await client.lessonBlock.delete({
 			where: {
 				id: lessonBlockId
 			},
-			include: {
-				lesson: {
-					select: {
-						id: true,
-						url: true,
-						name: true,
-						index: true,
-						chapter: {
-							select: {
-								id: true,
-								url: true,
-								name: true,
-								index: true,
-								course: {
-									select: {
-										id: true,
-										url: true,
-										name: true,
-										department: {
-											select: {
-												id: true,
-												url: true,
-												name: true
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-				}
+			select: {
+				lessonId: true
 			}
-		})
-	).then((lessonBlock) => ({
-		body: lessonBlock,
-		status: 200
-	}));
+		});
+
+		if (lessonBlock) {
+			const children = await client.lessonBlock.findMany({
+				where: {
+					lessonId: lessonBlock.lessonId
+				},
+				select: {
+					id: true
+				}
+			});
+			await Promise.all(
+				children.map(({ id }, index) =>
+					client.lessonBlock.update({
+						where: {
+							id
+						},
+						data: {
+							index
+						}
+					})
+				)
+			);
+			return {
+				status: 204
+			};
+		} else {
+			return {
+				status: 404
+			};
+		}
+	});
 });

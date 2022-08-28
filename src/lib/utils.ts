@@ -1,5 +1,8 @@
 import { random } from '@aicacia/rand';
 import { range } from '@aicacia/range';
+import type { Prisma } from '@prisma/client';
+import type { IElement } from 'svelte-slate/plugins/Element.svelte';
+import type { IText } from 'svelte-slate/plugins/Leaf.svelte';
 
 export type IFetch = (info: RequestInfo, init?: RequestInit) => Promise<Response>;
 
@@ -188,4 +191,38 @@ export function sortByIndex<T extends { index: number }>(a: T, b: T) {
 
 export function sortById<T extends { id: number }>(a: T, b: T) {
 	return a.id - b.id;
+}
+
+export function getContentString(nodes: (IElement | IText)[]): string;
+export function getContentString(nodes: Prisma.JsonValue): string;
+
+export function getContentString(value: any): string {
+	const nodes = value as (IElement | IText)[];
+
+	return nodes.reduce((string, node) => {
+		if ('children' in node) {
+			return getContentString(node.children) + '\n';
+		} else {
+			return string + node.text;
+		}
+	}, '');
+}
+
+export function isContentEmpty(nodes: (IElement | IText)[]): boolean;
+export function isContentEmpty(nodes: Prisma.JsonValue): boolean;
+
+export function isContentEmpty(value: any): boolean {
+	const nodes = value as (IElement | IText)[];
+
+	for (const node of nodes) {
+		if ('children' in node) {
+			if (!isContentEmpty(node.children)) {
+				return false;
+			}
+		} else if (node.text.trim() !== '') {
+			return false;
+		}
+	}
+
+	return true;
 }

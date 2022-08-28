@@ -55,7 +55,11 @@
 				{/if}
 			</span>
 			{#if course.finished}
-				<i class="bi fs-4 bi-check-circle-fill text-success solved-check" />
+				{#if course.result > 0.6}
+					<i class="bi fs-4 bi-check-circle-fill text-success solved-check" />
+				{:else}
+					<i class="bi fs-4 bi-x-circle-fill text-danger solved-check" />
+				{/if}
 			{/if}
 		</div>
 	</div>

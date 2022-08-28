@@ -46,6 +46,7 @@
 		sortByIndex
 	);
 	$: lessonsByChapterUrl = ($lessonsByUrl[departmentUrl] || {})[courseUrl] || {};
+	$: lessonCount = Object.values(lessonsByChapterUrl).length;
 </script>
 
 <svelte:head>
@@ -81,7 +82,7 @@
 									<p>Chapters</p>
 								</div>
 								<div class="col">
-									<h4>{course.lessons}</h4>
+									<h4>{lessonCount}</h4>
 									<p>Lessons</p>
 								</div>
 							</div>

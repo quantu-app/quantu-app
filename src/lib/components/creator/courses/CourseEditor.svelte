@@ -1,5 +1,3 @@
-<svelte:options immutable />
-
 <script lang="ts" context="module">
 	import { create, test, enforce, only, type SuiteResult } from 'vest';
 
@@ -52,6 +50,7 @@
 	import { isUrlSafe } from '$lib/utils';
 	import classnames from 'vest/classnames';
 	import InputMessages from '$lib/components/ui/InputMessages.svelte';
+	import DateTimeInput from '$lib/components/ui/DateTimeInput.svelte';
 
 	export let course: StateCourse;
 
@@ -140,6 +139,16 @@
 		/>
 		<InputMessages className={messageClassName('url')} messages={result.getErrors('url')} />
 	</div>
+	<div class="col-1">
+		<label for="visible" class="form-label">Visible</label><br />
+		<input class="form-check-input" type="checkbox" name="visible" bind:checked={course.visible} />
+	</div>
+	{#if course.visible}
+		<div class="col-md">
+			<label for="releasedAt" class="form-label">Release At</label>
+			<DateTimeInput id="releasedAt" bind:date={course.releasedAt} {disabled} />
+		</div>
+	{/if}
 </div>
 <hr />
 <div class="row">

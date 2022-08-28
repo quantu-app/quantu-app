@@ -4,7 +4,12 @@ import type { RequestEvent } from '@sveltejs/kit/types/internal';
 
 export const GET = async (event: RequestEvent) => {
 	const course = await run((client) =>
-		getCourseByUrl(client, event.params.departmentUrl, event.params.courseUrl)
+		getCourseByUrl(
+			client,
+			event.params.departmentUrl,
+			event.params.courseUrl,
+			event.locals.token?.userId as string
+		)
 	);
 
 	return {
@@ -16,29 +21,31 @@ export const GET = async (event: RequestEvent) => {
 export async function getCourseByUrl(
 	client: PrismaClient,
 	departmentUrl: string,
-	courseUrl: string
+	courseUrl: string,
+	userId: string
 ) {
-	const chapters = await client.chapter.findMany({
+	const lessonBlocks = await client.lessonBlock.findMany({
 		where: {
-			course: {
-				url: courseUrl,
-				department: {
-					url: departmentUrl
+			lesson: {
+				chapter: {
+					course: {
+						url: courseUrl
+					}
 				}
 			}
-		},
-		select: {
-			id: true
 		}
 	});
-	const chapterIds = chapters.map((chapter) => chapter.id);
+	const lessonBlockIds = lessonBlocks.map((lessonBlock) => lessonBlock.id);
 	const {
-		_count: { _all: lessonCount }
-	} = await client.lesson.aggregate({
+		_avg: { value: result },
+		_count: { _all: results }
+	} = await client.result.aggregate({
+		_avg: { value: true },
 		_count: { _all: true },
 		where: {
-			chapterId: {
-				in: chapterIds
+			userId,
+			lessonBlockId: {
+				in: lessonBlockIds
 			}
 		}
 	});
@@ -60,8 +67,9 @@ export async function getCourseByUrl(
 		}
 	});
 
-	(course as any).finished = false; // TODO: add user course progress
-	(course as any).lessons = lessonCount;
+	// TODO: include quizzes score
+	(course as any).result = result;
+	(course as any).finished = results === lessonBlocks.length;
 
 	return course;
 }

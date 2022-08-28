@@ -5,6 +5,7 @@ import type { IFetch } from '../utils';
 
 export type StateCourse = Course & {
 	lessons: number;
+	result: number;
 	finished: boolean;
 	department: { url: string; name: string };
 };

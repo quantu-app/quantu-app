@@ -5,7 +5,7 @@ import { getDepartments } from '../departments';
 import { getCourses } from '../departments/[departmentUrl]/courses';
 
 export const GET = authenticated(async (event) => ({
-	body: await run((client) => getTopCourses(client, event.locals.token.userId)),
+	body: await run((client) => getTopCourses(client, event.locals.token?.userId)),
 	status: 200
 }));
 

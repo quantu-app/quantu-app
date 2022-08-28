@@ -7,7 +7,7 @@ export const GET = async (event: RequestEvent) => {
 	const challenge = await run((client) =>
 		getChallengeByUrl(
 			client,
-			event.locals.token.userId,
+			event.locals.token?.userId,
 			event.params.departmentUrl,
 			event.params.challengeUrl
 		)

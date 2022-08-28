@@ -9,7 +9,7 @@ export const GET = authenticated(async (event) => ({
 	body: await run((client) =>
 		getChallenges(
 			client,
-			event.locals.token.userId,
+			event.locals.token?.userId,
 			undefined,
 			undefined,
 			event.params.departmentUrl

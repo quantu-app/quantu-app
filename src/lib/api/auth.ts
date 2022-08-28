@@ -6,7 +6,7 @@ export interface ITokenValue {
 }
 
 export const authenticated = (handler: RequestHandler) => (event: RequestEvent) =>
-	event.locals.token && event.locals.token.userId
+	event.locals.token && event.locals.token?.userId
 		? handler(event)
 		: {
 				status: 401
@@ -18,7 +18,7 @@ export const isCreator = (handler: RequestHandler) =>
 			client.user
 				.findUnique({
 					where: {
-						id: event.locals.token.userId
+						id: event.locals.token?.userId
 					}
 				})
 				.then((user) =>

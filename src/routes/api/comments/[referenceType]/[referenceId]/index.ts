@@ -79,7 +79,7 @@ export const POST = authenticated(async (event) => ({
 	body: await run(async (client) =>
 		createComment(
 			client,
-			event.locals.token.userId,
+			event.locals.token?.userId,
 			event.params.referenceType as CommentReferenceType,
 			event.params.referenceId,
 			await event.request.json()

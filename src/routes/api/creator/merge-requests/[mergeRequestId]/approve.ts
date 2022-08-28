@@ -8,7 +8,7 @@ export const POST = isCreator(async (event) => {
 			approve(
 				client,
 				event.params.mergeRequestId,
-				event.locals.token.userId,
+				event.locals.token?.userId,
 				await event.request.json()
 			)
 		),

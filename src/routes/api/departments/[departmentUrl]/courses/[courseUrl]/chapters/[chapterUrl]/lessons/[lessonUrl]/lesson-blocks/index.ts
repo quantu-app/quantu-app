@@ -7,7 +7,7 @@ export const GET = authenticated(async (event) => ({
 	body: await run((client) =>
 		getLessonBlocks(
 			client,
-			event.locals.token.userId,
+			event.locals.token?.userId,
 			event.params.departmentUrl,
 			event.params.courseUrl,
 			event.params.chapterUrl,

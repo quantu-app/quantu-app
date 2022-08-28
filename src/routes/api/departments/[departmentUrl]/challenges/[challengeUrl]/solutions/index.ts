@@ -76,7 +76,7 @@ export const POST = authenticated(async (event) => ({
 			client,
 			event.params.departmentUrl,
 			event.params.challengeUrl,
-			event.locals.token.userId,
+			event.locals.token?.userId,
 			await event.request.json()
 		)
 	),

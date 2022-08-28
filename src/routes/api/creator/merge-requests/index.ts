@@ -10,7 +10,7 @@ export const GET = isCreator(async (event) => {
 			getMergeRequests(
 				client,
 				event.url.searchParams.get('referenceType') as ChangeType,
-				event.url.searchParams.has('currentUser') ? event.locals.token.userId : undefined,
+				event.url.searchParams.has('currentUser') ? event.locals.token?.userId : undefined,
 				merged
 			)
 		),

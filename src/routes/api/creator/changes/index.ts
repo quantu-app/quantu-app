@@ -14,7 +14,7 @@ export const GET = isCreator(async (event) => {
 				client,
 				event.url.searchParams.get('referenceType') as ChangeType,
 				event.url.searchParams.get('referenceId'),
-				event.url.searchParams.has('currentUser') ? event.locals.token.userId : undefined,
+				event.url.searchParams.has('currentUser') ? event.locals.token?.userId : undefined,
 				latest,
 				merged
 			)
@@ -84,7 +84,7 @@ export const POST = isCreator(async (event) => ({
 			client,
 			event.url.searchParams.get('referenceType') as ChangeType,
 			event.url.searchParams.get('referenceId'),
-			event.locals.token.userId,
+			event.locals.token?.userId,
 			body.name,
 			body.value
 		);

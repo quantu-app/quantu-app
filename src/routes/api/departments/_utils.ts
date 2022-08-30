@@ -1,4 +1,9 @@
-import { isMultipleChoicePrivate, isInputPrivate, type Prompt, type PromptPrivate } from '$lib/types';
+import {
+	isMultipleChoicePrivate,
+	isInputPrivate,
+	type Prompt,
+	type PromptPrivate
+} from '$lib/types';
 import type { Challenge, QuestionType, LessonBlock } from '@prisma/client';
 
 export function removePrivate<T extends Challenge | LessonBlock>(question: T | null): T | null {
@@ -10,9 +15,11 @@ export function removePrivate<T extends Challenge | LessonBlock>(question: T | n
 
 function removePrivatePrompt(type: QuestionType, prompt: PromptPrivate): Prompt {
 	if (isMultipleChoicePrivate(type, prompt)) {
-		prompt.choices.forEach((choice) => {
-			delete choice.correct;
-		});
+		if (prompt.choices) {
+			prompt.choices.forEach((choice) => {
+				delete choice.correct;
+			});
+		}
 		delete prompt.explanation;
 	} else if (isInputPrivate(type, prompt)) {
 		delete prompt.answers;

@@ -6,7 +6,7 @@
 	export let breadcrumbs: { href?: string; title: string }[] = [];
 </script>
 
-<div class="container">
+<div class="container mt-3">
 	<nav aria-label="breadcrumb">
 		<ol class="breadcrumb">
 			{#each breadcrumbs as breadcrumb}

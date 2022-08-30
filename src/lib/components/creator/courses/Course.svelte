@@ -25,7 +25,7 @@
 					return chaptersById[state.selectedId];
 				case 'lesson':
 					return lessonsById[state.selectedId];
-				case 'lesson-block':
+				case 'lesson-block': // TODO: rename all lesson-blocks to learning blocks
 					return lessonBlocksById[state.selectedId];
 				default:
 					return undefined;
@@ -104,7 +104,15 @@
 
 <div class="d-flex flex-grow-1 flex-row w-100 h-100 pe-2 border-top">
 	<div class="course-sidebar d-flex flex-column flex-shrink overflow-auto border-end">
-		<ul class="list-group list-group-flush">
+		<Search
+			filter={search}
+			{onChange}
+			formClass="mt-3 mb-1"
+			searchInputClass="me-3"
+			placeholder="Filter chapters..."
+			searchIcon={true}
+		/>
+		<ul class="list-group list-group-flush mt-2">
 			<li
 				bind:this={courseElement}
 				class="list-group-item list-group-item-action"
@@ -127,7 +135,6 @@
 		</ul>
 	</div>
 	<div class="d-flex flex-column flex-grow-1 px-2">
-		<Search filter={search} {onChange} />
 		<div class="mt-2 mb-8">
 			<Editor />
 		</div>

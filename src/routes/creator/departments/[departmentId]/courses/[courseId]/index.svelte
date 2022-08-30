@@ -41,7 +41,7 @@
 </script>
 
 <svelte:head>
-	<title>Creator Studio - {course.name}</title>
+	<title>Course Editor | {course.name}</title>
 </svelte:head>
 
 <StudioLayout

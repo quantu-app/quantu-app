@@ -115,7 +115,7 @@
 </div>
 
 <div class="row">
-	<div class="col-md">
+	<div class="col-6">
 		<label for="name" class="form-label">Name</label>
 		<input
 			name="name"
@@ -127,7 +127,7 @@
 		/>
 		<InputMessages className={messageClassName('name')} messages={result.getErrors('name')} />
 	</div>
-	<div class="col-md">
+	<div class="col-6">
 		<label for="url" class="form-label">URL</label>
 		<input
 			name="url"
@@ -139,8 +139,10 @@
 		/>
 		<InputMessages className={messageClassName('url')} messages={result.getErrors('url')} />
 	</div>
+</div>
+<div class="row mt-2">
 	<div class="col-1">
-		<label for="visible" class="form-label">Visible</label><br />
+		<label for="visible" class="form-label">Visible</label>
 		<input class="form-check-input" type="checkbox" name="visible" bind:checked={course.visible} />
 	</div>
 	{#if course.visible}

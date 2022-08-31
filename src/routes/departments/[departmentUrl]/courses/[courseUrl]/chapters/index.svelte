@@ -23,7 +23,7 @@
 </script>
 
 <script lang="ts">
-	import PublicLayout from '$lib/components/layouts/PublicLayout.svelte';
+	import UserLayout from '$lib/components/layouts/PublicLayout.svelte';
 	import { authGuard } from '$lib/guard/authGuard';
 	import { isValidStatus } from '$lib/guard/isValidStatus';
 	import { departmentsByUrl, showDepartmentByUrl } from '$lib/state/departments';
@@ -42,4 +42,4 @@
 	<title>Chapters</title>
 </svelte:head>
 
-<PublicLayout />
+<UserLayout />

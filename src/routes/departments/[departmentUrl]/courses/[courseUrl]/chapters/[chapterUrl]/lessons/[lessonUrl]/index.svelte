@@ -42,7 +42,7 @@
 	import { chaptersByUrl, showChapterByUrl } from '$lib/state/chapters';
 	import { lessonsByUrl, showLessonByUrl } from '$lib/state/lessons';
 	import { lessonBlocksByUrl, showLessonBlocks } from '$lib/state/lessonBlocks';
-	import PublicLayout from '$lib/components/layouts/PublicLayout.svelte';
+	import LessonLayout from '$lib/components/layouts/LessonLayout.svelte';
 
 	export let departmentUrl: string;
 	export let courseUrl: string;
@@ -58,10 +58,16 @@
 	$: lessonBlocks =
 		((($lessonBlocksByUrl[departmentUrl] || {})[courseUrl] || {})[chapterUrl] || {})[lessonUrl] ||
 		[];
+	$: console.log(lesson);
 </script>
 
 <svelte:head>
-	<title>Creator Studio - {chapter.name}</title>
+	<title>Lesson | {lesson.name}</title>
 </svelte:head>
 
-<PublicLayout />
+<LessonLayout>
+	<div class="container">
+		<div class="progress-bar" />
+		<div class="main-learning-area" />
+	</div>
+</LessonLayout>

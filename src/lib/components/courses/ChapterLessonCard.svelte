@@ -2,17 +2,21 @@
 	import type { StateLesson } from '$lib/state/lessons';
 	import RichViewer from '../editor/RichViewer.svelte';
 	import { base } from '$app/paths';
+	import { noImageFallback } from '$lib/utils';
 
 	export let lesson: StateLesson;
 </script>
 
 <div class="card">
 	<div class="card-body">
-		{#if lesson.logoId}
-			<img src={`${base}/api/assets/${lesson.logoId}`} alt={lesson.name} class="card-img-top" />
-		{/if}
-		<h5 class="card-title mt-3">{lesson.name}</h5>
-		<div class="card-text">
+		<img
+			src={lesson.logoId ? `${base}/api/assets/${lesson.logoId}` : noImageFallback}
+			alt={lesson.name}
+			height="160"
+			class="card-img-top"
+		/>
+		<h4 class="card-title mt-3">{lesson.name}</h4>
+		<div class="card-text card-body-height">
 			<RichViewer value={lesson.description} />
 			<a
 				role="button"
@@ -26,3 +30,12 @@
 		<span>{lesson.blocks} questions</span>
 	</div>
 </div>
+
+<style>
+	.card-text {
+		overflow: hidden;
+	}
+	.card-body-height {
+		height: 90px;
+	}
+</style>

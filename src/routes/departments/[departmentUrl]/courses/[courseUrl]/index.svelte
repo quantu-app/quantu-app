@@ -35,7 +35,7 @@
 	import RichViewer from '$lib/components/editor/RichViewer.svelte';
 	import CourseChapter from '$lib/components/courses/CourseChapter.svelte';
 	import { showChapters, chaptersByUrl } from '$lib/state/chapters';
-	import { sortByIndex } from '$lib/utils';
+	import { sortByIndex, noImageFallback } from '$lib/utils';
 	import { lessonsByUrl, showLessons } from '$lib/state/lessons';
 
 	export let departmentUrl: string;
@@ -57,7 +57,7 @@
 	<div class="container-full-bg bg-dark py-5">
 		<div class="container">
 			<div class="row text-white">
-				<div class="col-8">
+				<div class="col-8 col-xl-7">
 					<a href={`${base}/courses`} class="linkToCourses">
 						<span>&lt;</span>
 						<span>Back to Courses</span>
@@ -66,24 +66,22 @@
 					<h1 class="mt-3">{course.name}</h1>
 					<RichViewer value={course.description} />
 				</div>
-				<div class="col-4">
+				<div class="col-4 offset-xl-1">
 					<div class="card darkerBgColor">
-						{#if course.logoId}
-							<img
-								src={`${base}/api/assets/${course.logoId}`}
-								alt={course.name}
-								class="card-img-top"
-							/>
-						{/if}
+						<img
+							src={course.logoId ? `${base}/api/assets/${course.logoId}` : noImageFallback}
+							alt={course.name}
+							class="card-img-top"
+						/>
 						<div class="card-body">
-							<div class="row text-center">
+							<div class="row text-center mt-3">
 								<div class="col">
-									<h4>{chapters.length}</h4>
-									<p>Chapters</p>
+									<h4 class="mb-0">{chapters.length}</h4>
+									<h5>Chapters</h5>
 								</div>
 								<div class="col">
-									<h4>{lessonCount}</h4>
-									<p>Lessons</p>
+									<h4 class="mb-0">{lessonCount}</h4>
+									<h5>Lessons</h5>
 								</div>
 							</div>
 						</div>
@@ -93,15 +91,15 @@
 		</div>
 	</div>
 	<div class="container">
-		<div class="row py-4 my-4">
-			{#each chapters as chapter, idx}
+		{#each chapters as chapter, idx}
+			<div class="row py-4 my-4">
 				<CourseChapter
 					{chapter}
 					chapterNumber={idx + 1}
 					lessons={Object.values(lessonsByChapterUrl[chapter.url] || {})}
 				/>
-			{/each}
-		</div>
+			</div>
+		{/each}
 	</div>
 </UserLayout>
 

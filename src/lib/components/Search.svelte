@@ -13,8 +13,8 @@
 	}
 </script>
 
-<form on:submit|preventDefault class={`${formClass || ''}`}>
-	<div class={`input-group ${searchIcon ? 'search-icon' : ''}`}>
+<form on:submit|preventDefault class={formClass}>
+	<div class="input-group" class:search-icon={searchIcon}>
 		{#if searchIcon}
 			<i class="bi bi-search" />
 		{/if}

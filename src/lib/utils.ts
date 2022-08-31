@@ -4,6 +4,9 @@ import type { Prisma } from '@prisma/client';
 import type { IElement } from 'svelte-slate/plugins/Element.svelte';
 import type { IText } from 'svelte-slate/plugins/Leaf.svelte';
 
+export const noImageFallback =
+	'https://raw.githubusercontent.com/quantu-app/design-platform/master/app/resources/general/no-image-available.png';
+
 export type IFetch = (info: RequestInfo, init?: RequestInit) => Promise<Response>;
 
 function checkPrototypeProperty(obj: Record<string, unknown>) {

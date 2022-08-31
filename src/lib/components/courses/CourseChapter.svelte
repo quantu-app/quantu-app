@@ -14,19 +14,30 @@
 	<h1>Chapter {chapterNumber}: {chapter.name}</h1>
 </div>
 
-{#if lessons.length}
-	<div class="container">
+<div class="container">
+	{#if lessons.length > 0}
 		<h2 class="my-4">Lessons</h2>
 
-		<div class="row row-cols-lg-3 row-cols-md-3 row-cols-sm-2">
+		<div class="row row-cols-md-3 row-cols-sm-2">
 			{#each lessons as lesson (lesson.id)}
-				<div class="col-2 my-2">
+				<div class="col my-2">
 					<ChapterLessonCard {lesson} />
 				</div>
 			{/each}
 		</div>
-	</div>
-{/if}
+	{:else}
+		<div class="row mt-4">
+			<div class="col text-center">
+				<div class="alert alert-primary">
+					<h4 class="mb-0">
+						<i class="bi bi-info-circle" />
+						No lessons yet
+					</h4>
+				</div>
+			</div>
+		</div>
+	{/if}
+</div>
 {#if quizzes.length}
 	<div class="container">
 		<h2 class="my-4">Quizzes</h2>

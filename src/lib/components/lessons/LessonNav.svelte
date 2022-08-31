@@ -4,27 +4,37 @@
 	import { base } from '$app/paths';
 	import { page } from '$app/stores';
 	import { currentUser } from '$lib/state/user';
+
+	export let lessonName: string = 'Subsets';
+	export let lessonBlockName: string = '';
+	export let returnRoute: string = '';
+
+	let lessonNameHover = false;
 </script>
 
-<nav class="navbar navbar-dark navbar-expand bg-dark justify-content-between">
+<nav class="navbar navbar-dark navbar-expand bg-dark">
 	<div class="container">
-		<a class="navbar-brand logo" href="/">
-			<img
-				src="https://raw.githubusercontent.com/quantu-app/design-platform/master/branding/logo/1x/logo-matrix-symmetric.png"
-				alt="[Q]"
-				width="21"
-				height="21"
-			/>
+		<a href={`${base}/${returnRoute}`} class="return-link">
+			<h5 class="mt-2">
+				<i class="bi bi-chevron-left" />
+				Return
+			</h5>
 		</a>
+		<h4 class="lessonName text-center mt-2">
+			{lessonName}
+		</h4>
 	</div>
 </nav>
 
 <style lang="scss">
-	.logo {
-		line-height: 21px;
-		border-radius: 100%;
-		padding: 9px;
-		background-color: white;
+	.lessonName {
+		color: white;
+		width: 100%;
+	}
+	a.return-link {
+		position: absolute;
+		color: white;
+		text-decoration: none;
 	}
 	a.nav-link.linkExtra {
 		font-size: 20px;

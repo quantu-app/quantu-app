@@ -25,6 +25,7 @@ export async function getLessons(
 	const lessons = await client.lesson.findMany({
 		where: {
 			url: lessonUrl,
+			visible: true,
 			chapter: {
 				url: chapterUrl,
 				course: {

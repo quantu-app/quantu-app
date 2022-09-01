@@ -46,8 +46,8 @@
 	}) {
 		let count = 0;
 		for (let chapterUrl in lessonsByChapterUrl) {
-			const chapterLessonCount = Object.values(lessonsByChapterUrl[chapterUrl]).length;
-			count += chapterLessonCount;
+			const lessonCount = Object.values(lessonsByChapterUrl[chapterUrl]).length;
+			count += lessonCount;
 		}
 		return count;
 	}
@@ -57,6 +57,7 @@
 		sortByIndex
 	);
 	$: lessonsByChapterUrl = ($lessonsByUrl[departmentUrl] || {})[courseUrl] || {};
+	$: console.log(lessonsByChapterUrl);
 	$: lessonCount = getLessonCount(lessonsByChapterUrl); // TODO: simplify this
 </script>
 

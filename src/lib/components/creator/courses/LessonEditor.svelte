@@ -55,6 +55,7 @@
 	import { isUrlSafe } from '$lib/utils';
 	import classnames from 'vest/classnames';
 	import InputMessages from '$lib/components/ui/InputMessages.svelte';
+	import DateTimeInput from '$lib/components/ui/DateTimeInput.svelte';
 
 	export let lesson: StateLesson;
 
@@ -126,7 +127,7 @@
 	</button>
 </div>
 <div class="row">
-	<div class="col-md">
+	<div class="col-6">
 		<label for="name" class="form-label">Name</label>
 		<input
 			name="name"
@@ -138,7 +139,7 @@
 		/>
 		<InputMessages className={messageClassName('name')} messages={result.getErrors('name')} />
 	</div>
-	<div class="col-md">
+	<div class="col-6">
 		<label for="url" class="form-label">URL</label>
 		<input
 			name="url"
@@ -151,7 +152,18 @@
 		<InputMessages className={messageClassName('url')} messages={result.getErrors('url')} />
 	</div>
 </div>
-<hr />
+<div class="row my-2">
+	<div class="col-1">
+		<label for="visible" class="form-label">Visible</label>
+		<input class="form-check-input" type="checkbox" name="visible" bind:checked={lesson.visible} />
+	</div>
+	{#if lesson.visible}
+		<div class="col-md">
+			<label for="releasedAt" class="form-label">Release At</label>
+			<DateTimeInput id="releasedAt" bind:date={lesson.releasedAt} {disabled} />
+		</div>
+	{/if}
+</div>
 <div class="row">
 	{#if lesson.id}
 		<div class="col-md-3">

@@ -36,17 +36,28 @@
 	import CourseChapter from '$lib/components/courses/CourseChapter.svelte';
 	import { showChapters, chaptersByUrl } from '$lib/state/chapters';
 	import { sortByIndex, noImageFallback } from '$lib/utils';
-	import { lessonsByUrl, showLessons } from '$lib/state/lessons';
+	import { lessonsByUrl, showLessons, type StateLesson } from '$lib/state/lessons';
 
 	export let departmentUrl: string;
 	export let courseUrl: string;
+
+	function getLessonCount(lessonsByChapterUrl: {
+		[chapterUrl: string]: { [url: string]: StateLesson };
+	}) {
+		let count = 0;
+		for (let chapterUrl in lessonsByChapterUrl) {
+			const chapterLessonCount = Object.values(lessonsByChapterUrl[chapterUrl]).length;
+			count += chapterLessonCount;
+		}
+		return count;
+	}
 
 	$: course = ($coursesByUrl[departmentUrl] || {})[courseUrl];
 	$: chapters = Object.values(($chaptersByUrl[departmentUrl] || {})[courseUrl] || {}).sort(
 		sortByIndex
 	);
 	$: lessonsByChapterUrl = ($lessonsByUrl[departmentUrl] || {})[courseUrl] || {};
-	$: lessonCount = Object.values(lessonsByChapterUrl).length;
+	$: lessonCount = getLessonCount(lessonsByChapterUrl); // TODO: simplify this
 </script>
 
 <svelte:head>

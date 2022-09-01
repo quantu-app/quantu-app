@@ -157,7 +157,10 @@
 	{#if course.id}
 		<div class="col-md-3">
 			<div class="form-control">
-				<label for="logo" class="form-label">Logo</label>
+				<label for="logo" class="form-label">
+					Logo
+					<span class="small text-muted">(size should be 450x320)</span>
+				</label>
 				<SelectAsset
 					name="logo"
 					departmentId={course.departmentId}

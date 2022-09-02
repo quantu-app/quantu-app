@@ -57,7 +57,6 @@
 		sortByIndex
 	);
 	$: lessonsByChapterUrl = ($lessonsByUrl[departmentUrl] || {})[courseUrl] || {};
-	$: console.log(lessonsByChapterUrl);
 	$: lessonCount = getLessonCount(lessonsByChapterUrl); // TODO: simplify this
 </script>
 

@@ -3,7 +3,7 @@
 <script lang="ts">
 	import { format } from 'date-fns';
 
-	export let date: string = new Date().toJSON();
+	export let date: string | null = new Date().toJSON();
 	export let id: string = '';
 	export let placeholder: string = '';
 	export let disabled: boolean = false;

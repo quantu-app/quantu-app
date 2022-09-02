@@ -43,6 +43,7 @@
 	import { lessonsByUrl, showLessonByUrl } from '$lib/state/lessons';
 	import { lessonBlocksByUrl, showLessonBlocks } from '$lib/state/lessonBlocks';
 	import LessonLayout from '$lib/components/layouts/LessonLayout.svelte';
+	import LessonProgressMenu from '$lib/components/lessons/LessonProgressMenu.svelte';
 
 	export let departmentUrl: string;
 	export let courseUrl: string;
@@ -55,10 +56,28 @@
 	$: lesson = ((($lessonsByUrl[departmentUrl] || {})[courseUrl] || {})[chapterUrl] || {})[
 		lessonUrl
 	];
-	$: lessonBlocks =
-		((($lessonBlocksByUrl[departmentUrl] || {})[courseUrl] || {})[chapterUrl] || {})[lessonUrl] ||
-		[];
-	$: console.log(lesson);
+	// $: learningBlocks =
+	// 	((($lessonBlocksByUrl[departmentUrl] || {})[courseUrl] || {})[chapterUrl] || {})[lessonUrl] ||
+	// 	[];
+
+	let learningBlockMenuItems: {
+		name: string;
+		url: string;
+		current: boolean;
+		completed: boolean;
+	}[] = [];
+
+	for (let i = 0; i < 40; i++) {
+		let completed = i < 15 ? true : Math.random() > 0.5;
+
+		learningBlockMenuItems.push({
+			name: `Dummy ${i}`,
+			url: `dummy-${i}`,
+			completed: completed,
+			current: false
+		});
+	}
+	learningBlockMenuItems[12].current = true;
 </script>
 
 <svelte:head>
@@ -67,7 +86,9 @@
 
 <LessonLayout>
 	<div class="container">
-		<div class="progress-bar" />
+		<div class="my-4">
+			<LessonProgressMenu {learningBlockMenuItems} />
+		</div>
 		<div class="main-learning-area" />
 	</div>
 </LessonLayout>

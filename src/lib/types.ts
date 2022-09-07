@@ -1,4 +1,4 @@
-import type { QuestionType } from '@prisma/client';
+import type { QuestionType, Result } from '@prisma/client';
 import type { IElement, IText } from '$lib/components/editor';
 
 export interface FlashCardPrivate {
@@ -72,6 +72,14 @@ export type PromptPrivate =
 	| InputPrivate
 	| MultipleChoicePrivate;
 export type Prompt = FlashCard | MarkAsRead | Input | MultipleChoice;
+
+export type UserAnswers = {
+	answers: { value: number; userId: string }[];
+}
+
+export type OptionalResult = {
+	result?: Result;
+}
 
 export function isFlashCardPrivate(
 	type: QuestionType,

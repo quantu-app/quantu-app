@@ -36,6 +36,7 @@
 
 <script lang="ts">
 	import { authGuard } from '$lib/guard/authGuard';
+	import { base } from '$app/paths';
 	import { isValidStatus } from '$lib/guard/isValidStatus';
 	import { departmentsByUrl, showDepartmentByUrl } from '$lib/state/departments';
 	import { coursesByUrl, showCourseByUrl } from '$lib/state/courses';
@@ -46,6 +47,7 @@
 	import LessonProgressMenu from '$lib/components/lessons/LessonProgressMenu.svelte';
 	import LearningBlockWrapper from '$lib/components/lesson_block/LessonBlockWrapper.svelte';
 	import LessonBlock from '$lib/components/lesson_block/LessonBlock.svelte';
+	import { departmentCoursePath } from '$lib/routingUtils';
 
 	export let departmentUrl: string;
 	export let courseUrl: string;
@@ -87,15 +89,15 @@
 	<title>Lesson | {lesson.name}</title>
 </svelte:head>
 
-<LessonLayout>
+<LessonLayout returnRoute={departmentCoursePath(department.url, course.url)}>
 	<div class="container">
 		<div class="row my-4">
 			<LessonProgressMenu {lessonBlockMenuItems} />
 		</div>
 		<div class="row main-learning-area">
-			<LearningBlockWrapper lessonBlock={currentLessonBlock}>
+			<!-- <LearningBlockWrapper lessonBlock={currentLessonBlock}>
 				<LessonBlock lessonBlock={currentLessonBlock} />
-			</LearningBlockWrapper>
+			</LearningBlockWrapper> -->
 		</div>
 	</div>
 </LessonLayout>

@@ -17,9 +17,10 @@
 		<a
 			href={item.url}
 			title={item.name}
-			class="lessonBlock px-3"
-			class:pending={!item.completed}
-			class:current={item.current}
+			class="lessonBlock px-3 rounded"
+			class:bg-dark={item.completed && !item.current}
+			class:bg-secondary={!item.completed}
+			class:bg-primary={item.current}
 		/>
 	{/each}
 </div>
@@ -27,21 +28,9 @@
 <style>
 	.lessonBlock {
 		display: block;
-		width: 40px;
-		height: 18px;
-		background-color: #333;
-		cursor: pointer;
+		width: 48px;
+		height: 14px;
 		margin: 0px 2px 2px 0px;
 		float: left;
-	}
-	.lessonBlock:hover {
-		transform: scaleY(1.3);
-		box-shadow: 1px 2px 2px 1px #d0d0d0;
-	}
-	.lessonBlock.pending {
-		background-color: #e2e2e2;
-	}
-	.lessonBlock.current {
-		background-color: #f9c138;
 	}
 </style>

@@ -3,6 +3,7 @@
 	import RichViewer from '../editor/RichViewer.svelte';
 	import { base } from '$app/paths';
 	import { noImageFallback } from '$lib/utils';
+	import { departmentCourseChapterLessonPath } from '$lib/routingUtils';
 
 	export let lesson: StateLesson;
 </script>
@@ -18,11 +19,17 @@
 		<h4 class="card-title mt-3">{lesson.name}</h4>
 		<div class="card-text card-body-height">
 			<RichViewer value={lesson.description} />
+			<!-- svelte-ignore a11y-missing-content -->
 			<a
 				role="button"
 				aria-label="review"
 				class="text-success stretched-link"
-				href={`${base}/departments/${lesson.chapter.course.department.url}/courses/${lesson.chapter.course.url}/chapters/${lesson.chapter.url}/lessons/${lesson.url}`}
+				href={departmentCourseChapterLessonPath(
+					lesson.chapter.course.department.url,
+					lesson.chapter.course.url,
+					lesson.chapter.url,
+					lesson.url
+				)}
 			/>
 		</div>
 	</div>

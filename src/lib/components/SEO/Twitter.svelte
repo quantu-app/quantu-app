@@ -6,11 +6,11 @@
 
 <script lang="ts">
 	// see: https://developer.twitter.com/en/docs/twitter-for-websites/cards/guides/getting-started
-	export let title: string = undefined;
-	export let card: CardType = undefined;
-	export let description: string = undefined;
-	export let image: string = undefined;
-	export let imageAlt: string = undefined;
+	export let title: string | undefined = undefined;
+	export let card: CardType | undefined = undefined;
+	export let description: string | undefined = undefined;
+	export let image: string | undefined = undefined;
+	export let imageAlt: string | undefined = undefined;
 </script>
 
 <meta property="twitter:site" content="@QUANTU_APP" />

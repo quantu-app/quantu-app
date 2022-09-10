@@ -4,10 +4,12 @@
 	import Notifications from '$lib/components/Notifications.svelte';
 	import LessonNav from '$lib/components/lessons/LessonNav.svelte';
 	import Footer from '../Footer.svelte';
+
+	export let returnRoute: string;
 </script>
 
 <div class="d-flex flex-column min-vh-100">
-	<LessonNav />
+	<LessonNav {returnRoute} />
 	<slot />
 	<div class="mt-auto">
 		<Footer />

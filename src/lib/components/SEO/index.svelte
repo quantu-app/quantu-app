@@ -5,13 +5,13 @@
 	import OpenGraph from './OpenGraph.svelte';
 	import Twitter from './Twitter.svelte';
 
-	export let title: string = undefined;
-	export let description: string = undefined;
-	export let keywords: string = undefined;
-	export let canonical: string = undefined;
+	export let title: string | undefined = undefined;
+	export let description: string | undefined = undefined;
+	export let keywords: string | undefined = undefined;
+	export let canonical: string | undefined = undefined;
 	export let robotsDirectives: TagDirective[] = [];
-	export let openGraph: object = undefined;
-	export let twitter: object = undefined;
+	export let openGraph: object | undefined = undefined;
+	export let twitter: object | undefined = undefined;
 </script>
 
 <svelte:head>

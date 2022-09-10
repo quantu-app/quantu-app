@@ -6,10 +6,11 @@
 	import Footer from '../Footer.svelte';
 
 	export let returnRoute: string;
+	export let lessonName: string;
 </script>
 
 <div class="d-flex flex-column min-vh-100">
-	<LessonNav {returnRoute} />
+	<LessonNav {returnRoute} {lessonName} />
 	<slot />
 	<div class="mt-auto">
 		<Footer />

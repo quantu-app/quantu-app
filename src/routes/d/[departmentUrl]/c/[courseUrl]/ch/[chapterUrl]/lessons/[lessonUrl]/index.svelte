@@ -47,7 +47,10 @@
 	import LessonProgressMenu from '$lib/components/lessons/LessonProgressMenu.svelte';
 	import LearningBlockWrapper from '$lib/components/lesson_block/LessonBlockWrapper.svelte';
 	import LessonBlock from '$lib/components/lesson_block/LessonBlock.svelte';
-	import { departmentCoursePath } from '$lib/routingUtils';
+	import {
+		departmentCoursePath,
+		departmentCourseChapterLessonLessonBlockPath
+	} from '$lib/routingUtils';
 
 	export let departmentUrl: string;
 	export let courseUrl: string;
@@ -63,33 +66,39 @@
 	$: lessonBlocks =
 		((($lessonBlocksByUrl[departmentUrl] || {})[courseUrl] || {})[chapterUrl] || {})[lessonUrl] ||
 		[];
-	$: currentLessonBlock = lessonBlocks[0];
 
 	let lessonBlockMenuItems: {
 		name: string;
 		url: string;
 		current: boolean;
 		completed: boolean;
-	}[] = [];
+	}[];
 
-	for (let i = 0; i < 40; i++) {
-		let completed = i < 15 ? true : Math.random() > 0.5;
-
-		lessonBlockMenuItems.push({
-			name: `Dummy ${i}`,
-			url: `dummy-${i}`,
-			completed: completed,
-			current: false
-		});
-	}
-	lessonBlockMenuItems[12].current = true;
+	$: lessonBlockMenuItems = lessonBlocks.map((value) => {
+		return {
+			name: value.name,
+			url: departmentCourseChapterLessonLessonBlockPath(
+				department.url,
+				course.url,
+				chapter.url,
+				lesson.url,
+				value.url
+			),
+			completed: false,
+			current: value.url == lessonBlocks[0].url
+		};
+	});
+	$: console.log(lessonBlockMenuItems);
 </script>
 
 <svelte:head>
 	<title>Lesson | {lesson.name}</title>
 </svelte:head>
 
-<LessonLayout returnRoute={departmentCoursePath(department.url, course.url)}>
+<LessonLayout
+	returnRoute={departmentCoursePath(department.url, course.url)}
+	lessonName={lesson.name}
+>
 	<div class="container">
 		<div class="row my-4">
 			<LessonProgressMenu {lessonBlockMenuItems} />

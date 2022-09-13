@@ -39,10 +39,12 @@ export const lessonBlocksByUrl = derived(lessonBlocksWritable, (lessonBlocks) =>
 			byCourseUrl[lessonBlock.lesson.chapter.url] ||
 			(byCourseUrl[lessonBlock.lesson.chapter.url] = {});
 		const byLessonUrl =
-			byChapterUrl[lessonBlock.lesson.url] || (byChapterUrl[lessonBlock.lesson.url] = []);
-		byLessonUrl.push(lessonBlock);
+			byChapterUrl[lessonBlock.lesson.url] || (byChapterUrl[lessonBlock.lesson.url] = {});
+
+		byLessonUrl[lessonBlock.url] = lessonBlock;
+
 		return byUrl;
-	}, {} as { [departmentUrl: string]: { [courseUrl: string]: { [chapterUrl: string]: { [lessonId: string]: StateLessonBlock[] } } } })
+	}, {} as { [departmentUrl: string]: { [courseUrl: string]: { [chapterUrl: string]: { [lessonUrl: string]: { [lessonBlockUrl: string]: StateLessonBlock } } } } })
 );
 
 export async function showLessonBlock(
@@ -53,7 +55,6 @@ export async function showLessonBlock(
 	lessonBlockUrl: string,
 	fetchFn: IFetch = fetch
 ) {
-	console.log(lessonBlockUrl);
 	const res = await fetchFn(
 		apiDepartmentCourseChapterLessonLessonBlockPath(departmentUrl, courseUrl, chapterUrl, lessonUrl, lessonBlockUrl),
 		{
@@ -67,7 +68,7 @@ export async function showLessonBlock(
 	}
 	const lessonBlock: StateLessonBlock = lessonBlockFromJSON(await res.json());
 	lessonBlocksWritable.update((state) => addOrUpdate(state.slice(), lessonBlock));
-	return lessonBlocks;
+	return lessonBlock;
 }
 
 export async function showLessonBlocks(

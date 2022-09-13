@@ -2,7 +2,7 @@
 	import type { Load } from '@sveltejs/kit';
 	import { isValidStatus } from '$lib/guard/isValidStatus';
 	import { authGuard } from '$lib/guard/authGuard';
-	import { lessonBlocksByUrl, showLessonBlock } from '$lib/state/lessonBlocks';
+	import { showLessonBlock } from '$lib/state/lessonBlocks';
 
 	export const load: Load = async (input) => {
 		const response = await authGuard(input);
@@ -15,7 +15,7 @@
 		const chapterUrl = input.params.chapterUrl;
 		const lessonUrl = input.params.lessonUrl;
 		const lessonBlockUrl = input.params.lessonBlockUrl;
-		await showLessonBlock(
+		let lessonBlock = await showLessonBlock(
 			departmentUrl,
 			courseUrl,
 			chapterUrl,
@@ -37,7 +37,7 @@
 </script>
 
 <script lang="ts">
-	import { lessonBlocks } from '$lib/state/lessonBlocks';
+	import { lessonBlocksByUrl } from '$lib/state/lessonBlocks';
 
 	export let departmentUrl: string;
 	export let courseUrl: string;
@@ -45,7 +45,8 @@
 	export let lessonUrl: string;
 	export let lessonBlockUrl: string;
 
-	$: lessonBlock = $lessonBlocks[0];
+	$: lessonBlock = (((($lessonBlocksByUrl[departmentUrl] || {})[courseUrl] || {})[chapterUrl] ||
+		{})[lessonUrl] || {})[lessonBlockUrl];
 </script>
 
 <svelte:head>

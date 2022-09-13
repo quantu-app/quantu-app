@@ -51,6 +51,7 @@
 		departmentCoursePath,
 		departmentCourseChapterLessonLessonBlockPath
 	} from '$lib/routingUtils';
+	import { sortByIndex } from '$lib/utils';
 
 	export let departmentUrl: string;
 	export let courseUrl: string;
@@ -63,9 +64,10 @@
 	$: lesson = ((($lessonsByUrl[departmentUrl] || {})[courseUrl] || {})[chapterUrl] || {})[
 		lessonUrl
 	];
-	$: lessonBlocks =
+	$: lessonBlocks = Object.values(
 		((($lessonBlocksByUrl[departmentUrl] || {})[courseUrl] || {})[chapterUrl] || {})[lessonUrl] ||
-		[];
+			{}
+	).sort(sortByIndex);
 
 	let lessonBlockMenuItems: {
 		name: string;

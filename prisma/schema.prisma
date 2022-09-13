@@ -433,6 +433,9 @@ model LessonBlock {
 
   results Result[] @relation(name: "LessonBlockResult")
 
+  visible    Boolean   @default(false)
+  releasedAt DateTime?
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 

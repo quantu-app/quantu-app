@@ -5,6 +5,7 @@
 	import { addNotification, NotificationType } from '$lib/state/notifications';
 	import { typeToName } from '$lib/types';
 	import { isUrlSafe } from '$lib/utils';
+	import DateTimeInput from '$lib/components/ui/DateTimeInput.svelte';
 
 	export let lessonBlock: StateLessonBlock;
 
@@ -61,6 +62,23 @@
 			class="form-control"
 		/>
 	</div>
+</div>
+<div class="row my-2">
+	<div class="col-1">
+		<label for="visible" class="form-label">Visible</label>
+		<input
+			class="form-check-input"
+			type="checkbox"
+			name="visible"
+			bind:checked={lessonBlock.visible}
+		/>
+	</div>
+	{#if lessonBlock.visible}
+		<div class="col-md">
+			<label for="releasedAt" class="form-label">Release At</label>
+			<DateTimeInput id="releasedAt" bind:date={lessonBlock.releasedAt} {disabled} />
+		</div>
+	{/if}
 </div>
 <div class="row mt-2">
 	<div class="col">

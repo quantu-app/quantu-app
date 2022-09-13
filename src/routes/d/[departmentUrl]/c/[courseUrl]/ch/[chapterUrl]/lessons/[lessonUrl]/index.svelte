@@ -85,10 +85,9 @@
 				value.url
 			),
 			completed: false,
-			current: value.url == lessonBlocks[0].url
+			current: value.url == lessonBlocks[0].url // TODO: fixme
 		};
 	});
-	$: console.log(lessonBlockMenuItems);
 </script>
 
 <svelte:head>

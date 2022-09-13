@@ -5,9 +5,9 @@ export const authGuard: Load = ({ url, session }) => {
 		return {};
 	} else {
 		const output = {
-				status: 302,
-				redirect: '/'
-			},
+			status: 302,
+			redirect: '/'
+		},
 			redirectQuery = url.searchParams.toString(),
 			redirectPath = url.pathname + (redirectQuery ? '?' + redirectQuery : '');
 

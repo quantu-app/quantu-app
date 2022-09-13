@@ -2,7 +2,9 @@ import type { LessonBlock, Result } from '@prisma/client';
 import { writable, derived, get } from 'svelte/store';
 import { base } from '$app/paths';
 import type { Answer, UserAnswers, OptionalResult } from '$lib/types';
+import { addOrUpdate } from './common';
 import type { IFetch } from '../utils';
+import { apiDepartmentCourseChapterLessonLessonBlockPath } from '$lib/routingUtils';
 
 export type StateLessonBlock = LessonBlock & UserAnswers & OptionalResult & {
 	lesson: {
@@ -43,6 +45,31 @@ export const lessonBlocksByUrl = derived(lessonBlocksWritable, (lessonBlocks) =>
 	}, {} as { [departmentUrl: string]: { [courseUrl: string]: { [chapterUrl: string]: { [lessonId: string]: StateLessonBlock[] } } } })
 );
 
+export async function showLessonBlock(
+	departmentUrl: string,
+	courseUrl: string,
+	chapterUrl: string,
+	lessonUrl: string,
+	lessonBlockUrl: string,
+	fetchFn: IFetch = fetch
+) {
+	console.log(lessonBlockUrl);
+	const res = await fetchFn(
+		apiDepartmentCourseChapterLessonLessonBlockPath(departmentUrl, courseUrl, chapterUrl, lessonUrl, lessonBlockUrl),
+		{
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		}
+	);
+	if (!res.ok) {
+		throw await res.json();
+	}
+	const lessonBlock: StateLessonBlock = lessonBlockFromJSON(await res.json());
+	lessonBlocksWritable.update((state) => addOrUpdate(state.slice(), lessonBlock));
+	return lessonBlocks;
+}
+
 export async function showLessonBlocks(
 	departmentUrl: string,
 	courseUrl: string,
@@ -66,19 +93,6 @@ export async function showLessonBlocks(
 		lessonBlocks.reduce((state, lessonBlock) => addOrUpdate(state, lessonBlock), state.slice())
 	);
 	return lessonBlocks;
-}
-
-function addOrUpdate(
-	state: Array<StateLessonBlock>,
-	lessonBlock: StateLessonBlock
-): Array<StateLessonBlock> {
-	const index = state.findIndex((c) => c.id === lessonBlock.id);
-	if (index === -1) {
-		state.push(lessonBlock);
-	} else {
-		state[index] = lessonBlock;
-	}
-	return state;
 }
 
 export function lessonBlockFromJSON(lessonBlock: StateLessonBlock): StateLessonBlock {

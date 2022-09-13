@@ -19,7 +19,7 @@
 			title={item.name}
 			class="lessonBlock px-3 rounded"
 			class:bg-dark={item.completed && !item.current}
-			class:bg-secondary={!item.completed}
+			class:bg-secondary={!item.completed && !item.current}
 			class:bg-primary={item.current}
 		/>
 	{/each}

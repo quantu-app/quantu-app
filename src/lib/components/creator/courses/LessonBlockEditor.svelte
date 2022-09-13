@@ -6,6 +6,7 @@
 	import { typeToName } from '$lib/types';
 	import { isUrlSafe } from '$lib/utils';
 	import DateTimeInput from '$lib/components/ui/DateTimeInput.svelte';
+	import ViewingOptions from './ViewingOptions.svelte';
 
 	export let lessonBlock: StateLessonBlock;
 
@@ -63,23 +64,7 @@
 		/>
 	</div>
 </div>
-<div class="row my-2">
-	<div class="col-1">
-		<label for="visible" class="form-label">Visible</label>
-		<input
-			class="form-check-input"
-			type="checkbox"
-			name="visible"
-			bind:checked={lessonBlock.visible}
-		/>
-	</div>
-	{#if lessonBlock.visible}
-		<div class="col-md">
-			<label for="releasedAt" class="form-label">Release At</label>
-			<DateTimeInput id="releasedAt" bind:date={lessonBlock.releasedAt} {disabled} />
-		</div>
-	{/if}
-</div>
+<ViewingOptions item={lessonBlock} {disabled} />
 <div class="row mt-2">
 	<div class="col">
 		<label for="lesson-blocktype" class="form-label">Type</label>

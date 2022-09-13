@@ -56,6 +56,7 @@
 	import classnames from 'vest/classnames';
 	import InputMessages from '$lib/components/ui/InputMessages.svelte';
 	import DateTimeInput from '$lib/components/ui/DateTimeInput.svelte';
+	import ViewingOptions from './ViewingOptions.svelte';
 
 	export let lesson: StateLesson;
 
@@ -152,18 +153,7 @@
 		<InputMessages className={messageClassName('url')} messages={result.getErrors('url')} />
 	</div>
 </div>
-<div class="row my-2">
-	<div class="col-1">
-		<label for="visible" class="form-label">Visible</label>
-		<input class="form-check-input" type="checkbox" name="visible" bind:checked={lesson.visible} />
-	</div>
-	{#if lesson.visible}
-		<div class="col-md">
-			<label for="releasedAt" class="form-label">Release At</label>
-			<DateTimeInput id="releasedAt" bind:date={lesson.releasedAt} {disabled} />
-		</div>
-	{/if}
-</div>
+<ViewingOptions item={lesson} {disabled} />
 <div class="row">
 	{#if lesson.id}
 		<div class="col-md-3">

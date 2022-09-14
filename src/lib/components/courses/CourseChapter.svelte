@@ -7,7 +7,6 @@
 	export let chapterNumber: number = 1;
 	export let chapter: StateChapter;
 	export let lessons: StateLesson[] = [];
-	export let quizzes: any[] = [];
 </script>
 
 <div class="container">
@@ -31,22 +30,10 @@
 				<div class="alert alert-primary">
 					<h4 class="mb-0">
 						<i class="bi bi-info-circle" />
-						No lessons yet
+						coming soon
 					</h4>
 				</div>
 			</div>
 		</div>
 	{/if}
 </div>
-{#if quizzes.length}
-	<div class="container">
-		<h2 class="my-4">Quizzes</h2>
-		<div class="row row-cols-lg-3 row-cols-md-3 row-cols-sm-2">
-			{#each quizzes as quiz, index (quiz.id)}
-				<div class="col-2 my-2">
-					<ChapterQuizCard {quiz} quizNumber={index + 1} />
-				</div>
-			{/each}
-		</div>
-	</div>
-{/if}

@@ -34,7 +34,7 @@
 		</div>
 	</div>
 	<div class="card-footer text-muted">
-		<span>{lesson.blocks} questions</span>
+		<span>{lesson.lessonBlocksCount} questions</span>
 	</div>
 </div>
 

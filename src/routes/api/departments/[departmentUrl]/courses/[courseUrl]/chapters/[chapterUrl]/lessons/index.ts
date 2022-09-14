@@ -1,6 +1,6 @@
 import { authenticated } from '$lib/api/auth';
 import { run } from '$lib/prisma';
-import type { PrismaClient } from '@prisma/client';
+import type { PrismaClient, LessonBlock } from '@prisma/client';
 
 export const GET = authenticated(async (event) => ({
 	body: await run((client) =>
@@ -59,23 +59,24 @@ export async function getLessons(
 	});
 
 	const lessonIds = lessons.map((lesson) => lesson.id);
-	const lessonBlockCounts = await client.lessonBlock.groupBy({
-		by: ['lessonId'],
-		_count: { _all: true },
+	const lessonBlocks = await client.lessonBlock.findMany({
 		where: {
+			visible: true,
 			lessonId: {
 				in: lessonIds
 			}
 		}
 	});
 
-	const lessonBlockCountByLessonId = lessonBlockCounts.reduce((byLessonId, lessonBlockCount) => {
-		byLessonId[lessonBlockCount.lessonId] = lessonBlockCount._count._all;
+	const lessonBlocksByLessonId = lessonBlocks.reduce((byLessonId, lessonBlock) => {
+		byLessonId[lessonBlock.lessonId] ||= [];
+		byLessonId[lessonBlock.lessonId].push(lessonBlock);
 		return byLessonId;
-	}, {} as { [lessonId: string]: number });
+	}, {} as { [lessonId: string]: LessonBlock[] });
 
 	for (const lesson of lessons) {
-		(lesson as any).blocks = lessonBlockCountByLessonId[lesson.id] || 0;
+		(lesson as any).lessonBlocks = lessonBlocksByLessonId[lesson.id];
+		(lesson as any).lessonBlocksCount = lessonBlocksByLessonId[lesson.id] ? lessonBlocksByLessonId[lesson.id].length : 0;
 	}
 
 	return lessons;

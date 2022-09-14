@@ -1,6 +1,6 @@
 import { authenticated } from '$lib/api/auth';
 import { run } from '$lib/prisma';
-import type { PrismaClient, LessonBlock } from '@prisma/client';
+import type { PrismaClient } from '@prisma/client';
 
 export const GET = authenticated(async (event) => ({
 	body: await run((client) =>

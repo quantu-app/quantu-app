@@ -9,7 +9,8 @@ export const GET = authenticated(async (event) => ({
 			event.params.departmentUrl,
 			event.params.courseUrl,
 			event.params.chapterUrl,
-			event.params.lessonUrl
+			event.params.lessonUrl,
+			event.locals.token?.userId,
 		)
 	),
 	status: 200
@@ -20,12 +21,19 @@ export async function getLessons(
 	departmentUrl: string,
 	courseUrl: string,
 	chapterUrl: string,
-	lessonUrl: string
+	lessonUrl: string,
+	userId: string
 ) {
+	const now = new Date();
+
 	const lessons = await client.lesson.findMany({
 		where: {
 			url: lessonUrl,
 			visible: true,
+			releasedAt: {
+				lte: now
+			},
+			NOT: [{ releasedAt: null }],
 			chapter: {
 				url: chapterUrl,
 				course: {
@@ -37,6 +45,22 @@ export async function getLessons(
 			}
 		},
 		include: {
+			lessonBlocks: {
+				where: {
+					visible: true,
+					NOT: [{ releasedAt: null }],
+					releasedAt: {
+						lte: now
+					}
+				},
+				include: {
+					results: {
+						where: {
+							userId
+						}
+					}
+				}
+			},
 			chapter: {
 				select: {
 					name: true,
@@ -58,25 +82,8 @@ export async function getLessons(
 		}
 	});
 
-	const lessonIds = lessons.map((lesson) => lesson.id);
-	const lessonBlocks = await client.lessonBlock.findMany({
-		where: {
-			visible: true,
-			lessonId: {
-				in: lessonIds
-			}
-		}
-	});
-
-	const lessonBlocksByLessonId = lessonBlocks.reduce((byLessonId, lessonBlock) => {
-		byLessonId[lessonBlock.lessonId] ||= [];
-		byLessonId[lessonBlock.lessonId].push(lessonBlock);
-		return byLessonId;
-	}, {} as { [lessonId: string]: LessonBlock[] });
-
 	for (const lesson of lessons) {
-		(lesson as any).lessonBlocks = lessonBlocksByLessonId[lesson.id];
-		(lesson as any).lessonBlocksCount = lessonBlocksByLessonId[lesson.id] ? lessonBlocksByLessonId[lesson.id].length : 0;
+		(lesson as any).lessonBlocksCount = lesson.lessonBlocks.length;
 	}
 
 	return lessons;

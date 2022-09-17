@@ -17,6 +17,7 @@
 	import type { StateCourse } from '$lib/state/courses';
 	import { XorShiftRng } from '@aicacia/rand';
 	import { formatDistanceToNowStrict, isBefore, isSameDay } from 'date-fns';
+	import { departmentCoursePath } from '$lib/routingUtils';
 
 	export let course: StateCourse;
 
@@ -37,7 +38,7 @@
 				role="button"
 				aria-label="enter"
 				class="stretched-link"
-				href={`${base}/departments/${course.department.url}/courses/${course.url}`}
+				href={departmentCoursePath(course.department.url, course.url)}
 			/>
 		</div>
 	</div>

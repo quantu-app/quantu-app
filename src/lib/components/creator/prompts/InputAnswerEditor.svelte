@@ -11,8 +11,6 @@
 	let prevType: InputType;
 	let mathElement: HTMLElement;
 
-	$: console.log(mathElement);
-
 	$: if (prevType !== type && mathElement) {
 		prevType = type;
 		const MQ = window.MathQuill.getInterface(2);

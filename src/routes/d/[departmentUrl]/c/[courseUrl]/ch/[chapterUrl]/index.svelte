@@ -9,37 +9,40 @@
 		}
 		const departmentUrl = input.params.departmentUrl;
 		const courseUrl = input.params.courseUrl;
+		const chapterUrl = input.params.chapterUrl;
 		const department = await showDepartmentByUrl(departmentUrl, input.fetch);
 		const course = await showCourseByUrl(departmentUrl, courseUrl, input.fetch);
-		await showChapters(departmentUrl, courseUrl, input.fetch);
+		await showChapterByUrl(departmentUrl, courseUrl, chapterUrl, input.fetch);
 
 		return {
 			props: {
 				departmentUrl,
-				courseUrl
+				courseUrl,
+				chapterUrl
 			}
 		};
 	};
 </script>
 
 <script lang="ts">
-	import PublicLayout from '$lib/components/layouts/PublicLayout.svelte';
+	import UserLayout from '$lib/components/layouts/PublicLayout.svelte';
 	import { authGuard } from '$lib/guard/authGuard';
 	import { isValidStatus } from '$lib/guard/isValidStatus';
 	import { departmentsByUrl, showDepartmentByUrl } from '$lib/state/departments';
 	import { coursesByUrl, showCourseByUrl } from '$lib/state/courses';
-	import { chaptersByUrl, showChapters } from '$lib/state/chapters';
+	import { chaptersByUrl, showChapterByUrl } from '$lib/state/chapters';
 
 	export let departmentUrl: string;
 	export let courseUrl: string;
+	export let chapterUrl: string;
 
 	$: department = $departmentsByUrl[departmentUrl];
 	$: course = ($coursesByUrl[departmentUrl] || {})[courseUrl];
-	$: chapters = Object.values(($chaptersByUrl[departmentUrl] || {})[courseUrl] || {});
+	$: chapter = (($chaptersByUrl[departmentUrl] || {})[courseUrl] || {})[chapterUrl];
 </script>
 
 <svelte:head>
-	<title>Chapters</title>
+	<title>{chapter.name}</title>
 </svelte:head>
 
-<PublicLayout />
+<UserLayout />

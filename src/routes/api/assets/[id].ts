@@ -1,5 +1,6 @@
 import { extname } from 'path';
 import mime from 'mime';
+import { Readable } from 'stream';
 import { s3Get } from '$lib/s3';
 import type { RequestEvent } from '@sveltejs/kit/types/internal';
 import { run } from '$lib/prisma';
@@ -27,7 +28,7 @@ export const GET = async (event: RequestEvent) => {
 							status: 200,
 							header,
 							maxage,
-							body: result.Body
+							body: Readable.toWeb(result.Body as Readable)
 						};
 				  })
 				: {

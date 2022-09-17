@@ -36,13 +36,22 @@
 
 <script lang="ts">
 	import { authGuard } from '$lib/guard/authGuard';
+	import { base } from '$app/paths';
 	import { isValidStatus } from '$lib/guard/isValidStatus';
 	import { departmentsByUrl, showDepartmentByUrl } from '$lib/state/departments';
 	import { coursesByUrl, showCourseByUrl } from '$lib/state/courses';
 	import { chaptersByUrl, showChapterByUrl } from '$lib/state/chapters';
 	import { lessonsByUrl, showLessonByUrl } from '$lib/state/lessons';
 	import { lessonBlocksByUrl, showLessonBlocks } from '$lib/state/lessonBlocks';
-	import PublicLayout from '$lib/components/layouts/PublicLayout.svelte';
+	import LessonLayout from '$lib/components/layouts/LessonLayout.svelte';
+	import LessonProgressMenu from '$lib/components/lessons/LessonProgressMenu.svelte';
+	import LearningBlockWrapper from '$lib/components/lesson_block/LessonBlockWrapper.svelte';
+	import LessonBlock from '$lib/components/lesson_block/LessonBlock.svelte';
+	import {
+		departmentCoursePath,
+		departmentCourseChapterLessonLessonBlockPath
+	} from '$lib/routingUtils';
+	import { sortByIndex } from '$lib/utils';
 
 	export let departmentUrl: string;
 	export let courseUrl: string;
@@ -55,13 +64,50 @@
 	$: lesson = ((($lessonsByUrl[departmentUrl] || {})[courseUrl] || {})[chapterUrl] || {})[
 		lessonUrl
 	];
-	$: lessonBlocks =
+	$: lessonBlocks = Object.values(
 		((($lessonBlocksByUrl[departmentUrl] || {})[courseUrl] || {})[chapterUrl] || {})[lessonUrl] ||
-		[];
+			{}
+	).sort(sortByIndex);
+
+	let lessonBlockMenuItems: {
+		name: string;
+		url: string;
+		current: boolean;
+		completed: boolean;
+	}[];
+
+	$: lessonBlockMenuItems = lessonBlocks.map((value) => {
+		return {
+			name: value.name,
+			url: departmentCourseChapterLessonLessonBlockPath(
+				department.url,
+				course.url,
+				chapter.url,
+				lesson.url,
+				value.url
+			),
+			completed: false,
+			current: value.url == lessonBlocks[0].url // TODO: fixme
+		};
+	});
 </script>
 
 <svelte:head>
-	<title>Creator Studio - {chapter.name}</title>
+	<title>Lesson | {lesson.name}</title>
 </svelte:head>
 
-<PublicLayout />
+<LessonLayout
+	returnRoute={departmentCoursePath(department.url, course.url)}
+	lessonName={lesson.name}
+>
+	<div class="container">
+		<div class="row my-4">
+			<LessonProgressMenu {lessonBlockMenuItems} />
+		</div>
+		<div class="row main-learning-area">
+			<!-- <LearningBlockWrapper lessonBlock={currentLessonBlock}>
+				<LessonBlock lessonBlock={currentLessonBlock} />
+			</LearningBlockWrapper> -->
+		</div>
+	</div>
+</LessonLayout>

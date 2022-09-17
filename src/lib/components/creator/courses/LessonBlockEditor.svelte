@@ -5,6 +5,8 @@
 	import { addNotification, NotificationType } from '$lib/state/notifications';
 	import { typeToName } from '$lib/types';
 	import { isUrlSafe } from '$lib/utils';
+	import DateTimeInput from '$lib/components/ui/DateTimeInput.svelte';
+	import ViewingOptions from './ViewingOptions.svelte';
 
 	export let lessonBlock: StateLessonBlock;
 
@@ -62,6 +64,7 @@
 		/>
 	</div>
 </div>
+<ViewingOptions item={lessonBlock} {disabled} />
 <div class="row mt-2">
 	<div class="col">
 		<label for="lesson-blocktype" class="form-label">Type</label>

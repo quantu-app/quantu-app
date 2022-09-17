@@ -55,6 +55,8 @@
 	import { isUrlSafe } from '$lib/utils';
 	import classnames from 'vest/classnames';
 	import InputMessages from '$lib/components/ui/InputMessages.svelte';
+	import DateTimeInput from '$lib/components/ui/DateTimeInput.svelte';
+	import ViewingOptions from './ViewingOptions.svelte';
 
 	export let lesson: StateLesson;
 
@@ -126,7 +128,7 @@
 	</button>
 </div>
 <div class="row">
-	<div class="col-md">
+	<div class="col-6">
 		<label for="name" class="form-label">Name</label>
 		<input
 			name="name"
@@ -138,7 +140,7 @@
 		/>
 		<InputMessages className={messageClassName('name')} messages={result.getErrors('name')} />
 	</div>
-	<div class="col-md">
+	<div class="col-6">
 		<label for="url" class="form-label">URL</label>
 		<input
 			name="url"
@@ -151,7 +153,7 @@
 		<InputMessages className={messageClassName('url')} messages={result.getErrors('url')} />
 	</div>
 </div>
-<hr />
+<ViewingOptions item={lesson} {disabled} />
 <div class="row">
 	{#if lesson.id}
 		<div class="col-md-3">

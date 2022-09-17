@@ -10,10 +10,6 @@
 		await showAllCourses(input.fetch);
 		return response;
 	};
-
-	function sortByDate(a: StateCourse, b: StateCourse) {
-		return a.createdAt < b.createdAt ? 1 : -1;
-	}
 </script>
 
 <script lang="ts">

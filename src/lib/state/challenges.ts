@@ -1,13 +1,11 @@
 import type { Challenge, Result } from '@prisma/client';
 import { writable, derived, get } from 'svelte/store';
 import { base } from '$app/paths';
-import type { Answer } from '$lib/types';
+import type { Answer, UserAnswers, OptionalResult } from '$lib/types';
 import type { IFetch } from '../utils';
 
-export type StateChallenge = Challenge & {
+export type StateChallenge = Challenge & UserAnswers & OptionalResult & {
 	department: { url: string; name: string };
-	result?: Result;
-	answers: { value: number; userId: string }[];
 	solutions: number;
 };
 

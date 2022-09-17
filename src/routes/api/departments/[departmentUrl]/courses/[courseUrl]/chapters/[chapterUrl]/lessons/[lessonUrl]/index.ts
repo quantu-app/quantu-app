@@ -70,7 +70,7 @@ export async function getLessonByUrl(
 				lessonId: lesson.id
 			}
 		});
-		(lesson as any).blocks = lessonBlockCount;
+		(lesson as any).lessonBlockCount = lessonBlockCount;
 	}
 
 	return lesson;

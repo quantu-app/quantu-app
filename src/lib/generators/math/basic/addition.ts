@@ -1,7 +1,7 @@
 import { QuestionGenerator, type IQuestion } from '$lib/api/generator';
 import { content } from '$lib/api/generator/Content';
 import { InputType, type InputPrivate } from '$lib/types';
-import { QuestionType } from '@prisma/client';
+import type { QuestionType } from '@prisma/client';
 
 export interface IConfig {}
 

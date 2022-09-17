@@ -8,7 +8,7 @@
 	import Modal from '$lib/components/ui/Modal.svelte';
 	import type { StateChapter } from '$lib/state/creator/chapters';
 	import { createLessonBlock } from '$lib/state/creator/lessonBlocks';
-	import { QuestionType } from '@prisma/client';
+	import type { QuestionType } from '@prisma/client';
 	import { convertToUrlSafe, isUrlSafe } from '$lib/utils';
 
 	export let department: StateDepartment;
@@ -17,7 +17,7 @@
 	export let lesson: StateLesson;
 	export let open = false;
 
-	let lessonBlockType: QuestionType = QuestionType.MULTIPLE_CHOICE;
+	let lessonBlockType: QuestionType = 'MULTIPLE_CHOICE';
 	let lessonBlockName: string = '';
 	let lessonBlockUrl: string = '';
 	let invalidFormData: boolean = true;
@@ -48,7 +48,7 @@
 			creatingLesson = false;
 
 			// reset form values
-			lessonBlockType = QuestionType.MULTIPLE_CHOICE;
+			lessonBlockType = 'MULTIPLE_CHOICE';
 			lessonBlockName = '';
 			lessonBlockUrl = '';
 		}

@@ -34,6 +34,7 @@
 	<div class="card-body">
 		<h5 class="card-title mt-4 mt-lg-0 mb-0">{course.name}</h5>
 		<div class="text-end">
+			<!-- svelte-ignore a11y-missing-content -->
 			<a
 				role="button"
 				aria-label="enter"

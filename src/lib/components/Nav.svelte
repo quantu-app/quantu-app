@@ -2,9 +2,9 @@
 
 <script lang="ts">
 	import UserDropdown from './UserDropdown.svelte';
-	import { base } from '$app/paths';
 	import { page } from '$app/stores';
 	import { currentUser } from '$lib/state/user';
+	import { challengesPath, coursesPath } from '$lib/routingUtils';
 </script>
 
 <nav class="navbar navbar-dark navbar-expand bg-dark justify-content-between">
@@ -22,16 +22,16 @@
 			<ul class="navbar-nav me-auto">
 				<li class="nav-item">
 					<a
-						class:active={$page.url.pathname.startsWith(`${base}/challenges`)}
+						class:active={$page.url.pathname.startsWith(challengesPath())}
 						class="nav-link linkExtra"
-						href={`${base}/challenges`}>Challenges</a
+						href={challengesPath()}>Challenges</a
 					>
 				</li>
 				<li class="nav-item">
 					<a
-						class:active={$page.url.pathname.startsWith(`${base}/courses`)}
+						class:active={$page.url.pathname.startsWith(coursesPath())}
 						class="nav-link linkExtra"
-						href={`${base}/courses`}>Courses</a
+						href={coursesPath()}>Courses</a
 					>
 				</li>
 			</ul>

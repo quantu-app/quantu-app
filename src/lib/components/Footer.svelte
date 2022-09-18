@@ -103,6 +103,6 @@
 
 	.social {
 		font-size: 1.5rem;
-		padding: 0rem 0.3rem;
+		padding: 0.3rem 0.4rem 0rem 0.4rem;
 	}
 </style>

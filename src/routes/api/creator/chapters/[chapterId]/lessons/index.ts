@@ -1,5 +1,5 @@
 import { isCreator } from '$lib/api/auth';
-import { run, transaction } from '$lib/prisma';
+import { run } from '$lib/prisma';
 import type { Prisma } from '@prisma/client';
 
 export const GET = isCreator((event) => {
@@ -27,6 +27,7 @@ export const GET = isCreator((event) => {
 								name: true,
 								department: {
 									select: {
+										id: true,
 										url: true,
 										name: true
 									}

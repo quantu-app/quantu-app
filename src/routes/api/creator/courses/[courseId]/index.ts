@@ -17,6 +17,7 @@ export const GET = isCreator((event) => {
 				},
 				department: {
 					select: {
+						id: true,
 						url: true,
 						name: true
 					}

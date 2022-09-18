@@ -13,27 +13,27 @@ export const GET = async (event: RequestEvent) => {
 		.then((asset) =>
 			asset
 				? s3Get([asset.departmentId, asset.folder].join('/'), asset.name).then((result) => {
-						const maxage = result.Expires
-							? Math.round(result.Expires.getTime() - Date.now() / 1000)
-							: ONE_MONTH_IN_SECONDS;
-						const header = {
-							'Content-Type': mime.getType(extname(asset.name)),
-							'Content-Length': result.ContentLength,
-							'Cache-Control': `public, max-age=${maxage}`
-						};
-						if (result.ETag) {
-							header['ETag'] = result.ETag;
-						}
-						return {
-							status: 200,
-							header,
-							maxage,
-							body: Readable.toWeb(result.Body as Readable)
-						};
-				  })
+					const maxage = result.Expires
+						? Math.round(result.Expires.getTime() - Date.now() / 1000)
+						: ONE_MONTH_IN_SECONDS;
+					const header = {
+						'Content-Type': mime.getType(extname(asset.name)),
+						'Content-Length': result.ContentLength,
+						'Cache-Control': `public, max-age=${maxage}`
+					};
+					if (result.ETag) {
+						header['ETag'] = result.ETag;
+					}
+					return {
+						status: 200,
+						header,
+						maxage,
+						body: Readable.toWeb(result.Body as Readable)
+					};
+				})
 				: {
-						status: 404
-				  }
+					status: 404
+				}
 		)
 		.catch(() => ({
 			status: 404

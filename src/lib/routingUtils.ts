@@ -4,27 +4,59 @@ const DEPARTMENTS_SHORT_PATH = "d";
 const COURSES_SHORT_PATH = "c";
 const CHAPTERS_SHORT_PATH = "ch";
 const LESSON_BLOCK_SHORT_PATH = "lb";
+const API_PATH = `${base}/api`;
 
-export function departmentPath(departmentId: string): string {
-    return `${base}/${DEPARTMENTS_SHORT_PATH}/${departmentId}`;
+export function departmentPath(departmentUrl: string): string {
+    return `${base}/${DEPARTMENTS_SHORT_PATH}/${departmentUrl}`;
 }
 
-export function departmentCoursePath(departmentId: string, courseId: string): string {
-    return `${base}/${DEPARTMENTS_SHORT_PATH}/${departmentId}/${COURSES_SHORT_PATH}/${courseId}`;
+export function departmentCoursePath(departmentUrl: string, courseUrl: string): string {
+    return `${base}/${DEPARTMENTS_SHORT_PATH}/${departmentUrl}/${COURSES_SHORT_PATH}/${courseUrl}`;
 }
 
-export function departmentCourseChapterLessonPath(departmentId: string, courseId: string, chapterId: string, lessonId: string): string {
-    return `${base}/${DEPARTMENTS_SHORT_PATH}/${departmentId}/${COURSES_SHORT_PATH}/${courseId}/${CHAPTERS_SHORT_PATH}/${chapterId}/lessons/${lessonId}`;
+export function departmentCourseChapterLessonPath(
+    departmentUrl: string,
+    courseUrl: string,
+    chapterUrl: string,
+    lessonUrl: string
+): string {
+    return `${base}/${DEPARTMENTS_SHORT_PATH}/${departmentUrl}/${COURSES_SHORT_PATH}/${courseUrl}/${CHAPTERS_SHORT_PATH}/${chapterUrl}/lessons/${lessonUrl}`;
 }
 
 export function departmentCourseChapterLessonLessonBlockPath(
-    departmentId: string,
-    courseId: string,
-    chapterId: string,
-    lessonId: string,
-    lessonBlockId: string
+    departmentUrl: string,
+    courseUrl: string,
+    chapterUrl: string,
+    lessonUrl: string,
+    lessonBlockUrl: string
 ): string {
-    return `${base}/${DEPARTMENTS_SHORT_PATH}/${departmentId}/${COURSES_SHORT_PATH}/${courseId}/${CHAPTERS_SHORT_PATH}/${chapterId}/lessons/${lessonId}/${LESSON_BLOCK_SHORT_PATH}/${lessonBlockId}`;
+    return `${base}/${DEPARTMENTS_SHORT_PATH}/${departmentUrl}/${COURSES_SHORT_PATH}/${courseUrl}/${CHAPTERS_SHORT_PATH}/${chapterUrl}/lessons/${lessonUrl}/${LESSON_BLOCK_SHORT_PATH}/${lessonBlockUrl}`;
+}
+
+export function departmentChallengePath(
+    departmentUrl: string,
+    challengeUrl: string
+): string {
+    return `${base}/${DEPARTMENTS_SHORT_PATH}/${departmentUrl}/challenges/${challengeUrl}`;
+}
+
+export function departmentChallengeReviewPath(
+    departmentUrl: string,
+    challengeUrl: string
+): string {
+    return `${base}/${DEPARTMENTS_SHORT_PATH}/${departmentUrl}/challenges/${challengeUrl}/review`;
+}
+
+export function challengesPath(): string {
+    return `${base}/challenges`;
+}
+
+export function challengesAllPath(): string {
+    return `${challengesPath()}/all`;
+}
+
+export function coursesPath(): string {
+    return `${base}/courses`;
 }
 
 /*=====================
@@ -38,5 +70,9 @@ export function apiDepartmentCourseChapterLessonLessonBlockPath(
     lessonId: string,
     lessonBlockId: string
 ): string {
-    return `${base}/api/departments/${departmentId}/courses/${courseId}/chapters/${chapterId}/lessons/${lessonId}/lesson-blocks/${lessonBlockId}`;
+    return `${API_PATH}/departments/${departmentId}/courses/${courseId}/chapters/${chapterId}/lessons/${lessonId}/lesson-blocks/${lessonBlockId}`;
+}
+
+export function apiAssetPath(assetId: string) {
+    return `${API_PATH}/assets/${assetId}`;
 }

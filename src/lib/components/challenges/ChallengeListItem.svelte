@@ -1,6 +1,7 @@
 <svelte:options immutable />
 
 <script lang="ts" context="module">
+	import { departmentChallengePath, departmentChallengeReviewPath } from '$lib/routingUtils';
 	const IMAGES = [
 		'https://raw.githubusercontent.com/quantu-app/design-platform/c8023510d3491c97da21e0a5dc167456573ee4ac/app/resources/challenges/no_image_placeholder_imgs/Parallelogram.png',
 		'https://raw.githubusercontent.com/quantu-app/design-platform/master/app/resources/challenges/no_image_placeholder_imgs/Three%20octogons.png',
@@ -17,6 +18,7 @@
 	import type { StateChallenge } from '$lib/state/challenges';
 	import { XorShiftRng } from '@aicacia/rand';
 	import { formatDistanceToNowStrict, isBefore, isSameDay } from 'date-fns';
+	import { apiAssetPath } from '$lib/routingUtils';
 
 	export let challenge: StateChallenge;
 
@@ -26,7 +28,7 @@
 
 <div class={challenge.result ? 'card solved' : 'card'}>
 	<img
-		src={challenge.logoId ? `${base}/api/assets/${challenge.logoId}` : image}
+		src={challenge.logoId ? apiAssetPath(challenge.logoId) : image}
 		alt={challenge.name}
 		class="card-img-top"
 	/>
@@ -34,18 +36,20 @@
 		<h5 class="card-title mt-4 mt-lg-0 mb-0">{challenge.name}</h5>
 		<div class="text-end">
 			{#if challenge.result}
+				<!-- svelte-ignore a11y-missing-content -->
 				<a
 					role="button"
 					aria-label="review"
 					class="text-success stretched-link"
-					href={`${base}/departments/${challenge.department.url}/challenges/${challenge.url}/review`}
+					href={departmentChallengeReviewPath(challenge.department.url, challenge.url)}
 				/>
 			{:else}
+				<!-- svelte-ignore a11y-missing-content -->
 				<a
 					role="button"
 					aria-label="solve"
 					class="stretched-link"
-					href={`${base}/departments/${challenge.department.url}/challenges/${challenge.url}`}
+					href={departmentChallengePath(challenge.department.url, challenge.url)}
 				/>
 			{/if}
 		</div>

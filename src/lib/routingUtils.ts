@@ -3,7 +3,6 @@ import { base } from "$app/paths";
 const API_PATH = `${base}/api`;
 
 /**
- * @param departmentUrl
  * @returns "/d/:departmentUrl"
  */
 export function departmentPath(departmentUrl: string): string {
@@ -11,8 +10,6 @@ export function departmentPath(departmentUrl: string): string {
 }
 
 /**
- * @param departmentUrl 
- * @param courseUrl 
  * @returns "/d/:departmentUrl/c/:courseUrl"
  */
 export function departmentCoursePath(departmentUrl: string, courseUrl: string): string {
@@ -20,10 +17,6 @@ export function departmentCoursePath(departmentUrl: string, courseUrl: string): 
 }
 
 /**
- * @param departmentUrl
- * @param courseUrl
- * @param chapterUrl
- * @param lessonUrl
  * @returns "/d/:departmentUrl/c/:courseUrl/ch/:chapterUrl/lessons/:lessonUrl"
  */
 export function departmentCourseChapterLessonPath(
@@ -36,11 +29,6 @@ export function departmentCourseChapterLessonPath(
 }
 
 /**
- * @param departmentUrl
- * @param courseUrl
- * @param chapterUrl
- * @param lessonUrl
- * @param lessonBlockUrl
  * @returns "/d/:departmentUrl/c/:courseUrl/ch/:chapterUrl/lessons/:lessonUrl/lb/:lessonBlockUrl"
  */
 export function departmentCourseChapterLessonLessonBlockPath(
@@ -54,8 +42,6 @@ export function departmentCourseChapterLessonLessonBlockPath(
 }
 
 /**
- * @param departmentUrl
- * @param challengeUrl
  * @returns "/d/:departmentUrl/challenges/:challengeUrl"
  */
 export function departmentChallengePath(
@@ -66,8 +52,6 @@ export function departmentChallengePath(
 }
 
 /**
- * @param departmentUrl
- * @param challengeUrl
  * @returns "/d/:departmentUrl/challenges/:challengeUrl/review"
  */
 export function departmentChallengeReviewPath(
@@ -103,11 +87,6 @@ export function coursesPath(): string {
 =====================*/
 
 /**
- * @param departmentId
- * @param courseId
- * @param chapterId
- * @param lessonId
- * @param lessonBlockId
  * @returns "/api/departments/:departmentId/courses/:courseId/chapters/:chapterId/lessons/:lessonId/lesson-blocks/:lessonBlockId"
  */
 export function apiDepartmentCourseChapterLessonLessonBlockPath(
@@ -121,7 +100,40 @@ export function apiDepartmentCourseChapterLessonLessonBlockPath(
 }
 
 /**
- * @param assetId
+ * @returns "/api/departments/:departmentUrl/challenges/:challengeUrl"
+ */
+export function apiDepartmentChallengePath(departmentUrl: string, challengeUrl: string): string {
+    return `${API_PATH}/departments/${departmentUrl}/challenges/${challengeUrl}`;
+}
+
+/**
+ * @returns "/api/departments/:departmentUrl/challenges"
+ */
+export function apiDepartmentChallengesPath(departmentUrl: string): string {
+    return `${API_PATH}/departments/${departmentUrl}/challenges`;
+}
+
+/**
+ * @returns "/api/challenges"
+ */
+export function apiChallengesPath(): string {
+    return `${API_PATH}/challenges`;
+}
+
+/**
+ * @returns "/api/results/challenge/:challengeId"
+ */
+export function apiResultsChallengePath(challengeId: string): string {
+    return `${API_PATH}/results/challenge/${challengeId}`
+}
+/**
+ * @returns "/api/results/challenges/:challengeId/explain"
+ */
+export function apiResultsChallengeExplainPath(challengeId: string): string {
+    return `${API_PATH}/results/challenge/${challengeId}/explain`;
+}
+
+/**
  * @returns "/api/assets/:assetId"
  */
 export function apiAssetPath(assetId: string) {

@@ -3,6 +3,8 @@ import { writable, derived, get } from 'svelte/store';
 import { base } from '$app/paths';
 import type { Answer, UserAnswers, OptionalResult } from '$lib/types';
 import type { IFetch } from '../utils';
+import { apiChallengesPath, apiDepartmentChallengePath, apiDepartmentChallengesPath, apiResultsChallengeExplainPath, apiResultsChallengePath } from '$lib/routingUtils';
+import { addOrUpdate, resourceFromJSON } from './common';
 
 export type StateChallenge = Challenge & UserAnswers & OptionalResult & {
 	department: { url: string; name: string };
@@ -49,7 +51,7 @@ export async function showChallengeByUrl(
 	if (cachedChallenge) {
 		return cachedChallenge;
 	}
-	const res = await fetchFn(`${base}/api/departments/${departmentUrl}/challenges/${url}`, {
+	const res = await fetchFn(apiDepartmentChallengePath(departmentUrl, url), {
 		headers: {
 			'Content-Type': 'application/json'
 		}
@@ -57,13 +59,13 @@ export async function showChallengeByUrl(
 	if (!res.ok) {
 		throw await res.json();
 	}
-	const challenge: StateChallenge = challengeFromJSON(await res.json());
+	const challenge: StateChallenge = resourceFromJSON<StateChallenge>(await res.json());
 	challengesWritable.update((challenges) => addOrUpdate(challenges.slice(), challenge));
 	return challenge;
 }
 
 export async function showChallenges(departmentUrl: string, fetchFn: IFetch = fetch) {
-	const res = await fetchFn(`${base}/api/departments/${departmentUrl}/challenges`, {
+	const res = await fetchFn(apiDepartmentChallengesPath(departmentUrl), {
 		headers: {
 			'Content-Type': 'application/json'
 		}
@@ -71,7 +73,7 @@ export async function showChallenges(departmentUrl: string, fetchFn: IFetch = fe
 	if (!res.ok) {
 		throw await res.json();
 	}
-	const challenges: Array<StateChallenge> = (await res.json()).map(challengeFromJSON);
+	const challenges: Array<StateChallenge> = (await res.json()).map(resourceFromJSON<StateChallenge>);
 	challengesWritable.update((state) =>
 		challenges.reduce((state, challenge) => addOrUpdate(state, challenge), state.slice())
 	);
@@ -79,7 +81,7 @@ export async function showChallenges(departmentUrl: string, fetchFn: IFetch = fe
 }
 
 export async function showAllChallenges(fetchFn: IFetch = fetch) {
-	const res = await fetchFn(`${base}/api/challenges`, {
+	const res = await fetchFn(apiChallengesPath(), {
 		headers: {
 			'Content-Type': 'application/json'
 		}
@@ -87,7 +89,7 @@ export async function showAllChallenges(fetchFn: IFetch = fetch) {
 	if (!res.ok) {
 		throw await res.json();
 	}
-	const challenges: Array<StateChallenge> = (await res.json()).map(challengeFromJSON);
+	const challenges: Array<StateChallenge> = (await res.json()).map(resourceFromJSON<StateChallenge>);
 	challengesWritable.update((state) =>
 		challenges.reduce((state, challenge) => addOrUpdate(state, challenge), state.slice())
 	);
@@ -95,14 +97,14 @@ export async function showAllChallenges(fetchFn: IFetch = fetch) {
 }
 
 export async function answer(challengeId: string, answer: Answer) {
-	const res = await fetch(`${base}/api/results/challenge/${challengeId}`, {
+	const res = await fetch(apiResultsChallengePath(challengeId), {
 		method: 'POST',
 		body: JSON.stringify(answer)
 	});
 	if (!res.ok) {
 		throw await res.json();
 	}
-	const result: Result = resultFromJSON(await res.json());
+	const result: Result = resourceFromJSON<Result>(await res.json());
 	challengesWritable.update((state) => {
 		const index = state.findIndex((c) => c.id === result.challengeId);
 		const challenge = state[index];
@@ -130,13 +132,13 @@ export async function answer(challengeId: string, answer: Answer) {
 }
 
 export async function explain(challengeId: string) {
-	const res = await fetch(`${base}/api/results/challenge/${challengeId}/explain`, {
+	const res = await fetch(apiResultsChallengeExplainPath(challengeId), {
 		method: 'POST'
 	});
 	if (!res.ok) {
 		throw await res.json();
 	}
-	const result: Result = resultFromJSON(await res.json());
+	const result: Result = resourceFromJSON<Result>(await res.json());
 	challengesWritable.update((state) => {
 		const index = state.findIndex((c) => c.id === result.challengeId);
 		const challenge = state[index];
@@ -161,34 +163,4 @@ export async function explain(challengeId: string) {
 		return state;
 	});
 	return result;
-}
-
-function addOrUpdate(
-	state: Array<StateChallenge>,
-	challenge: StateChallenge
-): Array<StateChallenge> {
-	const index = state.findIndex((c) => c.id === challenge.id);
-	if (index === -1) {
-		state.push(challenge);
-	} else {
-		state[index] = challenge;
-	}
-	return state;
-}
-
-export function resultFromJSON(result: Result): Result {
-	return {
-		...result,
-		createdAt: new Date(result.createdAt),
-		updatedAt: new Date(result.updatedAt)
-	};
-}
-
-export function challengeFromJSON(challenge: StateChallenge): StateChallenge {
-	return {
-		...challenge,
-		releasedAt: challenge.releasedAt ? new Date(challenge.releasedAt) : challenge.releasedAt,
-		createdAt: new Date(challenge.createdAt),
-		updatedAt: new Date(challenge.updatedAt)
-	};
 }

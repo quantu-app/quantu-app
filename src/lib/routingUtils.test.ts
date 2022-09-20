@@ -12,7 +12,12 @@ import {
 
     // api imports
     apiDepartmentCourseChapterLessonLessonBlockPath,
-    apiAssetPath
+    apiDepartmentChallengePath,
+    apiDepartmentChallengesPath,
+    apiAssetPath,
+    apiChallengesPath,
+    apiResultsChallengePath,
+    apiResultsChallengeExplainPath
 } from './routingUtils';
 
 describe('departments', () => {
@@ -82,14 +87,41 @@ describe("courses", () => {
  */
 
 describe("api", () => {
-    test('apiDepartmentCourseChapterLessonLessonBlockPath', () => {
-        expect(apiDepartmentCourseChapterLessonLessonBlockPath(
-            "123",
-            "456",
-            "789",
-            "111",
-            "222"
-        )).toEqual("/api/departments/123/courses/456/chapters/789/lessons/111/lesson-blocks/222");
+
+    describe("departments", () => {
+        test('apiDepartmentCourseChapterLessonLessonBlockPath', () => {
+            expect(apiDepartmentCourseChapterLessonLessonBlockPath(
+                "123",
+                "456",
+                "789",
+                "111",
+                "222"
+            )).toEqual("/api/departments/123/courses/456/chapters/789/lessons/111/lesson-blocks/222");
+        });
+
+        test("apiDepartmentChallengePath", () => {
+            expect(apiDepartmentChallengePath("math", "integrate-two-numbers")).toEqual(
+                "/api/departments/math/challenges/integrate-two-numbers"
+            )
+        });
+
+        test("apiDepartmentChallengesPath", () => {
+            expect(apiDepartmentChallengesPath("math")).toEqual(
+                "/api/departments/math/challenges"
+            )
+        })
+    });
+
+    test("apiChallengesPath", () => {
+        expect(apiChallengesPath()).toEqual("/api/challenges");
+    });
+
+    test("apiResultsChallengePath", () => {
+        expect(apiResultsChallengePath("123")).toEqual("/api/results/challenge/123");
+    });
+
+    test("apiResultsChallengeExplainPath", () => {
+        expect(apiResultsChallengeExplainPath("123")).toEqual("/api/results/challenge/123/explain");
     });
 
     test('apiAssetPath', () => {

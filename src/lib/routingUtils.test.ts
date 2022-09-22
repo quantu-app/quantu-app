@@ -14,6 +14,8 @@ import {
     apiDepartmentCourseChapterLessonLessonBlockPath,
     apiDepartmentChallengePath,
     apiDepartmentChallengesPath,
+    apiDepartmentCourseChapterLessonPath,
+    apiDepartmentCourseChapterLessonsPath,
     apiAssetPath,
     apiChallengesPath,
     apiResultsChallengePath,
@@ -109,7 +111,19 @@ describe("api", () => {
             expect(apiDepartmentChallengesPath("math")).toEqual(
                 "/api/departments/math/challenges"
             )
-        })
+        });
+
+        test("apiDepartmentCourseChapterLessonPath", () => {
+            expect(apiDepartmentCourseChapterLessonPath("math", "calculus-1", "limits", "concept-of-limit")).toEqual(
+                "/api/departments/math/courses/calculus-1/chapters/limits/lessons/concept-of-limit"
+            )
+        });
+
+        test("apiDepartmentCourseChapterLessonsPath", () => {
+            expect(apiDepartmentCourseChapterLessonsPath("math", "calculus-1", "limits")).toEqual(
+                "/api/departments/math/courses/calculus-1/chapters/limits/lessons"
+            )
+        });
     });
 
     test("apiChallengesPath", () => {

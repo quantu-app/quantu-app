@@ -112,6 +112,28 @@ export function apiDepartmentChallengePath(departmentUrl: string, challengeUrl: 
 export function apiDepartmentChallengesPath(departmentUrl: string): string {
     return `${API_PATH}/departments/${departmentUrl}/challenges`;
 }
+/**
+ * @returns "/api/departments/:departmentUrl/courses/:courseUrl/chapters/:chapterUrl/lessons/:lessonUrl"
+ */
+export function apiDepartmentCourseChapterLessonPath(
+    departmentUrl: string,
+    courseUrl: string,
+    chapterUrl: string,
+    lessonUrl: string
+): string {
+    return `${API_PATH}/departments/${departmentUrl}/courses/${courseUrl}/chapters/${chapterUrl}/lessons/${lessonUrl}`
+}
+
+/**
+ * @returns "/api/departments/:departmentUrl/courses/:courseUrl/chapters/:chapterUrl/lessons"
+ */
+export function apiDepartmentCourseChapterLessonsPath(
+    departmentUrl: string,
+    courseUrl: string,
+    chapterUrl: string
+): string {
+    return `${API_PATH}/departments/${departmentUrl}/courses/${courseUrl}/chapters/${chapterUrl}/lessons`;
+}
 
 /**
  * @returns "/api/challenges"

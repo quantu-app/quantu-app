@@ -1,7 +1,8 @@
 import type { Lesson } from '@prisma/client';
 import { writable, derived, get } from 'svelte/store';
-import { base } from '$app/paths';
 import type { IFetch } from '../utils';
+import { resourceFromJSON, addOrUpdate } from './common';
+import { apiDepartmentCourseChapterLessonPath, apiDepartmentCourseChapterLessonsPath } from '$lib/routingUtils';
 
 export type StateLesson = Lesson & {
 	lessonBlocksCount: number;
@@ -48,7 +49,7 @@ export async function showLessonByUrl(
 		return cachedLesson;
 	}
 	const res = await fetchFn(
-		`${base}/api/departments/${departmentUrl}/courses/${courseUrl}/chapters/${chapterUrl}/lessons/${url}`,
+		apiDepartmentCourseChapterLessonPath(departmentUrl, courseUrl, chapterUrl, url),
 		{
 			headers: {
 				'Content-Type': 'application/json'
@@ -58,7 +59,7 @@ export async function showLessonByUrl(
 	if (!res.ok) {
 		throw await res.json();
 	}
-	const lesson: StateLesson = lessonFromJSON(await res.json());
+	const lesson: StateLesson = resourceFromJSON<StateLesson>(await res.json());
 	lessonsWritable.update((lessons) => addOrUpdate(lessons.slice(), lesson));
 	return lesson;
 }
@@ -70,7 +71,7 @@ export async function showLessons(
 	fetchFn: IFetch = fetch
 ) {
 	const res = await fetchFn(
-		`${base}/api/departments/${departmentUrl}/courses/${courseUrl}/chapters/${chapterUrl}/lessons`,
+		apiDepartmentCourseChapterLessonsPath(departmentUrl, courseUrl, chapterUrl),
 		{
 			headers: {
 				'Content-Type': 'application/json'
@@ -80,28 +81,9 @@ export async function showLessons(
 	if (!res.ok) {
 		throw await res.json();
 	}
-	const lessons: Array<StateLesson> = (await res.json()).map(lessonFromJSON);
+	const lessons: Array<StateLesson> = (await res.json()).map(resourceFromJSON<StateLesson>);
 	lessonsWritable.update((state) =>
 		lessons.reduce((state, lesson) => addOrUpdate(state, lesson), state.slice())
 	);
 	return lessons;
-}
-
-function addOrUpdate(state: Array<StateLesson>, lesson: StateLesson): Array<StateLesson> {
-	const index = state.findIndex((c) => c.id === lesson.id);
-	if (index === -1) {
-		state.push(lesson);
-	} else {
-		state[index] = lesson;
-	}
-	return state;
-}
-
-export function lessonFromJSON(lesson: StateLesson): StateLesson {
-	return {
-		...lesson,
-		releasedAt: lesson.releasedAt ? new Date(lesson.releasedAt) : lesson.releasedAt,
-		createdAt: new Date(lesson.createdAt),
-		updatedAt: new Date(lesson.updatedAt)
-	};
 }

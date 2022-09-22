@@ -79,7 +79,10 @@ export async function fromCallback(prisma: PrismaClient, params: IFromCallbackPa
 
 	if (user) {
 		const privateUser = user as StateUser;
-		privateUser.emailHash = MD5.generate(getPrimaryEmail(user.emails));
+		const email = getPrimaryEmail(user.emails);
+		if (email) {
+			privateUser.emailHash = MD5.generate(email);
+		}
 		return privateUser;
 	} else {
 		return null;

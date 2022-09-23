@@ -92,7 +92,7 @@
 				value.url
 			),
 			completed: false,
-			current: value.url == lessonBlocks[0].url // TODO: fixme
+			current: value.url == lessonBlockUrl
 		};
 	});
 

@@ -21,7 +21,9 @@ import {
     apiResultsChallengePath,
     apiResultsChallengeExplainPath,
     apiDepartmentPath,
-    apiDepartmentsPath
+    apiDepartmentsPath,
+    apiDepartmentCourseChapterPath,
+    apiDepartmentCourseChaptersPath
 } from './routingUtils';
 
 describe('departments', () => {
@@ -101,6 +103,18 @@ describe("api", () => {
         test('apiDepartmentPath', () => {
             expect(apiDepartmentPath("mathematics")).toEqual("/api/departments/mathematics");
         });
+
+        test('apiDepartmentCourseChapterPath', () => {
+            expect(apiDepartmentCourseChapterPath("math", "functions", "one-to-one")).toEqual(
+                "/api/departments/math/courses/functions/chapters/one-to-one"
+            );
+        });
+
+        test('apiDepartmentCourseChaptersPath', () => {
+            expect(apiDepartmentCourseChaptersPath("math", "functions")).toEqual(
+                "/api/departments/math/courses/functions/chapters"
+            );
+        })
 
         test('apiDepartmentCourseChapterLessonLessonBlockPath', () => {
             expect(apiDepartmentCourseChapterLessonLessonBlockPath(

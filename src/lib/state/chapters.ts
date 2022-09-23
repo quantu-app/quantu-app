@@ -1,7 +1,8 @@
 import type { Chapter } from '@prisma/client';
 import { writable, derived, get } from 'svelte/store';
-import { base } from '$app/paths';
-import type { IFetch } from '../utils';
+import { JSON_HEADERS, type IFetch } from '../utils';
+import { addOrUpdate, resourceFromJSON } from './common';
+import { apiDepartmentCourseChapterPath, apiDepartmentCourseChaptersPath } from '$lib/routingUtils';
 
 export type StateChapter = Chapter & {
 	course: { url: string; name: string; department: { url: string; name: string } };
@@ -32,23 +33,16 @@ export async function showChapterByUrl(
 	courseUrl: string,
 	url: string,
 	fetchFn: IFetch = fetch
-) {
+): Promise<StateChapter> {
 	const cachedChapter = ((get(chaptersByUrl)[departmentUrl] || {})[courseUrl] || {})[url];
 	if (cachedChapter) {
 		return cachedChapter;
 	}
-	const res = await fetchFn(
-		`${base}/api/departments/${departmentUrl}/courses/${courseUrl}/chapters/${url}`,
-		{
-			headers: {
-				'Content-Type': 'application/json'
-			}
-		}
-	);
+	const res = await fetchFn(apiDepartmentCourseChapterPath(departmentUrl, courseUrl, url), { headers: JSON_HEADERS });
 	if (!res.ok) {
 		throw await res.json();
 	}
-	const chapter: StateChapter = chapterFromJSON(await res.json());
+	const chapter: StateChapter = resourceFromJSON(await res.json());
 	chaptersWritable.update((chapters) => addOrUpdate(chapters.slice(), chapter));
 	return chapter;
 }
@@ -57,40 +51,14 @@ export async function showChapters(
 	departmentUrl: string,
 	courseUrl: string,
 	fetchFn: IFetch = fetch
-) {
-	const res = await fetchFn(
-		`${base}/api/departments/${departmentUrl}/courses/${courseUrl}/chapters`,
-		{
-			headers: {
-				'Content-Type': 'application/json'
-			}
-		}
-	);
+): Promise<StateChapter[]> {
+	const res = await fetchFn(apiDepartmentCourseChaptersPath(departmentUrl, courseUrl), { headers: JSON_HEADERS });
 	if (!res.ok) {
 		throw await res.json();
 	}
-	const chapters: Array<StateChapter> = (await res.json()).map(chapterFromJSON);
+	const chapters: Array<StateChapter> = (await res.json()).map(resourceFromJSON<StateChapter>);
 	chaptersWritable.update((state) =>
 		chapters.reduce((state, chapter) => addOrUpdate(state, chapter), state.slice())
 	);
 	return chapters;
-}
-
-function addOrUpdate(state: Array<StateChapter>, chapter: StateChapter): Array<StateChapter> {
-	const index = state.findIndex((c) => c.id === chapter.id);
-	if (index === -1) {
-		state.push(chapter);
-	} else {
-		state[index] = chapter;
-	}
-	return state;
-}
-
-export function chapterFromJSON(chapter: StateChapter): StateChapter {
-	return {
-		...chapter,
-		releasedAt: chapter.releasedAt ? new Date(chapter.releasedAt) : chapter.releasedAt,
-		createdAt: new Date(chapter.createdAt),
-		updatedAt: new Date(chapter.updatedAt)
-	};
 }

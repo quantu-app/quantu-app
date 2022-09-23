@@ -101,6 +101,27 @@ export function apiDepartmentPath(departmentUrl: string) {
 }
 
 /**
+ * @returns "/api/departments/:departmentUrl/courses/:courseUrl/chapters"
+ */
+export function apiDepartmentCourseChaptersPath(
+    departmentUrl: string,
+    courseUrl: string
+): string {
+    return `${API_PATH}/departments/${departmentUrl}/courses/${courseUrl}/chapters`;
+}
+
+/**
+ * @returns "/api/departments/:departmentUrl/courses/:courseUrl/chapters/:chapterUrl"
+ */
+export function apiDepartmentCourseChapterPath(
+    departmentUrl: string,
+    courseUrl: string,
+    chapterUrl: string
+): string {
+    return `${API_PATH}/departments/${departmentUrl}/courses/${courseUrl}/chapters/${chapterUrl}`;
+}
+
+/**
  * @returns "/api/departments/:departmentId/courses/:courseId/chapters/:chapterId/lessons/:lessonId/lesson-blocks/:lessonBlockId"
  */
 export function apiDepartmentCourseChapterLessonLessonBlockPath(

@@ -299,9 +299,6 @@ model Result {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
-  @@unique([userId, challengeId])
-  @@unique([userId, lessonBlockId])
 }
 
 // Assets

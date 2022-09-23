@@ -25,8 +25,8 @@ export function getResultById(client: PrismaClient, userId: string, type: string
 	return client.result.findFirst({
 		where: {
 			userId,
-			challengeId: type === 'challenge' ? id : null,
-			lessonBlockId: type === 'lesson-block' ? id : null
+			challengeId: type === 'challenge' ? id : undefined,
+			lessonBlockId: type === 'lesson-block' ? id : undefined
 		}
 	});
 }
@@ -74,18 +74,14 @@ export async function answer(
 		type: question.type,
 		value: getResult(question.type, question.prompt as unknown as PromptPrivate, answer)
 	};
-	const where: any = {};
+	const where: any = {
+		userId
+	};
 	if (type === 'challenge') {
-		where.userId_challengeId = {
-			userId,
-			challengeId: id
-		};
+		where.challengeId = id;
 		data.challengeId = id;
 	} else {
-		where.userId_lessonBlockId = {
-			userId,
-			lessonBlockId: id
-		};
+		where.lessonBlockId = id;
 		data.lessonBlockId = id;
 	}
 	return client.result.upsert({

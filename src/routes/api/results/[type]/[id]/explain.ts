@@ -35,16 +35,10 @@ export async function explain(client: PrismaClient, userId: string, type: string
 	};
 	const where: any = {};
 	if (type === 'challenge') {
-		where.userId_challengeId = {
-			userId: userId,
-			challengeId: id
-		};
+		where.challengeId = id;
 		data.challengeId = id;
 	} else {
-		where.userId_lessonBlockId = {
-			userId: userId,
-			lessonBlockId: id
-		};
+		where.lessonBlockId = id;
 		data.lessonBlockId = id;
 	}
 	return client.result.upsert({

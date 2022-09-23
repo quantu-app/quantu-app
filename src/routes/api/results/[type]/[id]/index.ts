@@ -86,7 +86,9 @@ export async function answer(
 		prompt: question.prompt,
 		type: question.type,
 		value: getResult(question.type, question.prompt as unknown as PromptPrivate, answer),
-		userId
+		userId,
+		challengeId: type === 'challenge' ? id : undefined,
+		lessonBlockId: type === 'lesson-block' ? id : undefined
 	};
 
 	if (prevResult) {

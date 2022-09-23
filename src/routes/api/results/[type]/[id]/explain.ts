@@ -44,7 +44,9 @@ export async function explain(client: PrismaClient, userId: string, type: string
 		prompt: question.prompt,
 		type: question.type,
 		value: 0,
-		userId: userId
+		userId: userId,
+		challengeId: type === 'challenge' ? id : undefined,
+		lessonBlockId: type === 'lesson-block' ? id : undefined
 	};
 
 	if (prevResult) {

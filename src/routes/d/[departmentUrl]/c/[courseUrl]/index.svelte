@@ -9,7 +9,7 @@
 		}
 		const departmentUrl = input.params.departmentUrl;
 		const courseUrl = input.params.courseUrl;
-		await showDepartmentByUrl(departmentUrl, input.fetch);
+		showDepartmentByUrl(departmentUrl, input.fetch).catch((error) => console.log(error));
 		await showCourseByUrl(departmentUrl, courseUrl, input.fetch);
 		const chapters = await showChapters(departmentUrl, courseUrl, input.fetch);
 		await Promise.all(
@@ -37,6 +37,7 @@
 	import { showChapters, chaptersByUrl } from '$lib/state/chapters';
 	import { sortByIndex, noImageFallback } from '$lib/utils';
 	import { lessonsByUrl, showLessons, type StateLesson } from '$lib/state/lessons';
+	import { apiAssetPath } from '$lib/routingUtils';
 
 	export let departmentUrl: string;
 	export let courseUrl: string;
@@ -80,7 +81,7 @@
 				<div class="col-4 offset-xl-1">
 					<div class="card darkerBgColor">
 						<img
-							src={course.logoId ? `${base}/api/assets/${course.logoId}` : noImageFallback}
+							src={course.logoId ? apiAssetPath(course.logoId) : noImageFallback}
 							alt={course.name}
 							class="card-img-top"
 						/>

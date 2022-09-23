@@ -87,6 +87,20 @@ export function coursesPath(): string {
 =====================*/
 
 /**
+ * @returns "/api/departments/:departmentUrl"
+ */
+export function apiDepartmentsPath() {
+    return `${API_PATH}/departments`;
+}
+
+/**
+ * @returns "/api/departments/:departmentUrl"
+ */
+export function apiDepartmentPath(departmentUrl: string) {
+    return `${API_PATH}/departments/${departmentUrl}`;
+}
+
+/**
  * @returns "/api/departments/:departmentId/courses/:courseId/chapters/:chapterId/lessons/:lessonId/lesson-blocks/:lessonBlockId"
  */
 export function apiDepartmentCourseChapterLessonLessonBlockPath(

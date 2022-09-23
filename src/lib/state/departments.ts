@@ -1,12 +1,16 @@
 import type { Department } from '@prisma/client';
 import { writable, derived } from 'svelte/store';
-import { base } from '$app/paths';
-import type { IFetch } from '$lib/utils';
+import { JSON_HEADERS, type IFetch } from '$lib/utils';
+import { addOrUpdate, resourceFromJSON } from './common';
+import { apiDepartmentPath, apiDepartmentsPath } from '$lib/routingUtils';
 
 const departmentsWritable = writable<Department[]>([]);
 
 export const departments = derived(departmentsWritable, (departments) => departments);
 
+/**
+ * Derived Stores
+ */
 export const departmentsById = derived(departmentsWritable, (departments) =>
 	departments.reduce((byId, department) => {
 		byId[department.id] = department;
@@ -20,48 +24,50 @@ export const departmentsByUrl = derived(departmentsWritable, (departments) =>
 	}, {} as { [url: string]: Department })
 );
 
-export async function showDepartmentByUrl(url: string, fetchFn: IFetch = fetch) {
-	const res = await fetchFn(`${base}/api/departments/${url}`, {
-		headers: {
-			'Content-Type': 'application/json'
-		}
-	});
-	if (!res.ok) {
-		throw await res.json();
+interface APIError {
+	code: string;
+	status: number;
+	message: string;
+}
+
+function handleErrors(response: Response): APIError | undefined {
+	if (response.ok) {
+		return
 	}
-	const department: Department = departmentFromJSON(await res.json());
+
+	if (response.status === 404) {
+		return {
+			code: "NOT_FOUND",
+			status: 404,
+			message: response.statusText,
+		};
+	}
+	if (response.status === 500) {
+		return {
+			code: "INTERNAL_SERVER_ERROR",
+			status: 500,
+			message: response.statusText
+		}
+	}
+}
+
+export async function showDepartmentByUrl(url: string, fetchFn: IFetch = fetch): Promise<Department> {
+	const res = await fetchFn(apiDepartmentPath(url), { headers: JSON_HEADERS });
+	const error = handleErrors(res);
+	if (error) {
+		throw error;
+	}
+	const department: Department = resourceFromJSON<Department>(await res.json());
 	departmentsWritable.update((state) => addOrUpdate(state.slice(), department));
 	return department;
 }
 
-export async function showDepartments(fetchFn: IFetch = fetch) {
-	const res = await fetchFn(`${base}/api/departments`, {
-		headers: {
-			'Content-Type': 'application/json'
-		}
-	});
+export async function showDepartments(fetchFn: IFetch = fetch): Promise<Department[]> {
+	const res = await fetchFn(apiDepartmentsPath(), { headers: JSON_HEADERS });
 	if (!res.ok) {
 		throw await res.json();
 	}
-	const departments: Department[] = (await res.json()).map(departmentFromJSON);
+	const departments: Department[] = (await res.json()).map(resourceFromJSON<Department>);
 	departmentsWritable.set(departments);
 	return departments;
-}
-
-function addOrUpdate(state: Department[], department: Department) {
-	const index = state.findIndex((t) => t.id === department.id);
-	if (index === -1) {
-		state.push(department);
-	} else {
-		state[index] = department;
-	}
-	return state;
-}
-
-function departmentFromJSON(department: Department): Department {
-	return {
-		...department,
-		createdAt: new Date(department.createdAt),
-		updatedAt: new Date(department.updatedAt)
-	};
 }

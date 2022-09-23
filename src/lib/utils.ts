@@ -229,3 +229,8 @@ export function isContentEmpty(value: any): boolean {
 
 	return true;
 }
+
+/**
+ * API Helpers
+ */
+export const JSON_HEADERS = { 'Content-Type': 'application/json' };

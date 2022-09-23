@@ -1,14 +1,18 @@
-interface ResourceStringId {
-    id: string
+export interface HasStringId {
+    readonly id: string
 }
 
-interface ResourceTimestamps {
+export interface HasUrl {
+    readonly url: string
+}
+
+export interface HasTimestamps {
     releasedAt?: Date | string | null,
     createdAt: Date | string | null,
     updatedAt: Date | string | null
 }
 
-export function addOrUpdate<T extends ResourceStringId>(
+export function addOrUpdate<T extends HasStringId>(
     state: Array<T>,
     resource: T
 ): Array<T> {
@@ -21,7 +25,7 @@ export function addOrUpdate<T extends ResourceStringId>(
     return state;
 }
 
-export function resourceFromJSON<T extends ResourceStringId & ResourceTimestamps>(resource: T): T {
+export function resourceFromJSON<T extends HasStringId & HasTimestamps>(resource: T): T {
     if (resource.releasedAt) {
         return {
             ...resource,

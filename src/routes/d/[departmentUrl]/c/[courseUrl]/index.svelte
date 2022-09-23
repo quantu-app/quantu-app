@@ -26,6 +26,11 @@
 </script>
 
 <script lang="ts">
+	/**
+	 * routes
+	 */
+	import { coursesPath, apiAssetPath } from '$lib/routingUtils';
+
 	import { authGuard } from '$lib/guard/authGuard';
 	import { isValidStatus } from '$lib/guard/isValidStatus';
 	import { showDepartmentByUrl } from '$lib/state/departments';
@@ -37,7 +42,6 @@
 	import { showChapters, chaptersByUrl } from '$lib/state/chapters';
 	import { sortByIndex, noImageFallback } from '$lib/utils';
 	import { lessonsByUrl, showLessons, type StateLesson } from '$lib/state/lessons';
-	import { apiAssetPath } from '$lib/routingUtils';
 
 	export let departmentUrl: string;
 	export let courseUrl: string;
@@ -70,7 +74,7 @@
 		<div class="container">
 			<div class="row text-white">
 				<div class="col-8 col-xl-7">
-					<a href={`${base}/courses`} class="linkToCourses">
+					<a href={coursesPath()} class="linkToCourses">
 						<span>&lt;</span>
 						<span>Back to Courses</span>
 					</a>

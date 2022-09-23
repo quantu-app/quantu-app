@@ -1,9 +1,8 @@
 <script lang="ts">
 	import type { StateLesson } from '$lib/state/lessons';
 	import RichViewer from '../editor/RichViewer.svelte';
-	import { base } from '$app/paths';
 	import { noImageFallback } from '$lib/utils';
-	import { departmentCourseChapterLessonPath } from '$lib/routingUtils';
+	import { departmentCourseChapterLessonPath, apiAssetPath } from '$lib/routingUtils';
 
 	export let lesson: StateLesson;
 </script>
@@ -11,7 +10,7 @@
 <div class="card">
 	<div class="card-body">
 		<img
-			src={lesson.logoId ? `${base}/api/assets/${lesson.logoId}` : noImageFallback}
+			src={lesson.logoId ? apiAssetPath(lesson.logoId) : noImageFallback}
 			alt={lesson.name}
 			height="160"
 			class="card-img-top"

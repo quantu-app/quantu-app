@@ -37,22 +37,28 @@
 </script>
 
 <script lang="ts">
+	// routes
+	import {
+		departmentCoursePath,
+		departmentCourseChapterLessonLessonBlockPath,
+		departmentCourseChapterLessonPath
+	} from '$lib/routingUtils';
+
 	import { authGuard } from '$lib/guard/authGuard';
 	import { isValidStatus } from '$lib/guard/isValidStatus';
 	import { departmentsByUrl, showDepartmentByUrl } from '$lib/state/departments';
 	import { coursesByUrl, showCourseByUrl } from '$lib/state/courses';
 	import { chaptersByUrl, showChapterByUrl } from '$lib/state/chapters';
 	import { lessonsByUrl, showLessonByUrl } from '$lib/state/lessons';
-	import { lessonBlocksByUrl, showLessonBlocks } from '$lib/state/lessonBlocks';
+	import {
+		lessonBlocksByUrl,
+		showLessonBlocks,
+		type StateLessonBlock
+	} from '$lib/state/lessonBlocks';
 	import LessonLayout from '$lib/components/layouts/LessonLayout.svelte';
 	import LessonProgressMenu from '$lib/components/lessons/LessonProgressMenu.svelte';
 	import LearningBlockWrapper from '$lib/components/lesson_block/LessonBlockWrapper.svelte';
 	import LessonBlock from '$lib/components/lesson_block/LessonBlock.svelte';
-	import {
-		departmentCoursePath,
-		departmentCourseChapterLessonLessonBlockPath,
-		departmentCourseChapterLessonPath
-	} from '$lib/routingUtils';
 	import { sortByIndex } from '$lib/utils';
 
 	export let departmentUrl: string;
@@ -96,17 +102,26 @@
 		};
 	});
 
-	$: isDone = lessonBlocks.every((lessonBlock) => !!lessonBlock.result);
-	// TODO: make this a true next
-	$: nextUrl = isDone
-		? departmentCourseChapterLessonPath(department.url, course.url, chapter.url, lesson.url)
-		: departmentCourseChapterLessonLessonBlockPath(
-				department.url,
-				course.url,
-				chapter.url,
-				lesson.url,
-				lessonBlocks.find((lessonBlock) => !lessonBlock.result)?.url as string
-		  );
+	function findNextLessonBlockUrl(lessonBlocks: StateLessonBlock[]): string | undefined {
+		const isDone = lessonBlocks.every((lessonBlock) => !!lessonBlock.result);
+		if (isDone) {
+			return;
+		}
+		const firstUnfinishedLessonBlock = lessonBlocks.find((lb) => !lb.result);
+		return firstUnfinishedLessonBlock?.url;
+	}
+
+	$: nextLessonBlockUrl = findNextLessonBlockUrl(lessonBlocks);
+	$: nextUrl =
+		nextLessonBlockUrl === undefined
+			? departmentCourseChapterLessonPath(department.url, course.url, chapter.url, lesson.url)
+			: departmentCourseChapterLessonLessonBlockPath(
+					department.url,
+					course.url,
+					chapter.url,
+					lesson.url,
+					nextLessonBlockUrl
+			  );
 </script>
 
 <svelte:head>

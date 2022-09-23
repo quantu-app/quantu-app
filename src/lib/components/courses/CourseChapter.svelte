@@ -2,7 +2,6 @@
 	import type { StateChapter } from '$lib/state/chapters';
 	import type { StateLesson } from '$lib/state/lessons';
 	import ChapterLessonCard from './ChapterLessonCard.svelte';
-	import ChapterQuizCard from './ChapterQuizCard.svelte';
 
 	export let chapterNumber: number = 1;
 	export let chapter: StateChapter;

@@ -71,12 +71,12 @@
 		departmentCourseChapterLessonLessonBlockPath
 	} from '$lib/routingUtils';
 	import { sortByIndex } from '$lib/utils';
+	import LessonComplete from '$lib/components/lessons/LessonComplete.svelte';
 
 	export let departmentUrl: string;
 	export let courseUrl: string;
 	export let chapterUrl: string;
 	export let lessonUrl: string;
-	export let isDone: boolean;
 
 	$: department = $departmentsByUrl[departmentUrl];
 	$: course = ($coursesByUrl[departmentUrl] || {})[courseUrl];
@@ -98,7 +98,9 @@
 	returnRoute={departmentCoursePath(department.url, course.url)}
 	lessonName={lesson.name}
 >
-	<div class="container">
-		<h1>Results</h1>
-	</div>
+	<LessonComplete
+		{lesson}
+		{lessonBlocks}
+		continueLink={departmentCoursePath(department.url, course.url)}
+	/>
 </LessonLayout>

@@ -91,7 +91,7 @@
 				lesson.url,
 				value.url
 			),
-			completed: false,
+			completed: !!value.result,
 			current: value.url == lessonBlockUrl
 		};
 	});

@@ -68,30 +68,39 @@ export async function answer(
 		return null;
 	}
 
+	const prevResult = await client.result.findFirst({
+		where:
+			type === 'challenge'
+				? {
+						userId,
+						challengeId: id
+				  }
+				: {
+						userId,
+						lessonBlockId: id
+				  }
+	});
+
 	const data: any = {
 		answer,
 		prompt: question.prompt,
 		type: question.type,
-		value: getResult(question.type, question.prompt as unknown as PromptPrivate, answer)
-	};
-	const where: any = {
+		value: getResult(question.type, question.prompt as unknown as PromptPrivate, answer),
 		userId
 	};
-	if (type === 'challenge') {
-		where.challengeId = id;
-		data.challengeId = id;
+
+	if (prevResult) {
+		return client.result.update({
+			where: {
+				id: prevResult.id
+			},
+			data
+		});
 	} else {
-		where.lessonBlockId = id;
-		data.lessonBlockId = id;
+		return client.result.create({
+			data
+		});
 	}
-	return client.result.upsert({
-		where,
-		update: data,
-		create: {
-			...data,
-			userId
-		}
-	});
 }
 
 function getResult(type: QuestionType, prompt: PromptPrivate, answer: Answer): number {

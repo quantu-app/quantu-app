@@ -27,23 +27,36 @@ export async function explain(client: PrismaClient, userId: string, type: string
 		return null;
 	}
 
+	const prevResult = await client.result.findFirst({
+		where:
+			type === 'challenge'
+				? {
+						userId,
+						challengeId: id
+				  }
+				: {
+						userId,
+						lessonBlockId: id
+				  }
+	});
+
 	const data: any = {
 		prompt: question.prompt,
 		type: question.type,
 		value: 0,
 		userId: userId
 	};
-	const where: any = {};
-	if (type === 'challenge') {
-		where.challengeId = id;
-		data.challengeId = id;
+
+	if (prevResult) {
+		return client.result.update({
+			where: {
+				id: prevResult.id
+			},
+			data
+		});
 	} else {
-		where.lessonBlockId = id;
-		data.lessonBlockId = id;
+		return client.result.create({
+			data
+		});
 	}
-	return client.result.upsert({
-		where,
-		update: data,
-		create: data
-	});
 }

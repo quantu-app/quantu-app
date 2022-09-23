@@ -6,17 +6,19 @@ import { addOrUpdate } from './common';
 import type { IFetch } from '../utils';
 import { apiDepartmentCourseChapterLessonLessonBlockPath } from '$lib/routingUtils';
 
-export type StateLessonBlock = LessonBlock & UserAnswers & OptionalResult & {
-	lesson: {
-		url: string;
-		name: string;
-		chapter: {
+export type StateLessonBlock = LessonBlock &
+	UserAnswers &
+	OptionalResult & {
+		lesson: {
 			url: string;
 			name: string;
-			course: { url: string; name: string; department: { url: string; name: string } };
+			chapter: {
+				url: string;
+				name: string;
+				course: { url: string; name: string; department: { url: string; name: string } };
+			};
 		};
 	};
-};
 
 export const lessonBlocksWritable = writable<Array<StateLessonBlock>>([]);
 
@@ -56,7 +58,13 @@ export async function showLessonBlock(
 	fetchFn: IFetch = fetch
 ) {
 	const res = await fetchFn(
-		apiDepartmentCourseChapterLessonLessonBlockPath(departmentUrl, courseUrl, chapterUrl, lessonUrl, lessonBlockUrl),
+		apiDepartmentCourseChapterLessonLessonBlockPath(
+			departmentUrl,
+			courseUrl,
+			chapterUrl,
+			lessonUrl,
+			lessonBlockUrl
+		),
 		{
 			headers: {
 				'Content-Type': 'application/json'
@@ -106,7 +114,7 @@ export function lessonBlockFromJSON(lessonBlock: StateLessonBlock): StateLessonB
 }
 
 export async function answer(lessonBlockId: string, answer: Answer) {
-	const res = await fetch(`${base}/api/results/lesson-blocks/${lessonBlockId}`, {
+	const res = await fetch(`${base}/api/results/lesson-block/${lessonBlockId}`, {
 		method: 'POST',
 		body: JSON.stringify(answer)
 	});
@@ -139,7 +147,7 @@ export async function answer(lessonBlockId: string, answer: Answer) {
 }
 
 export async function explain(challengeId: string) {
-	const res = await fetch(`${base}/api/results/challenge/${challengeId}/explain`, {
+	const res = await fetch(`${base}/api/results/lesson-block/${challengeId}/explain`, {
 		method: 'POST'
 	});
 	if (!res.ok) {

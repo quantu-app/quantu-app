@@ -13,7 +13,7 @@ import { authenticated } from '$lib/api/auth';
 
 export const GET = authenticated(async (event) => {
 	const result = await run((client) =>
-		getResultById(client, event.locals.token?.userId, event.params.id)
+		getResultById(client, event.locals.token?.userId, event.params.type, event.params.id)
 	);
 	return {
 		body: result,
@@ -21,18 +21,25 @@ export const GET = authenticated(async (event) => {
 	};
 });
 
-export function getResultById(client: PrismaClient, userId: string, challengeId: string) {
+export function getResultById(client: PrismaClient, userId: string, type: string, id: string) {
 	return client.result.findFirst({
 		where: {
 			userId,
-			challengeId
+			challengeId: type === 'challenge' ? id : null,
+			lessonBlockId: type === 'lesson-block' ? id : null
 		}
 	});
 }
 
 export const POST = authenticated(async (event) => ({
 	body: await run(async (client) =>
-		answer(client, event.locals.token?.userId, event.params.id, await event.request.json())
+		answer(
+			client,
+			event.locals.token?.userId,
+			event.params.type,
+			event.params.id,
+			await event.request.json()
+		)
 	),
 	status: 201
 }));
@@ -40,32 +47,52 @@ export const POST = authenticated(async (event) => ({
 export async function answer(
 	client: PrismaClient,
 	userId: string,
-	challengeId: string,
+	type: string,
+	id: string,
 	answer: Answer
 ) {
-	const question = await client.challenge.findUnique({
-		where: {
-			id: challengeId
-		}
-	});
+	const question =
+		type === 'challenge'
+			? await client.challenge.findUnique({
+					where: {
+						id
+					}
+			  })
+			: await client.lessonBlock.findUnique({
+					where: {
+						id
+					}
+			  });
 
-	const data = {
+	if (!question) {
+		return null;
+	}
+
+	const data: any = {
 		answer,
 		prompt: question.prompt,
 		type: question.type,
 		value: getResult(question.type, question.prompt as unknown as PromptPrivate, answer)
 	};
+	const where: any = {};
+	if (type === 'challenge') {
+		where.userId_challengeId = {
+			userId,
+			challengeId: id
+		};
+		data.challengeId = id;
+	} else {
+		where.userId_lessonBlockId = {
+			userId,
+			lessonBlockId: id
+		};
+		data.lessonBlockId = id;
+	}
 	return client.result.upsert({
-		where: {
-			userId_challengeId: {
-				userId,
-				challengeId
-			}
-		},
+		where,
 		update: data,
 		create: {
 			...data,
-			challengeId,
 			userId
 		}
 	});

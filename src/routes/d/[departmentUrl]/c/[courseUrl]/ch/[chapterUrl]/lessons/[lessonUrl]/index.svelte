@@ -21,7 +21,30 @@
 			lessonUrl,
 			input.fetch
 		);
-		await showLessonBlocks(departmentUrl, courseUrl, chapterUrl, lessonUrl, input.fetch);
+		const lessonBlocks = await showLessonBlocks(
+			departmentUrl,
+			courseUrl,
+			chapterUrl,
+			lessonUrl,
+			input.fetch
+		);
+		const isDone = lessonBlocks.every((lessonBlock) => !!lessonBlock.result);
+
+		if (!isDone) {
+			const lessonBlock = lessonBlocks.find((lessonBlock) => !lessonBlock.result);
+			if (lessonBlock) {
+				return {
+					status: 302,
+					redirect: departmentCourseChapterLessonLessonBlockPath(
+						department.url,
+						course.url,
+						chapter.url,
+						lesson.url,
+						lessonBlock.url
+					)
+				};
+			}
+		}
 
 		return {
 			props: {
@@ -36,7 +59,6 @@
 
 <script lang="ts">
 	import { authGuard } from '$lib/guard/authGuard';
-	import { base } from '$app/paths';
 	import { isValidStatus } from '$lib/guard/isValidStatus';
 	import { departmentsByUrl, showDepartmentByUrl } from '$lib/state/departments';
 	import { coursesByUrl, showCourseByUrl } from '$lib/state/courses';
@@ -44,9 +66,6 @@
 	import { lessonsByUrl, showLessonByUrl } from '$lib/state/lessons';
 	import { lessonBlocksByUrl, showLessonBlocks } from '$lib/state/lessonBlocks';
 	import LessonLayout from '$lib/components/layouts/LessonLayout.svelte';
-	import LessonProgressMenu from '$lib/components/lessons/LessonProgressMenu.svelte';
-	import LearningBlockWrapper from '$lib/components/lesson_block/LessonBlockWrapper.svelte';
-	import LessonBlock from '$lib/components/lesson_block/LessonBlock.svelte';
 	import {
 		departmentCoursePath,
 		departmentCourseChapterLessonLessonBlockPath
@@ -57,6 +76,7 @@
 	export let courseUrl: string;
 	export let chapterUrl: string;
 	export let lessonUrl: string;
+	export let isDone: boolean;
 
 	$: department = $departmentsByUrl[departmentUrl];
 	$: course = ($coursesByUrl[departmentUrl] || {})[courseUrl];
@@ -68,28 +88,6 @@
 		((($lessonBlocksByUrl[departmentUrl] || {})[courseUrl] || {})[chapterUrl] || {})[lessonUrl] ||
 			{}
 	).sort(sortByIndex);
-
-	let lessonBlockMenuItems: {
-		name: string;
-		url: string;
-		current: boolean;
-		completed: boolean;
-	}[];
-
-	$: lessonBlockMenuItems = lessonBlocks.map((value) => {
-		return {
-			name: value.name,
-			url: departmentCourseChapterLessonLessonBlockPath(
-				department.url,
-				course.url,
-				chapter.url,
-				lesson.url,
-				value.url
-			),
-			completed: false,
-			current: value.url == lessonBlocks[0].url // TODO: fixme
-		};
-	});
 </script>
 
 <svelte:head>
@@ -101,13 +99,6 @@
 	lessonName={lesson.name}
 >
 	<div class="container">
-		<div class="row my-4">
-			<LessonProgressMenu {lessonBlockMenuItems} />
-		</div>
-		<div class="row main-learning-area">
-			<!-- <LearningBlockWrapper lessonBlock={currentLessonBlock}>
-				<LessonBlock lessonBlock={currentLessonBlock} />
-			</LearningBlockWrapper> -->
-		</div>
+		<h1>Results</h1>
 	</div>
 </LessonLayout>

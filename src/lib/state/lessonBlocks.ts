@@ -2,7 +2,7 @@ import type { LessonBlock, Result } from '@prisma/client';
 import { writable, derived, get } from 'svelte/store';
 import { base } from '$app/paths';
 import type { Answer, UserAnswers, OptionalResult } from '$lib/types';
-import { addOrUpdate } from './common';
+import { addOrUpdate, resourceFromJSON } from './common';
 import type { IFetch } from '../utils';
 import { apiDepartmentCourseChapterLessonLessonBlockPath } from '$lib/routingUtils';
 
@@ -74,7 +74,7 @@ export async function showLessonBlock(
 	if (!res.ok) {
 		throw await res.json();
 	}
-	const lessonBlock: StateLessonBlock = lessonBlockFromJSON(await res.json());
+	const lessonBlock: StateLessonBlock = resourceFromJSON<StateLessonBlock>(await res.json());
 	lessonBlocksWritable.update((state) => addOrUpdate(state.slice(), lessonBlock));
 	return lessonBlock;
 }
@@ -97,20 +97,11 @@ export async function showLessonBlocks(
 	if (!res.ok) {
 		throw await res.json();
 	}
-	const lessonBlocks: Array<StateLessonBlock> = (await res.json()).map(lessonBlockFromJSON);
+	const lessonBlocks: Array<StateLessonBlock> = (await res.json()).map(resourceFromJSON<StateLessonBlock>);
 	lessonBlocksWritable.update((state) =>
 		lessonBlocks.reduce((state, lessonBlock) => addOrUpdate(state, lessonBlock), state.slice())
 	);
 	return lessonBlocks;
-}
-
-export function lessonBlockFromJSON(lessonBlock: StateLessonBlock): StateLessonBlock {
-	return {
-		...lessonBlock,
-		releasedAt: lessonBlock.releasedAt ? new Date(lessonBlock.releasedAt) : lessonBlock.releasedAt,
-		createdAt: new Date(lessonBlock.createdAt),
-		updatedAt: new Date(lessonBlock.updatedAt)
-	};
 }
 
 export async function answer(lessonBlockId: string, answer: Answer) {
@@ -121,7 +112,7 @@ export async function answer(lessonBlockId: string, answer: Answer) {
 	if (!res.ok) {
 		throw await res.json();
 	}
-	const result: Result = resultFromJSON(await res.json());
+	const result: Result = resourceFromJSON<Result>(await res.json());
 	lessonBlocksWritable.update((state) => {
 		const index = state.findIndex((c) => c.id === result.lessonBlockId);
 		const lessonBlock = state[index];
@@ -153,7 +144,7 @@ export async function explain(challengeId: string) {
 	if (!res.ok) {
 		throw await res.json();
 	}
-	const result: Result = resultFromJSON(await res.json());
+	const result: Result = resourceFromJSON<Result>(await res.json());
 	lessonBlocksWritable.update((state) => {
 		const index = state.findIndex((c) => c.id === result.challengeId);
 		const challenge = state[index];
@@ -176,12 +167,4 @@ export async function explain(challengeId: string) {
 		return state;
 	});
 	return result;
-}
-
-export function resultFromJSON(result: Result): Result {
-	return {
-		...result,
-		createdAt: new Date(result.createdAt),
-		updatedAt: new Date(result.updatedAt)
-	};
 }

@@ -2,6 +2,8 @@
 	import type { StateLesson } from '$lib/state/lessons';
 	import type { StateLessonBlock } from '$lib/state/lessonBlocks';
 	import LessonSummaryCard from './LessonSummaryCard.svelte';
+	import { goto } from '$app/navigation';
+	import { departmentCourseChapterLessonPath } from '$lib/routingUtils';
 
 	export let lesson: StateLesson;
 	export let lessonBlocks: StateLessonBlock[];
@@ -9,7 +11,23 @@
 	export let downvote: (event: Event) => void = (_event) => {};
 	export let continueLink: string;
 
-	function redoLesson() {}
+	async function redoLesson() {
+		const departmentUrl = lesson.chapter.course.department.url;
+		const courseUrl = lesson.chapter.course.url;
+		const chapterUrl = lesson.chapter.url;
+		const lessonId = lesson.id;
+
+		const res = await fetch(
+			`/api/departments/${departmentUrl}/courses/${courseUrl}/chapters/${chapterUrl}/lessons/${lessonId}/redo`,
+			{
+				method: 'DELETE'
+			}
+		);
+		if (res.ok) {
+			// Why does this not work?
+			goto(departmentCourseChapterLessonPath(departmentUrl, courseUrl, chapterUrl, lesson.url));
+		}
+	}
 </script>
 
 <div class="container">
@@ -17,7 +35,6 @@
 		<div class="col-6 mx-auto">
 			<h2 class="text-center mx-auto my-5">Lesson complete</h2>
 
-			<!-- lesson card -->
 			<div class="row mb-4">
 				<LessonSummaryCard {lesson} {lessonBlocks} />
 				<p class="my-4 text-center">Did you like this lesson?</p>

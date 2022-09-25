@@ -1,4 +1,3 @@
-import { dev } from '$app/env';
 import {
 	S3Client,
 	ListObjectsCommand,
@@ -8,7 +7,7 @@ import {
 	DeleteObjectCommand
 } from '@aws-sdk/client-s3';
 
-const ENV = dev ? 'dev' : 'prod';
+const ENV = process.env.NODE_ENV === 'production' ? 'prod' : 'dev';
 
 export const s3Client = new S3Client({
 	region: process.env.S3_REGION,

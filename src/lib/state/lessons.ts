@@ -2,7 +2,10 @@ import type { Lesson } from '@prisma/client';
 import { writable, derived, get } from 'svelte/store';
 import type { IFetch } from '../utils';
 import { resourceFromJSON, addOrUpdate } from './common';
-import { apiDepartmentCourseChapterLessonPath, apiDepartmentCourseChapterLessonsPath } from '$lib/routingUtils';
+import {
+	apiDepartmentCourseChapterLessonPath,
+	apiDepartmentCourseChapterLessonsPath
+} from '$lib/routingUtils';
 
 export type StateLesson = Lesson & {
 	lessonBlocksCount: number;
@@ -86,4 +89,25 @@ export async function showLessons(
 		lessons.reduce((state, lesson) => addOrUpdate(state, lesson), state.slice())
 	);
 	return lessons;
+}
+
+export async function redoLesson(
+	departmentUrl: string,
+	courseUrl: string,
+	chapterUrl: string,
+	lessonUrl: string
+) {
+	const res = await fetch(
+		`/api/departments/${departmentUrl}/courses/${courseUrl}/chapters/${chapterUrl}/lessons/${lessonUrl}/redo`,
+		{
+			method: 'DELETE'
+		}
+	);
+	if (!res.ok) {
+		throw await res.json();
+	}
+	lessonsWritable.update((state) => {
+		// TODO: delete all results from lesson blocks whose parent is the lesson url
+		return state;
+	});
 }

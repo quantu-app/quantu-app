@@ -30,7 +30,11 @@ export const GET = authenticated((event) =>
 	).then((user) => {
 		if (user) {
 			const privateUser = user as StateUser;
-			privateUser.emailHash = MD5.generate(getPrimaryEmail(privateUser.emails));
+			const email = getPrimaryEmail(privateUser.emails);
+			console.log(JSON.stringify(privateUser, null, 2));
+			if (email) {
+				privateUser.emailHash = MD5.generate(email);
+			}
 			return {
 				status: 200,
 				body: privateUser

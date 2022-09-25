@@ -21,6 +21,7 @@ npm run secret
 Setup database
 
 **Option 1** : docker-compose mongo backend
+
 ```bash
 npm run mongo
 
@@ -47,5 +48,5 @@ After any updates to the database schema in `prisma/schema.prisma` you should ru
 
 ```bash
 export KUBECONFIG=~/my/path/to/appname-kubeconfig.yaml
-NODE_ENV=production npm run helm 
+NODE_ENV=production npm run helm
 ```

@@ -8,7 +8,7 @@ export const DELETE = async (event: RequestEvent) => {
 	);
 
 	return {
-		status: 200
+		status: 204
 	};
 };
 

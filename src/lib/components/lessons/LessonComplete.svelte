@@ -9,13 +9,20 @@
 	export let downvote: (event: Event) => void = (_event) => {};
 	export let continueLink: string;
 
-	function onRedoLesson() {
-		redoLesson(
-			lesson.chapter.course.department.url,
-			lesson.chapter.course.url,
-			lesson.chapter.url,
-			lesson.url
-		);
+	let redoingLesson = false;
+	async function onRedoLesson() {
+		redoingLesson = true;
+		try {
+			await redoLesson(
+				lesson.chapter.course.department.url,
+				lesson.chapter.course.url,
+				lesson.chapter.url,
+				lesson.url
+			);
+			window.location.reload();
+		} finally {
+			redoingLesson = false;
+		}
 	}
 </script>
 
@@ -39,7 +46,12 @@
 			<div class="row text-center mb-6">
 				<div class="col-6 mx-auto">
 					<a class="btn btn-dark" style="width: 120px" href={continueLink}>Continue</a><br />
-					<button class="btn mt-2" style="width: 120px" on:click={onRedoLesson}>Redo lesson</button>
+					<button
+						class="btn mt-2"
+						style="width: 120px"
+						on:click={onRedoLesson}
+						disabled={redoingLesson}>Redo lesson</button
+					>
 				</div>
 			</div>
 		</div>

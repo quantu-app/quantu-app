@@ -6,6 +6,7 @@ import {
 	apiDepartmentCourseChapterLessonPath,
 	apiDepartmentCourseChapterLessonsPath
 } from '$lib/routingUtils';
+import { lessonBlocksWritable } from './lessonBlocks';
 
 export type StateLesson = Lesson & {
 	lessonBlocksCount: number;
@@ -106,8 +107,17 @@ export async function redoLesson(
 	if (!res.ok) {
 		throw await res.json();
 	}
-	lessonsWritable.update((state) => {
-		// TODO: delete all results from lesson blocks whose parent is the lesson url
-		return state;
+	lessonBlocksWritable.update((state) => {
+		return state.map((lessonBlock) => {
+			return lessonBlock.lesson.chapter.course.department.url === departmentUrl &&
+				lessonBlock.lesson.chapter.course.url === courseUrl &&
+				lessonBlock.lesson.chapter.url === chapterUrl &&
+				lessonBlock.lesson.url === lessonUrl
+				? {
+						...lessonBlock,
+						result: undefined
+				  }
+				: lessonBlock;
+		});
 	});
 }

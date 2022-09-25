@@ -31,7 +31,6 @@ export const GET = authenticated((event) =>
 		if (user) {
 			const privateUser = user as StateUser;
 			const email = getPrimaryEmail(privateUser.emails);
-			console.log(JSON.stringify(privateUser, null, 2));
 			if (email) {
 				privateUser.emailHash = MD5.generate(email);
 			}
@@ -73,7 +72,10 @@ export const PATCH = authenticated((event) =>
 		).then((user) => {
 			if (user) {
 				const privateUser = user as StateUser;
-				privateUser.emailHash = MD5.generate(getPrimaryEmail(privateUser.emails));
+				const email = getPrimaryEmail(privateUser.emails);
+				if (email) {
+					privateUser.emailHash = MD5.generate(email);
+				}
 				return {
 					status: 200,
 					body: privateUser

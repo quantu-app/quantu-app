@@ -9,7 +9,7 @@
 		}
 		const departmentUrl = input.params.departmentUrl;
 		const courseUrl = input.params.courseUrl;
-		showDepartmentByUrl(departmentUrl, input.fetch).catch((error) => console.log(error));
+		await showDepartmentByUrl(departmentUrl, input.fetch);
 		await showCourseByUrl(departmentUrl, courseUrl, input.fetch);
 		const chapters = await showChapters(departmentUrl, courseUrl, input.fetch);
 		await Promise.all(

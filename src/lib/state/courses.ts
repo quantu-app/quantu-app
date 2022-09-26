@@ -1,7 +1,8 @@
 import type { Course } from '@prisma/client';
 import { writable, derived, get } from 'svelte/store';
-import { base } from '$app/paths';
-import type { IFetch } from '../utils';
+import { JSON_HEADERS, type IFetch } from '../utils';
+import { addOrUpdate, resourceFromJSON } from './common';
+import { apiCoursesPath, apiDepartmentCoursePath, apiDepartmentCoursesPath } from '$lib/routingUtils';
 
 export type StateCourse = Course & {
 	lessons: number;
@@ -45,29 +46,21 @@ export async function showCourseByUrl(departmentUrl: string, url: string, fetchF
 	if (cachedCourse) {
 		return cachedCourse;
 	}
-	const res = await fetchFn(`${base}/api/departments/${departmentUrl}/courses/${url}`, {
-		headers: {
-			'Content-Type': 'application/json'
-		}
-	});
+	const res = await fetchFn(apiDepartmentCoursePath(departmentUrl, url), { headers: JSON_HEADERS });
 	if (!res.ok) {
 		throw await res.json();
 	}
-	const course: StateCourse = courseFromJSON(await res.json());
+	const course: StateCourse = resourceFromJSON<StateCourse>(await res.json());
 	coursesWritable.update((courses) => addOrUpdate(courses.slice(), course));
 	return course;
 }
 
 export async function showCourses(departmentUrl: string, fetchFn: IFetch = fetch) {
-	const res = await fetchFn(`${base}/api/departments/${departmentUrl}/courses`, {
-		headers: {
-			'Content-Type': 'application/json'
-		}
-	});
+	const res = await fetchFn(apiDepartmentCoursesPath(departmentUrl), { headers: JSON_HEADERS });
 	if (!res.ok) {
 		throw await res.json();
 	}
-	const courses: Array<StateCourse> = (await res.json()).map(courseFromJSON);
+	const courses: Array<StateCourse> = (await res.json()).map(resourceFromJSON<StateCourse>);
 	coursesWritable.update((state) =>
 		courses.reduce((state, course) => addOrUpdate(state, course), state.slice())
 	);
@@ -75,36 +68,13 @@ export async function showCourses(departmentUrl: string, fetchFn: IFetch = fetch
 }
 
 export async function showAllCourses(fetchFn: IFetch = fetch) {
-	const res = await fetchFn(`${base}/api/courses`, {
-		headers: {
-			'Content-Type': 'application/json'
-		}
-	});
+	const res = await fetchFn(apiCoursesPath(), { headers: JSON_HEADERS });
 	if (!res.ok) {
 		throw await res.json();
 	}
-	const courses: Array<StateCourse> = (await res.json()).map(courseFromJSON);
+	const courses: Array<StateCourse> = (await res.json()).map(resourceFromJSON<StateCourse>);
 	coursesWritable.update((state) =>
 		courses.reduce((state, course) => addOrUpdate(state, course), state.slice())
 	);
 	return courses;
-}
-
-function addOrUpdate(state: Array<StateCourse>, course: StateCourse): Array<StateCourse> {
-	const index = state.findIndex((c) => c.id === course.id);
-	if (index === -1) {
-		state.push(course);
-	} else {
-		state[index] = course;
-	}
-	return state;
-}
-
-export function courseFromJSON(course: StateCourse): StateCourse {
-	return {
-		...course,
-		releasedAt: course.releasedAt ? new Date(course.releasedAt) : course.releasedAt,
-		createdAt: new Date(course.createdAt),
-		updatedAt: new Date(course.updatedAt)
-	};
 }

@@ -1,6 +1,5 @@
 import type { Challenge, Result } from '@prisma/client';
 import { writable, derived, get } from 'svelte/store';
-import { base } from '$app/paths';
 import type { Answer, UserAnswers, OptionalResult } from '$lib/types';
 import type { IFetch } from '../utils';
 import { apiChallengesPath, apiDepartmentChallengePath, apiDepartmentChallengesPath, apiResultsChallengeExplainPath, apiResultsChallengePath } from '$lib/routingUtils';

@@ -97,7 +97,9 @@ export async function showLessonBlocks(
 	if (!res.ok) {
 		throw await res.json();
 	}
-	const lessonBlocks: Array<StateLessonBlock> = (await res.json()).map(resourceFromJSON<StateLessonBlock>);
+	const lessonBlocks: Array<StateLessonBlock> = (await res.json()).map(
+		resourceFromJSON<StateLessonBlock>
+	);
 	lessonBlocksWritable.update((state) =>
 		lessonBlocks.reduce((state, lessonBlock) => addOrUpdate(state, lessonBlock), state.slice())
 	);
@@ -137,8 +139,8 @@ export async function answer(lessonBlockId: string, answer: Answer) {
 	return result;
 }
 
-export async function explain(challengeId: string) {
-	const res = await fetch(`${base}/api/results/lesson-block/${challengeId}/explain`, {
+export async function explain(lessonBlockId: string) {
+	const res = await fetch(`${base}/api/results/lesson-block/${lessonBlockId}/explain`, {
 		method: 'POST'
 	});
 	if (!res.ok) {
@@ -146,7 +148,7 @@ export async function explain(challengeId: string) {
 	}
 	const result: Result = resourceFromJSON<Result>(await res.json());
 	lessonBlocksWritable.update((state) => {
-		const index = state.findIndex((c) => c.id === result.challengeId);
+		const index = state.findIndex((c) => c.id === result.lessonBlockId);
 		const challenge = state[index];
 		if (challenge) {
 			state = state.slice();

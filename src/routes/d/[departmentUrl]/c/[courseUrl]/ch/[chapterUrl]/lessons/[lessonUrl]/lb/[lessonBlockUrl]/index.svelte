@@ -105,7 +105,7 @@
 	function findNextLessonBlockUrl(lessonBlocks: StateLessonBlock[]): string | undefined {
 		const isDone = lessonBlocks.every((lessonBlock) => !!lessonBlock.result);
 		if (isDone) {
-			return;
+			return undefined;
 		}
 		const firstUnfinishedLessonBlock = lessonBlocks.find((lb) => !lb.result);
 		return firstUnfinishedLessonBlock?.url;

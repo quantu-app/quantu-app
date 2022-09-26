@@ -13,3 +13,4 @@
 ## Bugs
 * Creating Block Math inserts a newline before the block which cannot be removed.
     * see: https://trello.com/c/ypV7jNOd/76-creating-block-math-inserts-a-newline-before-the-block-which-cannot-be-removed
+* On Multiple Choice questions, the option "Can the user select only one answer?" is always disabled.

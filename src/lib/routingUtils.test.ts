@@ -26,7 +26,8 @@ import {
     apiDepartmentCoursesPath,
     apiDepartmentCourseChapterPath,
     apiDepartmentCourseChaptersPath,
-    apiCoursesPath
+    apiCoursesPath,
+    apiDepartmentCourseChapterLessonRedoPath
 } from './routingUtils';
 
 describe('departments', () => {
@@ -163,6 +164,11 @@ describe("api", () => {
             expect(apiDepartmentCourseChapterLessonsPath("math", "calculus-1", "limits")).toEqual(
                 "/api/departments/math/courses/calculus-1/chapters/limits/lessons"
             )
+        });
+        test("apiDepartmentCourseChapterLessonRedoPath", () => {
+            expect(apiDepartmentCourseChapterLessonRedoPath("math", "cal1", "functions", "notation")).toEqual(
+                "/api/departments/math/courses/cal1/chapters/functions/lessons/notation/redo"
+            );
         });
     });
 

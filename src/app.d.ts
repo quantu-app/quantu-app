@@ -12,23 +12,22 @@ declare global {
 			token?: ITokenValue;
 		}
 
-		interface Platform {}
+		interface Platform { }
 
-		interface PrivateEnv {}
+		interface PrivateEnv { }
 
-		interface PublicEnv {}
+		interface PublicEnv { }
 
 		interface Session {
 			user?: Omit<User, 'encryptedPassword'>;
 		}
 
-		interface Stuff {}
+		interface Stuff { }
 	}
 
 	interface Window {
 		bootstrap: typeof bootstrap;
 		dataLayer: IArguments[];
-		gtag(type: string, ...args: any[]): void;
 	}
 
 	namespace NodeJS {

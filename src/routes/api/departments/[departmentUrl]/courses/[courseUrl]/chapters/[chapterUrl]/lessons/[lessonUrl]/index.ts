@@ -9,7 +9,8 @@ export const GET = async (event: RequestEvent) => {
 			event.params.departmentUrl,
 			event.params.courseUrl,
 			event.params.chapterUrl,
-			event.params.lessonUrl
+			event.params.lessonUrl,
+			event.locals.token?.userId,
 		)
 	);
 
@@ -24,8 +25,11 @@ export async function getLessonByUrl(
 	departmentUrl: string,
 	courseUrl: string,
 	chapterUrl: string,
-	lessonUrl: string
+	lessonUrl: string,
+	userId: string
 ) {
+	const now = new Date();
+
 	const lesson = await client.lesson.findFirst({
 		where: {
 			url: lessonUrl,
@@ -40,6 +44,22 @@ export async function getLessonByUrl(
 			}
 		},
 		include: {
+			lessonBlocks: {
+				where: {
+					visible: true,
+					NOT: [{ releasedAt: null }],
+					releasedAt: {
+						lte: now
+					}
+				},
+				include: {
+					results: {
+						where: {
+							userId
+						}
+					}
+				}
+			},
 			chapter: {
 				select: {
 					url: true,
@@ -62,15 +82,11 @@ export async function getLessonByUrl(
 	});
 
 	if (lesson) {
-		const {
-			_count: { _all: lessonBlockCount }
-		} = await client.lessonBlock.aggregate({
-			_count: { _all: true },
-			where: {
-				lessonId: lesson.id
-			}
+		(lesson as any).lessonBlockCount = lesson.lessonBlocks.length;
+		lesson.lessonBlocks.forEach((v) => {
+			const result = v.results.find((r) => r.userId == userId);
+			(v as any).result = result;
 		});
-		(lesson as any).lessonBlockCount = lessonBlockCount;
 	}
 
 	return lesson;

@@ -1,9 +1,11 @@
-import type { Lesson } from '@prisma/client';
+import type { Lesson, LessonBlock } from '@prisma/client';
 import { writable, derived, get } from 'svelte/store';
-import type { IFetch } from '../utils';
+import { JSON_HEADERS, type IFetch } from '../utils';
+import type { OptionalResult } from '$lib/types';
 import { resourceFromJSON, addOrUpdate } from './common';
 import {
 	apiDepartmentCourseChapterLessonPath,
+	apiDepartmentCourseChapterLessonRedoPath,
 	apiDepartmentCourseChapterLessonsPath
 } from '$lib/routingUtils';
 import { lessonBlocksWritable } from './lessonBlocks';
@@ -15,6 +17,7 @@ export type StateLesson = Lesson & {
 		name: string;
 		course: { url: string; name: string; department: { url: string; name: string } };
 	};
+	lessonBlocks: (LessonBlock & OptionalResult)[];
 };
 
 export const lessonsWritable = writable<Array<StateLesson>>([]);
@@ -40,6 +43,16 @@ export const lessonsByUrl = derived(lessonsWritable, (lessons) =>
 	}, {} as { [departmentUrl: string]: { [courseUrl: string]: { [chapterUrl: string]: { [url: string]: StateLesson } } } })
 );
 
+export function completionPercentageInfo(lesson: StateLesson): { percentage: number, completed: number, total: number } {
+	const totalLessonBlocks = lesson.lessonBlocksCount;
+	const completedLessonBlocks = lesson.lessonBlocks.filter((v) => !!v.result).length;
+	return {
+		percentage: (completedLessonBlocks / totalLessonBlocks) * 100,
+		completed: completedLessonBlocks,
+		total: totalLessonBlocks
+	};
+}
+
 export async function showLessonByUrl(
 	departmentUrl: string,
 	courseUrl: string,
@@ -54,11 +67,7 @@ export async function showLessonByUrl(
 	}
 	const res = await fetchFn(
 		apiDepartmentCourseChapterLessonPath(departmentUrl, courseUrl, chapterUrl, url),
-		{
-			headers: {
-				'Content-Type': 'application/json'
-			}
-		}
+		{ headers: JSON_HEADERS }
 	);
 	if (!res.ok) {
 		throw await res.json();
@@ -76,11 +85,7 @@ export async function showLessons(
 ) {
 	const res = await fetchFn(
 		apiDepartmentCourseChapterLessonsPath(departmentUrl, courseUrl, chapterUrl),
-		{
-			headers: {
-				'Content-Type': 'application/json'
-			}
-		}
+		{ headers: JSON_HEADERS }
 	);
 	if (!res.ok) {
 		throw await res.json();
@@ -99,10 +104,8 @@ export async function redoLesson(
 	lessonUrl: string
 ) {
 	const res = await fetch(
-		`/api/departments/${departmentUrl}/courses/${courseUrl}/chapters/${chapterUrl}/lessons/${lessonUrl}/redo`,
-		{
-			method: 'DELETE'
-		}
+		apiDepartmentCourseChapterLessonRedoPath(departmentUrl, courseUrl, chapterUrl, lessonUrl),
+		{ method: 'DELETE' }
 	);
 	if (!res.ok) {
 		throw await res.json();
@@ -114,9 +117,9 @@ export async function redoLesson(
 				lessonBlock.lesson.chapter.url === chapterUrl &&
 				lessonBlock.lesson.url === lessonUrl
 				? {
-						...lessonBlock,
-						result: undefined
-				  }
+					...lessonBlock,
+					result: undefined
+				}
 				: lessonBlock;
 		});
 	});

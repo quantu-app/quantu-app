@@ -186,6 +186,18 @@ export function apiDepartmentCourseChapterLessonsPath(
 }
 
 /**
+ * @returns "/api/departments/:departmentUrl/courses/:courseUrl/chapters/:chapterUrl/lessons/:lessonUrl/redo"
+ */
+export function apiDepartmentCourseChapterLessonRedoPath(
+    departmentUrl: string,
+    courseUrl: string,
+    chapterUrl: string,
+    lessonUrl: string
+): string {
+    return `${API_PATH}/departments/${departmentUrl}/courses/${courseUrl}/chapters/${chapterUrl}/lessons/${lessonUrl}/redo`;
+}
+
+/**
  * @returns "/api/courses"
  */
 export function apiCoursesPath(): string {

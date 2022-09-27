@@ -4,18 +4,15 @@
 	import { base } from '$app/paths';
 	import RichViewer from '$lib/components/editor/RichViewer.svelte';
 	import type { StateDepartment } from '$lib/state/creator/departments';
+	import { apiAssetPath } from '$lib/routingUtils';
 
 	export let department: StateDepartment;
 </script>
 
 <div class="col-6 col-md-3 mt-4">
 	<div class="card">
-		{#if department.logoId}
-			<img
-				class="card-img-top"
-				src={`${base}/api/assets/${department.logoId}`}
-				alt={department.logo.name}
-			/>
+		{#if department.logoId && department.logo}
+			<img class="card-img-top" src={apiAssetPath(department.logoId)} alt={department.logo.name} />
 		{/if}
 		<div class="card-body">
 			<h4 class="card-title">

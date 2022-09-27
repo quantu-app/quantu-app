@@ -36,7 +36,6 @@
 	import { showDepartmentByUrl } from '$lib/state/departments';
 	import { showCourseByUrl, coursesByUrl } from '$lib/state/courses';
 	import UserLayout from '$lib/components/layouts/UserLayout.svelte';
-	import { base } from '$app/paths';
 	import RichViewer from '$lib/components/editor/RichViewer.svelte';
 	import CourseChapter from '$lib/components/courses/CourseChapter.svelte';
 	import { showChapters, chaptersByUrl } from '$lib/state/chapters';

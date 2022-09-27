@@ -1,10 +1,14 @@
 <script lang="ts">
-	import type { StateLesson } from '$lib/state/lessons';
+	import { completionPercentageInfo, type StateLesson } from '$lib/state/lessons';
 	import RichViewer from '../editor/RichViewer.svelte';
 	import { noImageFallback } from '$lib/utils';
 	import { departmentCourseChapterLessonPath, apiAssetPath } from '$lib/routingUtils';
+	import { lessonBlocksByLessonId } from '$lib/state/creator/lessonBlocks';
+	import { lessonBlocks } from '$lib/state/lessonBlocks';
 
 	export let lesson: StateLesson;
+
+	$: completionInfo = completionPercentageInfo(lesson);
 </script>
 
 <div class="card">
@@ -31,9 +35,24 @@
 				)}
 			/>
 		</div>
+		<div class="progress mt-4">
+			<div
+				class="progress-bar bg-success"
+				role="progressbar"
+				style={`width: ${completionInfo.percentage}%`}
+				aria-valuenow={completionInfo.percentage}
+				aria-valuemin={0}
+				aria-valuemax={100}
+			/>
+		</div>
 	</div>
+
 	<div class="card-footer text-muted">
-		<span>{lesson.lessonBlocksCount} questions</span>
+		{#if completionInfo.completed === 0}
+			<span>{lesson.lessonBlocksCount} questions.</span>
+		{:else}
+			<span>{completionInfo.completed} of {completionInfo.total} questions completed.</span>
+		{/if}
 	</div>
 </div>
 

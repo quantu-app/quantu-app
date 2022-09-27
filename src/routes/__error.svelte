@@ -11,7 +11,6 @@
 
 <script lang="ts">
 	import { dev } from '$app/env';
-	import GTag from '$lib/components/GTag.svelte';
 	import PublicLayout from '$lib/components/layouts/PublicLayout.svelte';
 	import type { Load } from '@sveltejs/kit';
 
@@ -34,5 +33,3 @@
 		{/if}
 	</div>
 </PublicLayout>
-
-<GTag />

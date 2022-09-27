@@ -84,6 +84,10 @@ export async function getLessons(
 
 	for (const lesson of lessons) {
 		(lesson as any).lessonBlocksCount = lesson.lessonBlocks.length;
+		lesson.lessonBlocks.forEach((v) => {
+			const result = v.results.find((r) => r.userId == userId);
+			(v as any).result = result;
+		});
 	}
 
 	return lessons;

@@ -80,11 +80,10 @@
 			<option value={'MARK_AS_READ'}>Mark as Read</option>
 		</select>
 	</div>
-</div>
-<div class="row mt-2">
 	<div class="col">
 		<label for="description" class="form-label">Description</label>
 		<RichEditor id="description" name="description" bind:value={lessonBlock.description} />
 	</div>
 </div>
+<hr class="border-2 border-top my-4" />
 <PromptEditor type={lessonBlock.type} {prompt} />

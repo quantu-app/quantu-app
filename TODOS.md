@@ -2,8 +2,8 @@
 
 ## Features
 * Working through a lesson should work not just on perfect case:
-    * User's should be able to complete blocks in any order.
-    * If a user shows an explanation w/out answering it should still count the block as completed.
+    * ~~User's should be able to complete blocks in any order.~~
+    * ~~If a user shows an explanation w/out answering it should still count the block as completed.~~
     * If a user answers incorrectly and then clicks explain it should count block as completed.
 * User should be able to upvote/downvote lessons.
 

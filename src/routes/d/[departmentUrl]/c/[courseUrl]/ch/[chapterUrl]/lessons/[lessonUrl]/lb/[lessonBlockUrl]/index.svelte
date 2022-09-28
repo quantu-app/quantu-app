@@ -140,7 +140,11 @@
 			<LearningBlockWrapper {lessonBlock}>
 				<LessonBlock {lessonBlock}>
 					<svelte:fragment slot="extra">
-						<a role="button" class="btn btn-outline-primary" href={nextUrl}>Continue</a>
+						{#if nextLessonBlockUrl}
+							<a role="button" class="btn btn-outline-primary" href={nextUrl}>Continue</a>
+						{:else}
+							<a role="button" class="btn btn-outline-primary" href={nextUrl}>Finish Lesson</a>
+						{/if}
 					</svelte:fragment>
 				</LessonBlock>
 			</LearningBlockWrapper>

@@ -50,6 +50,8 @@
 	<div class="card-footer text-muted">
 		{#if completionInfo.completed === 0}
 			<span>{lesson.lessonBlocksCount} questions.</span>
+		{:else if completionInfo.completed === completionInfo.total}
+			<span>Lesson completed.</span>
 		{:else}
 			<span>{completionInfo.completed} of {completionInfo.total} questions completed.</span>
 		{/if}

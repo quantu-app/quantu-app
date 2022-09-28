@@ -62,7 +62,7 @@
 	import { isValidStatus } from '$lib/guard/isValidStatus';
 	import { departmentsByUrl, showDepartmentByUrl } from '$lib/state/departments';
 	import { coursesByUrl, showCourseByUrl } from '$lib/state/courses';
-	import { chaptersByUrl, showChapterByUrl } from '$lib/state/chapters';
+	import { showChapterByUrl } from '$lib/state/chapters';
 	import { lessonsByUrl, showLessonByUrl } from '$lib/state/lessons';
 	import { lessonBlocksByUrl, showLessonBlocks } from '$lib/state/lessonBlocks';
 	import LessonLayout from '$lib/components/layouts/LessonLayout.svelte';
@@ -80,7 +80,6 @@
 
 	$: department = $departmentsByUrl[departmentUrl];
 	$: course = ($coursesByUrl[departmentUrl] || {})[courseUrl];
-	$: chapter = (($chaptersByUrl[departmentUrl] || {})[courseUrl] || {})[chapterUrl];
 	$: lesson = ((($lessonsByUrl[departmentUrl] || {})[courseUrl] || {})[chapterUrl] || {})[
 		lessonUrl
 	];

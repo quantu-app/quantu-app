@@ -5,8 +5,8 @@
 
 	export let lesson: StateLesson;
 	export let lessonBlocks: StateLessonBlock[];
-	export let upvote: (event: Event) => void = (_event) => {};
-	export let downvote: (event: Event) => void = (_event) => {};
+	//export let upvote: (event: Event) => void = (_event) => {};
+	//export let downvote: (event: Event) => void = (_event) => {};
 	export let continueLink: string;
 
 	let redoingLesson = false;
@@ -33,7 +33,7 @@
 
 			<div class="row mb-4">
 				<LessonSummaryCard {lesson} {lessonBlocks} />
-				<p class="my-4 text-center">Did you like this lesson?</p>
+				<!-- <p class="my-4 text-center">Did you like this lesson?</p>
 				<div class="col-6 mx-auto text-center">
 					<button class="btn btn-outline-dark" aria-label="thumbs up" on:click={upvote}>
 						<i class="bi bi-hand-thumbs-up" />
@@ -41,7 +41,7 @@
 					<button class="btn btn-outline-dark" aria-label="thumbs down" on:click={downvote}>
 						<i class="bi bi-hand-thumbs-down" />
 					</button>
-				</div>
+				</div> -->
 			</div>
 			<div class="row text-center mb-6">
 				<div class="col-6 mx-auto">

@@ -38,7 +38,9 @@ export async function showChapterByUrl(
 	if (cachedChapter) {
 		return cachedChapter;
 	}
-	const res = await fetchFn(apiDepartmentCourseChapterPath(departmentUrl, courseUrl, url), { headers: JSON_HEADERS });
+	const res = await fetchFn(apiDepartmentCourseChapterPath(departmentUrl, courseUrl, url), {
+		headers: JSON_HEADERS
+	});
 	if (!res.ok) {
 		throw await res.json();
 	}
@@ -52,7 +54,9 @@ export async function showChapters(
 	courseUrl: string,
 	fetchFn: IFetch = fetch
 ): Promise<StateChapter[]> {
-	const res = await fetchFn(apiDepartmentCourseChaptersPath(departmentUrl, courseUrl), { headers: JSON_HEADERS });
+	const res = await fetchFn(apiDepartmentCourseChaptersPath(departmentUrl, courseUrl), {
+		headers: JSON_HEADERS
+	});
 	if (!res.ok) {
 		throw await res.json();
 	}

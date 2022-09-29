@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { getEditorContext } from 'svelte-slate';
+	import { getEditorContext } from 'svelte-slate/components/Slate.svelte';
 	import Button from './Button.svelte';
 	import { isBlockActive, toggleBlock } from 'svelte-slate/plugins/utils';
 

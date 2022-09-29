@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { getEditorContext } from 'svelte-slate';
+	import { getEditorContext } from 'svelte-slate/components/Slate.svelte';
 	import Button from './Button.svelte';
 	import { insertCode } from 'svelte-slate/plugins/CodeElement.svelte';
 	import { isBlockActive } from 'svelte-slate/plugins/utils';

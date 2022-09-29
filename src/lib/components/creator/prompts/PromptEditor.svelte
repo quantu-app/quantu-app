@@ -26,9 +26,9 @@
 {#if type === 'FLASH_CARD'}
 	<FlashCardEditor {disabled} bind:prompt={promptFlashCard} {onChange} />
 {:else if type === 'MULTIPLE_CHOICE'}
-	<MultipleChoiceEditor {disabled} bind:prompt={promptMultipleChoice} {onChange}/>
+	<MultipleChoiceEditor {disabled} bind:prompt={promptMultipleChoice} {onChange} />
 {:else if type === 'INPUT'}
-	<InputEditor {disabled} bind:prompt={promptInput} {onChange}/>
+	<InputEditor {disabled} bind:prompt={promptInput} {onChange} />
 {:else if type === 'mark_as_read'}
-	<MarkAsReadEditor {disabled} bind:prompt={promptMarkAsRead} {onChange}/>
+	<MarkAsReadEditor {disabled} bind:prompt={promptMarkAsRead} {onChange} />
 {/if}

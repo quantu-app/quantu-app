@@ -17,7 +17,7 @@
 	import { withHistory } from 'slate-history';
 	import { DEFAULT_PLUGINS } from 'svelte-slate/plugins/DEFAULT_PLUGINS';
 	import ImageElement, { IMAGE_TYPE, withImages } from 'svelte-slate/plugins/ImageElement.svelte';
-	import { longpress } from 'svelte-slate/plugins/longpress';
+	import { longpress } from '$lib/longpress';
 	import CodeElement, {
 		CODE_TYPE,
 		isCodeElement,
@@ -56,13 +56,12 @@
 	}
 
 	function onKeyDown(event: KeyboardEvent) {
-		for (const hotkey in HOTKEYS) {
+		Object.entries(HOTKEYS).forEach(([hotkey, mark]) => {
 			if (isHotkey(hotkey, event)) {
 				event.preventDefault();
-				const mark = HOTKEYS[hotkey];
 				toggleMark(editor, mark);
 			}
-		}
+		});
 	}
 
 	function onLongPress() {

@@ -1,4 +1,4 @@
-import { browser } from '$app/env';
+import { browser } from '$app/environment';
 import { derived, writable } from 'svelte/store';
 
 const nowWritable = writable(Date.now());

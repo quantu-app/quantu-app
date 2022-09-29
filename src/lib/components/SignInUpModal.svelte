@@ -13,7 +13,7 @@
 	import SignIn from './SignIn.svelte';
 	import SignUp from './SignUp.svelte';
 	import { onDestroy, onMount } from 'svelte';
-	import { browser } from '$app/env';
+	import { browser } from '$app/environment';
 	import { base } from '$app/paths';
 	import Cookies from 'js-cookie';
 	import { signIn } from '$lib/state/user';

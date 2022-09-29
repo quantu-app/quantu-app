@@ -2,7 +2,6 @@
 
 import type { ITokenValue } from '$lib/api/auth';
 import type { IJwtString } from '$lib/api/jwt';
-import type { User } from '@prisma/client';
 import type * as bootstrap from 'bootstrap';
 
 declare global {
@@ -12,17 +11,13 @@ declare global {
 			token?: ITokenValue;
 		}
 
-		interface Platform { }
+		// interface Platform {}
 
-		interface PrivateEnv { }
+		// interface PrivateEnv {}
 
-		interface PublicEnv { }
+		// interface PublicEnv {}
 
-		interface Session {
-			user?: Omit<User, 'encryptedPassword'>;
-		}
-
-		interface Stuff { }
+		// interface Stuff {}
 	}
 
 	interface Window {
@@ -44,5 +39,11 @@ declare global {
 			FACEBOOK_OAUTH_CLIENT_ID: string;
 			FACEBOOK_OAUTH_CLIENT_SECRET: string;
 		}
+	}
+}
+
+declare namespace svelte.JSX {
+	interface HTMLAttributes<T> {
+		onlongpress?: (event: CustomEvent<MouseEvent>) => void;
 	}
 }

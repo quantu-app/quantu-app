@@ -1,12 +1,8 @@
-import type { Load } from '@sveltejs/kit';
+import { redirect, type Load } from '@sveltejs/kit';
 
-export const creatorGuard: Load = ({ session }) => {
-	if (session?.user?.creator) {
-		return {};
-	} else {
-		return {
-			status: 302,
-			redirect: '/'
-		};
+export const creatorGuard: Load = async ({ parent }) => {
+	const { user } = await parent();
+	if (!user?.creator) {
+		throw redirect(302, '/');
 	}
 };

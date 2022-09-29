@@ -1,7 +1,7 @@
 <svelte:options immutable />
 
 <script lang="ts">
-	import { browser } from '$app/env';
+	import { browser } from '$app/environment';
 	import Modal from '$lib/components/ui/Modal.svelte';
 	import { showAssetById } from '$lib/state/creator/assets';
 	import type { Asset } from '@prisma/client';

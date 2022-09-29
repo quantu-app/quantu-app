@@ -1,214 +1,216 @@
 import {
-    // frontend imports
-    departmentPath,
-    departmentCoursePath,
-    departmentCourseChapterLessonPath,
-    departmentCourseChapterLessonLessonBlockPath,
-    departmentChallengePath,
-    departmentChallengeReviewPath,
-    challengesPath,
-    challengesAllPath,
-    coursesPath,
+	// frontend imports
+	departmentPath,
+	departmentCoursePath,
+	departmentCourseChapterLessonPath,
+	departmentCourseChapterLessonLessonBlockPath,
+	departmentChallengePath,
+	departmentChallengeReviewPath,
+	challengesPath,
+	challengesAllPath,
+	coursesPath,
 
-    // api imports
-    apiDepartmentCourseChapterLessonLessonBlockPath,
-    apiDepartmentChallengePath,
-    apiDepartmentChallengesPath,
-    apiDepartmentCourseChapterLessonPath,
-    apiDepartmentCourseChapterLessonsPath,
-    apiAssetPath,
-    apiChallengesPath,
-    apiResultsChallengePath,
-    apiResultsChallengeExplainPath,
-    apiDepartmentPath,
-    apiDepartmentsPath,
-    apiDepartmentCoursePath,
-    apiDepartmentCoursesPath,
-    apiDepartmentCourseChapterPath,
-    apiDepartmentCourseChaptersPath,
-    apiCoursesPath,
-    apiDepartmentCourseChapterLessonRedoPath,
-    userWelcomePath,
-    apiUserPath,
-    apiUserSettingsPath
+	// api imports
+	apiDepartmentCourseChapterLessonLessonBlockPath,
+	apiDepartmentChallengePath,
+	apiDepartmentChallengesPath,
+	apiDepartmentCourseChapterLessonPath,
+	apiDepartmentCourseChapterLessonsPath,
+	apiAssetPath,
+	apiChallengesPath,
+	apiResultsChallengePath,
+	apiResultsChallengeExplainPath,
+	apiDepartmentPath,
+	apiDepartmentsPath,
+	apiDepartmentCoursePath,
+	apiDepartmentCoursesPath,
+	apiDepartmentCourseChapterPath,
+	apiDepartmentCourseChaptersPath,
+	apiCoursesPath,
+	apiDepartmentCourseChapterLessonRedoPath,
+	userWelcomePath,
+	apiUserPath,
+	apiUserSettingsPath
 } from './routingUtils';
 
 describe('departments', () => {
-    test('departmentPath', () => {
-        expect(departmentPath("mathematics")).toEqual("/d/mathematics");
-    });
-    test('departmentCoursePath', () => {
-        expect(departmentCoursePath("mathematics", "intro-to-functions")).toEqual(
-            "/d/mathematics/c/intro-to-functions"
-        );
-    });
-    test('departmentCourseChapterLessonPath', () => {
-        expect(departmentCourseChapterLessonPath(
-            "mathematics",
-            "intro-to-functions",
-            "functions",
-            "function-notation"
-        )).toEqual(
-            "/d/mathematics/c/intro-to-functions/ch/functions/lessons/function-notation"
-        );
-    });
+	test('departmentPath', () => {
+		expect(departmentPath('mathematics')).toEqual('/d/mathematics');
+	});
+	test('departmentCoursePath', () => {
+		expect(departmentCoursePath('mathematics', 'intro-to-functions')).toEqual(
+			'/d/mathematics/c/intro-to-functions'
+		);
+	});
+	test('departmentCourseChapterLessonPath', () => {
+		expect(
+			departmentCourseChapterLessonPath(
+				'mathematics',
+				'intro-to-functions',
+				'functions',
+				'function-notation'
+			)
+		).toEqual('/d/mathematics/c/intro-to-functions/ch/functions/lessons/function-notation');
+	});
 
-    test('departmentCourseChapterLessonLessonBlockPath', () => {
-        expect(departmentCourseChapterLessonLessonBlockPath(
-            "mathematics",
-            "intro-to-functions",
-            "functions",
-            "function-notation",
-            "mappings"
-        )).toEqual(
-            "/d/mathematics/c/intro-to-functions/ch/functions/lessons/function-notation/lb/mappings"
-        );
-    });
+	test('departmentCourseChapterLessonLessonBlockPath', () => {
+		expect(
+			departmentCourseChapterLessonLessonBlockPath(
+				'mathematics',
+				'intro-to-functions',
+				'functions',
+				'function-notation',
+				'mappings'
+			)
+		).toEqual(
+			'/d/mathematics/c/intro-to-functions/ch/functions/lessons/function-notation/lb/mappings'
+		);
+	});
 
-    test('departmentChallengePath', () => {
-        expect(departmentChallengePath("mathematics", "a-puzzling-integral")).toEqual(
-            "/d/mathematics/challenges/a-puzzling-integral"
-        )
-    });
+	test('departmentChallengePath', () => {
+		expect(departmentChallengePath('mathematics', 'a-puzzling-integral')).toEqual(
+			'/d/mathematics/challenges/a-puzzling-integral'
+		);
+	});
 
-    test('departmentChallengeReviewPath', () => {
-        expect(departmentChallengeReviewPath("mathematics", "a-puzzling-integral")).toEqual(
-            "/d/mathematics/challenges/a-puzzling-integral/review"
-        )
-    });
+	test('departmentChallengeReviewPath', () => {
+		expect(departmentChallengeReviewPath('mathematics', 'a-puzzling-integral')).toEqual(
+			'/d/mathematics/challenges/a-puzzling-integral/review'
+		);
+	});
 });
 
-describe("challenges", () => {
-    test('challengesPath', () => {
-        expect(challengesPath()).toEqual("/challenges");
-    });
+describe('challenges', () => {
+	test('challengesPath', () => {
+		expect(challengesPath()).toEqual('/challenges');
+	});
 
-    test('challengesAllPath', () => {
-        expect(challengesAllPath()).toEqual("/challenges/all");
-    });
+	test('challengesAllPath', () => {
+		expect(challengesAllPath()).toEqual('/challenges/all');
+	});
 });
 
-describe("courses", () => {
-    test('coursesPath', () => {
-        expect(coursesPath()).toEqual("/courses");
-    })
+describe('courses', () => {
+	test('coursesPath', () => {
+		expect(coursesPath()).toEqual('/courses');
+	});
 });
 
-describe("users", () => {
-    test('userWelcomePath', () => {
-        expect(userWelcomePath()).toEqual("/user/welcome");
-    })
+describe('users', () => {
+	test('userWelcomePath', () => {
+		expect(userWelcomePath()).toEqual('/user/welcome');
+	});
 });
-
 
 /**
  * API PATHS
  */
 
-describe("api", () => {
+describe('api', () => {
+	describe('departments', () => {
+		test('apiDepartmentsPath', () => {
+			expect(apiDepartmentsPath()).toEqual('/api/departments');
+		});
 
-    describe("departments", () => {
+		test('apiDepartmentPath', () => {
+			expect(apiDepartmentPath('mathematics')).toEqual('/api/departments/mathematics');
+		});
 
-        test('apiDepartmentsPath', () => {
-            expect(apiDepartmentsPath()).toEqual("/api/departments");
-        });
+		test('apiDepartmentCoursePath', () => {
+			expect(apiDepartmentCoursePath('mathematics', 'calculus')).toEqual(
+				'/api/departments/mathematics/courses/calculus'
+			);
+		});
 
-        test('apiDepartmentPath', () => {
-            expect(apiDepartmentPath("mathematics")).toEqual("/api/departments/mathematics");
-        });
+		test('apiDepartmentCoursesPath', () => {
+			expect(apiDepartmentCoursesPath('mathematics')).toEqual(
+				'/api/departments/mathematics/courses'
+			);
+		});
 
-        test('apiDepartmentCoursePath', () => {
-            expect(apiDepartmentCoursePath("mathematics", "calculus")).toEqual(
-                "/api/departments/mathematics/courses/calculus"
-            );
-        });
+		test('apiDepartmentCourseChapterPath', () => {
+			expect(apiDepartmentCourseChapterPath('math', 'functions', 'one-to-one')).toEqual(
+				'/api/departments/math/courses/functions/chapters/one-to-one'
+			);
+		});
 
-        test('apiDepartmentCoursesPath', () => {
-            expect(apiDepartmentCoursesPath("mathematics")).toEqual(
-                "/api/departments/mathematics/courses"
-            );
-        });
+		test('apiDepartmentCourseChaptersPath', () => {
+			expect(apiDepartmentCourseChaptersPath('math', 'functions')).toEqual(
+				'/api/departments/math/courses/functions/chapters'
+			);
+		});
 
-        test('apiDepartmentCourseChapterPath', () => {
-            expect(apiDepartmentCourseChapterPath("math", "functions", "one-to-one")).toEqual(
-                "/api/departments/math/courses/functions/chapters/one-to-one"
-            );
-        });
+		test('apiDepartmentCourseChapterLessonLessonBlockPath', () => {
+			expect(
+				apiDepartmentCourseChapterLessonLessonBlockPath('123', '456', '789', '111', '222')
+			).toEqual('/api/departments/123/courses/456/chapters/789/lessons/111/lesson-blocks/222');
+		});
 
-        test('apiDepartmentCourseChaptersPath', () => {
-            expect(apiDepartmentCourseChaptersPath("math", "functions")).toEqual(
-                "/api/departments/math/courses/functions/chapters"
-            );
-        })
+		test('apiDepartmentChallengePath', () => {
+			expect(apiDepartmentChallengePath('math', 'integrate-two-numbers')).toEqual(
+				'/api/departments/math/challenges/integrate-two-numbers'
+			);
+		});
 
-        test('apiDepartmentCourseChapterLessonLessonBlockPath', () => {
-            expect(apiDepartmentCourseChapterLessonLessonBlockPath(
-                "123",
-                "456",
-                "789",
-                "111",
-                "222"
-            )).toEqual("/api/departments/123/courses/456/chapters/789/lessons/111/lesson-blocks/222");
-        });
+		test('apiDepartmentChallengesPath', () => {
+			expect(apiDepartmentChallengesPath('math')).toEqual('/api/departments/math/challenges');
+		});
 
-        test("apiDepartmentChallengePath", () => {
-            expect(apiDepartmentChallengePath("math", "integrate-two-numbers")).toEqual(
-                "/api/departments/math/challenges/integrate-two-numbers"
-            )
-        });
+		test('apiDepartmentCourseChapterLessonPath', () => {
+			expect(
+				apiDepartmentCourseChapterLessonPath('math', 'calculus-1', 'limits', 'concept-of-limit')
+			).toEqual(
+				'/api/departments/math/courses/calculus-1/chapters/limits/lessons/concept-of-limit'
+			);
+		});
 
-        test("apiDepartmentChallengesPath", () => {
-            expect(apiDepartmentChallengesPath("math")).toEqual(
-                "/api/departments/math/challenges"
-            )
-        });
+		test('apiDepartmentCourseChapterLessonsPath', () => {
+			expect(apiDepartmentCourseChapterLessonsPath('math', 'calculus-1', 'limits')).toEqual(
+				'/api/departments/math/courses/calculus-1/chapters/limits/lessons'
+			);
+		});
+		test('apiDepartmentCourseChapterLessonRedoPath', () => {
+			expect(
+				apiDepartmentCourseChapterLessonRedoPath('math', 'cal1', 'functions', 'notation')
+			).toEqual('/api/departments/math/courses/cal1/chapters/functions/lessons/notation/redo');
+		});
+	});
 
-        test("apiDepartmentCourseChapterLessonPath", () => {
-            expect(apiDepartmentCourseChapterLessonPath("math", "calculus-1", "limits", "concept-of-limit")).toEqual(
-                "/api/departments/math/courses/calculus-1/chapters/limits/lessons/concept-of-limit"
-            )
-        });
+	test('apiCoursesPath', () => {
+		expect(apiCoursesPath()).toEqual('/api/courses');
+	});
 
-        test("apiDepartmentCourseChapterLessonsPath", () => {
-            expect(apiDepartmentCourseChapterLessonsPath("math", "calculus-1", "limits")).toEqual(
-                "/api/departments/math/courses/calculus-1/chapters/limits/lessons"
-            )
-        });
-        test("apiDepartmentCourseChapterLessonRedoPath", () => {
-            expect(apiDepartmentCourseChapterLessonRedoPath("math", "cal1", "functions", "notation")).toEqual(
-                "/api/departments/math/courses/cal1/chapters/functions/lessons/notation/redo"
-            );
-        });
-    });
+	test('apiChallengesPath', () => {
+		expect(apiChallengesPath()).toEqual('/api/challenges');
+	});
 
-    test("apiCoursesPath", () => {
-        expect(apiCoursesPath()).toEqual("/api/courses");
-    });
+	test('apiResultsChallengePath', () => {
+		expect(apiResultsChallengePath('123')).toEqual('/api/results/challenge/123');
+	});
 
-    test("apiChallengesPath", () => {
-        expect(apiChallengesPath()).toEqual("/api/challenges");
-    });
+	test('apiResultsChallengeExplainPath', () => {
+		expect(apiResultsChallengeExplainPath('123')).toEqual('/api/results/challenge/123/explain');
+	});
 
-    test("apiResultsChallengePath", () => {
-        expect(apiResultsChallengePath("123")).toEqual("/api/results/challenge/123");
-    });
+	test('apiResultsChallengePath', () => {
+		expect(apiResultsChallengePath('123')).toEqual('/api/results/challenge/123');
+	});
 
-    test("apiResultsChallengeExplainPath", () => {
-        expect(apiResultsChallengeExplainPath("123")).toEqual("/api/results/challenge/123/explain");
-    });
+	test('apiResultsChallengeExplainPath', () => {
+		expect(apiResultsChallengeExplainPath('123')).toEqual('/api/results/challenge/123/explain');
+	});
 
-    test('apiAssetPath', () => {
-        expect(apiAssetPath("1001")).toEqual("/api/assets/1001");
-    });
+	test('apiAssetPath', () => {
+		expect(apiAssetPath('1001')).toEqual('/api/assets/1001');
+	});
 
+	describe('users', () => {
+		test('apiUserPath', () => {
+			expect(apiUserPath()).toEqual('/api/user');
+		});
 
-    describe("users", () => {
-        test("apiUserPath", () => {
-            expect(apiUserPath()).toEqual("/api/user");
-        });
-
-        test("apiUserSettingsPath", () => {
-            expect(apiUserSettingsPath()).toEqual("/api/user/settings");
-        });
-    })
+		test('apiUserSettingsPath', () => {
+			expect(apiUserSettingsPath()).toEqual('/api/user/settings');
+		});
+	});
 });

@@ -11,7 +11,7 @@ services:
       - MONGODB_ROOT_PASSWORD=password
       - MONGODB_REPLICA_SET_KEY=replicasetkey
     ports:
-      - "27017:27017"
+      - '27017:27017'
     volumes:
       - mongodb_master_data:/bitnami/mongodb
 

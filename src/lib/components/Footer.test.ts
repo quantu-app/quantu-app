@@ -12,17 +12,16 @@ describe('Test Footer', () => {
 
 		// test footer links
 		const footerLinks = [
-			{ text: "About us", link: "/info/about-us" },
-			{ text: "Principles", link: "/info/principles" },
-			{ text: "Roadmap", link: "https://trello.com/b/DrtlVKXH/product-roadmap" },
-			{ text: "Open Source Projects", link: "https://github.com/quantu-app" },
+			{ text: 'About us', link: '/info/about-us' },
+			{ text: 'Principles', link: '/info/principles' },
+			{ text: 'Roadmap', link: 'https://trello.com/b/DrtlVKXH/product-roadmap' },
+			{ text: 'Open Source Projects', link: 'https://github.com/quantu-app' }
 		];
 
 		for (let i = 0; i < footerLinks.length; i++) {
 			const item = footerLinks[i];
 			const domNode = component.getByText(item.text);
-			expect(domNode.closest("a")).toHaveAttribute("href", item.link);
+			expect(domNode.closest('a')).toHaveAttribute('href', item.link);
 		}
-
 	});
 });

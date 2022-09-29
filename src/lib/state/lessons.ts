@@ -43,7 +43,11 @@ export const lessonsByUrl = derived(lessonsWritable, (lessons) =>
 	}, {} as { [departmentUrl: string]: { [courseUrl: string]: { [chapterUrl: string]: { [url: string]: StateLesson } } } })
 );
 
-export function completionPercentageInfo(lesson: StateLesson): { percentage: number, completed: number, total: number } {
+export function completionPercentageInfo(lesson: StateLesson): {
+	percentage: number;
+	completed: number;
+	total: number;
+} {
 	const totalLessonBlocks = lesson.lessonBlocksCount;
 	const completedLessonBlocks = lesson.lessonBlocks.filter((v) => !!v.result).length;
 	return {
@@ -117,9 +121,9 @@ export async function redoLesson(
 				lessonBlock.lesson.chapter.url === chapterUrl &&
 				lessonBlock.lesson.url === lessonUrl
 				? {
-					...lessonBlock,
-					result: undefined
-				}
+						...lessonBlock,
+						result: undefined
+				  }
 				: lessonBlock;
 		});
 	});

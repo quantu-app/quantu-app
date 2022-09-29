@@ -2,13 +2,21 @@ import type { Challenge, Result } from '@prisma/client';
 import { writable, derived, get } from 'svelte/store';
 import type { Answer, UserAnswers, OptionalResult } from '$lib/types';
 import type { IFetch } from '../utils';
-import { apiChallengesPath, apiDepartmentChallengePath, apiDepartmentChallengesPath, apiResultsChallengeExplainPath, apiResultsChallengePath } from '$lib/routingUtils';
+import {
+	apiChallengesPath,
+	apiDepartmentChallengePath,
+	apiDepartmentChallengesPath,
+	apiResultsChallengeExplainPath,
+	apiResultsChallengePath
+} from '$lib/routingUtils';
 import { addOrUpdate, resourceFromJSON } from './common';
 
-export type StateChallenge = Challenge & UserAnswers & OptionalResult & {
-	department: { url: string; name: string };
-	solutions: number;
-};
+export type StateChallenge = Challenge &
+	UserAnswers &
+	OptionalResult & {
+		department: { url: string; name: string };
+		solutions: number;
+	};
 
 export const challengesWritable = writable<Array<StateChallenge>>([]);
 
@@ -72,7 +80,9 @@ export async function showChallenges(departmentUrl: string, fetchFn: IFetch = fe
 	if (!res.ok) {
 		throw await res.json();
 	}
-	const challenges: Array<StateChallenge> = (await res.json()).map(resourceFromJSON<StateChallenge>);
+	const challenges: Array<StateChallenge> = (await res.json()).map(
+		resourceFromJSON<StateChallenge>
+	);
 	challengesWritable.update((state) =>
 		challenges.reduce((state, challenge) => addOrUpdate(state, challenge), state.slice())
 	);
@@ -88,7 +98,9 @@ export async function showAllChallenges(fetchFn: IFetch = fetch) {
 	if (!res.ok) {
 		throw await res.json();
 	}
-	const challenges: Array<StateChallenge> = (await res.json()).map(resourceFromJSON<StateChallenge>);
+	const challenges: Array<StateChallenge> = (await res.json()).map(
+		resourceFromJSON<StateChallenge>
+	);
 	challengesWritable.update((state) =>
 		challenges.reduce((state, challenge) => addOrUpdate(state, challenge), state.slice())
 	);

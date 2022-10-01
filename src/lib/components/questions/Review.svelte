@@ -6,12 +6,14 @@
 			<slot name="content" />
 		</div>
 	</div>
-	<div class="col-12">
-		<div class="d-flex flex-column pt-4 h-100 input">
+	<div class="my-4">
+		<div class="d-flex flex-column flex-grow-1">
 			<slot name="input" />
 
-			<div class="d-flex flex-column mt-2">
-				<slot name="extra" />
+			<div class="row justify-content-between mt-4">
+				<div class="col text-end">
+					<slot name="extra" />
+				</div>
 			</div>
 			<div>
 				<slot name="explanation" />

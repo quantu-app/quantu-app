@@ -60,6 +60,7 @@
 	import LearningBlockWrapper from '$lib/components/lesson_block/LessonBlockWrapper.svelte';
 	import LessonBlock from '$lib/components/lesson_block/LessonBlock.svelte';
 	import { sortByIndex } from '$lib/utils';
+	import LessonBlockReview from '$lib/components/lesson_block/LessonBlockReview.svelte';
 
 	export let departmentUrl: string;
 	export let courseUrl: string;
@@ -133,20 +134,30 @@
 	lessonName={lesson.name}
 >
 	<div class="container">
-		<div class="row my-4">
-			<LessonProgressMenu {lessonBlockMenuItems} />
-		</div>
+		<LessonProgressMenu {lessonBlockMenuItems} />
 		<div class="row main-learning-area">
 			<LearningBlockWrapper {lessonBlock}>
-				<LessonBlock {lessonBlock}>
-					<svelte:fragment slot="extra">
-						{#if nextLessonBlockUrl}
-							<a role="button" class="btn btn-outline-primary" href={nextUrl}>Continue</a>
-						{:else}
-							<a role="button" class="btn btn-outline-primary" href={nextUrl}>Finish Lesson</a>
-						{/if}
-					</svelte:fragment>
-				</LessonBlock>
+				{#if lessonBlock.result}
+					<LessonBlockReview result={lessonBlock.result}>
+						<svelte:fragment slot="extra">
+							{#if nextLessonBlockUrl}
+								<a role="button" class="btn btn-outline-primary" href={nextUrl}>Continue</a>
+							{:else}
+								<a role="button" class="btn btn-outline-primary" href={nextUrl}>Finish Lesson</a>
+							{/if}
+						</svelte:fragment>
+					</LessonBlockReview>
+				{:else}
+					<LessonBlock {lessonBlock}>
+						<svelte:fragment slot="extra">
+							{#if nextLessonBlockUrl}
+								<a role="button" class="btn btn-outline-primary" href={nextUrl}>Continue</a>
+							{:else}
+								<a role="button" class="btn btn-outline-primary" href={nextUrl}>Finish Lesson</a>
+							{/if}
+						</svelte:fragment>
+					</LessonBlock>
+				{/if}
 			</LearningBlockWrapper>
 		</div>
 	</div>

@@ -6,6 +6,7 @@ import Cookies from 'js-cookie';
 import type { ApplicationSettings, User, Email } from '@prisma/client';
 import { base } from '$app/paths';
 import { goto } from '$app/navigation';
+import { challengesPath } from '$lib/routingUtils';
 
 export type PublicUser = User & {
 	emailHash: string;
@@ -46,6 +47,8 @@ export async function signIn() {
 		if (redirectPath) {
 			redirectPathWritable.set(undefined);
 			goto(redirectPath);
+		} else {
+			goto(challengesPath());
 		}
 	} else {
 		goto(`${base}/user/welcome`);
@@ -53,9 +56,11 @@ export async function signIn() {
 	userEmitter.emit('signIn', user);
 }
 
-export function signOut() {
+export async function signOut() {
+	await goto(`${base}/`);
 	Cookies.remove('token');
 	session.set(null);
+	redirectPathWritable.set(undefined);
 	userEmitter.emit('signOut');
 }
 

@@ -13,26 +13,26 @@ $enable-rounded: true;
 $btn-border-radius: 3px;
 $font-family-base: 'Computer Modern';
 
-$primary: #1b72b3; // $primary: #202020;
+$primary: #1B72B3;
 $secondary: #a8a8a8;
-$success: #42d12a;
-$danger: #a00;
+$success: #28BC1C;
+$danger: #CA1F1F;
 $info: #aaa;
-$warning: #a40;
+$warning: #F7B81B;
 $light: #f1f1f1;
 $dark: #111;
 
 $spacer: 1rem;
 $spacers: (
-  0: 0,
-  1: $spacer * .25,
-  2: $spacer * .5,
-  3: $spacer,
-  4: $spacer * 1.5,
-  5: $spacer * 3,
-  6: $spacer * 6,
-  7: $spacer * 9,
-  8: $spacer * 12,
+	0: 0,
+	1: $spacer * .25,
+	2: $spacer * .5,
+	3: $spacer,
+	4: $spacer * 1.5,
+	5: $spacer * 3,
+	6: $spacer * 6,
+	7: $spacer * 9,
+	8: $spacer * 12,
 );
 
 $container-max-widths: (

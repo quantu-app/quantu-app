@@ -19,7 +19,7 @@
 		</a>
 
 		{#if $currentUser}
-			<ul class="navbar-nav me-auto">
+			<ul class="navbar-nav mx-auto">
 				<li class="nav-item">
 					<a
 						class:active={$page.url.pathname.startsWith(challengesPath())}
@@ -35,7 +35,7 @@
 					>
 				</li>
 			</ul>
-			<div class="navbar-nav ms-lg-auto">
+			<div class="navbar-nav">
 				<UserDropdown />
 			</div>
 		{:else}

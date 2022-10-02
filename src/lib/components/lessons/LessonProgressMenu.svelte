@@ -5,6 +5,7 @@
 		name: string;
 		url: string;
 		current: boolean;
+		correct: boolean;
 		completed: boolean;
 	};
 
@@ -17,8 +18,11 @@
 		<a
 			href={item.url}
 			title={item.name}
-			class="lessonBlock px-3 rounded mb-2"
+			class="lessonBlock px-3 rounded mb-2 border-bottom"
 			class:bg-dark={item.completed && !item.current}
+			class:border-4={item.completed && !item.current}
+			class:border-success={item.completed && !item.current && item.correct}
+			class:border-danger={item.completed && !item.current && !item.correct}
 			class:bg-secondary={!item.completed && !item.current}
 			class:bg-primary={item.current}
 		/>

@@ -5,7 +5,7 @@
 	import Stats from './Stats.svelte';
 
 	export let challenge: StateChallenge;
-	const CORRECT_THRESHOLD = 0.6;
+	const CORRECT_THRESHOLD = 0.6; // TODO: set this as a config option for lesson blocks globally
 
 	$: correct = challenge.answers.reduce((correct, result) => {
 		if (result.value >= CORRECT_THRESHOLD) {

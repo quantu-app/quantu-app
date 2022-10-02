@@ -98,6 +98,7 @@
 				lesson.url,
 				value.url
 			),
+			correct: value.result && value.result.value > 0.6,
 			completed: !!value.result,
 			current: value.url == lessonBlockUrl
 		};

@@ -13,11 +13,10 @@
 </script>
 
 <script lang="ts">
-	import { base } from '$app/paths';
 	import type { StateCourse } from '$lib/state/courses';
 	import { XorShiftRng } from '@aicacia/rand';
 	import { formatDistanceToNowStrict, isBefore, isSameDay } from 'date-fns';
-	import { departmentCoursePath } from '$lib/routingUtils';
+	import { departmentCoursePath, apiAssetPath } from '$lib/routingUtils';
 
 	export let course: StateCourse;
 
@@ -27,7 +26,7 @@
 
 <div class="card">
 	<img
-		src={course.logoId ? `${base}/api/assets/${course.logoId}` : image}
+		src={course.logoId ? apiAssetPath(course.logoId) : image}
 		alt={course.name}
 		class="card-img-top"
 	/>
@@ -56,13 +55,6 @@
 					ago
 				{/if}
 			</span>
-			{#if course.finished}
-				{#if course.result > 0.6}
-					<i class="bi fs-4 bi-check-circle-fill text-success solved-check" />
-				{:else}
-					<i class="bi fs-4 bi-x-circle-fill text-danger solved-check" />
-				{/if}
-			{/if}
 		</div>
 	</div>
 </div>

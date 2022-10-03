@@ -61,6 +61,7 @@
 	import LessonBlock from '$lib/components/lesson_block/LessonBlock.svelte';
 	import { sortByIndex } from '$lib/utils';
 	import LessonBlockReview from '$lib/components/lesson_block/LessonBlockReview.svelte';
+	import { config } from '$lib/config';
 
 	export let departmentUrl: string;
 	export let courseUrl: string;
@@ -85,6 +86,7 @@
 		name: string;
 		url: string;
 		current: boolean;
+		correct: boolean;
 		completed: boolean;
 	}[];
 
@@ -98,7 +100,7 @@
 				lesson.url,
 				value.url
 			),
-			correct: value.result && value.result.value > 0.6,
+			correct: !!value.result && value.result.value >= config.lessons.ANSWER_CORRECT_THRESHOLD,
 			completed: !!value.result,
 			current: value.url == lessonBlockUrl
 		};

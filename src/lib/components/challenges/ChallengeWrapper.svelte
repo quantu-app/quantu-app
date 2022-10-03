@@ -1,14 +1,14 @@
 <svelte:options immutable />
 
 <script lang="ts">
-	import type { StateChallenge } from '$lib/state/creator/challenges';
+	import type { StateChallenge } from '$lib/state/challenges';
+	import { config } from '$lib/config';
 	import Stats from './Stats.svelte';
 
 	export let challenge: StateChallenge;
-	const CORRECT_THRESHOLD = 0.6; // TODO: set this as a config option for lesson blocks globally
 
 	$: correct = challenge.answers.reduce((correct, result) => {
-		if (result.value >= CORRECT_THRESHOLD) {
+		if (result.value >= config.lessons.ANSWER_CORRECT_THRESHOLD) {
 			return correct + 1;
 		} else {
 			return correct;

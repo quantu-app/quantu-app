@@ -25,7 +25,7 @@
 					return chaptersById[state.selectedId];
 				case 'lesson':
 					return lessonsById[state.selectedId];
-				case 'lesson-block': // TODO: rename all lesson-blocks to learning blocks
+				case 'lesson-block':
 					return lessonBlocksById[state.selectedId];
 				default:
 					return undefined;

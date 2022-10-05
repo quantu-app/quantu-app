@@ -7,6 +7,8 @@ import type { ApplicationSettings, User, Email } from '@prisma/client';
 import { base } from '$app/paths';
 import { goto } from '$app/navigation';
 import { challengesPath } from '$lib/routingUtils';
+import { subYears } from "date-fns";
+import { DEFAULT_AGE } from '$lib/components/user/userProfileSuite';
 
 export type PublicUser = User & {
 	emailHash: string;
@@ -34,6 +36,7 @@ export function isSignedIn() {
 	return !!getCurrentUser();
 }
 
+// TODO: add api user routes in routingUtils.ts file
 export async function signIn() {
 	const res = await fetch(`${base}/api/user`);
 	if (!res.ok) {
@@ -95,7 +98,7 @@ export async function updateSettings(data: Partial<ApplicationSettings>) {
 export function userFromJSON(user: any): StateUser {
 	return {
 		...user,
-		birthday: user.birthday ? new Date(user.birthday) : new Date(Date.now() - 1000000000000), // TODO: use correct birthdate
+		birthday: user.birthday ? new Date(user.birthday) : subYears(new Date(), DEFAULT_AGE),
 		updatedAt: new Date(user.updatedAt),
 		createdAt: new Date(user.createdAt)
 	};

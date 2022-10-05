@@ -11,6 +11,7 @@ export interface IUserProfile {
 
 export const validUsernameRegex = /^[a-z]+[a-z0-9]+$/;
 export const MIN_AGE = 16;
+export const DEFAULT_AGE = 21;
 
 export const validate = create(
 	'user_edit_profile_form',

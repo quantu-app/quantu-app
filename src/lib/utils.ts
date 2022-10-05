@@ -125,7 +125,6 @@ export function convertToUrlSafe(value: string, replaceWhitespaceWith = '-'): st
 }
 
 export function isUrlSafe(value: string): boolean {
-	// TODO: should an empty string url safe?
 	return /^[a-zA-Z0-9_-]+$/.test(value);
 }
 

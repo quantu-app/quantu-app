@@ -41,12 +41,16 @@ describe("isUrlSafe", () => {
             { o: "<script>alert('foobar');</script>", e: false },
             { o: "今日は晴れです。", e: false },
             { o: "this-is-a-nice-url", e: true },
-            { o: "-may-the-force-be---with----you-", e: true },
+            { o: "-may-the-force-be---with----you-", e: true }
         ];
 
         for (let i = 0; i < t.length; i++) {
             const { o, e } = t[i];
             expect(isUrlSafe(o)).toEqual(e);
         }
-    })
+    });
+
+    test("an empty string is not urlsafe", () => {
+        expect(isUrlSafe("")).toEqual(false);
+    });
 })

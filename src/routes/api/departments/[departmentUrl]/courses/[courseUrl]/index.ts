@@ -67,7 +67,6 @@ export async function getCourseByUrl(
 		}
 	});
 
-	// TODO: include quizzes score
 	(course as any).result = result;
 	(course as any).finished = results === lessonBlocks.length;
 

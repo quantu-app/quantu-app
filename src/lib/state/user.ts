@@ -6,7 +6,7 @@ import Cookies from 'js-cookie';
 import type { ApplicationSettings, User, Email } from '@prisma/client';
 import { base } from '$app/paths';
 import { goto } from '$app/navigation';
-import { challengesPath } from '$lib/routingUtils';
+import { apiUserPath, apiUserSettingsPath, challengesPath, userWelcomePath } from '$lib/routingUtils';
 import { subYears } from "date-fns";
 import { DEFAULT_AGE } from '$lib/components/user/userProfileSuite';
 
@@ -36,9 +36,8 @@ export function isSignedIn() {
 	return !!getCurrentUser();
 }
 
-// TODO: add api user routes in routingUtils.ts file
 export async function signIn() {
-	const res = await fetch(`${base}/api/user`);
+	const res = await fetch(apiUserPath());
 	if (!res.ok) {
 		throw new Error('Failed to sign in');
 	}
@@ -54,7 +53,7 @@ export async function signIn() {
 			goto(challengesPath());
 		}
 	} else {
-		goto(`${base}/user/welcome`);
+		goto(userWelcomePath());
 	}
 	userEmitter.emit('signIn', user);
 }
@@ -68,7 +67,7 @@ export async function signOut() {
 }
 
 export async function updateUser(data: Partial<User>) {
-	const res = await fetch(`${base}/api/user`, {
+	const res = await fetch(apiUserPath(), {
 		method: 'PATCH',
 		body: JSON.stringify(data)
 	});
@@ -82,7 +81,7 @@ export async function updateUser(data: Partial<User>) {
 }
 
 export async function updateSettings(data: Partial<ApplicationSettings>) {
-	const res = await fetch(`${base}/api/user/settings`, {
+	const res = await fetch(apiUserSettingsPath(), {
 		method: 'PATCH',
 		body: JSON.stringify(data)
 	});

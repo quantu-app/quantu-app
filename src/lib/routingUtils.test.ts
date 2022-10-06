@@ -27,7 +27,10 @@ import {
     apiDepartmentCourseChapterPath,
     apiDepartmentCourseChaptersPath,
     apiCoursesPath,
-    apiDepartmentCourseChapterLessonRedoPath
+    apiDepartmentCourseChapterLessonRedoPath,
+    userWelcomePath,
+    apiUserPath,
+    apiUserSettingsPath
 } from './routingUtils';
 
 describe('departments', () => {
@@ -88,6 +91,12 @@ describe("challenges", () => {
 describe("courses", () => {
     test('coursesPath', () => {
         expect(coursesPath()).toEqual("/courses");
+    })
+});
+
+describe("users", () => {
+    test('userWelcomePath', () => {
+        expect(userWelcomePath()).toEqual("/user/welcome");
     })
 });
 
@@ -191,4 +200,15 @@ describe("api", () => {
     test('apiAssetPath', () => {
         expect(apiAssetPath("1001")).toEqual("/api/assets/1001");
     });
+
+
+    describe("users", () => {
+        test("apiUserPath", () => {
+            expect(apiUserPath()).toEqual("/api/user");
+        });
+
+        test("apiUserSettingsPath", () => {
+            expect(apiUserSettingsPath()).toEqual("/api/user/settings");
+        });
+    })
 });

@@ -82,6 +82,13 @@ export function coursesPath(): string {
     return `${base}/courses`;
 }
 
+/**
+ * @returns "/user/welcome"
+ */
+export function userWelcomePath() {
+    return `${base}/user/welcome`;
+}
+
 /*=====================
 == API PATHS
 =====================*/
@@ -229,4 +236,18 @@ export function apiResultsChallengeExplainPath(challengeId: string): string {
  */
 export function apiAssetPath(assetId: string) {
     return `${API_PATH}/assets/${assetId}`;
+}
+
+/**
+ * @returns "/api/user"
+ */
+export function apiUserPath() {
+    return `${API_PATH}/user`;
+}
+
+/**
+ * @returns "/api/user/settings"
+ */
+export function apiUserSettingsPath() {
+    return `${API_PATH}/user/settings`;
 }

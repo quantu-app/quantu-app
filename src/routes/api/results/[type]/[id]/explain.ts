@@ -13,15 +13,15 @@ export async function explain(client: PrismaClient, userId: string, type: string
 	const question =
 		type === 'challenge'
 			? await client.challenge.findUnique({
-					where: {
-						id
-					}
-			  })
+				where: {
+					id
+				}
+			})
 			: await client.lessonBlock.findUnique({
-					where: {
-						id
-					}
-			  });
+				where: {
+					id
+				}
+			});
 
 	if (!question) {
 		return null;
@@ -31,16 +31,16 @@ export async function explain(client: PrismaClient, userId: string, type: string
 		where:
 			type === 'challenge'
 				? {
-						userId,
-						challengeId: id
-				  }
+					userId,
+					challengeId: id
+				}
 				: {
-						userId,
-						lessonBlockId: id
-				  }
+					userId,
+					lessonBlockId: id
+				}
 	});
 
-	const data: any = {
+	let data: any = {
 		prompt: question.prompt,
 		type: question.type,
 		value: 0,
@@ -50,6 +50,7 @@ export async function explain(client: PrismaClient, userId: string, type: string
 	};
 
 	if (prevResult) {
+		data.value = prevResult.value;
 		return client.result.update({
 			where: {
 				id: prevResult.id

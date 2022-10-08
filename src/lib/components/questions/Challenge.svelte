@@ -25,6 +25,7 @@
 	function onExplain() {
 		return explain(challenge.id);
 	}
+
 	function onSubmit(a: Answer) {
 		return answer(challenge.id, a);
 	}

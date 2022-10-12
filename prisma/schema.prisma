@@ -7,17 +7,17 @@ generator client {
 }
 
 datasource db {
-  provider = "mongodb"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
 // User
 
 model Email {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
+  id Int @id @default(autoincrement())
 
-  user   User   @relation(fields: [userId], references: [id])
-  userId String @db.ObjectId
+  user   User @relation(fields: [userId], references: [id])
+  userId Int
 
   email     String  @unique
   primary   Boolean @default(false)
@@ -28,10 +28,10 @@ model Email {
 }
 
 model OldPasswords {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
+  id Int @id @default(autoincrement())
 
-  user   User   @relation(fields: [userId], references: [id])
-  userId String @db.ObjectId
+  user   User @relation(fields: [userId], references: [id])
+  userId Int
 
   encryptedPassword String
 
@@ -42,10 +42,10 @@ model OldPasswords {
 }
 
 model ApplicationSettings {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
+  id Int @id @default(autoincrement())
 
-  user   User   @relation(fields: [userId], references: [id])
-  userId String @unique @db.ObjectId
+  user   User @relation(fields: [userId], references: [id])
+  userId Int  @unique
 
   lang String @default("en")
 
@@ -54,7 +54,7 @@ model ApplicationSettings {
 }
 
 model User {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
+  id Int @id @default(autoincrement())
 
   username          String    @unique
   encryptedPassword String
@@ -96,13 +96,13 @@ enum ChangeType {
 }
 
 model Change {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
+  id Int @id @default(autoincrement())
 
-  userId        String      @db.ObjectId
+  userId        Int
   user          User        @relation(fields: [userId], references: [id])
-  prevChangeId  String?     @db.ObjectId
+  prevChangeId  Int
   prevChange    Change?     @relation(name: "PrevChange", fields: [prevChangeId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  referenceId   String?     @db.ObjectId
+  referenceId   Int
   referenceType ChangeType?
 
   latest Boolean
@@ -119,12 +119,12 @@ model Change {
 }
 
 model MergeRequest {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
+  id Int @id @default(autoincrement())
 
   user      User                   @relation(fields: [userId], references: [id])
-  userId    String                 @db.ObjectId
+  userId    Int
   change    Change                 @relation(fields: [changeId], references: [id])
-  changeId  String                 @db.ObjectId
+  changeId  Int
   merged    Boolean                @default(false)
   approvals MergeRequestApproval[]
 
@@ -135,12 +135,12 @@ model MergeRequest {
 }
 
 model MergeRequestApproval {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
+  id Int @id @default(autoincrement())
 
   user           User         @relation(fields: [userId], references: [id])
-  userId         String       @db.ObjectId
+  userId         Int
   mergeRequest   MergeRequest @relation(fields: [mergeRequestId], references: [id])
-  mergeRequestId String       @db.ObjectId
+  mergeRequestId Int
   approved       Boolean      @default(false)
 
   createdAt DateTime @default(now())
@@ -152,12 +152,12 @@ model MergeRequestApproval {
 // Departments
 
 model Department {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
+  id Int @id @default(autoincrement())
 
   name        String
-  url         String  @unique
-  logo        Asset?  @relation(name: "DepartmentLogo", fields: [logoId], references: [id])
-  logoId      String? @db.ObjectId
+  url         String @unique
+  logo        Asset? @relation(name: "DepartmentLogo", fields: [logoId], references: [id])
+  logoId      Int?
   description Json
 
   createdAt DateTime @default(now())
@@ -178,12 +178,12 @@ enum QuestionType {
 }
 
 model Challenge {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
+  id Int @id @default(autoincrement())
 
   logo         Asset?     @relation(name: "ChallengeLogo", fields: [logoId], references: [id])
-  logoId       String?    @db.ObjectId
+  logoId       Int?
   department   Department @relation(fields: [departmentId], references: [id])
-  departmentId String     @db.ObjectId
+  departmentId Int
 
   name        String
   url         String
@@ -204,11 +204,11 @@ model Challenge {
 }
 
 model ChallengeSolution {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
+  id Int @id @default(autoincrement())
 
-  challengeId String    @db.ObjectId
+  challengeId Int
   challenge   Challenge @relation(fields: [challengeId], references: [id])
-  userId      String    @db.ObjectId
+  userId      Int
   user        User      @relation(fields: [userId], references: [id])
 
   solution Json
@@ -222,10 +222,10 @@ model ChallengeSolution {
 }
 
 model ChallengeSolutionVote {
-  id                  String            @id @default(auto()) @map("_id") @db.ObjectId
-  challengeSolutionId String            @db.ObjectId
+  id                  Int               @id @default(autoincrement())
+  challengeSolutionId Int
   challengeSolution   ChallengeSolution @relation(fields: [challengeSolutionId], references: [id])
-  userId              String            @db.ObjectId
+  userId              Int
   user                User              @relation(fields: [userId], references: [id])
 
   vote Boolean?
@@ -245,13 +245,13 @@ enum CommentReferenceType {
 }
 
 model Comment {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
+  id Int @id @default(autoincrement())
 
   referenceType CommentReferenceType @default(CHALLENGE_SOLUTION)
-  referenceId   String               @db.ObjectId
-  commentId     String?              @db.ObjectId
+  referenceId   Int
+  commentId     Int?
   comment       Comment?             @relation(name: "Comments", fields: [commentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  userId        String               @db.ObjectId
+  userId        Int
   user          User                 @relation(fields: [userId], references: [id])
 
   content Json
@@ -267,11 +267,11 @@ model Comment {
 }
 
 model CommentVote {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
+  id Int @id @default(autoincrement())
 
-  commentId String  @db.ObjectId
+  commentId Int
   comment   Comment @relation(fields: [commentId], references: [id])
-  userId    String  @db.ObjectId
+  userId    Int
   user      User    @relation(fields: [userId], references: [id])
 
   vote Boolean?
@@ -283,14 +283,14 @@ model CommentVote {
 }
 
 model Result {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
+  id Int @id @default(autoincrement())
 
   user          User         @relation(fields: [userId], references: [id])
-  userId        String       @db.ObjectId
+  userId        Int
   challenge     Challenge?   @relation(name: "ChallengeResult", fields: [challengeId], references: [id])
-  challengeId   String?      @db.ObjectId
+  challengeId   Int
   lessonBlock   LessonBlock? @relation(name: "LessonBlockResult", fields: [lessonBlockId], references: [id])
-  lessonBlockId String?      @db.ObjectId
+  lessonBlockId Int
 
   type   QuestionType @default(MULTIPLE_CHOICE)
   prompt Json
@@ -310,10 +310,10 @@ enum AssetType {
 }
 
 model Asset {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
+  id Int @id @default(autoincrement())
 
   department   Department @relation(fields: [departmentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  departmentId String     @unique @db.ObjectId
+  departmentId Int
 
   type   AssetType
   name   String
@@ -334,12 +334,12 @@ model Asset {
 // Courses
 
 model Course {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
+  id Int @id @default(autoincrement())
 
   logo         Asset?     @relation(name: "CourseLogo", fields: [logoId], references: [id])
-  logoId       String?    @db.ObjectId
+  logoId       Int?
   department   Department @relation(fields: [departmentId], references: [id])
-  departmentId String     @db.ObjectId
+  departmentId Int
 
   name        String
   url         String
@@ -357,13 +357,13 @@ model Course {
 }
 
 model Chapter {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
+  id Int @id @default(autoincrement())
 
-  logo     Asset?  @relation(name: "ChapterLogo", fields: [logoId], references: [id])
-  logoId   String? @db.ObjectId
-  course   Course  @relation(fields: [courseId], references: [id])
-  courseId String  @db.ObjectId
-  index    Int     @default(0)
+  logo     Asset? @relation(name: "ChapterLogo", fields: [logoId], references: [id])
+  logoId   Int
+  course   Course @relation(fields: [courseId], references: [id])
+  courseId Int
+  index    Int    @default(0)
 
   name        String
   url         String
@@ -382,10 +382,10 @@ model Chapter {
 }
 
 model Quiz {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
+  id Int @id @default(autoincrement())
 
   chapter   Chapter @relation(fields: [chapterId], references: [id])
-  chapterId String  @db.ObjectId
+  chapterId Int
   config    Json
 
   createdAt DateTime @default(now())
@@ -393,12 +393,12 @@ model Quiz {
 }
 
 model Lesson {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
+  id Int @id @default(autoincrement())
 
   logo      Asset?  @relation(name: "LessonLogo", fields: [logoId], references: [id])
-  logoId    String? @db.ObjectId
+  logoId    Int
   chapter   Chapter @relation(fields: [chapterId], references: [id])
-  chapterId String  @db.ObjectId
+  chapterId Int
   index     Int     @default(0)
 
   name         String
@@ -416,10 +416,10 @@ model Lesson {
 }
 
 model LessonBlock {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
+  id Int @id @default(autoincrement())
 
   lesson   Lesson @relation(fields: [lessonId], references: [id])
-  lessonId String @db.ObjectId
+  lessonId Int
   index    Int    @default(0)
 
   name        String

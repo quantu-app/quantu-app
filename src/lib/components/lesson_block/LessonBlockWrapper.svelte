@@ -12,7 +12,7 @@
 			{#if lessonBlock}
 				<div id="lessonBlock-content" data-lessonBlock-id={lessonBlock.id}>
 					<div class="row mt-3 mx-2">
-						<div class="col">
+						<div class="col-8 mx-auto">
 							<slot />
 						</div>
 					</div>

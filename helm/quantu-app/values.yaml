@@ -49,10 +49,25 @@ mongodb:
     storageClass: linode-block-storage-retain
   rbac:
     create: true
-  # externalAccess:
-  #   enabled: true
-  #   create: true
-  #   service.type: LoadBalancer
-  #   service.port: 27017
-  #   autoDiscovery:
-  #     enabled: true
+  externalAccess:
+    enabled: true
+    create: true
+    service.type: LoadBalancer
+    service.port: 27017
+    autoDiscovery:
+      enabled: true
+
+postgresql:
+  architecture: replicaset
+  replication:
+    applicationName: quantu-app
+  auth:
+    database: quantu-app
+    username: quantu
+    replicationUsername: quantu
+  primary:
+    persistence:
+      enabled: true
+      storageClass: linode-block-storage-retain
+  rbac:
+    create: true

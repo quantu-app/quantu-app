@@ -1,6 +1,4 @@
 <script lang="ts">
-\
-
 	import UserLayout from '$lib/components/layouts/UserLayout.svelte';
 	import { page } from '$app/stores';
 	import { challengesByDepartmentUrl, showChallengeByUrl } from '$lib/state/challenges';
@@ -11,7 +9,7 @@
 	import type { PageData } from './$types';
 
 	export let data: PageData;
-	
+
 	$: ({ departmentUrl, url } = data);
 
 	$: challenge = ($challengesByDepartmentUrl[departmentUrl] || {})[url];

@@ -1,5 +1,5 @@
 import cookie from 'cookie';
-import { dev, prerendering } from '$app/environment';
+import { prerendering } from '$app/environment';
 import { decode } from '$lib/api/jwt';
 import type { IJwtString } from '$lib/api/jwt';
 import type { Handle, HandleServerError } from '@sveltejs/kit';

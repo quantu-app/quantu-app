@@ -1,4 +1,3 @@
-import { dev } from "$app/env";
 
 export const config = {
     lessons: {

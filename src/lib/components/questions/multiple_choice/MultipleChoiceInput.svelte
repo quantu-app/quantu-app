@@ -49,6 +49,7 @@
 				<div class="flex-shink-0 flex-row justify-content-center align-self-center me-3">
 					<Checkbox
 						{disabled}
+						rounded={!!prompt.singleAnswer}
 						status={isCorrect ? 'success' : isIncorrect ? 'error' : undefined}
 						checked={selected[choice.id]}
 					/>

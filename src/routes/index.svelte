@@ -2,11 +2,20 @@
 	export function load(input: LoadInput): LoadOutput {
 		const redirectPath = input.url.searchParams.get('redirectPath');
 
-		return {
-			props: {
-				redirectPath
-			}
-		};
+		let { session } = input;
+
+		if (session && session.user && !redirectPath) {
+			return {
+				status: 302,
+				redirect: challengesPath()
+			};
+		} else {
+			return {
+				props: {
+					redirectPath
+				}
+			};
+		}
 	}
 </script>
 
@@ -17,8 +26,9 @@
 	import { base } from '$app/paths';
 	import type { LoadInput, LoadOutput } from '@sveltejs/kit/types/internal';
 	import SEO from '$lib/components/SEO/index.svelte';
+	import { challengesPath } from '$lib/routingUtils';
 
-	export let redirectPath: string = undefined;
+	export let redirectPath: string | undefined = undefined;
 
 	if (redirectPath && !get(redirectPathWritable)) {
 		redirectPathWritable.set(redirectPath);

@@ -5,11 +5,13 @@
 	import { page } from '$app/stores';
 	import { currentUser } from '$lib/state/user';
 	import { challengesPath, coursesPath } from '$lib/routingUtils';
+
+	$: rootPath = $currentUser ? challengesPath() : '/';
 </script>
 
 <nav class="navbar navbar-dark navbar-expand bg-dark justify-content-between">
 	<div class="container">
-		<a class="navbar-brand logo" href="/">
+		<a class="navbar-brand logo" href={rootPath}>
 			<img
 				src="https://raw.githubusercontent.com/quantu-app/design-platform/master/branding/logo/1x/logo-matrix-symmetric.png"
 				alt="[Q]"

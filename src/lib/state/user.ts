@@ -53,12 +53,12 @@ export async function signIn() {
 	if (user.confirmed) {
 		if (redirectPath) {
 			redirectPathWritable.set(undefined);
-			goto(redirectPath);
+			window.location.href = redirectPath;
 		} else {
-			goto(challengesPath());
+			await goto(challengesPath());
 		}
 	} else {
-		goto(userWelcomePath());
+		await goto(userWelcomePath());
 	}
 	userEmitter.emit('signIn', user);
 }

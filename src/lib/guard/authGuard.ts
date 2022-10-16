@@ -1,6 +1,6 @@
-import { redirect, type Load } from '@sveltejs/kit';
+import { redirect } from '@sveltejs/kit';
 
-export const authGuard: Load = async ({ url, parent }) => {
+export const authGuard = async ({ parent, url }: any) => {
 	const { user } = await parent();
 
 	if (!user) {

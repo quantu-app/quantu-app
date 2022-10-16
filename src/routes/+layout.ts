@@ -1,7 +1,13 @@
 import type { LayoutLoad } from './$types';
 import '../app.scss';
-import { currentUserWritable } from '$lib/state/user';
+import { currentUserWritable, type StateUser } from '$lib/state/user';
 
 export const load: LayoutLoad = async (event) => {
-	currentUserWritable.set(event.data.user);
+	const user = event.data.user;
+
+	currentUserWritable.set(user as StateUser);
+
+	return {
+		user: user as StateUser
+	};
 };

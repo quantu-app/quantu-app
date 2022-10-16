@@ -8,7 +8,7 @@
 
 	export let data: PageData;
 
-	if (data.redirectPath && !get(redirectPathWritable)) {
+	$: if (!$currentUser && data.redirectPath && !get(redirectPathWritable)) {
 		redirectPathWritable.set(data.redirectPath);
 	}
 

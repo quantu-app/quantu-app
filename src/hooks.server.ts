@@ -4,6 +4,8 @@ import { decode } from '$lib/api/jwt';
 import type { IJwtString } from '$lib/api/jwt';
 import type { Handle, HandleServerError } from '@sveltejs/kit';
 import type { ITokenValue } from '$lib/api/auth';
+import { run } from '$lib/prisma';
+import type { StateUser } from '$lib/state/user';
 
 export const handle: Handle = async ({ event, resolve }) => {
 	const rawToken = event.request.headers.has('cookie')
@@ -15,6 +17,31 @@ export const handle: Handle = async ({ event, resolve }) => {
 	}
 	if (event.locals.rawToken) {
 		event.locals.token = await decode(event.locals.rawToken);
+	}
+	if (event.locals.token) {
+		event.locals.user = await run(
+			async (client) =>
+				(await client.user.findUnique({
+					where: {
+						id: event.locals.token?.userId as string
+					},
+					select: {
+						id: true,
+						username: true,
+						creator: true,
+						active: true,
+						emails: true,
+						confirmed: true,
+						firstName: true,
+						lastName: true,
+						birthday: true,
+						country: true,
+						bio: true,
+						createdAt: true,
+						updatedAt: true
+					}
+				})) as StateUser
+		);
 	}
 	return resolve(event);
 };

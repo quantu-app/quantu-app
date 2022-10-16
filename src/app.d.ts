@@ -2,6 +2,7 @@
 
 import type { ITokenValue } from '$lib/api/auth';
 import type { IJwtString } from '$lib/api/jwt';
+import type { StateUser } from '$lib/state/user';
 import type * as bootstrap from 'bootstrap';
 
 declare global {
@@ -9,6 +10,7 @@ declare global {
 		interface Locals {
 			rawToken?: IJwtString<ITokenValue>;
 			token?: ITokenValue;
+			user?: StateUser;
 		}
 
 		// interface Platform {}

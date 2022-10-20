@@ -2,7 +2,11 @@ import type { Course } from '@prisma/client';
 import { writable, derived, get } from 'svelte/store';
 import { JSON_HEADERS, type IFetch } from '../utils';
 import { addOrUpdate, resourceFromJSON } from './common';
-import { apiCoursesPath, apiDepartmentCoursePath, apiDepartmentCoursesPath } from '$lib/routingUtils';
+import {
+	apiCoursesPath,
+	apiDepartmentCoursePath,
+	apiDepartmentCoursesPath
+} from '$lib/routingUtils';
 
 export type StateCourse = Course & {
 	lessons: number;

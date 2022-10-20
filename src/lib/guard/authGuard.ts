@@ -1,20 +1,18 @@
-import type { Load } from '@sveltejs/kit';
+import { redirect } from '@sveltejs/kit';
 
-export const authGuard: Load = ({ url, session }) => {
-	if (session?.user) {
-		return {};
-	} else {
-		const output = {
-			status: 302,
-			redirect: '/'
-		},
-			redirectQuery = url.searchParams.toString(),
+export const authGuard = async ({ parent, url }: any) => {
+	const { user } = await parent();
+
+	if (!user) {
+		const redirectQuery = url.searchParams.toString(),
 			redirectPath = url.pathname + (redirectQuery ? '?' + redirectQuery : '');
 
+		let path = '/';
+
 		if (redirectPath && url.pathname !== '/') {
-			output.redirect += `?redirectPath=${encodeURIComponent(redirectPath)}`;
+			path += `?redirectPath=${encodeURIComponent(redirectPath)}`;
 		}
 
-		return output;
+		throw redirect(302, path);
 	}
 };

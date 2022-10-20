@@ -16,4 +16,4 @@
 	<p>Please confirm or adjust the following information to finish activating your profile.</p>
 </div>
 
-<EditProfile {user} />
+<EditProfile {user} redirect />

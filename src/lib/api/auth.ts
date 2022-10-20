@@ -1,5 +1,5 @@
 import { run } from '$lib/prisma';
-import type { RequestEvent, RequestHandler } from '@sveltejs/kit/types/internal';
+import { error, type RequestEvent, type RequestHandler } from '@sveltejs/kit';
 
 export interface ITokenValue {
 	userId: string;
@@ -21,12 +21,12 @@ export const isCreator = (handler: RequestHandler) =>
 						id: event.locals.token?.userId
 					}
 				})
-				.then((user) =>
-					user?.creator
-						? handler(event)
-						: {
-								status: 403
-						  }
-				)
+				.then((user) => {
+					if (user?.creator) {
+						return handler(event);
+					} else {
+						throw error(403);
+					}
+				})
 		)
 	);

@@ -1,13 +1,17 @@
-import type { Readable } from 'svelte/store';
+import type { Readable, Writable } from 'svelte/store';
 import { get, writable, derived } from 'svelte/store';
 import EventEmitter from 'eventemitter3';
-import { session } from '$app/stores';
 import Cookies from 'js-cookie';
 import type { ApplicationSettings, User, Email } from '@prisma/client';
 import { base } from '$app/paths';
 import { goto } from '$app/navigation';
-import { apiUserPath, apiUserSettingsPath, challengesPath, userWelcomePath } from '$lib/routingUtils';
-import { subYears } from "date-fns";
+import {
+	apiUserPath,
+	apiUserSettingsPath,
+	challengesPath,
+	userWelcomePath
+} from '$lib/routingUtils';
+import { subYears } from 'date-fns';
 import { DEFAULT_AGE } from '$lib/components/user/userProfileSuite';
 
 export type PublicUser = User & {
@@ -20,7 +24,8 @@ export type StateUser = PublicUser & {
 };
 
 export const redirectPathWritable = writable<string | undefined>();
-export const currentUser: Readable<StateUser> = derived(session, (session) => session?.user);
+export const currentUserWritable: Writable<StateUser | null> = writable(null);
+export const currentUser: Readable<StateUser | null> = derived(currentUserWritable, (user) => user);
 export const signedIn = derived(currentUser, (currentUser) => !!currentUser);
 
 export const userEmitter = new EventEmitter<{
@@ -44,16 +49,16 @@ export async function signIn() {
 	const user = userFromJSON(await res.json());
 	const redirectPath = get(redirectPathWritable);
 
-	session.update((session) => ({ ...session, user }));
+	currentUserWritable.update((state) => ({ ...state, ...user }));
 	if (user.confirmed) {
 		if (redirectPath) {
 			redirectPathWritable.set(undefined);
-			goto(redirectPath);
+			window.location.href = redirectPath;
 		} else {
-			goto(challengesPath());
+			await goto(challengesPath());
 		}
 	} else {
-		goto(userWelcomePath());
+		await goto(userWelcomePath());
 	}
 	userEmitter.emit('signIn', user);
 }
@@ -61,7 +66,7 @@ export async function signIn() {
 export async function signOut() {
 	await goto(`${base}/`);
 	Cookies.remove('token');
-	session.set(null);
+	currentUserWritable.set(null);
 	redirectPathWritable.set(undefined);
 	userEmitter.emit('signOut');
 }
@@ -73,7 +78,7 @@ export async function updateUser(data: Partial<User>) {
 	});
 	if (res.ok) {
 		const user = userFromJSON(await res.json());
-		session.update((session) => ({ ...session, user }));
+		currentUserWritable.update((state) => ({ ...state, ...user }));
 		return user;
 	} else {
 		throw await res.json();
@@ -87,7 +92,7 @@ export async function updateSettings(data: Partial<ApplicationSettings>) {
 	});
 	if (res.ok) {
 		const settings = userFromJSON(await res.json());
-		session.update((session) => ({ ...session, user: { ...session.user, settings } }));
+		currentUserWritable.update((state) => (state ? { ...state, settings } : null));
 		return settings;
 	} else {
 		throw await res.json();

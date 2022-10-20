@@ -1,12 +1,15 @@
 import type { PrismaClient, Prisma } from '@prisma/client';
 import prisma from '@prisma/client';
-import type { MaybePromise } from '@sveltejs/kit/types/internal';
+import type { MaybePromise } from '@sveltejs/kit/types/private';
 
-const prismaConfig = process.env.NODE_ENV === 'production' ? {
-	log: ['error'] as Prisma.LogLevel[]
-} : {
-	log: ['query', 'info', 'warn', 'error'] as Prisma.LogLevel[]
-};
+const prismaConfig =
+	process.env.NODE_ENV === 'production'
+		? {
+				log: ['error'] as Prisma.LogLevel[]
+		  }
+		: {
+				log: ['query', 'info', 'warn', 'error'] as Prisma.LogLevel[]
+		  };
 
 const client = new prisma.PrismaClient(prismaConfig);
 

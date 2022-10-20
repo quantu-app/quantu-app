@@ -18,6 +18,7 @@
 	import { onMount } from 'svelte';
 
 	export let user: User;
+	export let redirect = false;
 
 	let username = user.username;
 	let firstName = user.firstName || '';
@@ -76,7 +77,9 @@
 				birthday: date,
 				country
 			});
-			await goto(`${base}/challenges`);
+			if (redirect) {
+				await goto(`${base}/challenges`);
+			}
 		} catch (e) {
 			console.error(e);
 			addNotification({

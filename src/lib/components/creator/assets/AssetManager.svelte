@@ -13,7 +13,7 @@
 </script>
 
 <script lang="ts">
-	import { browser } from '$app/env';
+	import { browser } from '$app/environment';
 	import { assets, showAssets } from '$lib/state/creator/assets';
 	import AssetUpload from './AssetUpload.svelte';
 	import DeleteAsset from './DeleteAsset.svelte';

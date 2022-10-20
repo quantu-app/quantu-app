@@ -32,26 +32,29 @@ interface APIError {
 
 function handleErrors(response: Response): APIError | undefined {
 	if (response.ok) {
-		return
+		return;
 	}
 
 	if (response.status === 404) {
 		return {
-			code: "NOT_FOUND",
+			code: 'NOT_FOUND',
 			status: 404,
-			message: response.statusText,
+			message: response.statusText
 		};
 	}
 	if (response.status === 500) {
 		return {
-			code: "INTERNAL_SERVER_ERROR",
+			code: 'INTERNAL_SERVER_ERROR',
 			status: 500,
 			message: response.statusText
-		}
+		};
 	}
 }
 
-export async function showDepartmentByUrl(url: string, fetchFn: IFetch = fetch): Promise<Department> {
+export async function showDepartmentByUrl(
+	url: string,
+	fetchFn: IFetch = fetch
+): Promise<Department> {
 	const res = await fetchFn(apiDepartmentPath(url), { headers: JSON_HEADERS });
 	const error = handleErrors(res);
 	if (error) {

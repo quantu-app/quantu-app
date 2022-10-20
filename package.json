@@ -27,6 +27,7 @@
 		"svelte-kit": "svelte-kit",
 		"sync": "svelte-kit sync",
 		"clean": "rm -rf node_modules/.vite .svelte-kit build",
+		"dev": "vite dev --host",
 		"start": "vite dev --host --open",
 		"build": "vite build",
 		"preview": "vite preview",

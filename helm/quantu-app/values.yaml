@@ -71,3 +71,5 @@ postgresql:
       storageClass: linode-block-storage-retain
   rbac:
     create: true
+  networkPolicy:
+    enabled: true

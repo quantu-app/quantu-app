@@ -20,7 +20,7 @@ export const departmentsById = derived(departmentsWritable, (departments) =>
 	}, {} as { [id: string]: StateDepartment })
 );
 
-export async function showDepartmentById(id: string, fetchFn: IFetch = fetch) {
+export async function showDepartmentById(id: number, fetchFn: IFetch = fetch) {
 	const res = await fetchFn(`${base}/api/creator/departments/${id}`, {
 		headers: {
 			'Content-Type': 'application/json'

@@ -107,7 +107,7 @@ export async function showChangesByIds(ids: string[], fetchFn: IFetch = fetch) {
 
 export async function createChange(
 	referenceType: ChangeType,
-	referenceId: string | null,
+	referenceId: string | undefined,
 	name: string,
 	value: Change['value']
 ) {

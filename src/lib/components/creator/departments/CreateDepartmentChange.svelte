@@ -21,7 +21,7 @@
 	async function onCreateDepartment() {
 		creatingDepartmentChange = true;
 		try {
-			const { id } = await createChange('DEPARTMENT', null, name, departmentChange as any);
+			const { id } = await createChange('DEPARTMENT', undefined, name, departmentChange as any);
 			open = false;
 			await goto(`${base}/creator/departments/changes/${id}`);
 			departmentChange = {};

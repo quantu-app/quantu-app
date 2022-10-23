@@ -51,6 +51,11 @@ mongodb:
     create: true
   externalAccess:
     enabled: true
+    create: true
+    service.type: LoadBalancer
+    service.port: 27017
+    autoDiscovery:
+      enabled: true
 
 postgresql:
   architecture: replicaset

@@ -38,6 +38,13 @@ mongo -u root -p password admin
 
 If you have a local mongo db or online instance, just set `DATABASE_URL` in the .env to have the app connect to the db.
 
+### Connect to remote
+
+```bash
+kubectl port-forward --namespace ui svc/quantu-app-postgresql 5432:5432
+kubectl port-forward --namespace ui svc/quantu-app-mongodb-headless 27017:27017
+```
+
 ## Development
 
 ### Prisma

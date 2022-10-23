@@ -49,6 +49,8 @@ mongodb:
     storageClass: linode-block-storage-retain
   rbac:
     create: true
+  externalAccess:
+    enabled: true
 
 postgresql:
   architecture: replicaset

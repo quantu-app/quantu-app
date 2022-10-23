@@ -1,18 +1,18 @@
 import { authenticated } from '$lib/api/auth';
 import { run } from '$lib/prisma';
 import type { CommentReferenceType, PrismaClient } from '@prisma/client';
-import { deleteComments } from '../../../../../../comments/[referenceType]/[referenceId]/[commentId]';
-import { getCommentsByReferenceId } from '../../../../../../comments/[referenceType]/[referenceId]';
+import { deleteComments } from '../../../../../../comments/[referenceType]/[referenceId]/[commentId]/+server';
+import { getCommentsByReferenceId } from '../../../../../../comments/[referenceType]/[referenceId]/+server';
 
 export const GET = authenticated(async (event) => {
 	const solution = await run((client) =>
 		getSolutionById(
 			client,
-			event.params.solutionId,
+			event.params.solutionId as string,
 			parseInt(event.url.searchParams.get('depth') || '2')
 		)
 	);
-	return new Response(solution, { status: solution ? 200 : 404 });
+	return new Response(JSON.stringify(solution), { status: solution ? 200 : 404 });
 });
 
 export async function getSolutionById(client: PrismaClient, solutionId: string, depth?: number) {
@@ -52,20 +52,27 @@ export async function getSolutionById(client: PrismaClient, solutionId: string, 
 	return solution;
 }
 
-export const PATCH = authenticated(async (event) => ({
-	body: await run(async (client) =>
-		updateSolution(
-			client,
-			event.params.deparementUrl,
-			event.params.challengeUrl,
-			event.params.solutionId,
-			event.locals.token?.userId as string,
-			await event.request.json(),
-			parseInt(event.url.searchParams.get('depth') || '2')
+export const PATCH = authenticated(
+	async (event) =>
+		new Response(
+			JSON.stringify(
+				await run(async (client) =>
+					updateSolution(
+						client,
+						event.params.deparementUrl as string,
+						event.params.challengeUrl as string,
+						event.params.solutionId as string,
+						event.locals.token?.userId as string,
+						await event.request.json(),
+						parseInt(event.url.searchParams.get('depth') || '2')
+					)
+				)
+			),
+			{
+				status: 200
+			}
 		)
-	),
-	status: 200
-}));
+);
 
 export async function updateSolution(
 	client: PrismaClient,
@@ -76,7 +83,7 @@ export async function updateSolution(
 	data: any,
 	depth?: number
 ) {
-	const { id: challengeId } = await client.challenge.findFirst({
+	const challenge = await client.challenge.findFirst({
 		where: {
 			url: challengeUrl,
 			department: {
@@ -87,11 +94,14 @@ export async function updateSolution(
 			id: true
 		}
 	});
+	if (!challenge) {
+		return null;
+	}
 	const solution = await client.challengeSolution.update({
 		where: {
 			userId_challengeId: {
 				userId,
-				challengeId
+				challengeId: challenge.id
 			}
 		},
 		data: {
@@ -133,13 +143,13 @@ export const DELETE = authenticated(async (event) => {
 	const solution = await run((client) =>
 		deleteSolutionById(
 			client,
-			event.params.deparementUrl,
-			event.params.challengeUrl,
-			event.params.solutionId,
-			event.locals.token?.userId
+			event.params.deparementUrl as string,
+			event.params.challengeUrl as string,
+			event.params.solutionId as string,
+			event.locals.token?.userId as string
 		)
 	);
-	return new Response(solution, { status: solution ? 200 : 404 });
+	return new Response(JSON.stringify(solution), { status: solution ? 200 : 404 });
 });
 
 export async function deleteSolutionById(
@@ -149,7 +159,7 @@ export async function deleteSolutionById(
 	solutionId: string,
 	userId: string
 ) {
-	const { id: challengeId } = await client.challenge.findFirst({
+	const challenge = await client.challenge.findFirst({
 		where: {
 			url: challengeUrl,
 			department: {
@@ -160,11 +170,14 @@ export async function deleteSolutionById(
 			id: true
 		}
 	});
+	if (!challenge) {
+		return null;
+	}
 	const solution = await client.challengeSolution.delete({
 		where: {
 			userId_challengeId: {
 				userId,
-				challengeId
+				challengeId: challenge.id
 			}
 		},
 		include: {

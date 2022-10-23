@@ -1,12 +1,17 @@
 import { isCreator } from '$lib/api/auth';
 import { run } from '$lib/prisma';
 import type { PrismaClient } from '@prisma/client';
-import { getReferenceType } from '..';
+import { getReferenceType } from '../+server';
 
 export const GET = isCreator(async (event) => {
-	return new Response(await run((client) => getMergeRequest(client, event.params.mergeRequestId)), {
-		status: 200
-	});
+	return new Response(
+		JSON.stringify(
+			await run((client) => getMergeRequest(client, event.params.mergeRequestId as string))
+		),
+		{
+			status: 200
+		}
+	);
 });
 
 export async function getMergeRequest(client: PrismaClient, mergeRequestId: string) {

@@ -2,19 +2,26 @@ import { authenticated } from '$lib/api/auth';
 import { run } from '$lib/prisma';
 import type { Comment, PrismaClient } from '@prisma/client';
 import type { CommentReferenceType } from '@prisma/client';
-import { getCommentsByReferenceId } from '../../../../../comments/[referenceType]/[referenceId]';
+import { getCommentsByReferenceId } from '../../../../../comments/[referenceType]/[referenceId]/+server';
 
-export const GET = authenticated(async (event) => ({
-	body: await run((client) =>
-		getSolutions(
-			client,
-			event.params.departmentUrl,
-			event.params.challengeUrl,
-			parseInt(event.url.searchParams.get('depth') || '2')
+export const GET = authenticated(
+	async (event) =>
+		new Response(
+			JSON.stringify(
+				await run((client) =>
+					getSolutions(
+						client,
+						event.params.departmentUrl as string,
+						event.params.challengeUrl as string,
+						parseInt(event.url.searchParams.get('depth') || '2')
+					)
+				)
+			),
+			{
+				status: 200
+			}
 		)
-	),
-	status: 200
-}));
+);
 
 export async function getSolutions(
 	client: PrismaClient,
@@ -70,18 +77,25 @@ export async function getSolutions(
 	});
 }
 
-export const POST = authenticated(async (event) => ({
-	body: await run(async (client) =>
-		createSolution(
-			client,
-			event.params.departmentUrl,
-			event.params.challengeUrl,
-			event.locals.token?.userId as string,
-			await event.request.json()
+export const POST = authenticated(
+	async (event) =>
+		new Response(
+			JSON.stringify(
+				await run(async (client) =>
+					createSolution(
+						client,
+						event.params.departmentUrl as string,
+						event.params.challengeUrl as string,
+						event.locals.token?.userId as string,
+						await event.request.json()
+					)
+				)
+			),
+			{
+				status: 201
+			}
 		)
-	),
-	status: 201
-}));
+);
 
 export async function createSolution(
 	client: PrismaClient,
@@ -102,12 +116,7 @@ export async function createSolution(
 				connect: {
 					departmentId_url: {
 						url: challengeUrl,
-						departmentId: (
-							await client.department.findUnique({
-								where: { url: departmentUrl },
-								select: { id: true }
-							})
-						).id
+						department: { url: departmentUrl }
 					}
 				}
 			}

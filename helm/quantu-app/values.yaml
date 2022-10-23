@@ -73,3 +73,6 @@ postgresql:
     create: true
   networkPolicy:
     enabled: true
+    ingressRules:
+      primaryAccessOnlyFrom:
+        enabled: true

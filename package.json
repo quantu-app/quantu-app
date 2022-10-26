@@ -21,6 +21,9 @@
 			"email": "jwaterfaucett@gmail.com"
 		}
 	],
+	"prisma": {
+		"seed": "ts-node prisma/seed.ts"
+	},
 	"scripts": {
 		"prisma": "prisma",
 		"vite": "vite",
@@ -65,10 +68,12 @@
 		"@types/jsonwebtoken": "^8.5.9",
 		"@types/katex": "^0.14.0",
 		"@types/mime": "^3.0.1",
+		"@types/node": "^18.11.4",
 		"@types/prismjs": "^1.26.0",
 		"@typescript-eslint/eslint-plugin": "^5.39.0",
 		"@typescript-eslint/parser": "^5.39.0",
 		"bootstrap": "^5.2.2",
+		"csv": "^6.2.1",
 		"eslint": "^8.25.0",
 		"eslint-config-prettier": "^8.5.0",
 		"eslint-plugin-svelte3": "^4.0.0",
@@ -82,6 +87,7 @@
 		"svelte-jester": "^2.3.2",
 		"svelte-preprocess": "^4.10.7",
 		"ts-jest": "^29.0.3",
+		"ts-node": "^10.9.1",
 		"tslib": "^2.4.0",
 		"typescript": "^4.8.4",
 		"vite": "^3.1.6"

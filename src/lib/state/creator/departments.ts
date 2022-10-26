@@ -20,7 +20,7 @@ export const departmentsById = derived(departmentsWritable, (departments) =>
 	}, {} as { [id: string]: StateDepartment })
 );
 
-export async function showDepartmentById(id: number, fetchFn: IFetch = fetch) {
+export async function showDepartmentById(id: string, fetchFn: IFetch = fetch) {
 	const res = await fetchFn(`${base}/api/creator/departments/${id}`, {
 		headers: {
 			'Content-Type': 'application/json'
@@ -38,17 +38,17 @@ export async function showDepartments(ids: string[] = [], fetchFn: IFetch = fetc
 	const res =
 		ids && ids.length
 			? await fetchFn(`${base}/api/creator/departments${createQueryParams({ ids })}`, {
-					method: 'PUT',
-					headers: {
-						'Content-Type': 'application/json'
-					},
-					body: JSON.stringify(ids)
-			  })
+				method: 'PUT',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify(ids)
+			})
 			: await fetchFn(`${base}/api/creator/departments${createQueryParams({ ids })}`, {
-					headers: {
-						'Content-Type': 'application/json'
-					}
-			  });
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			});
 	if (!res.ok) {
 		throw await res.json();
 	}

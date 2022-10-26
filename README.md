@@ -18,7 +18,12 @@ cp .env.example .env
 npm run secret
 ```
 
-Setup database
+## Setup database
+
+### Seeding the DB
+```
+npx prisma db seed
+```
 
 **Option 1** : docker-compose mongo backend
 

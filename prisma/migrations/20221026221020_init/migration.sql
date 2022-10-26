@@ -12,8 +12,8 @@ CREATE TYPE "AssetType" AS ENUM ('IMAGE', 'VIDEO', 'AUDIO');
 
 -- CreateTable
 CREATE TABLE "Email" (
-    "id" SERIAL NOT NULL,
-    "userId" INTEGER NOT NULL,
+    "id" TEXT NOT NULL,
+    "userId" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "primary" BOOLEAN NOT NULL DEFAULT false,
     "confirmed" BOOLEAN NOT NULL DEFAULT false,
@@ -25,8 +25,8 @@ CREATE TABLE "Email" (
 
 -- CreateTable
 CREATE TABLE "OldPasswords" (
-    "id" SERIAL NOT NULL,
-    "userId" INTEGER NOT NULL,
+    "id" TEXT NOT NULL,
+    "userId" TEXT NOT NULL,
     "encryptedPassword" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
@@ -36,8 +36,8 @@ CREATE TABLE "OldPasswords" (
 
 -- CreateTable
 CREATE TABLE "ApplicationSettings" (
-    "id" SERIAL NOT NULL,
-    "userId" INTEGER NOT NULL,
+    "id" TEXT NOT NULL,
+    "userId" TEXT NOT NULL,
     "lang" TEXT NOT NULL DEFAULT 'en',
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
@@ -47,7 +47,7 @@ CREATE TABLE "ApplicationSettings" (
 
 -- CreateTable
 CREATE TABLE "User" (
-    "id" SERIAL NOT NULL,
+    "id" TEXT NOT NULL,
     "username" TEXT NOT NULL,
     "encryptedPassword" TEXT NOT NULL,
     "creator" BOOLEAN NOT NULL DEFAULT false,
@@ -66,10 +66,10 @@ CREATE TABLE "User" (
 
 -- CreateTable
 CREATE TABLE "Change" (
-    "id" SERIAL NOT NULL,
-    "userId" INTEGER NOT NULL,
-    "prevChangeId" INTEGER NOT NULL,
-    "referenceId" INTEGER NOT NULL,
+    "id" TEXT NOT NULL,
+    "userId" TEXT NOT NULL,
+    "prevChangeId" TEXT NOT NULL,
+    "referenceId" TEXT NOT NULL,
     "referenceType" "ChangeType",
     "latest" BOOLEAN NOT NULL,
     "name" TEXT NOT NULL,
@@ -82,9 +82,9 @@ CREATE TABLE "Change" (
 
 -- CreateTable
 CREATE TABLE "MergeRequest" (
-    "id" SERIAL NOT NULL,
-    "userId" INTEGER NOT NULL,
-    "changeId" INTEGER NOT NULL,
+    "id" TEXT NOT NULL,
+    "userId" TEXT NOT NULL,
+    "changeId" TEXT NOT NULL,
     "merged" BOOLEAN NOT NULL DEFAULT false,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
@@ -94,9 +94,9 @@ CREATE TABLE "MergeRequest" (
 
 -- CreateTable
 CREATE TABLE "MergeRequestApproval" (
-    "id" SERIAL NOT NULL,
-    "userId" INTEGER NOT NULL,
-    "mergeRequestId" INTEGER NOT NULL,
+    "id" TEXT NOT NULL,
+    "userId" TEXT NOT NULL,
+    "mergeRequestId" TEXT NOT NULL,
     "approved" BOOLEAN NOT NULL DEFAULT false,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
@@ -106,10 +106,10 @@ CREATE TABLE "MergeRequestApproval" (
 
 -- CreateTable
 CREATE TABLE "Department" (
-    "id" SERIAL NOT NULL,
+    "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "url" TEXT NOT NULL,
-    "logoId" INTEGER,
+    "logoId" TEXT,
     "description" JSONB NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
@@ -119,9 +119,9 @@ CREATE TABLE "Department" (
 
 -- CreateTable
 CREATE TABLE "Challenge" (
-    "id" SERIAL NOT NULL,
-    "logoId" INTEGER,
-    "departmentId" INTEGER NOT NULL,
+    "id" TEXT NOT NULL,
+    "logoId" TEXT,
+    "departmentId" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "url" TEXT NOT NULL,
     "description" JSONB NOT NULL,
@@ -137,9 +137,9 @@ CREATE TABLE "Challenge" (
 
 -- CreateTable
 CREATE TABLE "ChallengeSolution" (
-    "id" SERIAL NOT NULL,
-    "challengeId" INTEGER NOT NULL,
-    "userId" INTEGER NOT NULL,
+    "id" TEXT NOT NULL,
+    "challengeId" TEXT NOT NULL,
+    "userId" TEXT NOT NULL,
     "solution" JSONB NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
@@ -149,9 +149,9 @@ CREATE TABLE "ChallengeSolution" (
 
 -- CreateTable
 CREATE TABLE "ChallengeSolutionVote" (
-    "id" SERIAL NOT NULL,
-    "challengeSolutionId" INTEGER NOT NULL,
-    "userId" INTEGER NOT NULL,
+    "id" TEXT NOT NULL,
+    "challengeSolutionId" TEXT NOT NULL,
+    "userId" TEXT NOT NULL,
     "vote" BOOLEAN,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
@@ -161,11 +161,11 @@ CREATE TABLE "ChallengeSolutionVote" (
 
 -- CreateTable
 CREATE TABLE "Comment" (
-    "id" SERIAL NOT NULL,
+    "id" TEXT NOT NULL,
     "referenceType" "CommentReferenceType" NOT NULL DEFAULT 'CHALLENGE_SOLUTION',
-    "referenceId" INTEGER NOT NULL,
-    "commentId" INTEGER,
-    "userId" INTEGER NOT NULL,
+    "referenceId" TEXT NOT NULL,
+    "commentId" TEXT,
+    "userId" TEXT NOT NULL,
     "content" JSONB NOT NULL,
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -176,9 +176,9 @@ CREATE TABLE "Comment" (
 
 -- CreateTable
 CREATE TABLE "CommentVote" (
-    "id" SERIAL NOT NULL,
-    "commentId" INTEGER NOT NULL,
-    "userId" INTEGER NOT NULL,
+    "id" TEXT NOT NULL,
+    "commentId" TEXT NOT NULL,
+    "userId" TEXT NOT NULL,
     "vote" BOOLEAN,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
@@ -188,10 +188,10 @@ CREATE TABLE "CommentVote" (
 
 -- CreateTable
 CREATE TABLE "Result" (
-    "id" SERIAL NOT NULL,
-    "userId" INTEGER NOT NULL,
-    "challengeId" INTEGER NOT NULL,
-    "lessonBlockId" INTEGER NOT NULL,
+    "id" TEXT NOT NULL,
+    "userId" TEXT NOT NULL,
+    "challengeId" TEXT NOT NULL,
+    "lessonBlockId" TEXT NOT NULL,
     "type" "QuestionType" NOT NULL DEFAULT 'MULTIPLE_CHOICE',
     "prompt" JSONB NOT NULL,
     "answer" JSONB,
@@ -204,8 +204,8 @@ CREATE TABLE "Result" (
 
 -- CreateTable
 CREATE TABLE "Asset" (
-    "id" SERIAL NOT NULL,
-    "departmentId" INTEGER NOT NULL,
+    "id" TEXT NOT NULL,
+    "departmentId" TEXT NOT NULL,
     "type" "AssetType" NOT NULL,
     "name" TEXT NOT NULL,
     "folder" TEXT NOT NULL,
@@ -217,9 +217,9 @@ CREATE TABLE "Asset" (
 
 -- CreateTable
 CREATE TABLE "Course" (
-    "id" SERIAL NOT NULL,
-    "logoId" INTEGER,
-    "departmentId" INTEGER NOT NULL,
+    "id" TEXT NOT NULL,
+    "logoId" TEXT,
+    "departmentId" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "url" TEXT NOT NULL,
     "description" JSONB NOT NULL,
@@ -233,9 +233,9 @@ CREATE TABLE "Course" (
 
 -- CreateTable
 CREATE TABLE "Chapter" (
-    "id" SERIAL NOT NULL,
-    "logoId" INTEGER NOT NULL,
-    "courseId" INTEGER NOT NULL,
+    "id" TEXT NOT NULL,
+    "logoId" TEXT,
+    "courseId" TEXT NOT NULL,
     "index" INTEGER NOT NULL DEFAULT 0,
     "name" TEXT NOT NULL,
     "url" TEXT NOT NULL,
@@ -250,8 +250,8 @@ CREATE TABLE "Chapter" (
 
 -- CreateTable
 CREATE TABLE "Quiz" (
-    "id" SERIAL NOT NULL,
-    "chapterId" INTEGER NOT NULL,
+    "id" TEXT NOT NULL,
+    "chapterId" TEXT NOT NULL,
     "config" JSONB NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
@@ -261,9 +261,9 @@ CREATE TABLE "Quiz" (
 
 -- CreateTable
 CREATE TABLE "Lesson" (
-    "id" SERIAL NOT NULL,
-    "logoId" INTEGER NOT NULL,
-    "chapterId" INTEGER NOT NULL,
+    "id" TEXT NOT NULL,
+    "logoId" TEXT,
+    "chapterId" TEXT NOT NULL,
     "index" INTEGER NOT NULL DEFAULT 0,
     "name" TEXT NOT NULL,
     "url" TEXT NOT NULL,
@@ -278,8 +278,8 @@ CREATE TABLE "Lesson" (
 
 -- CreateTable
 CREATE TABLE "LessonBlock" (
-    "id" SERIAL NOT NULL,
-    "lessonId" INTEGER NOT NULL,
+    "id" TEXT NOT NULL,
+    "lessonId" TEXT NOT NULL,
     "index" INTEGER NOT NULL DEFAULT 0,
     "name" TEXT NOT NULL,
     "url" TEXT NOT NULL,
@@ -427,7 +427,7 @@ ALTER TABLE "Course" ADD CONSTRAINT "Course_logoId_fkey" FOREIGN KEY ("logoId") 
 ALTER TABLE "Course" ADD CONSTRAINT "Course_departmentId_fkey" FOREIGN KEY ("departmentId") REFERENCES "Department"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Chapter" ADD CONSTRAINT "Chapter_logoId_fkey" FOREIGN KEY ("logoId") REFERENCES "Asset"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Chapter" ADD CONSTRAINT "Chapter_logoId_fkey" FOREIGN KEY ("logoId") REFERENCES "Asset"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Chapter" ADD CONSTRAINT "Chapter_courseId_fkey" FOREIGN KEY ("courseId") REFERENCES "Course"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -436,7 +436,7 @@ ALTER TABLE "Chapter" ADD CONSTRAINT "Chapter_courseId_fkey" FOREIGN KEY ("cours
 ALTER TABLE "Quiz" ADD CONSTRAINT "Quiz_chapterId_fkey" FOREIGN KEY ("chapterId") REFERENCES "Chapter"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Lesson" ADD CONSTRAINT "Lesson_logoId_fkey" FOREIGN KEY ("logoId") REFERENCES "Asset"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Lesson" ADD CONSTRAINT "Lesson_logoId_fkey" FOREIGN KEY ("logoId") REFERENCES "Asset"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Lesson" ADD CONSTRAINT "Lesson_chapterId_fkey" FOREIGN KEY ("chapterId") REFERENCES "Chapter"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

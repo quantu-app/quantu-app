@@ -12,6 +12,12 @@
 	let userCountry: string = user.country || '';
 	let userCountryName: string = countries.find((c) => c.code == userCountry)?.name || '';
 	let memberSince = formatRelative(new Date(user.createdAt), new Date());
+
+	// TODO: use our own country flags so it will still work if this repo goes down.
+	const countryFlagURL =
+		'https://raw.githubusercontent.com/hampusborgos/country-flags/main/png100px/';
+	const userCountryFlag =
+		userCountry.length > 0 ? `${countryFlagURL}/${userCountry.toLowerCase()}.png` : null;
 </script>
 
 <div class="container-xxl mt-4">
@@ -24,14 +30,14 @@
 				<h2 class="mb-0">
 					<span class="fw-bold">{user.firstName} {user.lastName}</span>
 					<span class="small text-muted">(@{user.username})</span>
-					<img
-						class="img-thumbnail my-2"
-						width="50"
-						src={`https://raw.githubusercontent.com/hampusborgos/country-flags/main/png100px/${(
-							userCountry || ''
-						).toLowerCase()}.png`}
-						alt={(userCountryName || 'No country') + ' Flag'}
-					/>
+					{#if userCountryFlag}
+						<img
+							class="img-thumbnail my-2"
+							width="50"
+							src={userCountryFlag}
+							alt={(userCountryName || 'No country') + ' Flag'}
+						/>
+					{/if}
 				</h2>
 				<p>
 					<span>Joined: {memberSince}</span>

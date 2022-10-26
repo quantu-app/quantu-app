@@ -190,8 +190,8 @@ CREATE TABLE "CommentVote" (
 CREATE TABLE "Result" (
     "id" TEXT NOT NULL,
     "userId" TEXT NOT NULL,
-    "challengeId" TEXT NOT NULL,
-    "lessonBlockId" TEXT NOT NULL,
+    "challengeId" TEXT,
+    "lessonBlockId" TEXT,
     "type" "QuestionType" NOT NULL DEFAULT 'MULTIPLE_CHOICE',
     "prompt" JSONB NOT NULL,
     "answer" JSONB,
@@ -334,6 +334,12 @@ CREATE UNIQUE INDEX "Comment_referenceType_referenceId_commentId_key" ON "Commen
 CREATE UNIQUE INDEX "CommentVote_userId_commentId_key" ON "CommentVote"("userId", "commentId");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "Result_userId_challengeId_key" ON "Result"("userId", "challengeId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Result_userId_lessonBlockId_key" ON "Result"("userId", "lessonBlockId");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "Asset_departmentId_folder_name_key" ON "Asset"("departmentId", "folder", "name");
 
 -- CreateIndex
@@ -412,10 +418,10 @@ ALTER TABLE "CommentVote" ADD CONSTRAINT "CommentVote_userId_fkey" FOREIGN KEY (
 ALTER TABLE "Result" ADD CONSTRAINT "Result_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Result" ADD CONSTRAINT "Result_challengeId_fkey" FOREIGN KEY ("challengeId") REFERENCES "Challenge"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Result" ADD CONSTRAINT "Result_challengeId_fkey" FOREIGN KEY ("challengeId") REFERENCES "Challenge"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Result" ADD CONSTRAINT "Result_lessonBlockId_fkey" FOREIGN KEY ("lessonBlockId") REFERENCES "LessonBlock"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Result" ADD CONSTRAINT "Result_lessonBlockId_fkey" FOREIGN KEY ("lessonBlockId") REFERENCES "LessonBlock"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Asset" ADD CONSTRAINT "Asset_departmentId_fkey" FOREIGN KEY ("departmentId") REFERENCES "Department"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;

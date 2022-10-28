@@ -50,15 +50,19 @@ export async function signIn() {
 	const redirectPath = get(redirectPathWritable);
 
 	currentUserWritable.update((state) => ({ ...state, ...user }));
-	if (user.confirmed) {
-		if (redirectPath) {
-			redirectPathWritable.set(undefined);
-			window.location.href = redirectPath;
+	try {
+		if (user.confirmed) {
+			if (redirectPath) {
+				redirectPathWritable.set(undefined);
+				await goto(redirectPath);
+			} else {
+				await goto(challengesPath());
+			}
 		} else {
-			await goto(challengesPath());
+			await goto(userWelcomePath());
 		}
-	} else {
-		await goto(userWelcomePath());
+	} catch (error) {
+		console.error(error);
 	}
 	userEmitter.emit('signIn', user);
 }

@@ -1,5 +1,5 @@
-export interface HasStringId {
-	readonly id: string;
+export interface HasId {
+	readonly id: number | string;
 }
 
 export interface HasUrl {
@@ -12,7 +12,7 @@ export interface HasTimestamps {
 	updatedAt: Date | string | null;
 }
 
-export function addOrUpdate<T extends HasStringId>(state: Array<T>, resource: T): Array<T> {
+export function addOrUpdate<T extends HasId>(state: Array<T>, resource: T): Array<T> {
 	const index = state.findIndex((c) => c.id === resource.id);
 	if (index === -1) {
 		state.push(resource);
@@ -22,7 +22,7 @@ export function addOrUpdate<T extends HasStringId>(state: Array<T>, resource: T)
 	return state;
 }
 
-export function resourceFromJSON<T extends HasStringId & HasTimestamps>(resource: T): T {
+export function resourceFromJSON<T extends HasId & HasTimestamps>(resource: T): T {
 	if (resource.releasedAt) {
 		return {
 			...resource,

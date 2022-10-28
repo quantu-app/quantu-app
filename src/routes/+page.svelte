@@ -1,15 +1,20 @@
 <script lang="ts">
 	import PublicLayout from '$lib/components/layouts/PublicLayout.svelte';
 	import { currentUser, redirectPathWritable } from '$lib/state/user';
-	import { get } from 'svelte/store';
 	import { base } from '$app/paths';
 	import SEO from '$lib/components/SEO/index.svelte';
 	import type { PageData } from './$types';
+	import { goto } from '$app/navigation';
+	import { browser } from '$app/environment';
 
 	export let data: PageData;
 
-	$: if (!$currentUser && data.redirectPath && !get(redirectPathWritable)) {
-		redirectPathWritable.set(data.redirectPath);
+	$: if (data.redirectPath) {
+		if ($currentUser && browser) {
+			goto(data.redirectPath);
+		} else {
+			redirectPathWritable.set(data.redirectPath);
+		}
 	}
 
 	let pageTitle: string = 'QUANTU | Where learning meets fun';

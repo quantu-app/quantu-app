@@ -19,11 +19,12 @@ export const handle: Handle = async ({ event, resolve }) => {
 		event.locals.token = await decode(event.locals.rawToken);
 	}
 	if (event.locals.token) {
+		const userId = event.locals.token.userId + '';
 		event.locals.user = await run(
 			async (client) =>
 				(await client.user.findUnique({
 					where: {
-						id: event.locals.token?.userId as string
+						id: userId
 					},
 					select: {
 						id: true,

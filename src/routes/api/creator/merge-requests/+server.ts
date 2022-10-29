@@ -1,12 +1,13 @@
 import { isCreator } from '$lib/api/auth';
 import { run } from '$lib/prisma';
 import type { PrismaClient, ChangeType, MergeRequest, Department } from '@prisma/client';
+import { json } from '@sveltejs/kit';
 
 export const GET = isCreator(async (event) => {
 	const mergedString = event.url.searchParams.get('merged');
 	const merged = mergedString === 'true' ? true : mergedString === 'false' ? false : undefined;
-	return {
-		body: await run((client) =>
+	return json(
+		await run((client) =>
 			getMergeRequests(
 				client,
 				event.url.searchParams.get('referenceType') as ChangeType,
@@ -14,8 +15,10 @@ export const GET = isCreator(async (event) => {
 				merged
 			)
 		),
-		status: 200
-	};
+		{
+			status: 200
+		}
+	);
 });
 
 export async function getMergeRequests(
@@ -56,12 +59,12 @@ export async function getMergeRequests(
 	const references = await Promise.all(
 		mergeReqeusts.map(async (mergeRequest) => ({
 			mergeRequestId: mergeRequest.id,
-			reference: await getReferenceType(client, mergeRequest)
+			reference: await getReferenceType(client, mergeRequest as any)
 		}))
 	);
 	const referencesByRequestId = references.reduce(
 		(referencesByRequestId, { mergeRequestId, reference }) => {
-			referencesByRequestId[mergeRequestId] = reference;
+			referencesByRequestId[mergeRequestId as string] = reference as any;
 			return referencesByRequestId;
 		},
 		{} as { [id: string]: Department }

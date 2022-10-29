@@ -23,10 +23,12 @@ export const changesById = derived(changesWritable, (changes) =>
 
 export const changesByReferenceTypeAndReferenceId = derived(changesWritable, (changes) =>
 	changes.reduce((state, change) => {
-		const byReferenceType = state[change.referenceType] || (state[change.referenceType] = {});
-		const byReferenceId =
-			byReferenceType[change.referenceId] || (byReferenceType[change.referenceId] = []);
-		byReferenceId.push(change);
+		if (change.referenceType) {
+			const byReferenceType = state[change.referenceType] || (state[change.referenceType] = {});
+			const byReferenceId =
+				byReferenceType[change.referenceId] || (byReferenceType[change.referenceId] = []);
+			byReferenceId.push(change);
+		}
 		return state;
 	}, {} as { [referenceType: string]: { [referenceId: string]: StateChange[] } })
 );

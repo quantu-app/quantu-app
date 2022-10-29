@@ -1,11 +1,14 @@
 import { isCreator } from '$lib/api/auth';
 import { run } from '$lib/prisma';
 import type { PrismaClient, MergeRequest, Change, Prisma, Department } from '@prisma/client';
+import { json } from '@sveltejs/kit';
 
 export const POST = isCreator(async (event) => {
-	return new Response(
-		await run((client) => mergeMergeRequest(client, event.params.mergeRequestId)),
-		{ status: 200 }
+	return json(
+		await run((client) => mergeMergeRequest(client, event.params.mergeRequestId as string)),
+		{
+			status: 200
+		}
 	);
 });
 

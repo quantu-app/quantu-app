@@ -100,9 +100,9 @@ model Change {
 
   userId        String
   user          User        @relation(fields: [userId], references: [id])
-  prevChangeId  String
+  prevChangeId  String?
   prevChange    Change?     @relation(name: "PrevChange", fields: [prevChangeId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  referenceId   String
+  referenceId   String?
   referenceType ChangeType?
 
   latest Boolean

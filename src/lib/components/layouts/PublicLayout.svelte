@@ -16,11 +16,3 @@
 	<Notifications />
 	<SignInUpModal />
 </div>
-
-<style lang="scss">
-	.dropdown {
-		position: absolute;
-		right: 0.5rem;
-		top: 0.5rem;
-	}
-</style>

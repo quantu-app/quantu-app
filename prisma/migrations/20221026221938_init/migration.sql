@@ -68,8 +68,8 @@ CREATE TABLE "User" (
 CREATE TABLE "Change" (
     "id" TEXT NOT NULL,
     "userId" TEXT NOT NULL,
-    "prevChangeId" TEXT NOT NULL,
-    "referenceId" TEXT NOT NULL,
+    "prevChangeId" TEXT,
+    "referenceId" TEXT,
     "referenceType" "ChangeType",
     "latest" BOOLEAN NOT NULL,
     "name" TEXT NOT NULL,

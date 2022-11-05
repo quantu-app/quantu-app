@@ -1,8 +1,8 @@
 <script lang="ts">
 	import type { Location } from 'slate';
 	import { onMount } from 'svelte';
-	import { isHotkey } from 'svelte-slate/isHotkey';
-	import { getEditorContext, getFocusedContext } from 'svelte-slate/components/Slate.svelte';
+	import { isHotkey } from 'svelte-slate';
+	import { getEditorContext, getFocusedContext } from 'svelte-slate';
 	import Button from './Button.svelte';
 	import MathEditor from 'svelte-slate/plugins/MathEditor.svelte';
 	import { insertMath, MATH_TYPE } from 'svelte-slate/plugins/MathElement.svelte';

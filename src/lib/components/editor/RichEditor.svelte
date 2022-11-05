@@ -11,7 +11,7 @@
 	export let value: any;
 	export let selection: Selection | null = null;
 	export let placeholder = 'Type...';
-	export let editor: ISvelteEditor | BaseEditor | HistoryEditor | undefined = undefined;
+	export let editor: (BaseEditor & ISvelteEditor & HistoryEditor) | undefined = undefined;
 	export let showHelper = false;
 	export let onChange: (name?: string) => void = () => undefined;
 

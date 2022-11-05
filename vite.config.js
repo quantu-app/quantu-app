@@ -8,8 +8,8 @@ const config = {
 	preview: {
 		port: 3000
 	},
-	ssr: {
-		noExternal: [/^svelte-slate?\//]
+	optimizeDeps: {
+		exclude: ['svelte-slate']
 	},
 	plugins: [sveltekit()]
 };

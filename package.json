@@ -28,7 +28,6 @@
 		"prisma": "prisma",
 		"vite": "vite",
 		"svelte-kit": "svelte-kit",
-		"sync": "svelte-kit sync",
 		"clean": "rm -rf node_modules/.vite .svelte-kit build",
 		"dev": "vite dev --host",
 		"start": "vite dev --host --open",
@@ -52,7 +51,8 @@
 		"check:watch": "svelte-check --tsconfig ./tsconfig.json --watch",
 		"lint": "prettier --check --plugin-search-dir=. . && eslint .",
 		"format": "prettier --write --plugin-search-dir=. .",
-		"secret": "node -e \"console.log(require('crypto').randomBytes(64).toString('base64'));\""
+		"secret": "node -e \"console.log(require('crypto').randomBytes(64).toString('base64'));\"",
+		"postinstall": "svelte-kit sync"
 	},
 	"devDependencies": {
 		"@playwright/test": "^1.27.1",

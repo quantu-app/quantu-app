@@ -28,7 +28,7 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: 16
-      - uses: azure/setup-helm@v1
+      - uses: azure/setup-helm@v3
       - env:
           KUBECONFIG_BASE64: ${{ secrets.KUBECONFIG }}
         run: |

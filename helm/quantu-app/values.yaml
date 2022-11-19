@@ -37,26 +37,6 @@ resources:
     cpu: 1000m
     memory: 1000M
 
-mongodb:
-  architecture: replicaset
-  replicaSetName: replicaset
-  auth:
-    enabled: true
-    database: quantu-app
-    replicaSetKey: replicasetkey
-  persistence:
-    enabled: true
-    storageClass: linode-block-storage-retain
-  rbac:
-    create: true
-  externalAccess:
-    enabled: true
-    create: true
-    service.type: LoadBalancer
-    service.port: 27017
-    autoDiscovery:
-      enabled: true
-
 postgresql:
   architecture: replicaset
   replication:
